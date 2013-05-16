@@ -1,8 +1,6 @@
 import java.awt.Image;
 import java.awt.Toolkit;
 
-import javax.swing.ImageIcon;
-
 /*
  * TileSet.java
  * Hier werden alle Tiles als Images gespeichert, die zu einem "Set" zusammen gehören.
@@ -15,8 +13,6 @@ import javax.swing.ImageIcon;
 public class TileSet {
 	
 	static int MAX_TILES = 40;
-	
-	private String dirname;
 	private Image[] tiles;
 	
 	TileSet(String dir) {
@@ -25,7 +21,6 @@ public class TileSet {
 		//WICHTIG! Es müssen sich nicht tatsächlich MAX_TILES Bilder im verzeichnis befinden.
 		//Wenn ein Bild nicht gefunden wurde (weil es z.B. nicht vorhanden ist), dann wird es einfach
 		//mit null gewertet und beim Anzeigen übersprungen
-		dirname = dir;
 		tiles = new Image[MAX_TILES]; //maximal 10 Tiles!!
 		String path;
 		for (int x=0; x<MAX_TILES; x++) {

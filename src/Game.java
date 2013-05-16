@@ -1,9 +1,3 @@
-import java.awt.Toolkit;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
-
-import javax.swing.JLabel;
-
 /*
  * Game.java
  * 

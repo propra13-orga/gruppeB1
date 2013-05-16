@@ -8,7 +8,5 @@ public class Scene {
 	}
 	
 	public void update() {};
-	
-	private void updateLogic() {};
-	private void updateScreen() {};
+
 }

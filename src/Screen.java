@@ -1,14 +1,7 @@
-import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Image;
-import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
-import java.util.ArrayList;
 
 import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 /*
@@ -26,6 +19,7 @@ import javax.swing.JPanel;
 
 public class Screen extends JFrame {
 	
+	private static final long serialVersionUID = 1L;
 	static int SCREEN_W = 640;
 	static int SCREEN_H = 480;
 	static int VISIBLE_TILES_X = SCREEN_W / Map.TILESIZE;

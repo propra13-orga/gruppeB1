@@ -1,10 +1,5 @@
 import java.io.*;
-import java.awt.Image;
 import java.awt.image.BufferedImage;
-
-import javax.swing.ImageIcon;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
 
 /*
  * Map.java
@@ -26,11 +21,8 @@ public class Map {
 	private TileSet			tileset;
 	private int 			width;
 	private int 			height;
-	private int 			gen_counter = 2;
 	private int[][] 		lowmap;
-	private int[][] 		highmap;
-	private BufferedImage 	low_map_image;
-	private BufferedImage 	high_map_image;
+	//private int[][] 		highmap;
 	
 	Map(String mapname) {
 		String filename = "res/maps/"+mapname+".txt";
@@ -52,10 +44,6 @@ public class Map {
 		return height;
 	}
 	
-	public Event[] getEvents() {
-		return null;
-	}
-	
 	public boolean isPassable(int x, int y) {
 		if (y >= height) return false;
 		if (lowmap[y][x] == 0  ||  lowmap[y][x] == 4) {
@@ -68,10 +56,6 @@ public class Map {
 		//'gen_counter' zählt runter, wie oft das Mapbild generiert wurde. Aus irgendeinem
 		//Grund muss dies nämlich mindestens zwei mal geschehen, damit das Bild vollständig
 		//ist und als fertiges Bild im Speicher gehalten werden kann
-		if (gen_counter == 0) {
-			return low_map_image;
-		}
-		gen_counter--;
 		BufferedImage b = new BufferedImage(TILESIZE*width,
 				TILESIZE*height,
 				BufferedImage.TYPE_INT_ARGB);
@@ -85,7 +69,6 @@ public class Map {
 						null);
 			}
 		}
-		low_map_image = b;
 		return b;
 	}
 	

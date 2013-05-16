@@ -1,3 +1,5 @@
+import java.util.Date;
+
 /*
  * 
  * Main.java
@@ -6,13 +8,19 @@
 
 public class Main {
 	
-	static int SLEEP_TIME = 6;
+	static int SLEEP_TIME = 10;
 	
 	public static void main(String[] args) {
 		
 		Game game = new Game();
+		long time;
+		long timeDiff;
+		Date date = new Date();
 		
 		while (game.scene != null) {
+			
+			time = date.getTime();
+			
 			try {
 				game.update();
 			}
@@ -20,10 +28,15 @@ public class Main {
 				//Irgendeine unerwartete Exception
 				e.printStackTrace();
 			}
-			try {
-				Thread.sleep(SLEEP_TIME);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
+			
+			timeDiff = date.getTime() - time;
+			
+			if (SLEEP_TIME-timeDiff > 0) {
+				try {
+					Thread.sleep(SLEEP_TIME-timeDiff);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
 			}
 		}
 		//Programm per System.exit(0) beenden, damit auch die
