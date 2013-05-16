@@ -95,6 +95,7 @@ public class Scene_Map extends Scene {
 			game.getKeyHandler().clear();
 			game.getKeyHandler().freeze(KeyHandler.ESCAPE, 20);
 			game.scene = new Scene_GameMenu(game, this);
+			//game.scene = new Scene_StartMenu(game);
 			return true;
 		}
 		return false;
