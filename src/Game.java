@@ -44,6 +44,7 @@ public class Game {
 		//player_move();
 		//player_animation();
 		scene.update();
+		keyhandler.freeze_update();
 		screen.update();
 	}
 

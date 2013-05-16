@@ -17,8 +17,7 @@ public class SpriteSet {
 		sprites = new Image[12];
 		//Einzelne Animationen in korrekter Reihenfolge ins Image Array laden
 		for (int x=0; x<12; x++) {
-			path = "res/char/"+filename+"/"+(int)Math.ceil((double)(x+1)/3)+"_"+x%3+".png";
-			System.out.println("Lade "+path);
+			path = "res/charset/"+filename+"/"+(int)Math.ceil((double)(x+1)/3)+"_"+x%3+".png";
 			sprites[x] = Toolkit.getDefaultToolkit().createImage(path);
 		}
 	}

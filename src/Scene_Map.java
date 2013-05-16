@@ -12,6 +12,7 @@ public class Scene_Map extends Scene {
 	private ArrayList<Sprite> sprites;
 	private Map map;
 	private Sprite main_sprite;
+	//private boolean menu_access;
 	
 	Scene_Map(Game g) {
 		super(g);
@@ -25,6 +26,7 @@ public class Scene_Map extends Scene {
 		setMap(current_map);
 		addSprite(player);
 		setFocusOn(player);
+		//menu_access = true;
 	}
 	
 	public void update() {
@@ -37,8 +39,16 @@ public class Scene_Map extends Scene {
 		//bearbeitet die Koordinaten des Characters entsprechend
 		//Initialisiert (wenn nötig) auch eine Bewegungsanimation
 		
+		//Prüfe, ob Menü aufgerufen werden kann, wenn ja rufe Menü
+		//Gegebenenfalls auf
 		if (check_menu()) return;
+		//if (!menu_access && !game.getKeyHandler().get_escape()) {
+		//	System.out.println("Menu wieder freigegeben");
+		//	menu_access = true;
+		//}
 		
+		//Falls, der Spieler gerade steuerbar ist (also nicht schon in einer
+		//Bewegungsphase), dann prüfe jetzt, ob er gestuert wurde
 		if (!skip_moving) {
 		
 			//Alte Koordinaten des Characters speichern um zu
@@ -55,6 +65,8 @@ public class Scene_Map extends Scene {
 				check_scrolling();
 			}
 		}
+		
+		//Animiere den Spieler
 		player_animation();
 	}
 	
@@ -77,9 +89,12 @@ public class Scene_Map extends Scene {
 	///////////////////////////////////////////////////////////////////////////////////////////
 	
 	private boolean check_menu() {
+		//if (!menu_access) return false;
+		//menu_access = false;
 		if (game.getKeyHandler().get_escape()) {
 			game.getKeyHandler().clear();
-			game.scene = new Scene_Menu(game, this);
+			game.getKeyHandler().freeze(KeyHandler.ESCAPE, 20);
+			game.scene = new Scene_GameMenu(game, this);
 			return true;
 		}
 		return false;
@@ -245,19 +260,19 @@ public class Scene_Map extends Scene {
 				switch (s.direction) {
 				case 2: //DOWN
 				case 1: //UP
-					new_x = (s.get_old_x()-screen_point[0])*map.TILESIZE;
-					new_y = (Screen.VISIBLE_TILES_Y/2)*map.TILESIZE - Map.TILESIZE;
+					new_x = (s.get_old_x()-screen_point[0])*Map.TILESIZE;
+					new_y = (Screen.VISIBLE_TILES_Y/2)*Map.TILESIZE - Map.TILESIZE;
 					break;
 				case 3: //LEFT
 				case 4: //RIGHT
-					new_x = (Screen.VISIBLE_TILES_X/2)*map.TILESIZE;
-					new_y = (s.get_old_y()-screen_point[1])*map.TILESIZE - Map.TILESIZE;
+					new_x = (Screen.VISIBLE_TILES_X/2)*Map.TILESIZE;
+					new_y = (s.get_old_y()-screen_point[1])*Map.TILESIZE - Map.TILESIZE;
 					break;
 				}
 			}
 			else {
-				new_x = (s.get_old_x()-screen_point[0])*map.TILESIZE;
-				new_y = (s.get_old_y()-screen_point[1])*map.TILESIZE - Map.TILESIZE;
+				new_x = (s.get_old_x()-screen_point[0])*Map.TILESIZE;
+				new_y = (s.get_old_y()-screen_point[1])*Map.TILESIZE - Map.TILESIZE;
 				//Falls der Character sich nciht bewegt ist movecounter 0 und nichts
 				//ändert sich hier!
 				switch (s.direction) {

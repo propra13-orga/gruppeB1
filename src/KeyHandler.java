@@ -14,6 +14,8 @@ import java.awt.event.KeyListener;
 
 public class KeyHandler implements KeyListener {
 	
+	final static int NUMBER_OF_KEYS = 100;
+	
 	final static int NO_KEY = 0;
 	final static int UP = 1;
 	final static int DOWN = 2;
@@ -21,51 +23,56 @@ public class KeyHandler implements KeyListener {
 	final static int RIGHT = 4;
 	final static int ESCAPE = 5;
 	
-	private boolean key_up = false;
-	private boolean key_down = false;
-	private boolean key_left = false;
-	private boolean key_right = false;
-	private boolean key_escape = false;
+	private boolean[] keys;
+	private int[] frozen;
 	private int first;
 	private int second;
 	
 	KeyHandler() {
 		first = NO_KEY;
 		second = NO_KEY;
+		//Arrays sind von selbst mit 'false' und 0 initialisiert
+		keys = new boolean[NUMBER_OF_KEYS];
+		frozen = new int[NUMBER_OF_KEYS];
 	}
 
 	@Override
 	public void keyPressed(KeyEvent e) {
 		if (e.getKeyCode() == KeyEvent.VK_UP) {
-			key_up = true;
+			if (frozen[UP] > 0) return;
+			keys[UP] = true;
 			if (first != UP && second != UP) {
 				second = first;
 				first = UP;
 			}
 		}
 		if (e.getKeyCode() == KeyEvent.VK_DOWN) {
-			key_down = true;
+			if (frozen[DOWN] > 0) return;
+			keys[DOWN] = true;
 			if (first != DOWN && second != DOWN) {
 				second = first;
 				first = DOWN;
 			}
 		}
 		if (e.getKeyCode() == KeyEvent.VK_LEFT) {
-			key_left = true;
+			if (frozen[DOWN] > 0) return;
+			keys[LEFT] = true;
 			if (first != LEFT && second != LEFT) {
 				second = first;
 				first = LEFT;
 			}
 		}
 		if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
-			key_right = true;
+			if (frozen[RIGHT] > 0) return;
+			keys[RIGHT] = true;
 			if (first != RIGHT && second != RIGHT) {
 				second = first;
 				first = RIGHT;
 			}
 		}
 		if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
-			key_escape = true;
+			if (frozen[ESCAPE] > 0) return;
+			keys[ESCAPE] = true;
 			if (first != ESCAPE && second != ESCAPE) {
 				second = first;
 				first = ESCAPE;
@@ -76,7 +83,8 @@ public class KeyHandler implements KeyListener {
 	@Override
 	public void keyReleased(KeyEvent e) {
 		if (e.getKeyCode() == KeyEvent.VK_UP) {
-			key_up = false;
+			if (frozen[UP] > 0) return;
+			keys[UP] = false;
 			if (second == UP) second = NO_KEY;
 			if (first == UP) {
 				first = second;
@@ -84,7 +92,8 @@ public class KeyHandler implements KeyListener {
 			}
 		}
 		if (e.getKeyCode() == KeyEvent.VK_DOWN) {
-			key_down = false;
+			if (frozen[DOWN] > 0) return;
+			keys[DOWN] = false;
 			if (second == DOWN) second = NO_KEY;
 			if (first == DOWN) {
 				first = second;
@@ -92,7 +101,8 @@ public class KeyHandler implements KeyListener {
 			}
 		}
 		if (e.getKeyCode() == KeyEvent.VK_LEFT) {
-			key_left = false;
+			if (frozen[LEFT] > 0) return;
+			keys[LEFT] = false;
 			if (second == LEFT) second = NO_KEY;
 			if (first == LEFT) {
 				first = second;
@@ -100,7 +110,8 @@ public class KeyHandler implements KeyListener {
 			}
 		}
 		if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
-			key_right = false;
+			if (frozen[RIGHT] > 0) return;
+			keys[RIGHT] = false;
 			if (second == RIGHT) second = NO_KEY;
 			if (first == RIGHT) {
 				first = second;
@@ -108,18 +119,31 @@ public class KeyHandler implements KeyListener {
 			}
 		}
 		if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
-			key_escape = true;
+			if (frozen[ESCAPE] > 0) return;
+			keys[ESCAPE] = true;
 		}
 	}
 	
 	public void clear() {
 		first = NO_KEY;
 		second = NO_KEY;
-		key_up = false;
-		key_down = false;
-		key_left = false;
-		key_right = false;
-		key_escape = false;
+		keys[UP] = false;
+		keys[DOWN] = false;
+		keys[LEFT] = false;
+		keys[RIGHT] = false;
+		keys[ESCAPE] = false;
+	}
+	
+	//freeze bietet die Möglichkeit, eine Taste, für eine bestimmte Anzahl von
+	//Frames zu sperren
+	public void freeze(int key, int time) {
+		frozen[key] = time;
+	}
+	
+	public void freeze_update() {
+		for (int i=0; i<NUMBER_OF_KEYS; i++) {
+			if (frozen[i] > 0) frozen[i]--;
+		}
 	}
 
 	@Override
@@ -129,10 +153,10 @@ public class KeyHandler implements KeyListener {
 		return first;
 	}
 	
-	public boolean get_up() { return key_up; }
-	public boolean get_down() { return key_down; }
-	public boolean get_left() { return key_left; }
-	public boolean get_right() { return key_right; }
-	public boolean get_escape() {return key_escape; }
+	public boolean get_up() { return keys[UP]; }
+	public boolean get_down() { return keys[DOWN]; }
+	public boolean get_left() { return keys[LEFT]; }
+	public boolean get_right() { return keys[RIGHT]; }
+	public boolean get_escape() {return keys[ESCAPE]; }
 
 }
