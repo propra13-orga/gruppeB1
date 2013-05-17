@@ -2,16 +2,8 @@ import java.awt.Image;
 
 /*
  * Sprite.java
- * Diese Klasse stellt eine darstellbare Spielfigur dar. Dies können Gegner, 
- * Objekte und auch der Character selbst sein.
- * Jeder Character hat für jede der Richtungen in die er schauen kann 3 Animationen.
- * Eine Standanimation und zwei Laufanimationen.
- * Seine Position wird nicht in Pixeln gespeichert sondern in dem Spielfeld, auf dem er
- * gerade steht. Die Größe eines Tiles beträgt 32 Pixel also würde einer Position von
- * (32, 32) der Position (1, 1) entsprechen.
- * Movecounter, move_distance und moving sind nur für die Laufanimation wichtig
- * 'old_x' und 'old_y' speichern die Koordinaten des characters vor einer eventuellen
- * bewegung, um zu prüfen ob er sich bewegt hat und animiert werden muss.
+ * Diese Klasse speicher alle wichtigen Daten, um einen (animierten) Sprite
+ * darzustellen.
  */
 
 public class Sprite {
@@ -44,10 +36,20 @@ public class Sprite {
 		direction = KeyHandler.KEY_DOWN;
 		animation = ANIMATION_MIDDLE;
 		move_distance = 1;
-		//Es wird davon ausgegangen, dass alle Bilder im SpriteSet die selben
-		//Maße haben!
+		//Momentan noch konstant, evtl später Variabel. Dann wären Charsets
+		//verschiedener Größe möglich.
 		width = 32;
 		height = 64;
+	}
+	
+	public void save_position() {
+		old_x = pos_x;
+		old_y = pos_y;
+	}
+	
+	public void restore_position() {
+		pos_x = old_x;
+		pos_y = old_y;
 	}
 	
 	public int getWidth() {
@@ -62,20 +64,12 @@ public class Sprite {
 	public int get_old_y() {
 		return old_y;
 	}
-	public void save_position() {
-		old_x = pos_x;
-		old_y = pos_y;
-	}
-	public void restore_position() {
-		pos_x = old_x;
-		pos_y = old_y;
-	}
 	public SpriteSet getSpriteSet() {
 		return spriteset;
 	}
 	public Image getImage() {
-		//Rechne die Richtung und Animationsstufe in den entsprechenden
-		//Index im SpriteSet Array um
+		//Gibt die Spritegrafik entsprechend der Blickrichtung und
+		//Animationsstufe zurück
 		return spriteset.getSprite(direction, animation);
 	}
 }

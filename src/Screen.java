@@ -7,20 +7,24 @@ import javax.swing.JPanel;
 
 /*
  * Screen.java
+ * Die Screenklasse definiert größtenteils nur konstanten und stellt über ein
+ * JFrame den Bildschirm zur Verfügung.
+ * Über getBuffer können alle Scenen auf den internen Bildschirmpuffer zugreifen
+ * um den Bildschirm innerhalb eines Frames zu verändern und zu aktualisieren.
+ * Die Methode update wird nur vom Game Objekt aufgerufen, NACHDEM scene.update
+ * aufgerufen wurde.
+ * Dies garantiert, dass alle Bearbeitungen am Bildschirm abgeschlossen sind, wenn
+ * er (für den Benutzer sichtbar) aktualisiert wird.
  * 
- * Hier befindet sich alles, was auf den Bildschirm und Grafiken zugreift.
- * Der Screen besitzt eine Liste von allen Sprites, die er in jedem Durchlauf aktualisiert.
- * Außerdem besitzt er eine Map, die auch regelmäßig aktualisiert wird.
- * Um später soetwas wie einen Titelbildschirm oder ein Menü zu bauen, könnte man
- * diese auch ganz einfach als Map gestalten, eben mit ein paar anderen Eigenschaften aber
- * das ist nicht weiter schwer (siehe Map.getLowMapImage)
- * 'buffer' ist ein BufferedImage, darauf wird letztendlich alles zuerst gezeichnet und wenn
- * alles fertig ist, wird das Bild neu angezeigt
+ * Die statische Methode makeTransparent ersetzt in einem BufferedImage jedes Pixel
+ * mit dem RGB Wert (255, 0, 255) bzw. 0xFF00FF durch ein trasparentes Pixel. Dadurch
+ * ist es möglich, die Char- und Tilesets mit einer Hintergrundfarbe zu versehen!!!
  */
 
 public class Screen extends JFrame {
 	
 	private static final long serialVersionUID = 1L;
+	
 	static int SCREEN_W = 640;
 	static int SCREEN_H = 480;
 	static int VISIBLE_TILES_X = SCREEN_W / Map.TILESIZE;

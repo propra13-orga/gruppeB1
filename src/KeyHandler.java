@@ -7,6 +7,28 @@ import java.awt.event.KeyListener;
  * Sobald ein KeyHandler Objekt mittels addKeyListener an den Screen gebunden wird,
  * lassen sich alle Methoden des KeyHandlers aufrufen.
  * 
+ * Die Konstanten KEY_XXX symbolisieren die verschiedenen Tasten und können intern
+ * über keys[KEY_XXX] (true/false) abgefragt werden. Zusätzlich ist noch ein (momentan
+ * nur zwei Plätze großer) Puffer implementiert, für den Fall, dass mehrere Tasten gedrückt
+ * werden. Ein größerer Puffer ist nicht sinnvoll, da es im Spiel keine Situation gibt, in
+ * der auf mehr als 2 Tasten gleichzeitig reagiert werden muss. Falls doch eine dritte Taste
+ * gedrückt wird, so wird die zuerst gedrückte aus dem Puffer gelöscht und neueste rückt an den
+ * vordersten Platz im Puffer.
+ * 
+ * Nach außen werden folgende Funktionen geboten:
+ * 
+ * int get_last()				Gibt die Taste zurück, welche sich an erster Stelle im
+ * 								Tastaturpuffer befindet
+ * 
+ * boolean get_key(key)			Gibt keys[key] zurück. Damit lässt sich also prüfen, ob die
+ * 								Taste 'key' gedrückt wird.
+ * 
+ * clear()						Löscht den Tastaturpuffer und setzt alle Werte im key Array
+ * 								auf false. Wichtig beim Wechsel zwischen zwei Szenen, da nicht sofort
+ * 								in der neuen Szene auf Eingaben aus der alten Szene reagiert
+ * 								werden soll.
+ * 
+ * freeze(int key, int time)	Bietet die Möglichkeit, eine Taste für 'time' Frames zu sperren.
  */
 
 public class KeyHandler implements KeyListener {
@@ -30,9 +52,15 @@ public class KeyHandler implements KeyListener {
 		second = NO_KEY;
 		//Arrays sind von selbst mit 'false' und 0 initialisiert
 		keys = new boolean[NUMBER_OF_KEYS];
+		//'frozen' speichert für jede Taste einen Wert >= 0, der (falls er nicht 0 ist) in
+		//jeden Frame um 1 dekrementiert wird. Falls in dieser Zeit die Taste gedrückt wird,
+		//wird die Eingabe ganz einfach ignoriert.
+		//Auf diese Weise lässt sich die Taste für X Frames sperren.
 		frozen = new int[NUMBER_OF_KEYS];
 	}
 
+	//Überschreibe Methoden von KeyListener
+	
 	@Override
 	public void keyPressed(KeyEvent e) {
 		if (e.getKeyCode() == KeyEvent.VK_UP) {
@@ -121,6 +149,11 @@ public class KeyHandler implements KeyListener {
 		}
 	}
 	
+	@Override
+	public void keyTyped(KeyEvent arg0) {}
+	
+	//Öffentliche Methoden
+	
 	public void clear() {
 		first = NO_KEY;
 		second = NO_KEY;
@@ -130,30 +163,23 @@ public class KeyHandler implements KeyListener {
 		keys[KEY_RIGHT] = false;
 		keys[KEY_ESCAPE] = false;
 	}
-	
-	//freeze bietet die Möglichkeit, eine Taste, für eine bestimmte Anzahl von
-	//Frames zu sperren
+
 	public void freeze(int key, int time) {
 		frozen[key] = time;
 	}
 	
-	public void freeze_update() {
+	public void freezeUpdate() {
 		for (int i=0; i<NUMBER_OF_KEYS; i++) {
 			if (frozen[i] > 0) frozen[i]--;
 		}
 	}
-
-	@Override
-	public void keyTyped(KeyEvent arg0) {}
 	
-	public int get_last() {
+	public int getLast() {
 		return first;
 	}
 	
-	public boolean get_up() { return keys[KEY_UP]; }
-	public boolean get_down() { return keys[KEY_DOWN]; }
-	public boolean get_left() { return keys[KEY_LEFT]; }
-	public boolean get_right() { return keys[KEY_RIGHT]; }
-	public boolean get_escape() {return keys[KEY_ESCAPE]; }
+	public boolean getKey(int key) {
+		return keys[key];
+	}
 
 }

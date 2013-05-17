@@ -3,6 +3,16 @@ import java.util.Date;
 /*
  * 
  * Main.java
+ * Die Klasse Main ist die Klasse, die das gesamte Programm startet. Dafür kann sie eigentlich
+ * nicht viel.
+ * Sie erstellt ein Game Objekt und führt dann den gameloop solange aus, wie
+ * game.scene nicht auf null zeigt.
+ * Dadurch kann das Spiel sich selbst ganz bequem beenden indem man in einer Scene einfach
+ * 
+ * 				game.scene = null;
+ * 
+ * schreibt. Eventuelle Aufräumarbeiten (Dateien schließen, etc.) können dann noch hier
+ * ausgeführt werden, bevor das Programm sich komplett beendet.
  * 
  */
 
@@ -17,6 +27,7 @@ public class Main {
 		long timeDiff;
 		Date date = new Date();
 		
+		//Gameloop
 		while (game.scene != null) {
 			
 			time = date.getTime();
@@ -39,6 +50,7 @@ public class Main {
 				}
 			}
 		}
+		
 		//Programm per System.exit(0) beenden, damit auch die
 		//Swing-Anwendungen geschlossen werden!
 		System.exit(0);

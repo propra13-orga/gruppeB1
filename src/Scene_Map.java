@@ -1,10 +1,24 @@
 import java.util.ArrayList;
 
+/*
+ * Scene_Map.java
+ * Diese Scene ist das Herzstück des Programms, da sie den gesamten Spielablauf regelt. Sie
+ * regelt die korrekte Anzeige der Map, Sprites und evtl. weiteren Grafiken, die Steuerung
+ * von Spieler und Gegnern sowie das Mapscrolling.
+ * 
+ * Wie jede Scene implementiert sie die Methode update, welche sich (momentan) aus den
+ * Methoden updateLogic und updateScreen zusammensetzt.
+ * Kurz gesagt überprüft updateLogic alle Tasteneingaben und verarbeitet sie entsprechend
+ * (Spielerbewegung, Menüaufruf, etc.) und zeichnet anschließend die Karte samt Sprites neu.
+ * 
+ * Für eine detailierte Beschreibung siehe updateLogic und updateScreen
+ */
 
 public class Scene_Map extends Scene {
 
 	int[] screen_point; //Das Tile, welches sich relativ zum Player
-						//in der oberen linken Ecke befindet
+						//in der oberen linken Ecke befindet. Wichtig
+						//beim Scrolling!
 	
 	private Sprite player;
 	private Map current_map;
@@ -12,12 +26,12 @@ public class Scene_Map extends Scene {
 	private ArrayList<Sprite> sprites;
 	private Map map;
 	private Sprite main_sprite;
-	//private boolean menu_access;
 	
 	Scene_Map(Game g) {
 		super(g);
-		//Die meisten initialisierungen müssen noch ausgelagert werden
+		//Die meisten Initialisierungen werden noch ausgelagert
 		player = new Sprite("character_2", 2, 5);
+		Sprite enemy1 = new Sprite("character_1", 7, 5);
 		current_map = new Map("map1", this);
 		sprites = new ArrayList<Sprite>();
 		screen_point = new int[2];
@@ -25,8 +39,8 @@ public class Scene_Map extends Scene {
 		screen_point[1] = 0;
 		setMap(current_map);
 		addSprite(player);
+		addSprite(enemy1);
 		setFocusOn(player);
-		//menu_access = true;
 	}
 	
 	public void update() {
@@ -39,34 +53,31 @@ public class Scene_Map extends Scene {
 		//bearbeitet die Koordinaten des Characters entsprechend
 		//Initialisiert (wenn nötig) auch eine Bewegungsanimation
 		
-		//Prüfe, ob Menü aufgerufen werden kann, wenn ja rufe Menü
-		//Gegebenenfalls auf
+		//checkMenu gibt true zurück, falls tatsächlich die Scene gewechselt wurde. In
+		//diesem Fall soll die update Methode natürlich so schnell wie möglich abbrechen
 		if (check_menu()) return;
-		//if (!menu_access && !game.getKeyHandler().get_escape()) {
-		//	System.out.println("Menu wieder freigegeben");
-		//	menu_access = true;
-		//}
 		
 		//Falls, der Spieler gerade steuerbar ist (also nicht schon in einer
-		//Bewegungsphase), dann prüfe jetzt, ob er gestuert wurde
+		//Bewegungsphase), dann prüfe jetzt, ob er bewegt wurde
 		if (!skip_moving) {
 		
-			//Alte Koordinaten des Characters speichern um zu
+			//Alte Koordinaten des characters speichern um zu
 			//prüfen, ob eine Bewegung animiert werden muss
 			player.save_position();
 			check_walking();
 			current_map.scrolling = false;
-			//Hat der Character sich bewegt
+			//Hat der Character sich bewegt?
 			if (player.get_old_x() != player.pos_x || player.get_old_y() != player.pos_y) {
 				//Spieler hat sich bewegt!
 				player.moving = true;
 				skip_moving = true;
-				//Scrolling?
+				//Muss gescrollt werden?
 				check_scrolling();
 			}
 		}
 		
-		//Animiere den Spieler
+		//Animiere den Spieler (falls er sich nicht bewegt hat, wird er einfach
+		//nur stehend angezeigt)
 		player_animation();
 	}
 	
@@ -81,6 +92,8 @@ public class Scene_Map extends Scene {
 		drawLowMap();
 		//Sprites zeichnen
 		drawSprites();
+		//Später noch:
+		//drawHighMap()
 	}
 	
 	
@@ -89,29 +102,27 @@ public class Scene_Map extends Scene {
 	///////////////////////////////////////////////////////////////////////////////////////////
 	
 	private boolean check_menu() {
-		//if (!menu_access) return false;
-		//menu_access = false;
-		if (game.getKeyHandler().get_escape()) {
+		if (game.getKeyHandler().getKey(KeyHandler.KEY_ESCAPE)) {
 			game.getKeyHandler().clear();
 			game.getKeyHandler().freeze(KeyHandler.KEY_ESCAPE, 20);
+			//Menü aufrufen
 			game.scene = new Scene_GameMenu(game, this);
-			//game.scene = new Scene_StartMenu(game);
 			return true;
 		}
 		return false;
 	}
 	
 	private void check_walking() {
-		//Koordinaten entsprechend der Eingabe (falls möglich)
-		//anpassen
-		switch (game.getKeyHandler().get_last()) {
+		//Falls eine Pfeiltaste gedrückt wurde, wird versucht den Spieler
+		//zu bewegen (das ist nur möglich, wenn er versucht, auf ein begehbares
+		//Feld zu gelangen
+		switch (game.getKeyHandler().getLast()) {
 		case 1: //UP
 			player.direction = KeyHandler.KEY_UP;
 			if (player.pos_y == 0) break;
 			if (!current_map.isPassable(player.pos_x, player.pos_y-1)) break;
 			player.pos_y -= 1;
 			break;
-			
 		case 2: //DOWN
 			player.direction = KeyHandler.KEY_DOWN;
 			if (player.pos_y == current_map.getHeight()-1) break;
@@ -133,6 +144,7 @@ public class Scene_Map extends Scene {
 	}
 	
 	private void check_scrolling() {
+		//Berechnet, ob die Karte gescrollt werden muss
 		boolean scrolling = false;
 		switch(player.direction) {
 		case 1: //UP
@@ -169,12 +181,13 @@ public class Scene_Map extends Scene {
 	
 	private void player_animation() {
 		//Der movecounter von jedem Sprite ist so groß, wie
-		//ein Tile. Während einer Bewegung wird er hochgezählt, um
-		//Den Character Pixelweise zu bewegen und zu animieren
+		//ein Tile (momentan 32). Während einer Bewegung wird er hochgezählt
+		//, um den character Pixelweise zu bewegen und zu animieren
 		//Wenn der movecounter 32 (die Tilegröße) erreicht hat
 		//dann ist die Animation vorbei und alles wird zurückgesetzt.
 		if (player.moving) player.movecounter += player.move_distance; 
 		if (player.movecounter >= Map.TILESIZE) {
+			//Der Spieler hat seine neue Position erreicht, die Animation ist vorbei
 			player.movecounter = 0;
 			//Koordinaten werden jetzt angepasst
 			player.save_position();
@@ -186,23 +199,13 @@ public class Scene_Map extends Scene {
 				player.old_animation = Sprite.ANIMATION_LEFT;
 			}
 			player.moving = false;
+			//Spieler kann wieder per tastatur gesteuert werden
 			skip_moving = false;
 		}
 	}
 
 	public void addSprite(Sprite s) {
 		sprites.add(s);
-		//Lade jede Animation einmal in den Bildpuffer. Dadurch wird das Flackern
-		//beim ersten Anzeigen der Animationen verhindert.
-		//Grund: unbekannt
-		for (int x=0; x<12; x++) {
-			//Evtl muss hier wirklich ins board gezeichnet werden
-			game.getScreen().getBuffer().getGraphics().drawImage(
-					s.getImage(),
-					0,
-					0,
-					game.getScreen());
-		}
 	}
 	
 	public void setMap(Map m) {
@@ -210,10 +213,15 @@ public class Scene_Map extends Scene {
 	}
 	
 	public void setFocusOn(Sprite s) {
+		//Der Sprites, auf den der Fokus gerichtet ist, wird als Referenzpunkt
+		//beim Scrolling verwendet
 		main_sprite = s;
 	}
 	
 	private void drawLowMap() {
+		//Zeichnet die LowMap (siehe Map.drawLowMapImage)
+		//Hier wird jedoch scrolling miteinbezogen, das fertige Bild
+		//wird also nur noch korrekt ausgerichtet
 		int map_x = -screen_point[0]*Map.TILESIZE;
 		int map_y = -screen_point[1]*Map.TILESIZE;
 		if (main_sprite.moving && map.scrolling){
@@ -240,6 +248,10 @@ public class Scene_Map extends Scene {
 	}
 	
 	private void drawSprites() {
+		//Geht die Liste der Sprites durch und zeichnet sie
+		// !!! WICHTIG !!!
+		//Momentan werden Sprites noch nicht danach sortiert, wer "über" wem steht
+		//Das wird noch umgesetzt
 		for (Sprite s : sprites) {
 			if (s.movecounter > 0) {
 				//ANIMATION

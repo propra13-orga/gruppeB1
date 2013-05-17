@@ -45,7 +45,7 @@ public class Scene_GameMenu extends Scene {
 			wait_counter--;
 			return;
 		}
-		switch (game.getKeyHandler().get_last()) {
+		switch (game.getKeyHandler().getLast()) {
 		case KeyHandler.KEY_DOWN:
 			cursor++;
 			dirty = true;
