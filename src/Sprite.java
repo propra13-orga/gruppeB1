@@ -43,11 +43,11 @@ public class Sprite {
 		old_y = pos_y;
 		direction = KeyHandler.KEY_DOWN;
 		animation = ANIMATION_MIDDLE;
-		move_distance = 2;
+		move_distance = 1;
 		//Es wird davon ausgegangen, dass alle Bilder im SpriteSet die selben
 		//Maﬂe haben!
-		width = spriteset.getSprite(0).getWidth(null);
-		height = spriteset.getSprite(0).getHeight(null);
+		width = 32;
+		height = 64;
 	}
 	
 	public int getWidth() {
@@ -76,7 +76,6 @@ public class Sprite {
 	public Image getImage() {
 		//Rechne die Richtung und Animationsstufe in den entsprechenden
 		//Index im SpriteSet Array um
-		int idx = (direction-1)*3 + animation;
-		return spriteset.getSprite(idx);
+		return spriteset.getSprite(direction, animation);
 	}
 }

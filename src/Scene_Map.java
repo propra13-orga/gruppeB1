@@ -17,8 +17,8 @@ public class Scene_Map extends Scene {
 	Scene_Map(Game g) {
 		super(g);
 		//Die meisten initialisierungen müssen noch ausgelagert werden
-		player = new Sprite("Character_01", 2, 5);
-		current_map = new Map("map1");
+		player = new Sprite("character_2", 2, 5);
+		current_map = new Map("map1", this);
 		sprites = new ArrayList<Sprite>();
 		screen_point = new int[2];
 		screen_point[0] = 0;
@@ -198,7 +198,7 @@ public class Scene_Map extends Scene {
 		for (int x=0; x<12; x++) {
 			//Evtl muss hier wirklich ins board gezeichnet werden
 			game.getScreen().getBuffer().getGraphics().drawImage(
-					s.getSpriteSet().getSprite(x),
+					s.getImage(),
 					0,
 					0,
 					game.getScreen());

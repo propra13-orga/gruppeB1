@@ -18,13 +18,15 @@ public class Map {
 	
 	boolean scrolling;
 	
+	private Scene scene;
 	private TileSet			tileset;
 	private int 			width;
 	private int 			height;
 	private int[][] 		lowmap;
 	//private int[][] 		highmap;
 	
-	Map(String mapname) {
+	Map(String mapname, Scene s) {
+		scene = s;
 		String filename = "res/maps/"+mapname+".txt";
 		try {
 			readData(filename);
@@ -63,16 +65,18 @@ public class Map {
 			for (int x=0; x<width; x++) {
 				//später getFloor(), etc. durch getTile(ID) ersetzen um beliebige Tiles zu
 				//bekommen! Spätestens dann auch subImages oder so benutzen
-				b.getGraphics().drawImage(tileset.getTile(lowmap[y][x]),
+				b.getGraphics().drawImage(tileset.getTile(0,lowmap[y][x]),
 						x*TILESIZE,
 						y*TILESIZE,
-						null);
+						scene.game.getScreen());
 			}
 		}
 		return b;
 	}
 	
 	private void readData(String filename) throws IOException {
+		//Erstellt Mapobjekt aus Datei
+		//!!! NOCH IN ARBEIT! BIS JETZT MIESE UMSETZUNG
 		FileReader fr = new FileReader(filename);
 		BufferedReader br = new BufferedReader(fr);
 		tileset = new TileSet(br.readLine());
@@ -86,7 +90,13 @@ public class Map {
 		int[] i_line = new int[width];
 		for (int y=0; y<height; y++) {
 			line = br.readLine().split(" ");
-			for (int i=0; i<width; i++) i_line[i] = Integer.parseInt(line[i]);
+			int i=0;
+			for (String s : line) {
+				if (s.length()==0) continue;
+				if (i == width) break;
+				i_line[i] = Integer.parseInt(s);
+				i++;
+			}
 			for (int x=0; x<width; x++) {
 				lowmap[y][x] = i_line[x];
 			}

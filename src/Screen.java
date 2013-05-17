@@ -1,3 +1,4 @@
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.image.BufferedImage;
 
@@ -24,6 +25,7 @@ public class Screen extends JFrame {
 	static int SCREEN_H = 480;
 	static int VISIBLE_TILES_X = SCREEN_W / Map.TILESIZE;
 	static int VISIBLE_TILES_Y = SCREEN_H / Map.TILESIZE;
+	static Color TRANSPARENT = new Color(255, 0, 255, 255);
 	
 	private BufferedImage buffer;
 	private JPanel board;
@@ -50,5 +52,18 @@ public class Screen extends JFrame {
 	
 	public BufferedImage getBuffer() {
 		return buffer;
+	}
+	
+	public static void makeTransparent(BufferedImage b) {
+		int width = b.getWidth();
+		int height = b.getHeight();
+		for (int y=0; y<height; y++) {
+			for (int x=0; x<width; x++) {
+				int rgb = b.getRGB(x, y) & 0x00FFFFFF;
+				if (rgb == 0xFF00FF) {
+					b.setRGB(x, y, 0);
+				}
+			}
+		}
 	}
 }

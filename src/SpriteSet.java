@@ -1,5 +1,9 @@
 import java.awt.Image;
-import java.awt.Toolkit;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
 
 /*
  * SpriteSet.java
@@ -9,20 +13,23 @@ import java.awt.Toolkit;
 
 public class SpriteSet {
 	
-	private Image[] sprites;
+	private BufferedImage set;
 	
 	SpriteSet(String filename) {
 		//Lade Tiles als Images in ein Array und speichere sie dort.
-		String path;
-		sprites = new Image[12];
-		//Einzelne Animationen in korrekter Reihenfolge ins Image Array laden
-		for (int x=0; x<12; x++) {
-			path = "res/charset/"+filename+"/"+(int)Math.ceil((double)(x+1)/3)+"_"+x%3+".png";
-			sprites[x] = Toolkit.getDefaultToolkit().createImage(path);
+		String path = "res/charset/"+filename+".png";
+		set = new BufferedImage(96, 256, BufferedImage.TYPE_INT_ARGB);
+		try {
+			set.getGraphics().drawImage(ImageIO.read(new File(path)),0,0,null);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
+		
+		Screen.makeTransparent(set);
 	}
 	
-	public Image getSprite(int idx) {
-		return sprites[idx];
+	public Image getSprite(int direction, int animation) {
+		return set.getSubimage(animation*32, (direction-1)*64, 32, 64);
 	}
 }
