@@ -6,7 +6,7 @@ import java.awt.Image;
  * darzustellen.
  */
 
-public class Sprite {
+class CompSprite extends Component {
 	
 	static int ANIMATION_LEFT = 0;
 	static int ANIMATION_MIDDLE = 1;
@@ -28,7 +28,9 @@ public class Sprite {
 	private int old_y;
 	private SpriteSet spriteset;
 	
-	Sprite (String filename, int x, int y) {
+	public CompSprite(Entity entity, ComponentSystem system,
+			String filename, int x, int y) {
+		super("sprite",entity,system);
 		spriteset = new SpriteSet(filename);
 		pos_x = x;
 		pos_y = y;
@@ -44,8 +46,8 @@ public class Sprite {
 		this.visible = true;
 	}
 	
-	Sprite (String filename) {
-		this(filename,0,0);
+	public CompSprite(Entity entity, ComponentSystem system, String filename) {
+		this(entity,system,filename,0,0);
 		this.visible = false;
 	}
 	

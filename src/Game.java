@@ -1,10 +1,10 @@
 /*
  * Game.java
- * Dies ist die Hauptklasse, welche den Screen und den KeyHandler (später auch evtl.
- * noch weitere global zugängliche Objekte) bereitstellt.
- * Hier wird die aktuelle auszuführende Szene gespeichert und geupdatet.
+ * Dies ist die Hauptklasse, welche den Screen und den KeyHandler (spï¿½ter auch evtl.
+ * noch weitere global zugï¿½ngliche Objekte) bereitstellt.
+ * Hier wird die aktuelle auszufï¿½hrende Szene gespeichert und geupdatet.
  * 
- * Die Methode game.update(), deren Ausführung genau einem Frame entspricht wird dann
+ * Die Methode game.update(), deren Ausfï¿½hrung genau einem Frame entspricht wird dann
  * letztendlich im Gameloop der Klasse Main aufgerufen.
  */
 
@@ -22,14 +22,15 @@ public class Game {
 		//Screen und KeyHandler initialisieren
 		keyhandler = new KeyHandler();
 		screen = new Screen();
-		scene = new Scene_Map(this);
+		//scene = new Scene_Map(this);
+		scene = new Scene_Level(this);
 		
 		screen.setTitle(GAME_TITLE);
 		screen.addKeyListener(keyhandler);
 		screen.setVisible(true);
 	}
 
-	//Die Ausführung dieser Methode entspricht genau einem Frame
+	//Die Ausfï¿½hrung dieser Methode entspricht genau einem Frame
 	public void update() {
 		scene.update();
 		keyhandler.freezeUpdate();		//Der Counter von eingefrorenen Tasten wird

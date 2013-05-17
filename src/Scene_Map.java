@@ -2,16 +2,16 @@ import java.util.ArrayList;
 
 /*
  * Scene_Map.java
- * Diese Scene ist das Herzstück des Programms, da sie den gesamten Spielablauf regelt. Sie
+ * Diese Scene ist das Herzstï¿½ck des Programms, da sie den gesamten Spielablauf regelt. Sie
  * regelt die korrekte Anzeige der Map, Sprites und evtl. weiteren Grafiken, die Steuerung
  * von Spieler und Gegnern sowie das Mapscrolling.
  * 
  * Wie jede Scene implementiert sie die Methode update, welche sich (momentan) aus den
  * Methoden updateLogic und updateScreen zusammensetzt.
- * Kurz gesagt überprüft updateLogic alle Tasteneingaben und verarbeitet sie entsprechend
- * (Spielerbewegung, Menüaufruf, etc.) und zeichnet anschließend die Karte samt Sprites neu.
+ * Kurz gesagt ï¿½berprï¿½ft updateLogic alle Tasteneingaben und verarbeitet sie entsprechend
+ * (Spielerbewegung, Menï¿½aufruf, etc.) und zeichnet anschlieï¿½end die Karte samt Sprites neu.
  * 
- * Für eine detailierte Beschreibung siehe updateLogic und updateScreen
+ * Fï¿½r eine detailierte Beschreibung siehe updateLogic und updateScreen
  */
 
 public class Scene_Map extends Scene {
@@ -49,20 +49,20 @@ public class Scene_Map extends Scene {
 	}
 	
 	private void updateLogic() {
-		//Überprüft, ob eine Bewegungstaste gedrückt wurde und
+		//ï¿½berprï¿½ft, ob eine Bewegungstaste gedrï¿½ckt wurde und
 		//bearbeitet die Koordinaten des Characters entsprechend
-		//Initialisiert (wenn nötig) auch eine Bewegungsanimation
+		//Initialisiert (wenn nï¿½tig) auch eine Bewegungsanimation
 		
-		//checkMenu gibt true zurück, falls tatsächlich die Scene gewechselt wurde. In
-		//diesem Fall soll die update Methode natürlich so schnell wie möglich abbrechen
+		//checkMenu gibt true zurï¿½ck, falls tatsï¿½chlich die Scene gewechselt wurde. In
+		//diesem Fall soll die update Methode natï¿½rlich so schnell wie mï¿½glich abbrechen
 		if (check_menu()) return;
 		
 		//Falls, der Spieler gerade steuerbar ist (also nicht schon in einer
-		//Bewegungsphase), dann prüfe jetzt, ob er bewegt wurde
+		//Bewegungsphase), dann prï¿½fe jetzt, ob er bewegt wurde
 		if (!skip_moving) {
 		
 			//Alte Koordinaten des characters speichern um zu
-			//prüfen, ob eine Bewegung animiert werden muss
+			//prï¿½fen, ob eine Bewegung animiert werden muss
 			player.save_position();
 			check_walking();
 			current_map.scrolling = false;
@@ -82,7 +82,7 @@ public class Scene_Map extends Scene {
 	}
 	
 	private void updateScreen() {
-		//Zuerst alles löschen
+		//Zuerst alles lï¿½schen
 		game.getScreen().getBuffer().getGraphics().clearRect(
 				0,
 				0,
@@ -92,20 +92,20 @@ public class Scene_Map extends Scene {
 		drawLowMap();
 		//Sprites zeichnen
 		drawSprites();
-		//Später noch:
+		//Spï¿½ter noch:
 		//drawHighMap()
 	}
 	
 	
 	///////////////////////////////////////////////////////////////////////////////////////////
-	//								Scene interne Methoden
+	//								Scene-interne Methoden
 	///////////////////////////////////////////////////////////////////////////////////////////
 	
 	private boolean check_menu() {
 		if (game.getKeyHandler().getKey(KeyHandler.KEY_ESCAPE)) {
 			game.getKeyHandler().clear();
 			game.getKeyHandler().freeze(KeyHandler.KEY_ESCAPE, 20);
-			//Menü aufrufen
+			//Menï¿½ aufrufen
 			game.scene = new Scene_GameMenu(game, this);
 			return true;
 		}
@@ -113,8 +113,8 @@ public class Scene_Map extends Scene {
 	}
 	
 	private void check_walking() {
-		//Falls eine Pfeiltaste gedrückt wurde, wird versucht den Spieler
-		//zu bewegen (das ist nur möglich, wenn er versucht, auf ein begehbares
+		//Falls eine Pfeiltaste gedrï¿½ckt wurde, wird versucht den Spieler
+		//zu bewegen (das ist nur mï¿½glich, wenn er versucht, auf ein begehbares
 		//Feld zu gelangen
 		switch (game.getKeyHandler().getLast()) {
 		case 1: //UP
@@ -180,18 +180,18 @@ public class Scene_Map extends Scene {
 	}
 	
 	private void player_animation() {
-		//Der movecounter von jedem Sprite ist so groß, wie
-		//ein Tile (momentan 32). Während einer Bewegung wird er hochgezählt
+		//Der movecounter von jedem Sprite ist so groï¿½, wie
+		//ein Tile (momentan 32). Wï¿½hrend einer Bewegung wird er hochgezï¿½hlt
 		//, um den character Pixelweise zu bewegen und zu animieren
-		//Wenn der movecounter 32 (die Tilegröße) erreicht hat
-		//dann ist die Animation vorbei und alles wird zurückgesetzt.
+		//Wenn der movecounter 32 (die Tilegrï¿½ï¿½e) erreicht hat
+		//dann ist die Animation vorbei und alles wird zurï¿½ckgesetzt.
 		if (player.moving) player.movecounter += player.move_distance; 
 		if (player.movecounter >= Map.TILESIZE) {
 			//Der Spieler hat seine neue Position erreicht, die Animation ist vorbei
 			player.movecounter = 0;
 			//Koordinaten werden jetzt angepasst
 			player.save_position();
-			//Schrittanimation für die nächste Bewegung wird gewechselt
+			//Schrittanimation fï¿½r die nï¿½chste Bewegung wird gewechselt
 			if (player.old_animation == Sprite.ANIMATION_LEFT) {
 				player.old_animation = Sprite.ANIMATION_RIGHT;
 			}
@@ -250,7 +250,7 @@ public class Scene_Map extends Scene {
 	private void drawSprites() {
 		//Geht die Liste der Sprites durch und zeichnet sie
 		// !!! WICHTIG !!!
-		//Momentan werden Sprites noch nicht danach sortiert, wer "über" wem steht
+		//Momentan werden Sprites noch nicht danach sortiert, wer "ï¿½ber" wem steht
 		//Das wird noch umgesetzt
 		for (Sprite s : sprites) {
 			if (s.movecounter > 0) {
@@ -263,11 +263,11 @@ public class Scene_Map extends Scene {
 					s.animation = Sprite.ANIMATION_MIDDLE;
 				}
 			}
-			//Berechne tatsächliche Pixelkoordinaten in Abhängigkeit von
+			//Berechne tatsï¿½chliche Pixelkoordinaten in Abhï¿½ngigkeit von
 			//Animation und Scrolling
 			int new_x=-100;
 			int new_y=-100;
-			//Falls scrolling aktiviert ist, verändert der Character zwar seine Mapkoordinaten
+			//Falls scrolling aktiviert ist, verï¿½ndert der Character zwar seine Mapkoordinaten
 			//aber wird weiterhin zentriert im Bild angezeigt
 			if (map.scrolling) {
 				switch (s.direction) {
@@ -287,7 +287,7 @@ public class Scene_Map extends Scene {
 				new_x = (s.get_old_x()-screen_point[0])*Map.TILESIZE;
 				new_y = (s.get_old_y()-screen_point[1])*Map.TILESIZE - Map.TILESIZE;
 				//Falls der Character sich nciht bewegt ist movecounter 0 und nichts
-				//ändert sich hier!
+				//ï¿½ndert sich hier!
 				switch (s.direction) {
 				case 1: //UP
 					new_y -= s.movecounter;
