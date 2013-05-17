@@ -3,13 +3,10 @@ import java.awt.event.KeyListener;
 
 /*
  * KeyHandler.java
- * Implementiert einfach einen KeyListener. Diese Klasse wurde allein stehend
- * aufgebaut, um einen möglichst einfachen Zugriff zu erlauben. Da Tastenabfragen
- * und alles was dazu gehört wird hier geregelt, für alle anderen Klassen reicht
- * es, KeyHandler.get_[KEY]() aufzurufen, um zu fragen ob [KEY] gedrückt wird.
- * Um die zuletzt gedrückte Taste zu erhalten, kann man get_last() aufrufen.
- * Siehe dazu z.B. Game.move_player(), dort wird die Methode genutzt, um diagonales
- * Laufen zu verhindern
+ * Bietet eine Schnittstelle zur Tastatur.
+ * Sobald ein KeyHandler Objekt mittels addKeyListener an den Screen gebunden wird,
+ * lassen sich alle Methoden des KeyHandlers aufrufen.
+ * 
  */
 
 public class KeyHandler implements KeyListener {
@@ -17,11 +14,11 @@ public class KeyHandler implements KeyListener {
 	final static int NUMBER_OF_KEYS = 100;
 	
 	final static int NO_KEY = 0;
-	final static int UP = 1;
-	final static int DOWN = 2;
-	final static int LEFT = 3;
-	final static int RIGHT = 4;
-	final static int ESCAPE = 5;
+	final static int KEY_UP = 1;
+	final static int KEY_DOWN = 2;
+	final static int KEY_LEFT = 3;
+	final static int KEY_RIGHT = 4;
+	final static int KEY_ESCAPE = 5;
 	
 	private boolean[] keys;
 	private int[] frozen;
@@ -39,43 +36,43 @@ public class KeyHandler implements KeyListener {
 	@Override
 	public void keyPressed(KeyEvent e) {
 		if (e.getKeyCode() == KeyEvent.VK_UP) {
-			if (frozen[UP] > 0) return;
-			keys[UP] = true;
-			if (first != UP && second != UP) {
+			if (frozen[KEY_UP] > 0) return;
+			keys[KEY_UP] = true;
+			if (first != KEY_UP && second != KEY_UP) {
 				second = first;
-				first = UP;
+				first = KEY_UP;
 			}
 		}
 		if (e.getKeyCode() == KeyEvent.VK_DOWN) {
-			if (frozen[DOWN] > 0) return;
-			keys[DOWN] = true;
-			if (first != DOWN && second != DOWN) {
+			if (frozen[KEY_DOWN] > 0) return;
+			keys[KEY_DOWN] = true;
+			if (first != KEY_DOWN && second != KEY_DOWN) {
 				second = first;
-				first = DOWN;
+				first = KEY_DOWN;
 			}
 		}
 		if (e.getKeyCode() == KeyEvent.VK_LEFT) {
-			if (frozen[DOWN] > 0) return;
-			keys[LEFT] = true;
-			if (first != LEFT && second != LEFT) {
+			if (frozen[KEY_DOWN] > 0) return;
+			keys[KEY_LEFT] = true;
+			if (first != KEY_LEFT && second != KEY_LEFT) {
 				second = first;
-				first = LEFT;
+				first = KEY_LEFT;
 			}
 		}
 		if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
-			if (frozen[RIGHT] > 0) return;
-			keys[RIGHT] = true;
-			if (first != RIGHT && second != RIGHT) {
+			if (frozen[KEY_RIGHT] > 0) return;
+			keys[KEY_RIGHT] = true;
+			if (first != KEY_RIGHT && second != KEY_RIGHT) {
 				second = first;
-				first = RIGHT;
+				first = KEY_RIGHT;
 			}
 		}
 		if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
-			if (frozen[ESCAPE] > 0) return;
-			keys[ESCAPE] = true;
-			if (first != ESCAPE && second != ESCAPE) {
+			if (frozen[KEY_ESCAPE] > 0) return;
+			keys[KEY_ESCAPE] = true;
+			if (first != KEY_ESCAPE && second != KEY_ESCAPE) {
 				second = first;
-				first = ESCAPE;
+				first = KEY_ESCAPE;
 			}
 		}
 	}
@@ -83,55 +80,55 @@ public class KeyHandler implements KeyListener {
 	@Override
 	public void keyReleased(KeyEvent e) {
 		if (e.getKeyCode() == KeyEvent.VK_UP) {
-			if (frozen[UP] > 0) return;
-			keys[UP] = false;
-			if (second == UP) second = NO_KEY;
-			if (first == UP) {
+			if (frozen[KEY_UP] > 0) return;
+			keys[KEY_UP] = false;
+			if (second == KEY_UP) second = NO_KEY;
+			if (first == KEY_UP) {
 				first = second;
 				second = NO_KEY;
 			}
 		}
 		if (e.getKeyCode() == KeyEvent.VK_DOWN) {
-			if (frozen[DOWN] > 0) return;
-			keys[DOWN] = false;
-			if (second == DOWN) second = NO_KEY;
-			if (first == DOWN) {
+			if (frozen[KEY_DOWN] > 0) return;
+			keys[KEY_DOWN] = false;
+			if (second == KEY_DOWN) second = NO_KEY;
+			if (first == KEY_DOWN) {
 				first = second;
 				second = NO_KEY;
 			}
 		}
 		if (e.getKeyCode() == KeyEvent.VK_LEFT) {
-			if (frozen[LEFT] > 0) return;
-			keys[LEFT] = false;
-			if (second == LEFT) second = NO_KEY;
-			if (first == LEFT) {
+			if (frozen[KEY_LEFT] > 0) return;
+			keys[KEY_LEFT] = false;
+			if (second == KEY_LEFT) second = NO_KEY;
+			if (first == KEY_LEFT) {
 				first = second;
 				second = NO_KEY;
 			}
 		}
 		if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
-			if (frozen[RIGHT] > 0) return;
-			keys[RIGHT] = false;
-			if (second == RIGHT) second = NO_KEY;
-			if (first == RIGHT) {
+			if (frozen[KEY_RIGHT] > 0) return;
+			keys[KEY_RIGHT] = false;
+			if (second == KEY_RIGHT) second = NO_KEY;
+			if (first == KEY_RIGHT) {
 				first = second;
 				second = NO_KEY;
 			}
 		}
 		if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
-			if (frozen[ESCAPE] > 0) return;
-			keys[ESCAPE] = true;
+			if (frozen[KEY_ESCAPE] > 0) return;
+			keys[KEY_ESCAPE] = true;
 		}
 	}
 	
 	public void clear() {
 		first = NO_KEY;
 		second = NO_KEY;
-		keys[UP] = false;
-		keys[DOWN] = false;
-		keys[LEFT] = false;
-		keys[RIGHT] = false;
-		keys[ESCAPE] = false;
+		keys[KEY_UP] = false;
+		keys[KEY_DOWN] = false;
+		keys[KEY_LEFT] = false;
+		keys[KEY_RIGHT] = false;
+		keys[KEY_ESCAPE] = false;
 	}
 	
 	//freeze bietet die Möglichkeit, eine Taste, für eine bestimmte Anzahl von
@@ -153,10 +150,10 @@ public class KeyHandler implements KeyListener {
 		return first;
 	}
 	
-	public boolean get_up() { return keys[UP]; }
-	public boolean get_down() { return keys[DOWN]; }
-	public boolean get_left() { return keys[LEFT]; }
-	public boolean get_right() { return keys[RIGHT]; }
-	public boolean get_escape() {return keys[ESCAPE]; }
+	public boolean get_up() { return keys[KEY_UP]; }
+	public boolean get_down() { return keys[KEY_DOWN]; }
+	public boolean get_left() { return keys[KEY_LEFT]; }
+	public boolean get_right() { return keys[KEY_RIGHT]; }
+	public boolean get_escape() {return keys[KEY_ESCAPE]; }
 
 }

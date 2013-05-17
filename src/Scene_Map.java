@@ -52,7 +52,7 @@ public class Scene_Map extends Scene {
 		if (!skip_moving) {
 		
 			//Alte Koordinaten des Characters speichern um zu
-			//prüfen, ob enie Bewegung animiert werden muss
+			//prüfen, ob eine Bewegung animiert werden muss
 			player.save_position();
 			check_walking();
 			current_map.scrolling = false;
@@ -93,7 +93,7 @@ public class Scene_Map extends Scene {
 		//menu_access = false;
 		if (game.getKeyHandler().get_escape()) {
 			game.getKeyHandler().clear();
-			game.getKeyHandler().freeze(KeyHandler.ESCAPE, 20);
+			game.getKeyHandler().freeze(KeyHandler.KEY_ESCAPE, 20);
 			game.scene = new Scene_GameMenu(game, this);
 			//game.scene = new Scene_StartMenu(game);
 			return true;
@@ -106,26 +106,26 @@ public class Scene_Map extends Scene {
 		//anpassen
 		switch (game.getKeyHandler().get_last()) {
 		case 1: //UP
-			player.direction = KeyHandler.UP;
+			player.direction = KeyHandler.KEY_UP;
 			if (player.pos_y == 0) break;
 			if (!current_map.isPassable(player.pos_x, player.pos_y-1)) break;
 			player.pos_y -= 1;
 			break;
 			
 		case 2: //DOWN
-			player.direction = KeyHandler.DOWN;
+			player.direction = KeyHandler.KEY_DOWN;
 			if (player.pos_y == current_map.getHeight()-1) break;
 			if (!current_map.isPassable(player.pos_x, player.pos_y+1)) break;
 			player.pos_y += 1;
 			break;
 		case 3: //LEFT
-			player.direction = KeyHandler.LEFT;
+			player.direction = KeyHandler.KEY_LEFT;
 			if (player.pos_x == 0) break;
 			if (!current_map.isPassable(player.pos_x-1, player.pos_y)) break;
 			player.pos_x -= 1;
 			break;
 		case 4: //RIGHT
-			player.direction = KeyHandler.RIGHT;
+			player.direction = KeyHandler.KEY_RIGHT;
 			if (player.pos_x == current_map.getWidth()-1) break;
 			if (!current_map.isPassable(player.pos_x+1, player.pos_y)) break;
 			player.pos_x += 1;
@@ -179,11 +179,11 @@ public class Scene_Map extends Scene {
 			//Koordinaten werden jetzt angepasst
 			player.save_position();
 			//Schrittanimation für die nächste Bewegung wird gewechselt
-			if (player.old_animation == Sprite.ANI_LEFT) {
-				player.old_animation = Sprite.ANI_RIGHT;
+			if (player.old_animation == Sprite.ANIMATION_LEFT) {
+				player.old_animation = Sprite.ANIMATION_RIGHT;
 			}
 			else {
-				player.old_animation = Sprite.ANI_LEFT;
+				player.old_animation = Sprite.ANIMATION_LEFT;
 			}
 			player.moving = false;
 			skip_moving = false;
@@ -244,11 +244,11 @@ public class Scene_Map extends Scene {
 			if (s.movecounter > 0) {
 				//ANIMATION
 				if (s.movecounter < Map.TILESIZE-10) {
-					if (s.old_animation == Sprite.ANI_LEFT) s.animation = Sprite.ANI_RIGHT;
-					else s.animation = Sprite.ANI_LEFT;
+					if (s.old_animation == Sprite.ANIMATION_LEFT) s.animation = Sprite.ANIMATION_RIGHT;
+					else s.animation = Sprite.ANIMATION_LEFT;
 				}
 				else {
-					s.animation = Sprite.ANI_MIDDLE;
+					s.animation = Sprite.ANIMATION_MIDDLE;
 				}
 			}
 			//Berechne tatsächliche Pixelkoordinaten in Abhängigkeit von

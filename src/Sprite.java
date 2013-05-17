@@ -16,9 +16,9 @@ import java.awt.Image;
 
 public class Sprite {
 	
-	static int ANI_LEFT = 0;
-	static int ANI_MIDDLE = 1;
-	static int ANI_RIGHT = 2;
+	static int ANIMATION_LEFT = 0;
+	static int ANIMATION_MIDDLE = 1;
+	static int ANIMATION_RIGHT = 2;
 	
 	int pos_x;
 	int pos_y;
@@ -41,8 +41,8 @@ public class Sprite {
 		pos_y = y;
 		old_x = pos_x;
 		old_y = pos_y;
-		direction = KeyHandler.DOWN;
-		animation = ANI_MIDDLE;
+		direction = KeyHandler.KEY_DOWN;
+		animation = ANIMATION_MIDDLE;
 		move_distance = 2;
 		//Es wird davon ausgegangen, dass alle Bilder im SpriteSet die selben
 		//Maﬂe haben!
