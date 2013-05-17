@@ -1,4 +1,6 @@
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 /*
  * Scene_Map.java
@@ -44,6 +46,7 @@ public class Scene_Map extends Scene {
 	}
 	
 	public void update() {
+		Collections.sort(sprites);
 		updateLogic();
 		updateScreen();
 	}
@@ -206,6 +209,7 @@ public class Scene_Map extends Scene {
 
 	public void addSprite(Sprite s) {
 		sprites.add(s);
+		Collections.sort(sprites);
 	}
 	
 	public void setMap(Map m) {
@@ -309,4 +313,21 @@ public class Scene_Map extends Scene {
 					game.getScreen());
 		}
 	}
+	
+	class SpriteComparator implements Comparator<Sprite> {
+
+		@Override
+		public int compare(Sprite arg0, Sprite arg1) {
+			// TODO Auto-generated method stub
+			if (arg0.pos_y < arg1.pos_y) {
+				return -1;
+			}
+			if (arg0.pos_y > arg1.pos_y) {
+				return 1;
+			}
+			return 0;
+		}
+		
+	}
+	
 }

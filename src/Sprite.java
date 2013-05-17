@@ -1,4 +1,5 @@
 import java.awt.Image;
+import java.lang.Comparable;
 
 /*
  * Sprite.java
@@ -6,7 +7,7 @@ import java.awt.Image;
  * darzustellen.
  */
 
-public class Sprite {
+public class Sprite implements Comparable<Sprite> {
 	
 	static int ANIMATION_LEFT = 0;
 	static int ANIMATION_MIDDLE = 1;
@@ -71,5 +72,16 @@ public class Sprite {
 		//Gibt die Spritegrafik entsprechend der Blickrichtung und
 		//Animationsstufe zurück
 		return spriteset.getSprite(direction, animation);
+	}
+
+	@Override
+	public int compareTo(Sprite other) {
+		if (pos_y > other.pos_y) {
+			return 1;
+		}
+		if (pos_y < other.pos_y) {
+			return -1;
+		}
+		return 0;
 	}
 }
