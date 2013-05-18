@@ -62,6 +62,10 @@ public class start extends JFrame implements ActionListener{
 		fenster.setSize(650,350);
 		fenster.setVisible(true);
 		fenster.add(new GameFrame());
+		/*die "GameFrame" ist nur ein Beispiel, muss ins Main verandert werden.
+		aber diese Files kann ich nicht in meine Eclipse öffnen und damit kann auch nicht überprufung, deswegen copy ich das Start.class 
+		nur einfach von miene Workspace ins Github. in ain paar zeit will ich wieder korrigieren.
+		*/
 	}
 	
 public static void auswahl(){
