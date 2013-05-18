@@ -62,7 +62,6 @@ abstract class ComponentSystem {
 		this.types = types;
 		this.entitiesByType = new Hashtable<String,List<Entity>>();
 		for (String type : this.types){
-			//List<Entity> tmplist = new LinkedList<Entity>();
 			this.entitiesByType.put(type,new LinkedList<Entity>());
 		}
 	}
@@ -100,7 +99,8 @@ class RenderSystem extends ComponentSystem {
 	public void update() {
 		screen.getBuffer().getGraphics().clearRect(0, 0, screen.SCREEN_W, screen.SCREEN_H);
 		this.drawLowMap();
-		//this.animations();
+		this.animations();
+		this.check_scrolling();
 		this.drawSprites();
 	}
 	
@@ -119,6 +119,7 @@ class RenderSystem extends ComponentSystem {
 				else {
 					compSprite.old_animation = CompSprite.ANIMATION_LEFT;
 				}
+				compMovement.setMoveable();
 			}
 		}
 	}
@@ -146,19 +147,19 @@ class RenderSystem extends ComponentSystem {
 				switch (compMovement.orientation) {
 				case 2: //DOWN
 				case 1: //UP
-					new_x = (compMovement.x-compMovement.dx-this.screenPoint[0])*Map.TILESIZE;
+					new_x = (compMovement.getOldX()-this.screenPoint[0])*Map.TILESIZE;
 					new_y = (Screen.VISIBLE_TILES_Y/2)*Map.TILESIZE - Map.TILESIZE;
 					break;
 				case 3: //LEFT
 				case 4: //RIGHT
 					new_x = (Screen.VISIBLE_TILES_X/2)*Map.TILESIZE;
-					new_y = (compMovement.y-compMovement.dy-this.screenPoint[1])*Map.TILESIZE - Map.TILESIZE;
+					new_y = (compMovement.getOldY()-this.screenPoint[1])*Map.TILESIZE - Map.TILESIZE;
 					break;
 				}
 			}
 			else {
-				new_x = (compMovement.x-compMovement.dx-this.screenPoint[0])*Map.TILESIZE;
-				new_y = (compMovement.y-compMovement.dy-this.screenPoint[1])*Map.TILESIZE - Map.TILESIZE;
+				new_x = (compMovement.getOldX()-this.screenPoint[0])*Map.TILESIZE;
+				new_y = (compMovement.getOldY()-this.screenPoint[1])*Map.TILESIZE - Map.TILESIZE;
 				//Falls der Character sich nciht bewegt ist movecounter 0 und nichts
 				//�ndert sich hier!
 				switch (compMovement.orientation) {
@@ -183,6 +184,52 @@ class RenderSystem extends ComponentSystem {
 		}
 	}
 	
+	private void check_scrolling() {
+		//Berechnet, ob die Karte gescrollt werden muss
+		Entity focus = this.getEntitiesByType("camera").get(0);
+		CompMovement compMovement = (CompMovement) focus.getComponent("movement");
+		
+		Map map = ((Scene_Level) this.scene).getCurrentMap();
+		
+		boolean scrolling = false;
+		
+		// TODO Scrollt aus irgendeinem Grund viel zu weit.
+		if (compMovement.isMoving()) {
+			
+			switch(compMovement.orientation) {
+			case 1: //UP
+				if (map.getHeight()-compMovement.getY()-1 <= Screen.VISIBLE_TILES_Y/2) break;
+				if (compMovement.getY() >= Screen.VISIBLE_TILES_Y/2) {
+					scrolling = true;
+					this.screenPoint[1]--;
+				}
+				break;
+			case 2: //DOWN
+				if (compMovement.getY() <= Screen.VISIBLE_TILES_Y/2) break;
+				if (map.getHeight()-compMovement.getY() > Screen.VISIBLE_TILES_Y/2) {
+					scrolling = true;
+					screenPoint[1]++;
+				}
+				break;
+			case 3: //LEFT
+				if (map.getWidth()-compMovement.getX() <= Screen.VISIBLE_TILES_X/2) break;
+				if (compMovement.getX() >= Screen.VISIBLE_TILES_X/2) {
+					scrolling = true;
+					screenPoint[0]--;
+				}
+				break;
+			case 4: //RIGHT
+				if (compMovement.getX() <= Screen.VISIBLE_TILES_X/2) break;
+				if (map.getWidth()-compMovement.getX() >= Screen.VISIBLE_TILES_X/2) {
+					scrolling = true;
+					screenPoint[0]++;
+				}
+				break;
+			}
+		}
+		map.scrolling = scrolling;
+	}
+	
 	private void drawLowMap() {
 		Entity focus = this.getEntitiesByType("camera").get(0);
 		CompMovement compMovement = (CompMovement) focus.getComponent("movement");
@@ -195,8 +242,7 @@ class RenderSystem extends ComponentSystem {
 		int map_x = -this.screenPoint[0]*Map.TILESIZE;
 		int map_y = -this.screenPoint[1]*Map.TILESIZE;
 		
-		boolean moving = compMovement.moving;
-		if (moving && map.scrolling){
+		if (compMovement.isMoving() && map.scrolling){
 			switch (compMovement.orientation) {
 			case 1: //UP
 				map_y -= Map.TILESIZE - compSprite.movecounter;
@@ -252,15 +298,7 @@ class MovementSystem extends ComponentSystem {
 		
 		// Nun die Entitäten bewegen.
 		for (Entity entity : this.getEntitiesByType("movement")) {
-			CompMovement compMovement = (CompMovement) entity.getComponent("movement");
-			int dx = compMovement.dx;
-			int dy = compMovement.dy;
-			compMovement.x += dx;
-			compMovement.y += dy;
-			if (dx != 0 || dy != 0) {
-				compMovement.moving = true;
-			}
-			else compMovement.moving = false;
+			this.moveEntity(entity);
 		}
 		
 		// Jetzt solange illegale Kollisionen behandeln, bis alle behoben sind.
@@ -285,11 +323,12 @@ class MovementSystem extends ComponentSystem {
 	}
 	
 	private void resetPosition(CompMovement compMovement) {
-		compMovement.x -= compMovement.dx;
-		compMovement.y -= compMovement.dy;
-		compMovement.dx = 0;
-		compMovement.dy = 0;
-		compMovement.moving = false;
+		compMovement.setX(compMovement.getOldX());
+		compMovement.setY(compMovement.getOldY());
+		compMovement.setdX(0);
+		compMovement.setdY(0);
+		compMovement.unsetMoving();
+		compMovement.setMoveable();
 	}
 	
 	private List<ECollision> getIllegalCollisions() {
@@ -300,8 +339,10 @@ class MovementSystem extends ComponentSystem {
 				for (int j = 0; j < i; j++) {
 					if (i != j) {
 						CompMovement compMovement2 = (CompMovement) this.getEntitiesByType("movement").get(j).getComponent("movement");
-						if (compMovement1.x == compMovement2.x && compMovement1.y == compMovement2.y) {
-							if (compMovement1.collidable && this.isIllegalCollision(compMovement1, compMovement2)) {
+						if (compMovement1.x == compMovement2.x 
+								&& compMovement1.y == compMovement2.y) {
+							if (compMovement1.collidable 
+									&& this.isIllegalCollision(compMovement1, compMovement2)) {
 								illegalCollisions.add(new ECollision(compMovement1.entity, compMovement2.entity));
 							}							
 						}
@@ -327,43 +368,60 @@ class MovementSystem extends ComponentSystem {
 		return ((Scene_Level) this.scene).getCurrentMap().isPassable(x, y);
 	}
 	
+	private void moveEntity(Entity entity) {
+		CompMovement compMovement = (CompMovement) entity.getComponent("movement");
+		if (compMovement.isMoveable()) {
+			int dx = compMovement.getdX();
+			int dy = compMovement.getdY();
+			compMovement.addToX(dx);
+			compMovement.addToY(dy);
+			if (dx != 0 || dy != 0) {
+				compMovement.setMoving();
+				compMovement.unsetMoveable();
+			}
+			else compMovement.unsetMoving();
+		}
+	}
+	
 	private void handlePlayerInput(CompMovement compMovement) {
-		int dx = 0;
-		int dy = 0;
-		switch(this.keyHandler.getLast()) {
-		case 1: // UP
-			compMovement.orientation = this.keyHandler.KEY_UP;
-			dx = 0;
-			dy = -1;
-			break;
-		case 2: // DOWN
-			compMovement.orientation = this.keyHandler.KEY_DOWN;
-			dx = 0;
-			dy = 1;
-			break;
-		case 3: // LEFT
-			compMovement.orientation = this.keyHandler.KEY_LEFT;
-			dx = -1;
-			dy = 0;
-			break;
-		case 4: // RIGHT
-			compMovement.orientation = this.keyHandler.KEY_RIGHT;
-			dx = 1;
-			dy = 0;
-			break;
-		default:
-			dx = 0;
-			dy = 0;
-		}
-		int newX = compMovement.x+dx;
-		int newY = compMovement.y+dy;
-		if (this.walkable(newX, newY)) {
-			compMovement.dx = dx;
-			compMovement.dy = dy;
-		}
-		else {
-			compMovement.dx = 0;
-			compMovement.dy = 0;
+		if (compMovement.isMoveable()) {
+			int dx = 0;
+			int dy = 0;
+			switch(this.keyHandler.getLast()) {
+			case 1: // UP
+				compMovement.setOrientation(1);
+				dx = 0;
+				dy = -1;
+				break;
+			case 2: // DOWN
+				compMovement.setOrientation(2);
+				dx = 0;
+				dy = 1;
+				break;
+			case 3: // LEFT
+				compMovement.setOrientation(3);
+				dx = -1;
+				dy = 0;
+				break;
+			case 4: // RIGHT
+				compMovement.setOrientation(4);
+				dx = 1;
+				dy = 0;
+				break;
+			default:
+				dx = 0;
+				dy = 0;
+			}
+			int newX = compMovement.getX()+dx;
+			int newY = compMovement.getY()+dy;
+			if (this.walkable(newX, newY)) {
+				compMovement.setdX(dx);
+				compMovement.setdY(dy);
+			}
+			else {
+				compMovement.setdX(0);
+				compMovement.setdY(0);
+			}
 		}
 			
 	}
@@ -395,7 +453,7 @@ abstract class Component {
 class CompMovement extends Component {
 	public int x, y, dx, dy;
 	public int orientation;
-	public boolean moving, walkable, collidable;
+	public boolean moving, walkable, collidable, moveable;
 	
 	public CompMovement(Entity entity, ComponentSystem system,
 			int x, int y, int dx, int dy,
@@ -408,12 +466,44 @@ class CompMovement extends Component {
 		this.orientation = 1;
 		this.walkable = walkable;
 		this.collidable = collidable;
+		this.moveable = true;
 	}
 	
 	public CompMovement(Entity entity, ComponentSystem system,
 			int x, int y) {
 		this(entity,system,x,y,0,0,true,false);
 	}
+	
+	// Getters
+	
+	public int getX() { return this.x; }
+	public int getY() { return this.y; }
+	public int getdX() { return this.dx; }
+	public int getdY() { return this.dy; }
+	public int getOldX() { return this.x-this.dx; }
+	public int getOldY() { return this.y-this.dy; }
+	public int getOrientation() { return this.orientation; }
+	
+	public boolean isMoving() { return this.moving; }
+	public boolean isWalkable() { return this.walkable; }
+	public boolean isCollidable() { return this.collidable; }
+	public boolean isMoveable() { return this.moveable; }
+	
+	// Setters
+	
+	public void setX(int x) { this.x = x; }
+	public void setY(int y) { this.y = y; }
+	public void setdX(int dx) { this.dx = dx; }
+	public void setdY(int dy) { this.dy = dy; }
+	public void addToX(int dx) { this.x += dx; }
+	public void addToY(int dy) { this.y += dy; }
+	public void setOrientation(int d) { this.orientation = d; }
+	
+	public void setMoving() { this.moving = true; }
+	public void setMoveable() { this.moveable = true; }
+	
+	public void unsetMoving() { this.moving = false; }
+	public void unsetMoveable() { this.moveable = false; }
 }
 
 class CompCamera extends Component {
@@ -423,42 +513,9 @@ class CompCamera extends Component {
 }
 
 class CompControls extends Component {
-	private boolean up;
-	private boolean down;
-	private boolean left;
-	private boolean right;
-	private boolean action;
-	
 	public CompControls(Entity entity, ComponentSystem system) {
 		super("controls",entity,system);
-		this.up = false;
-		this.down = false;
-		this.left = false;
-		this.right = false;
-		this.action = false;
 	}
-	
-	// Getters
-	
-	public boolean getUp() { return this.up; }
-	public boolean getDown() { return this.down; }
-	public boolean getLeft() { return this.left; }
-	public boolean getRight() { return this.right; }
-	public boolean getAction() { return this.action; }
-	
-	// Setters
-	
-	public void setUp() { this.up = true; }
-	public void setDown() { this.down = true; }
-	public void setLeft() { this.left = true; }
-	public void setRight() { this.right = true; }
-	public void setAction() { this.action = true; }
-	
-	public void unsetUp() { this.up = false; }
-	public void unsetDown() { this.down = false; }
-	public void unsetLeft() { this.left = false; }
-	public void unsetRight() { this.right = false; }
-	public void unsetAction() { this.action = false; }
 }
 
 class CompRenderable extends Component {
