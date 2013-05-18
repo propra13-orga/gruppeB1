@@ -32,8 +32,10 @@ public class Scene_Map extends Scene {
 	Scene_Map(Game g) {
 		super(g);
 		//Die meisten Initialisierungen werden noch ausgelagert
-		player = new Sprite("character_2", 2, 5);
+		player = new Sprite("player_2", 2, 5);
 		Sprite enemy1 = new Sprite("character_1", 7, 5);
+		Sprite enemy2 = new Sprite("character_1", 8, 9);
+		Sprite enemy3 = new Sprite("character_1", 17, 11);
 		current_map = new Map("map1", this);
 		sprites = new ArrayList<Sprite>();
 		screen_point = new int[2];
@@ -42,6 +44,8 @@ public class Scene_Map extends Scene {
 		setMap(current_map);
 		addSprite(player);
 		addSprite(enemy1);
+		addSprite(enemy2);
+		addSprite(enemy3);
 		setFocusOn(player);
 	}
 	
