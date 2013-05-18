@@ -61,7 +61,9 @@ public class start extends JFrame implements ActionListener{
 		fenster.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		fenster.setSize(650,350);
 		fenster.setVisible(true);
-		fenster.add(new GameFrame());
+		fenster.add(new Main());
+		//init von Main()//
+		
 		/*die "GameFrame" ist nur ein Beispiel, muss ins Main verandert werden.
 		aber diese Files kann ich nicht in meine Eclipse öffnen und damit kann auch nicht überprufung, deswegen copy ich das Start.class 
 		nur einfach von miene Workspace ins Github. in ain paar zeit will ich wieder korrigieren.
