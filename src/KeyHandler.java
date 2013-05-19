@@ -57,6 +57,8 @@ public class KeyHandler implements KeyListener {
 		//wird die Eingabe ganz einfach ignoriert.
 		//Auf diese Weise lässt sich die Taste für X Frames sperren.
 		frozen = new int[NUMBER_OF_KEYS];
+		first = NO_KEY;
+		second = NO_KEY;
 	}
 
 	//Überschreibe Methoden von KeyListener
