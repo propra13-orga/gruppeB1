@@ -41,6 +41,7 @@ public class KeyHandler implements KeyListener {
 	final static int KEY_LEFT = 3;
 	final static int KEY_RIGHT = 4;
 	final static int KEY_ESCAPE = 5;
+	final static int KEY_ENTER = 6;
 	
 	private boolean[] keys;
 	private int[] frozen;
@@ -103,6 +104,14 @@ public class KeyHandler implements KeyListener {
 			if (first != KEY_ESCAPE && second != KEY_ESCAPE) {
 				second = first;
 				first = KEY_ESCAPE;
+			}
+		}
+		if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+			if (frozen[KEY_ENTER] > 0) return;
+			keys[KEY_ENTER] = true;
+			if (first != KEY_ENTER && second != KEY_ENTER) {
+				second = first;
+				first = KEY_ENTER;
 			}
 		}
 	}

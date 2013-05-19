@@ -38,7 +38,7 @@ public class Sprite implements Comparable<Sprite> {
 		direction = KeyHandler.KEY_DOWN;
 		animation = ANIMATION_MIDDLE;
 		old_animation = ANIMATION_LEFT;
-		move_distance = 1;
+		move_distance = 2;
 		//Momentan noch konstant, evtl später Variabel. Dann wären Charsets
 		//verschiedener Größe möglich.
 		width = 32;
@@ -99,16 +99,16 @@ public class Sprite implements Comparable<Sprite> {
 			
 			switch (direction) {
 			case DIRECTION_UP:
-				pos_y--;
+				pos_y -= move_distance;
 				break;
 			case DIRECTION_DOWN:
-				pos_y++;
+				pos_y += move_distance;
 				break;
 			case DIRECTION_LEFT:
-				pos_x--;
+				pos_x -= move_distance;
 				break;
 			case DIRECTION_RIGHT:
-				pos_x++;
+				pos_x += move_distance;
 				break;
 			}
 			
@@ -120,9 +120,9 @@ public class Sprite implements Comparable<Sprite> {
 				animation = ANIMATION_MIDDLE;
 			}
 			
-			movecounter++;
+			movecounter += move_distance;
 			
-			if (movecounter == Map.TILESIZE) {
+			if (movecounter >= Map.TILESIZE) {
 				if (old_animation == ANIMATION_LEFT) old_animation = ANIMATION_RIGHT;
 				else old_animation = ANIMATION_LEFT;
 				movecounter = 0                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         ;

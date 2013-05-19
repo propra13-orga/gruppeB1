@@ -45,15 +45,9 @@ public class Map {
 		//berücksichtigt
 		//Weil die einzelnen Abfragen so lang sind, werden sie als booleans zwischen-
 		//gespeichert und am Ende verglichen
-		print("Hole ID bei x="+x+" und y="+y);
-		print("ID ist: "+getTileID(TileSet.LAYER_LOW,x,y));
 		boolean a = tileset.isPassable(TileSet.LAYER_LOW, getTileID(TileSet.LAYER_LOW,x,y));
 		boolean b = tileset.isPassable(TileSet.LAYER_HIGH, getTileID(TileSet.LAYER_HIGH,x,y));
 		return a && b;
-	}
-	
-	private void print(String s) {
-		System.out.println(s);
 	}
 	
 	public BufferedImage getLowMapImage() {

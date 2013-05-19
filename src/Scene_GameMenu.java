@@ -1,3 +1,5 @@
+import java.awt.Color;
+import java.awt.Graphics;
 import java.util.ArrayList;
 
 
@@ -12,7 +14,7 @@ public class Scene_GameMenu extends Scene {
 	int wait_counter;
 	//Die vorhandenen Befehle
 	private ArrayList<String> commands;
-	
+
 	Scene_GameMenu(Game g, Scene_Map m) {
 		super(g);
 		current_map = m;
@@ -33,10 +35,8 @@ public class Scene_GameMenu extends Scene {
 		print("Menü starten!");
 		cursor = 0;
 		commands = new ArrayList<String>();
-		commands.add("    Inventar   ");
-		commands.add("     Status    ");
-		commands.add("    Optionen   ");
 		commands.add("Spiel speichern");
+		commands.add("Spiel beenden");
 		updateScreen();
 	}
 	
@@ -63,42 +63,36 @@ public class Scene_GameMenu extends Scene {
 			game.getKeyHandler().freeze(KeyHandler.KEY_ESCAPE, 40);
 			game.scene = current_map;
 			return;
+		case KeyHandler.KEY_ENTER:
+			switch (cursor) {
+			case 0:
+				//Spiel speichern
+				break;
+			case 1:
+				//Spiel beenden
+				game.scene = null;
+			}
 		}
 		if (cursor < 0) cursor = commands.size() - 1;
 		if (cursor >= commands.size()) cursor = 0;
 	}
 	
 	private void updateScreen() {
-		if (dirty) {
-			clear_screen();
-			if (cursor == 0) {
-				print(">>> " + commands.get(0)+" <<<");
-			}
-			else {
-				print("    " + commands.get(0));
-			}
-			if (cursor == 1) {
-				print(">>> " + commands.get(1)+" <<<");
-			}
-			else {
-				print("    " + commands.get(1));
-			}
-			if (cursor == 2) {
-				print(">>> " + commands.get(2)+" <<<");
-			}
-			else {
-				print("    " + commands.get(2));
-			}
-			if (cursor == 3) {
-				print(">>> " + commands.get(3)+" <<<");
-			}
-			else {
-				print("    " + commands.get(3));
-			}
-			dirty = false;
+		Graphics g = game.getScreen().getBuffer().getGraphics();
+		g.clearRect(0, 0, Screen.SCREEN_W, Screen.SCREEN_H);
+		int text_x = 20;//Screen.SCREEN_W/2;
+		int text_y = 20;//Screen.SCREEN_H/2;
+		int i = 0;
+		for (String s : commands) {
+			g.drawString(s, text_x, text_y+i*20);
+			i++;
 		}
-		//Befehle auf den Bildschrim zeichnen
-		//Rahmen um den Befehl nummer 'cursor' zeichnen
+		g.setColor(new Color(255,255,255));
+		g.drawLine(text_x,
+				   text_y+cursor*20,
+				   text_x+100,
+				   text_y+cursor*20);
+		
 	}
 	
 	private void print(String s) {

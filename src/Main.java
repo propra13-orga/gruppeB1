@@ -18,7 +18,7 @@ import java.util.Date;
 
 public class Main {
 	
-	static int SLEEP_TIME = 6;
+	static int SLEEP_TIME = 10;
 	
 	public static void main(String[] args) {
 		

@@ -35,7 +35,7 @@ public class Scene_Map extends Scene {
 		Sprite enemy1 = new Sprite("character_1", 7, 5);
 		Sprite enemy2 = new Sprite("character_1", 8, 9);
 		Sprite enemy3 = new Sprite("character_1", 17, 11);
-		current_map = new Map("map1", this);
+		current_map = new Map("map2", this);
 		sprites = new ArrayList<Sprite>();
 		screen_point = new int[2];
 		screen_point[0] = 0;
