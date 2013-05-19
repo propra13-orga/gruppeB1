@@ -76,7 +76,7 @@ class CompSprite extends Component {
 	public SpriteSet getSpriteSet() {
 		return spriteset;
 	}
-	public Image getImage() {
+	public Image getImage(int direction) {
 		//Gibt die Spritegrafik entsprechend der Blickrichtung und
 		//Animationsstufe zur�ck
 		return spriteset.getSprite(direction, animation);
