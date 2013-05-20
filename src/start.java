@@ -19,7 +19,7 @@ public class start extends JFrame implements ActionListener{
 		
 		start frame = new start("Menue");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setSize(650,350);
+		frame.setSize(640,480);
 		
 		frame.setLayout(null);
 		frame.setVisible(true);
@@ -49,49 +49,11 @@ public class start extends JFrame implements ActionListener{
 		add(ende);
 	}
 	
-	public static void frame(){
-		start frame = new start("Menue");
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setSize(650,350);
-		
-		frame.setLayout(null);
-		frame.setVisible(true);
-	}
+
 	
 	public static void fenster(){
-		Frame frame = new Frame();
-		/*Game game = new Game();
-		long time;
-		long timeDiff;
-		Date date = new Date();
 		
-		while (game.scene != null) {
-			
-			time = date.getTime();
-			
-			try {
-				game.update();
-			}
-			catch (Exception e) {
-				//Irgendeine unerwartete Exception
-				e.printStackTrace();
-			}
-			
-			timeDiff = date.getTime() - time;
-			
-			if (SLEEP_TIME-timeDiff > 0) {
-				try {
-					Thread.sleep(SLEEP_TIME-timeDiff);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-			}
-		}
-		
-		System.exit(0);
-		*/
-		
-		
+
 	}
 	
 public static void auswahl(){
@@ -102,7 +64,13 @@ public static void auswahl(){
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource()==schliessen){
 			
-			fenster();
+			
+			//Main.main(null);
+			//direkte verwendung von Main.main() gilt nicht, kommt Map und Rolle vor aber sie koennen nicht bewegen
+			Frame main = new Frame();
+			main.start();
+			//erzeuge ein Class von Frame, die der Funktion von Start der Game dient. Kann man Frame als Bruecke zwischen start_menue und Game
+			//der Grund von Erstellung der Thread ist Umgehen der Main().
 			
 		}
 		

@@ -1,12 +1,12 @@
+
 import java.util.Date;
 
 
-public class Frame  {
+public class Frame extends Thread  {
 
-static int SLEEP_TIME = 10;
+    static int SLEEP_TIME = 10;
 	
-	//public static void main(String[] args) {
-    public Frame () {
+	public void run(){
 		
 		Game game = new Game();
 		long time;
@@ -37,8 +37,6 @@ static int SLEEP_TIME = 10;
 			}
 		}
 		
-		//Programm per System.exit(0) beenden, damit auch die
-		//Swing-Anwendungen geschlossen werden!
 		System.exit(0);
 	}
 

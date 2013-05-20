@@ -21,7 +21,7 @@ public class Main {
 	static int SLEEP_TIME = 10;
 	
 	public static void main(String[] args) {
-		
+	
 		Game game = new Game();
 		long time;
 		long timeDiff;
