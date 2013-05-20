@@ -37,7 +37,7 @@ public class Sprite {
 		direction = KeyHandler.KEY_DOWN;
 		animation = ANIMATION_MIDDLE;
 		old_animation = ANIMATION_LEFT;
-		move_distance = 1;
+		move_distance = 2;
 		//Momentan noch konstant, evtl später Variabel. Dann wären Charsets
 		//verschiedener Größe möglich.
 		width = 32;

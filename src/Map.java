@@ -57,6 +57,7 @@ public class Map {
 			for (int x=0; x<width; x++) {
 				for (int l=0; l<layer; l++) {
 					int tile_id = getTileID(l, x, y);
+					if (tile_id == 5) continue;
 					if (tileset.getPassability(tile_id) == level) {
 						current_tile = tileset.getMapTile(maplayer[l][y][x]);
 						screen.getGraphics().drawImage(current_tile,
@@ -96,7 +97,6 @@ public class Map {
 				line = br.readLine().split(" ");
 				int i=0;
 				for (String s : line) {
-					System.out.println(" "+l+" "+y+" "+i);
 					if (s.length()==0) continue;
 					if (i == width) break;
 					i_line[i] = Integer.parseInt(s);

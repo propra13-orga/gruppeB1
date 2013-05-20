@@ -58,6 +58,10 @@ public class Screen extends JFrame {
 		return buffer;
 	}
 	
+	public JPanel getBoard() {
+		return board;
+	}
+	
 	public static void makeTransparent(BufferedImage b) {
 		int width = b.getWidth();
 		int height = b.getHeight();

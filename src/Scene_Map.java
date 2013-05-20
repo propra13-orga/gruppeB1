@@ -60,33 +60,34 @@ public class Scene_Map extends Scene {
 		//checkMenu gibt true zurück, falls tatsächlich die Scene gewechselt wurde. In
 		//diesem Fall soll die update Methode natürlich so schnell wie möglich abbrechen
 		if (check_menu()) return;
-		
 		//Falls, der Spieler gerade steuerbar ist (also nicht schon in einer
 		//Bewegungsphase), dann prüfe jetzt, ob er bewegt wurde
 		if (!player.moving) checkWalking();
-		
 		//Aktualisiere Position und Animation aller Sprites
 		for (Sprite s : sprites) s.update();
-		
 		//Screenpoint wird aktualisiert
 		updateScreenPoint();
 	}
 	
 	private void updateScreen() {
-		current_map.drawTiles(game.getScreen().getBuffer(), TileSet.BELOW_SPRITE);
-		current_map.drawTiles(game.getScreen().getBuffer(), TileSet.SAME_LEVEL_AS_SPRITE);
-		drawSprites();
-		current_map.drawTiles(game.getScreen().getBuffer(), TileSet.ABOVE_SPRITE);
-		BufferedImage m = game.getScreen().getBuffer().getSubimage(
+		//Die gesamte Map wird als Bild berechnet
+		BufferedImage map = new BufferedImage(
+				current_map.getWidth()*Map.TILESIZE,
+				current_map.getHeight()*Map.TILESIZE,
+				BufferedImage.TYPE_INT_ARGB);
+		current_map.drawTiles(map, TileSet.BELOW_SPRITE);
+		current_map.drawTiles(map, TileSet.SAME_LEVEL_AS_SPRITE);
+		//Sprites werden drauf gezeichnet
+		drawSprites(map);
+		current_map.drawTiles(map, TileSet.ABOVE_SPRITE);
+		//Das sichtbare Feld um den Spieler wird ausgeschnitten...
+		map = map.getSubimage(
 				screen_point[0],
 				screen_point[1],
 				Screen.SCREEN_W,
 				Screen.SCREEN_H);
-		game.getScreen().getBuffer().getGraphics().drawImage(
-		m,
-		0,
-		0,
-		game.getScreen());
+		//...und angezeigt
+		game.getScreen().getBuffer().getGraphics().drawImage(map,0,0,null);
 	}
 	
 	
@@ -164,20 +165,12 @@ public class Scene_Map extends Scene {
 		main_sprite = s;
 	}
 	
-	private void drawSprites() {
+	private void drawSprites(BufferedImage screen) {
 		for (Sprite s : sprites) {
-			game.getScreen().getBuffer().getGraphics().drawImage(
-					s.getLowerHalf(),
-					s.getX(),
-					s.getY()+32,
-					game.getScreen());
+			screen.getGraphics().drawImage(s.getLowerHalf(),s.getX(),s.getY()+32,null);
 		}
 		for (Sprite s : sprites) {
-			game.getScreen().getBuffer().getGraphics().drawImage(
-					s.getUpperHalf(),
-					s.getX(),
-					s.getY(),
-					game.getScreen());
+			screen.getGraphics().drawImage(s.getUpperHalf(),s.getX(),s.getY(),null);
 		}
 	}
 }
