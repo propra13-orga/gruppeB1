@@ -1,5 +1,4 @@
-import java.awt.Image;
-import java.lang.Comparable;
+import java.awt.image.BufferedImage;
 
 /*
  * Sprite.java
@@ -7,7 +6,7 @@ import java.lang.Comparable;
  * darzustellen.
  */
 
-public class Sprite implements Comparable<Sprite> {
+public class Sprite {
 	
 	static final int ANIMATION_LEFT = 0;
 	static final int ANIMATION_MIDDLE = 1;
@@ -38,7 +37,7 @@ public class Sprite implements Comparable<Sprite> {
 		direction = KeyHandler.KEY_DOWN;
 		animation = ANIMATION_MIDDLE;
 		old_animation = ANIMATION_LEFT;
-		move_distance = 2;
+		move_distance = 1;
 		//Momentan noch konstant, evtl später Variabel. Dann wären Charsets
 		//verschiedener Größe möglich.
 		width = 32;
@@ -67,26 +66,19 @@ public class Sprite implements Comparable<Sprite> {
 	public SpriteSet getSpriteSet() {
 		return spriteset;
 	}
-	public Image getImage() {
+	public BufferedImage getImage() {
 		//Gibt die Spritegrafik entsprechend der Blickrichtung und
 		//Animationsstufe zurück
 		return spriteset.getSprite(direction, animation);
 	}
 	
-	/*
-	public void setX(int x) {
-		pos_x = x;
+	public BufferedImage getLowerHalf() {
+		return getImage().getSubimage(0, 32, 32, 32);
 	}
-	public void setY(int y) {
-		pos_y = y;
+	
+	public BufferedImage getUpperHalf() {
+		return getImage().getSubimage(0, 0, 32, 32);
 	}
-	public void setTileX(int x) {
-		pos_x = x * Map.TILESIZE;
-	}
-	public void setTileY(int y) {
-		pos_y = y * Map.TILESIZE;
-	}
-	*/
 	
 	public void makeStep() {
 		if (moving) return;
@@ -129,16 +121,5 @@ public class Sprite implements Comparable<Sprite> {
 				moving = false;
 			}
 		}
-	}
-
-	@Override
-	public int compareTo(Sprite other) {
-		if (pos_y > other.pos_y) {
-			return 1;
-		}
-		if (pos_y < other.pos_y) {
-			return -1;
-		}
-		return 0;
 	}
 }

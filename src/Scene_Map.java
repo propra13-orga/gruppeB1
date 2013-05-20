@@ -1,7 +1,5 @@
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 
 /*
  * Scene_Map.java
@@ -31,11 +29,11 @@ public class Scene_Map extends Scene {
 	Scene_Map(Game g) {
 		super(g);
 		//Die meisten Initialisierungen werden noch ausgelagert
-		player = new Sprite("player_2", 2, 5);
-		Sprite enemy1 = new Sprite("character_1", 7, 5);
-		Sprite enemy2 = new Sprite("character_1", 8, 9);
+		player = new Sprite("character_1", 2, 5);
+		Sprite enemy1 = new Sprite("character_1", 6, 5);
+		Sprite enemy2 = new Sprite("character_1", 6, 9);
 		Sprite enemy3 = new Sprite("character_1", 17, 11);
-		current_map = new Map("map2", this);
+		current_map = new Map("map2");
 		sprites = new ArrayList<Sprite>();
 		screen_point = new int[2];
 		screen_point[0] = 0;
@@ -50,7 +48,6 @@ public class Scene_Map extends Scene {
 	}
 	
 	public void update() {
-		Collections.sort(sprites);
 		updateLogic();
 		updateScreen();
 	}
@@ -76,9 +73,11 @@ public class Scene_Map extends Scene {
 	}
 	
 	private void updateScreen() {
-		BufferedImage m = current_map.getLowMapImage();
-		drawSprites(m);
-		m = m.getSubimage(
+		current_map.drawTiles(game.getScreen().getBuffer(), TileSet.BELOW_SPRITE);
+		current_map.drawTiles(game.getScreen().getBuffer(), TileSet.SAME_LEVEL_AS_SPRITE);
+		drawSprites();
+		current_map.drawTiles(game.getScreen().getBuffer(), TileSet.ABOVE_SPRITE);
+		BufferedImage m = game.getScreen().getBuffer().getSubimage(
 				screen_point[0],
 				screen_point[1],
 				Screen.SCREEN_W,
@@ -153,7 +152,6 @@ public class Scene_Map extends Scene {
 
 	public void addSprite(Sprite s) {
 		sprites.add(s);
-		Collections.sort(sprites);
 	}
 	
 	public void setMap(Map m) {
@@ -166,29 +164,20 @@ public class Scene_Map extends Scene {
 		main_sprite = s;
 	}
 	
-	private void drawSprites(BufferedImage map) {
+	private void drawSprites() {
 		for (Sprite s : sprites) {
-			map.getGraphics().drawImage(
-					s.getImage(),
+			game.getScreen().getBuffer().getGraphics().drawImage(
+					s.getLowerHalf(),
+					s.getX(),
+					s.getY()+32,
+					game.getScreen());
+		}
+		for (Sprite s : sprites) {
+			game.getScreen().getBuffer().getGraphics().drawImage(
+					s.getUpperHalf(),
 					s.getX(),
 					s.getY(),
 					game.getScreen());
 		}
 	}
-	
-	class SpriteComparator implements Comparator<Sprite> {
-
-		@Override
-		public int compare(Sprite arg0, Sprite arg1) {
-			if (arg0.getY() < arg1.getY()) {
-				return -1;
-			}
-			if (arg0.getY() > arg1.getY()) {
-				return 1;
-			}
-			return 0;
-		}
-		
-	}
-	
 }

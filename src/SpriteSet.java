@@ -1,4 +1,3 @@
-import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -29,7 +28,7 @@ public class SpriteSet {
 		Screen.makeTransparent(set);
 	}
 	
-	public Image getSprite(int direction, int animation) {
+	public BufferedImage getSprite(int direction, int animation) {
 		return set.getSubimage(animation*32, (direction-1)*64, 32, 64);
 	}
 }

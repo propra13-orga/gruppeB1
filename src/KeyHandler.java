@@ -157,6 +157,18 @@ public class KeyHandler implements KeyListener {
 		if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
 			if (frozen[KEY_ESCAPE] > 0) return;
 			keys[KEY_ESCAPE] = true;
+			if (first == KEY_ESCAPE) {
+				first = second;
+				second = NO_KEY;
+			}
+		}
+		if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+			if (frozen[KEY_ENTER] > 0) return;
+			keys[KEY_ENTER] = true;
+			if (first == KEY_ENTER) {
+				first = second;
+				second = NO_KEY;
+			}
 		}
 	}
 	
