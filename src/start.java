@@ -1,5 +1,6 @@
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Date;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -12,6 +13,7 @@ public class start extends JFrame implements ActionListener{
 	private JButton einstellung;
 	private JButton info;
 	private JButton ende;
+	static int SLEEP_TIME = 10;
 	
 	public static void main(String[] args) {
 		
@@ -57,17 +59,39 @@ public class start extends JFrame implements ActionListener{
 	}
 	
 	public static void fenster(){
-		JFrame fenster = new JFrame();
-		fenster.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		fenster.setSize(650,350);
-		fenster.setVisible(true);
-		fenster.add(new Main());
-		//init von Main()//
+		Frame frame = new Frame();
+		/*Game game = new Game();
+		long time;
+		long timeDiff;
+		Date date = new Date();
 		
-		/*die "GameFrame" ist nur ein Beispiel, muss ins Main verandert werden.
-		aber diese Files kann ich nicht in meine Eclipse öffnen und damit kann auch nicht überprufung, deswegen copy ich das Start.class 
-		nur einfach von miene Workspace ins Github. in ain paar zeit will ich wieder korrigieren.
+		while (game.scene != null) {
+			
+			time = date.getTime();
+			
+			try {
+				game.update();
+			}
+			catch (Exception e) {
+				//Irgendeine unerwartete Exception
+				e.printStackTrace();
+			}
+			
+			timeDiff = date.getTime() - time;
+			
+			if (SLEEP_TIME-timeDiff > 0) {
+				try {
+					Thread.sleep(SLEEP_TIME-timeDiff);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		
+		System.exit(0);
 		*/
+		
+		
 	}
 	
 public static void auswahl(){
