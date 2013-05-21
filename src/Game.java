@@ -22,7 +22,6 @@ public class Game {
 		//Screen und KeyHandler initialisieren
 		keyhandler = new KeyHandler();
 		screen = new Screen();
-		//scene = new Scene_Map(this);
 		scene = new Scene_Level(this);
 		
 		screen.setTitle(GAME_TITLE);

@@ -1,3 +1,12 @@
+/*
+ * Component.java
+ * 
+ * Hierin befinden sich fast alle Komponenten.
+ */
+
+/*
+ * Die Klasse, von der alle Komponenten abgeleitet werden.
+ */
 abstract class Component {
 	protected ComponentSystem system;
 	protected String type;
@@ -21,13 +30,18 @@ abstract class Component {
 	}
 }
 
+/*
+ * Die Bewegungskomponente enthält alle zur Bewegung (und Kollision) wichtigen
+ * Daten. Jede Entität, die auf der Karte erscheinen soll, braucht diese.
+ */
 class CompMovement extends Component {
 	public int x, y, dx, dy;
 	public int orientation;
+	public int delay, tick;
 	public boolean moving, walkable, collidable, moveable;
 	
 	public CompMovement(Entity entity, ComponentSystem system,
-			int x, int y, int dx, int dy,
+			int x, int y, int dx, int dy, int delay,
 			boolean walkable, boolean collidable) {
 		super("movement",entity,system);
 		this.x = x;
@@ -38,11 +52,17 @@ class CompMovement extends Component {
 		this.walkable = walkable;
 		this.collidable = collidable;
 		this.moveable = true;
+		// Das Delay bestimmt die Bewegungsgeschwindigkeit. Je höher, desto
+		// langsamer.
+		this.delay = delay;
+		// "tick" wird benutzt, um das Delay herunterzuzählen. Ist tick == 0, 
+		// dann kann die Entität bewegt werden.
+		this.tick = 0;
 	}
 	
 	public CompMovement(Entity entity, ComponentSystem system,
 			int x, int y) {
-		this(entity,system,x,y,0,0,true,false);
+		this(entity,system,x,y,0,0,0,true,false);
 	}
 	
 	// Getters
@@ -54,6 +74,8 @@ class CompMovement extends Component {
 	public int getOldX() { return this.x-this.dx; }
 	public int getOldY() { return this.y-this.dy; }
 	public int getOrientation() { return this.orientation; }
+	public int getDelay() { return this.delay; }
+	public int getTick() { return this.tick; }
 	
 	public boolean isMoving() { return this.moving; }
 	public boolean isWalkable() { return this.walkable; }
@@ -69,6 +91,7 @@ class CompMovement extends Component {
 	public void addToX(int dx) { this.x += dx; }
 	public void addToY(int dy) { this.y += dy; }
 	public void setOrientation(int d) { this.orientation = d; }
+	public void setDelay(int delay) { this.delay = delay; }
 	
 	public void setMoving() { this.moving = true; }
 	public void setMoveable() { this.moveable = true; }
@@ -76,59 +99,46 @@ class CompMovement extends Component {
 	public void unsetMoving() { this.moving = false; }
 	public void unsetMoveable() { this.moveable = false; }
 	
-	public void warp(int x, int y) {
+	public void warp(int x, int y) {		
 		this.dx = 0;
 		this.dy = 0;
 		this.x = x;
 		this.y = y;
 	}
+	
+	public void tick() {
+		if (this.tick > 0) this.tick--;
+	}
+	public void resetTick() { this.tick = this.delay; }
+	public void nullifyTick() { this.tick = 0; }
 }
 
+/*
+ * Das RenderSystem richtet sich beim Zeichnen der Karte nach der Entität mit 
+ * der Kamerakomponente. Muss genau einer Entität gegeben werden (sinnvollster-
+ * weise dem Spieler).
+ */
 class CompCamera extends Component {
 	public CompCamera(Entity entity, ComponentSystem system) {
 		super("camera",entity,system);
 	}
 }
 
+/*
+ * Entitäten mit dieser Komponente können gesteuert werden. Der Spieler über die
+ * Tastatur, NPCs über die KI (kommt noch).
+ */
 class CompControls extends Component {
 	public CompControls(Entity entity, ComponentSystem system) {
 		super("controls",entity,system);
 	}
 }
 
-class CompRenderable extends Component {
-	public Sprite sprite;
-	public CompRenderable(Entity entity, ComponentSystem system,
-			String spritePath) {
-		super("renderable",entity,system);
-		sprite = new Sprite(spritePath);
-	}
-	
-	public int getMovecounter() {
-		return this.sprite.movecounter;
-	}
-	
-	public boolean isVisible() {
-		return this.sprite.visible;
-	}
-	
-	public void setVisible() {
-		this.sprite.visible = true;
-	}
-	
-	public void setInvisible() {
-		this.sprite.visible = false;
-	}
-	
-	public void setMovecounter(int i) {
-		this.sprite.movecounter = i;
-	}
-	
-	public void addToMovecounter(int i) {
-		sprite.movecounter += i;
-	}
-}
-
+/*
+ * Trigger sind Komponenten, die auf bestimmte Ereignisse, wie Kollisionen, 
+ * reagieren. Das InteractionSystem behandelt die verschiedenen Trigger und
+ * was nach ihrer Auslösung passiert. 
+ */
 abstract class CompTrigger extends Component {
 	private EventType eventType;
 	public CompTrigger(String type, Entity entity, ComponentSystem system, 

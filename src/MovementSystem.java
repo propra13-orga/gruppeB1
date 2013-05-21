@@ -2,12 +2,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 class MovementSystem extends ComponentSystem {
-	private class ECollision extends Event {
-		public ECollision(Entity actor, Entity undergoer) {
-			super(EventType.ILLEGALCOLLISION,actor,undergoer);
-		}
-	}
-	
 	protected KeyHandler keyHandler;
 	
 	public MovementSystem(Scene scene, KeyHandler keyHandler) {
@@ -21,6 +15,7 @@ class MovementSystem extends ComponentSystem {
 		for (Entity entity : this.getEntitiesByType("controls")) {
 			if (entity.hasComponent("movement")) {
 				CompMovement compMovement = (CompMovement) entity.getComponent("movement");
+				this.handleMoveability(compMovement);
 				if (entity.isPlayer()) {
 					this.handlePlayerInput(compMovement);
 				}
@@ -109,6 +104,21 @@ class MovementSystem extends ComponentSystem {
 	}
 	
 	/*
+	 * Überprüft, ob eine Entität bewegt werden darf.
+	 */
+	private void handleMoveability(CompMovement compMovement) {
+		if (compMovement.getTick() == 0) {
+			compMovement.setMoveable();
+			compMovement.unsetMoving();
+		}
+		else {
+			compMovement.unsetMoveable();
+			compMovement.setMoving();
+			compMovement.tick();
+		}
+	}
+	
+	/*
 	 * Setzt Tasteneingaben vom Keyhandler in Bewegungen um.
 	 */
 	private void handlePlayerInput(CompMovement compMovement) {
@@ -137,6 +147,7 @@ class MovementSystem extends ComponentSystem {
 				dy = 0;
 				break;
 			default:
+				//compMovement.setOrientation(0);
 				dx = 0;
 				dy = 0;
 			}
@@ -182,6 +193,7 @@ class MovementSystem extends ComponentSystem {
 			if (dx != 0 || dy != 0) {
 				compMovement.setMoving();
 				compMovement.unsetMoveable();
+				compMovement.resetTick();
 			}
 			else {
 				compMovement.unsetMoving();
@@ -198,6 +210,7 @@ class MovementSystem extends ComponentSystem {
 		compMovement.setY(compMovement.getOldY());
 		compMovement.setdX(0);
 		compMovement.setdY(0);
+		compMovement.nullifyTick();
 		compMovement.unsetMoving();
 		compMovement.setMoveable();
 	}

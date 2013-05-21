@@ -1,4 +1,3 @@
-import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.File;
@@ -15,11 +14,9 @@ import javax.imageio.ImageIO;
 
 public class TileSet {
 	
-	static final int LAYER_LOW  = 0;
-	static final int LAYER_HIGH = 1;
-	
-	static final int PASSABLE   = 0;
-	static final int UNPASSABLE = 1;
+	static final int BELOW_SPRITE = 0;
+	static final int SAME_LEVEL_AS_SPRITE = 1;
+	static final int ABOVE_SPRITE   = 2;
 	
 	private BufferedImage set;
 	int[][] passable;
@@ -56,21 +53,25 @@ public class TileSet {
 		fr.close();
 	}
 	
-	public Image getMapTile(int layer, int id) {
+	public BufferedImage getMapTile(int id) {
 		//Liefert das Tile aus dem Low- bzw. Highlayer mit der ID 'id'
-		int x = layer*160 + (id%5);
-		int y = id / 5;
+		int x = id % 10;
+		int y = id / 10;
 		return set.getSubimage(x*32, y*32, 32, 32);
 	}
 	
-	public boolean isPassable(int layer, int id) {
+	public boolean isPassable(int id) {
 		//Prüft, ob das Tile mit der ID 'id' im Layer 'layer' begehbar ist
 		//oder nicht
-		if (passable[id/5][id%5] == PASSABLE) {
-			return true;
-		}
-		else {
+		if (passable[id/10][id%10] == SAME_LEVEL_AS_SPRITE) {
 			return false;
 		}
+		else {
+			return true;
+		}
+	}
+	
+	public int getPassability(int id) {
+		return passable[id/10][id%10];
 	}
 }

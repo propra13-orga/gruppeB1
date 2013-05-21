@@ -22,8 +22,12 @@ class InteractionSystem extends ComponentSystem {
 		 */
 		for (Event event : this.getEvents(EventType.COLLISION)) {
 			Entity entity = event.getUndergoer();
-			if (entity.hasComponent("trigger_levelchange")) {
-				System.out.println("aaa");
+			if (entity.hasComponent("trigger_levelchange")
+					&& this.getScene().getPlayer().equals(event.getActor())) {
+				/*
+				 * Die Komponente trigger_levelchange enthält alle wichtigen 
+				 * Daten für den Levelwechsel.
+				 */
 				CompTriggerLevelChange trigger = (CompTriggerLevelChange) entity.getComponent("trigger_levelchange");
 				int ID = trigger.getLevelID();
 				int x = trigger.getX();

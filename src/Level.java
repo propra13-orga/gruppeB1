@@ -6,8 +6,8 @@ public class Level extends Map {
 	List<Entity> entities;
 	int ID;
 
-	public Level(String mapname, Scene s, int ID) {
-		super(mapname, s);
+	public Level(String mapname, int ID) {
+		super(mapname);
 		this.entities = new LinkedList<Entity>();
 		this.ID = ID;
 	}
