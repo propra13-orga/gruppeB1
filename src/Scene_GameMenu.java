@@ -17,7 +17,6 @@ public class Scene_GameMenu extends Scene {
 
 
 	Scene_GameMenu(Game g, Scene_Level m) {
-
 		super(g);
 		current_map = m;
 		//Zeichne das Men� auf den Bildschirm

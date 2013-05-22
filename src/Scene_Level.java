@@ -61,6 +61,14 @@ public class Scene_Level extends Scene {
 		new CompMovement(trigger,movementSystem,19,12,0,0,0,true,true);
 		new CompTriggerLevelChange(trigger,interactionSystem,EventType.COLLISION,2,0,4);
 		
+		Entity trap = new Entity("Falle",eManager);
+		new CompMovement(trap,movementSystem,2,7,0,0,0,true,true);
+		new CompTriggerAttack(trap,interactionSystem,EventType.COLLISION,9);
+		
+		Entity instadeath = new Entity("Toeter!",eManager);
+		new CompMovement(instadeath,movementSystem,14,3,0,0,0,true,true);
+		new CompTriggerAttack(instadeath,interactionSystem,EventType.COLLISION,1000);
+		
 		Entity trigger2 = new Entity("Portal",eManager);
 		new CompMovement(trigger2,movementSystem,24,7,0,0,0,true,true);
 		new CompTriggerLevelChange(trigger2,interactionSystem,EventType.COLLISION,3,0,4);
@@ -69,9 +77,7 @@ public class Scene_Level extends Scene {
 		new CompMovement(trigger3,movementSystem,22,2,0,0,0,true,true);
 		new CompTriggerEndGame(trigger3,interactionSystem,EventType.COLLISION);
 		
-		Entity trap = new Entity("Falle",eManager);
-		new CompMovement(trap,movementSystem,2,7,0,0,0,true,true);
-		new CompTriggerAttack(trap,interactionSystem,EventType.COLLISION,9);
+		
 		
 		
 		/*
@@ -80,6 +86,7 @@ public class Scene_Level extends Scene {
 		level1.addEntity(enemy);
 		level1.addEntity(trigger);
 		level1.addEntity(trap);
+		level1.addEntity(instadeath);
 		
 		level2.addEntity(trigger2);
 		
