@@ -78,8 +78,13 @@ class RenderSystem extends ComponentSystem {
 		Entity player = this.getScene().getPlayer();
 		CompHealth compHealth = (CompHealth) player.getComponent("health");
 		int hp = compHealth.getHP();
+		float fraction = (float) hp / (float) compHealth.getMaxHP();
+				
 		String s = String.format("HP: %d", hp);
 		Graphics g = this.screen.getBuffer().getGraphics();
+		if (fraction < 0.3) g.setColor(new Color(200,0,0));
+		else if (fraction > 0.7) g.setColor(new Color(0,200,0));
+		else g.setColor(new Color(200,200,0));
 		g.drawString(s,10,Screen.SCREEN_H-10);
 	}
 	
