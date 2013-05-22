@@ -52,8 +52,8 @@ class InteractionSystem extends ComponentSystem {
 						if (this.getScene().getPlayer().equals(actor)) {
 							this.addEvent(new Event(EventType.PLAYERDMG,entity,actor));
 						}
+						compTriggerAttack.unsetReady();
 					}
-					compTriggerAttack.unsetReady();
 				}
 			}
 			if (entity.hasComponent("trigger_endgame")

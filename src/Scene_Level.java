@@ -42,7 +42,7 @@ public class Scene_Level extends Scene {
 		Level level3 = new Level("map4", 3);
 		
 		Entity player = new Entity("Tollkühner Held",eManager);
-		new CompMovement(player,movementSystem,2,5,0,0,16,false,true);
+		new CompMovement(player,movementSystem,2,5,0,0,8,false,true);
 		new CompHealth(player,interactionSystem,10);
 		new CompSprite(player,renderSystem,"player_2");
 		new CompControls(player,movementSystem);
@@ -61,9 +61,26 @@ public class Scene_Level extends Scene {
 		new CompMovement(trigger,movementSystem,19,12,0,0,0,true,true);
 		new CompTriggerLevelChange(trigger,interactionSystem,EventType.COLLISION,2,0,4);
 		
-		Entity trap = new Entity("Falle",eManager);
-		new CompMovement(trap,movementSystem,2,7,0,0,0,true,true);
-		new CompTriggerAttack(trap,interactionSystem,EventType.COLLISION,9);
+		Entity trap1 = new Entity("Falle",eManager);
+		new CompSprite(trap1,renderSystem,"trap_1");
+		new CompMovement(trap1,movementSystem,5,10,0,0,32,true,true);
+		new CompTriggerAttack(trap1,interactionSystem,EventType.COLLISION,4);
+		new CompAI(trap1,aiSystem);
+		new CompControls(trap1,movementSystem);
+		
+		Entity trap2 = new Entity("Falle",eManager);
+		new CompSprite(trap2,renderSystem,"trap_1");
+		new CompMovement(trap2,movementSystem,9,11,0,0,32,true,true);
+		new CompTriggerAttack(trap2,interactionSystem,EventType.COLLISION,4);
+		new CompAI(trap2,aiSystem);
+		new CompControls(trap2,movementSystem);
+		
+		Entity trap3 = new Entity("Falle",eManager);
+		new CompSprite(trap3,renderSystem,"trap_1");
+		new CompMovement(trap3,movementSystem,15,11,0,0,32,true,true);
+		new CompTriggerAttack(trap3,interactionSystem,EventType.COLLISION,4);
+		new CompAI(trap3,aiSystem);
+		new CompControls(trap3,movementSystem);
 		
 		Entity instadeath = new Entity("Toeter!",eManager);
 		new CompMovement(instadeath,movementSystem,14,3,0,0,0,true,true);
@@ -85,12 +102,14 @@ public class Scene_Level extends Scene {
 		 */
 		level1.addEntity(enemy);
 		level1.addEntity(trigger);
-		level1.addEntity(trap);
 		level1.addEntity(instadeath);
 		
 		level2.addEntity(trigger2);
 		
 		level3.addEntity(trigger3);
+		level3.addEntity(trap1);
+		level3.addEntity(trap2);
+		level3.addEntity(trap3);
 		
 		this.levels.put(level1.getID(), level1);
 		this.levels.put(level2.getID(), level2);
