@@ -1,3 +1,4 @@
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 /*
@@ -22,25 +23,28 @@ public class Scene_Map extends Scene {
 	
 	private Sprite player;
 	private Map current_map;
-	private boolean skip_moving;
 	private ArrayList<Sprite> sprites;
-	private Map map;
 	private Sprite main_sprite;
 	
 	Scene_Map(Game g) {
 		super(g);
 		//Die meisten Initialisierungen werden noch ausgelagert
-		player = new Sprite("character_2", 2, 5);
-		Sprite enemy1 = new Sprite("character_1", 7, 5);
-		current_map = new Map("map1", this);
+		player = new Sprite("player_2", 3, 3);
+		//Sprite enemy1 = new Sprite("player_1", 6, 5);
+		//Sprite enemy2 = new Sprite("character_1", 6, 9);
+		//Sprite enemy3 = new Sprite("character_1", 17, 11);
+		current_map = new Map("map2");
 		sprites = new ArrayList<Sprite>();
 		screen_point = new int[2];
 		screen_point[0] = 0;
 		screen_point[1] = 0;
 		setMap(current_map);
 		addSprite(player);
-		addSprite(enemy1);
+		//addSprite(enemy1);
+		//addSprite(enemy2);
+		//addSprite(enemy3);
 		setFocusOn(player);
+		player.moving = false;
 	}
 	
 	public void update() {
@@ -56,8 +60,8 @@ public class Scene_Map extends Scene {
 		//checkMenu gibt true zurï¿½ck, falls tatsï¿½chlich die Scene gewechselt wurde. In
 		//diesem Fall soll die update Methode natï¿½rlich so schnell wie mï¿½glich abbrechen
 		if (check_menu()) return;
-		
 		//Falls, der Spieler gerade steuerbar ist (also nicht schon in einer
+<<<<<<< HEAD
 		//Bewegungsphase), dann prï¿½fe jetzt, ob er bewegt wurde
 		if (!skip_moving) {
 		
@@ -94,6 +98,35 @@ public class Scene_Map extends Scene {
 		drawSprites();
 		//Spï¿½ter noch:
 		//drawHighMap()
+=======
+		//Bewegungsphase), dann prüfe jetzt, ob er bewegt wurde
+		if (!player.moving) checkWalking();
+		//Aktualisiere Position und Animation aller Sprites
+		for (Sprite s : sprites) s.update();
+		//Screenpoint wird aktualisiert
+		updateScreenPoint();
+	}
+	
+	private void updateScreen() {
+		//Die gesamte Map wird als Bild berechnet
+		BufferedImage map = new BufferedImage(
+				current_map.getWidth()*Map.TILESIZE,
+				current_map.getHeight()*Map.TILESIZE,
+				BufferedImage.TYPE_INT_ARGB);
+		current_map.drawTiles(map, TileSet.BELOW_SPRITE);
+		current_map.drawTiles(map, TileSet.SAME_LEVEL_AS_SPRITE);
+		//Sprites werden drauf gezeichnet
+		drawSprites(map);
+		current_map.drawTiles(map, TileSet.ABOVE_SPRITE);
+		//Das sichtbare Feld um den Spieler wird ausgeschnitten...
+		map = map.getSubimage(
+				screen_point[0],
+				screen_point[1],
+				Screen.SCREEN_W,
+				Screen.SCREEN_H);
+		//...und angezeigt
+		game.getScreen().getBuffer().getGraphics().drawImage(map,0,0,null);
+>>>>>>> 85c8cee54e8b7f323cca4d4494bfbc1927ca60ca
 	}
 	
 	
@@ -112,73 +145,45 @@ public class Scene_Map extends Scene {
 		return false;
 	}
 	
+<<<<<<< HEAD
 	private void check_walking() {
 		//Falls eine Pfeiltaste gedrï¿½ckt wurde, wird versucht den Spieler
 		//zu bewegen (das ist nur mï¿½glich, wenn er versucht, auf ein begehbares
+=======
+	private void checkWalking() {
+		//Falls eine Pfeiltaste gedrückt wurde, wird versucht den Spieler
+		//zu bewegen (das ist nur möglich, wenn er versucht, auf ein begehbares
+>>>>>>> 85c8cee54e8b7f323cca4d4494bfbc1927ca60ca
 		//Feld zu gelangen
 		switch (game.getKeyHandler().getLast()) {
 		case 1: //UP
 			player.direction = KeyHandler.KEY_UP;
-			if (player.pos_y == 0) break;
-			if (!current_map.isPassable(player.pos_x, player.pos_y-1)) break;
-			player.pos_y -= 1;
+			if (player.getTileY() == 0) return;
+			if (!current_map.isPassable(player.getTileX(), player.getTileY()-1)) return;
 			break;
 		case 2: //DOWN
 			player.direction = KeyHandler.KEY_DOWN;
-			if (player.pos_y == current_map.getHeight()-1) break;
-			if (!current_map.isPassable(player.pos_x, player.pos_y+1)) break;
-			player.pos_y += 1;
+			if (player.getTileY() == current_map.getHeight()-1) return;
+			if (!current_map.isPassable(player.getTileX(), player.getTileY()+1)) return;
 			break;
 		case 3: //LEFT
 			player.direction = KeyHandler.KEY_LEFT;
-			if (player.pos_x == 0) break;
-			if (!current_map.isPassable(player.pos_x-1, player.pos_y)) break;
-			player.pos_x -= 1;
+			if (player.getTileX() == 0) return;
+			if (!current_map.isPassable(player.getTileX()-1, player.getTileY())) return;
 			break;
 		case 4: //RIGHT
 			player.direction = KeyHandler.KEY_RIGHT;
-			if (player.pos_x == current_map.getWidth()-1) break;
-			if (!current_map.isPassable(player.pos_x+1, player.pos_y)) break;
-			player.pos_x += 1;
+			if (player.getTileX() == current_map.getWidth()-1) return;
+			if (!current_map.isPassable(player.getTileX()+1, player.getTileY())) return;
+			break;
+		case 0:
+			return;
 		}
+		//Alle Fehler wurden ausgeschlossen, Spieler darf sich bewegen
+		player.makeStep();
 	}
 	
-	private void check_scrolling() {
-		//Berechnet, ob die Karte gescrollt werden muss
-		boolean scrolling = false;
-		switch(player.direction) {
-		case 1: //UP
-			if (current_map.getHeight()-player.pos_y-1 <= Screen.VISIBLE_TILES_Y/2) break;
-			if (player.pos_y >= Screen.VISIBLE_TILES_Y/2) {
-				scrolling = true;
-				screen_point[1]--;
-			}
-			break;
-		case 2: //DOWN
-			if (player.pos_y <= Screen.VISIBLE_TILES_Y/2) break;
-			if (current_map.getHeight()-player.pos_y > Screen.VISIBLE_TILES_Y/2) {
-				scrolling = true;
-				screen_point[1]++;
-			}
-			break;
-		case 3: //LEFT
-			if (current_map.getWidth()-player.pos_x <= Screen.VISIBLE_TILES_X/2) break;
-			if (player.pos_x >= Screen.VISIBLE_TILES_X/2) {
-				scrolling = true;
-				screen_point[0]--;
-			}
-			break;
-		case 4: //RIGHT
-			if (player.pos_x <= Screen.VISIBLE_TILES_X/2) break;
-			if (current_map.getWidth()-player.pos_x >= Screen.VISIBLE_TILES_X/2) {
-				scrolling = true;
-				screen_point[0]++;
-			}
-			break;
-		}
-		current_map.scrolling = scrolling;
-	}
-	
+<<<<<<< HEAD
 	private void player_animation() {
 		//Der movecounter von jedem Sprite ist so groï¿½, wie
 		//ein Tile (momentan 32). Wï¿½hrend einer Bewegung wird er hochgezï¿½hlt
@@ -201,6 +206,18 @@ public class Scene_Map extends Scene {
 			player.moving = false;
 			//Spieler kann wieder per tastatur gesteuert werden
 			skip_moving = false;
+=======
+	private void updateScreenPoint() {
+		screen_point[0] = main_sprite.getX() - (Screen.SCREEN_W / 2);
+		screen_point[1] = main_sprite.getY() - (Screen.SCREEN_H / 2) + 16;
+		if (screen_point[0] < 0) screen_point[0] = 0;
+		if (screen_point[0] > current_map.getWidth()*Map.TILESIZE-Screen.SCREEN_W) {
+			screen_point[0] = current_map.getWidth()*Map.TILESIZE-Screen.SCREEN_W;
+		}
+		if (screen_point[1] < 0) screen_point[1] = 0;
+		if (screen_point[1] > current_map.getHeight()*Map.TILESIZE-Screen.SCREEN_H) {
+			screen_point[1] = current_map.getHeight()*Map.TILESIZE-Screen.SCREEN_H;
+>>>>>>> 85c8cee54e8b7f323cca4d4494bfbc1927ca60ca
 		}
 	}
 
@@ -209,7 +226,7 @@ public class Scene_Map extends Scene {
 	}
 	
 	public void setMap(Map m) {
-		map = m;
+		current_map = m;
 	}
 	
 	public void setFocusOn(Sprite s) {
@@ -218,28 +235,11 @@ public class Scene_Map extends Scene {
 		main_sprite = s;
 	}
 	
-	private void drawLowMap() {
-		//Zeichnet die LowMap (siehe Map.drawLowMapImage)
-		//Hier wird jedoch scrolling miteinbezogen, das fertige Bild
-		//wird also nur noch korrekt ausgerichtet
-		int map_x = -screen_point[0]*Map.TILESIZE;
-		int map_y = -screen_point[1]*Map.TILESIZE;
-		if (main_sprite.moving && map.scrolling){
-			switch (player.direction) {
-			case 1: //UP
-				map_y -= Map.TILESIZE - main_sprite.movecounter;
-				break;
-			case 2: //DOWN
-				map_y += Map.TILESIZE - main_sprite.movecounter;
-				break;
-			case 3: //LEFT
-				map_x -= Map.TILESIZE - main_sprite.movecounter;
-				break;
-			case 4: //RIGHT
-				map_x += Map.TILESIZE - main_sprite.movecounter;
-				break;
-			}
+	private void drawSprites(BufferedImage screen) {
+		for (Sprite s : sprites) {
+			screen.getGraphics().drawImage(s.getLowerHalf(),s.getX(),s.getY()+32,null);
 		}
+<<<<<<< HEAD
 		game.getScreen().getBuffer().getGraphics().drawImage(
 				map.getLowMapImage(),
 				map_x,
@@ -307,6 +307,10 @@ public class Scene_Map extends Scene {
 					new_x,
 					new_y,
 					game.getScreen());
+=======
+		for (Sprite s : sprites) {
+			screen.getGraphics().drawImage(s.getUpperHalf(),s.getX(),s.getY(),null);
+>>>>>>> 85c8cee54e8b7f323cca4d4494bfbc1927ca60ca
 		}
 	}
 }

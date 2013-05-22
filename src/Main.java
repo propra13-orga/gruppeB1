@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+
+>>>>>>> 85c8cee54e8b7f323cca4d4494bfbc1927ca60ca
 /*
  *
  * Main.java
@@ -23,6 +27,7 @@ public class Main {
 		Game game = new Game();
 		long time;
 		long timeDiff;
+<<<<<<< HEAD
 
 		// Gameloop
 		while (game.scene != null) {
@@ -30,13 +35,26 @@ public class Main {
 			time = System.currentTimeMillis();
 			game.update();
 
+=======
+		
+		//Gameloop
+		while (game.scene != null) {
+			
+			time = System.currentTimeMillis();
+			game.update();
+			
+>>>>>>> 85c8cee54e8b7f323cca4d4494bfbc1927ca60ca
 			try {
 				Thread.sleep(SLEEP_TIME);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+<<<<<<< HEAD
 
+=======
+			
+>>>>>>> 85c8cee54e8b7f323cca4d4494bfbc1927ca60ca
 			timeDiff = System.currentTimeMillis() - time;
 			if (timeDiff < SLEEP_TIME) {
 				try {
@@ -46,7 +64,11 @@ public class Main {
 					e.printStackTrace();
 				}
 			}
+<<<<<<< HEAD
 			System.out.println(Math.round(1000.0 / timeDiff));
+=======
+			System.out.println(Math.round(1000.0/timeDiff));
+>>>>>>> 85c8cee54e8b7f323cca4d4494bfbc1927ca60ca
 		}
 
 		// Programm per System.exit(0) beenden, damit auch die
