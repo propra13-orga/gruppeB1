@@ -50,11 +50,8 @@ public class Map {
 	}
 	
 	public void drawTiles(BufferedImage screen, int level) {
-<<<<<<< HEAD
+
 		//Zeichnet auf das ï¿½bergebene BufferedImage alle Tiles mit dem angegebenen
-=======
-		//Zeichnet auf das übergebene BufferedImage alle Tiles mit dem angegebenen
->>>>>>> 85c8cee54e8b7f323cca4d4494bfbc1927ca60ca
 		//Level (also BELOW, SAME_LEVEL, oder ABOVE)
 		Image current_tile;
 		for (int y=0; y<height; y++) {
