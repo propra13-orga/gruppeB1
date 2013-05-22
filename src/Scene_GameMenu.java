@@ -15,11 +15,9 @@ public class Scene_GameMenu extends Scene {
 	//Die vorhandenen Befehle
 	private ArrayList<String> commands;
 
-<<<<<<< HEAD
+
 	Scene_GameMenu(Game g, Scene_Level m) {
-=======
-	Scene_GameMenu(Game g, Scene_Map m) {
->>>>>>> 85c8cee54e8b7f323cca4d4494bfbc1927ca60ca
+
 		super(g);
 		current_map = m;
 		//Zeichne das Men� auf den Bildschirm
