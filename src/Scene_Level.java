@@ -15,6 +15,7 @@ public class Scene_Level extends Scene {
 	private InteractionSystem interactionSystem;
 	private RenderSystem renderSystem;
 	private boolean playerDead;
+	private boolean gameBeaten;
 
 	public Scene_Level(Game g) {
 		super(g);
@@ -23,6 +24,7 @@ public class Scene_Level extends Scene {
 		this.currentLevel = null;
 		this.nextLevel = null;
 		this.playerDead = false;
+		this.gameBeaten = false;
 		
 		this.eManager = new EntityManager(this);
 		this.aiSystem = new AISystem(this);
@@ -40,7 +42,7 @@ public class Scene_Level extends Scene {
 		Level level3 = new Level("map4", 3);
 		
 		Entity player = new Entity("Tollkühner Held",eManager);
-		new CompMovement(player,movementSystem,2,5,0,0,8,false,true);
+		new CompMovement(player,movementSystem,2,5,0,0,16,false,true);
 		new CompHealth(player,interactionSystem,10);
 		new CompSprite(player,renderSystem,"player_2");
 		new CompControls(player,movementSystem);
@@ -63,6 +65,10 @@ public class Scene_Level extends Scene {
 		new CompMovement(trigger2,movementSystem,24,7,0,0,0,true,true);
 		new CompTriggerLevelChange(trigger2,interactionSystem,EventType.COLLISION,3,0,4);
 		
+		Entity trigger3 = new Entity("Spielende",eManager);
+		new CompMovement(trigger3,movementSystem,22,2,0,0,0,true,true);
+		new CompTriggerEndGame(trigger3,interactionSystem,EventType.COLLISION);
+		
 		Entity trap = new Entity("Falle",eManager);
 		new CompMovement(trap,movementSystem,2,7,0,0,0,true,true);
 		new CompTriggerAttack(trap,interactionSystem,EventType.COLLISION,9);
@@ -77,6 +83,8 @@ public class Scene_Level extends Scene {
 		
 		level2.addEntity(trigger2);
 		
+		level3.addEntity(trigger3);
+		
 		this.levels.put(level1.getID(), level1);
 		this.levels.put(level2.getID(), level2);
 		this.levels.put(level3.getID(), level3);
@@ -88,6 +96,7 @@ public class Scene_Level extends Scene {
 	@Override
 	public void update() {
 		this.check_playerDeath();
+		this.check_gameBeaten();
 		if (this.nextLevel != null) {
 			this.changeLevel();
 		}
@@ -102,6 +111,10 @@ public class Scene_Level extends Scene {
 	
 	public void addEvent(Event event) {
 		this.events.get(event.getType()).add(event);
+	}
+	
+	public void beatGame() {
+		this.gameBeaten = true;
 	}
 	
 	public void demandLevelChange(int ID, int x, int y) {
@@ -130,6 +143,16 @@ public class Scene_Level extends Scene {
 	/*
 	 * Privates
 	 */
+	
+	/*
+	 * Überprüft, ob das Spiel als beendet erklärt wurde.
+	 */
+	private void check_gameBeaten() {
+		if (this.gameBeaten) {
+			game.getKeyHandler().clear();
+			game.scene = new Scene_GameBeaten(game,this);
+		}
+	}
 	
 	/*
 	 * Prüft, ob ESC gedrückt wurde und ruft in diesem Fall das Spielmenü auf.

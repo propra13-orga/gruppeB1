@@ -11,7 +11,10 @@
  * hier die Möglichkeit besteht, einem Event ein oder zwei beteiligte Entitäten 
  * zuzuweisen.
  */
-enum EventType { COLLISION, ILLEGALCOLLISION, ATTACK, DEATH, PLAYERDMG }
+enum EventType {
+	COLLISION, ILLEGALCOLLISION, ATTACK, DEATH, PLAYERDMG,
+	GAMEBEATEN
+	}
 
 class Event {
 	protected EventType type;

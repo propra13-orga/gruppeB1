@@ -11,7 +11,7 @@
 class InteractionSystem extends ComponentSystem {
 
 	public InteractionSystem(Scene scene) {
-		super(scene, "trigger_levelchange","trigger_attack","health");
+		super(scene, "trigger_levelchange","trigger_attack","trigger_endgame","health");
 	}
 
 	@Override
@@ -55,6 +55,10 @@ class InteractionSystem extends ComponentSystem {
 					}
 					compTriggerAttack.unsetReady();
 				}
+			}
+			if (entity.hasComponent("trigger_endgame")
+					&& this.getScene().getPlayer().equals(actor)) {
+				this.getScene().beatGame();
 			}
 		}
 		

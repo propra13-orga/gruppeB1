@@ -221,3 +221,10 @@ class CompTriggerAttack extends CompTrigger {
 	
 	public int getAP() { return this.ap; }
 }
+
+class CompTriggerEndGame extends CompTrigger {
+	public CompTriggerEndGame(Entity entity, ComponentSystem system,
+			EventType eventType) {
+		super("trigger_endgame",entity,system,eventType);
+	}
+}
