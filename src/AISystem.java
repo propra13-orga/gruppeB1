@@ -176,7 +176,6 @@ class CompAI extends Component {
 	
 	private int getRandomKey(int n, int i) {
 		int out = ((n >> 2*i) & 0b11)+1;
-		System.out.println(out);
 		return out;
 	}
 }

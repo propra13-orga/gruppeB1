@@ -28,7 +28,7 @@ abstract class ComponentSystem {
 	
 	abstract public void update();
 	
-	private void addEvent(Event event) {
+	public void addEvent(Event event) {
 		((Scene_Level) this.scene).addEvent(event);
 	}
 	

@@ -48,7 +48,7 @@ public class Main {
 				}
 			}
 
-			System.out.println(Math.round(1000.0 / timeDiff));
+			//System.out.println(Math.round(1000.0 / timeDiff));
 
 		}
 

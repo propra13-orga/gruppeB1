@@ -24,7 +24,19 @@ class EntityManager {
 	 * Update.
 	 */
 	public void update() {
-		// Hier passiert noch nix.
+		/*
+		 * Sind Entitäten gestorben? Wenn ja, entferne diese. Der Spielertod
+		 * wird gesondert behandelt.
+		 */
+		for (Event event : this.getEvents(EventType.DEATH)) {
+			Entity entity = event.getUndergoer();
+			if (this.isPlayer(entity)) {
+				this.getScene().setPlayerDead();
+			}
+			else {
+				this.deregister(entity);
+			}
+		}
 	}
 	
 	/*
@@ -65,6 +77,18 @@ class EntityManager {
 	 * Gebe die Spielerentität zurück.
 	 */
 	public Entity getPlayer() { return this.player; }
+	
+	/*
+	 * Privates
+	 */
+	
+	private List<Event> getEvents(EventType type) {
+		return ((Scene_Level) this.scene).getEvents(type); 
+	}
+	
+	private Scene_Level getScene() {
+		return (Scene_Level) this.scene;
+	}
 }
 
 /*

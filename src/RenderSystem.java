@@ -1,3 +1,5 @@
+import java.awt.Color;
+import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
 class RenderSystem extends ComponentSystem {
@@ -37,14 +39,39 @@ class RenderSystem extends ComponentSystem {
 				screen_point[1],
 				Screen.SCREEN_W,
 				Screen.SCREEN_H);
-		//...und angezeigt
-		this.screen.getBuffer().getGraphics().drawImage(map,0,0,null);
+		//...und angezeigt. Aber erst wird geschaut, ob der Spieler Schaden
+		// genommen hat.
+		
+		if (!this.checkPlayerDMG()) {
+			this.screen.getBuffer().getGraphics().drawImage(map,0,0,null);
+		}
 	}
 	
 	
 	/*
 	 * Privates.
 	 */
+	
+	/*
+	 * Hat der Spieler Schaden genommen, so soll der Bildschirm einmal kurz
+	 * rot aufblitzen.
+	 */
+	private boolean checkPlayerDMG() {
+		if (!this.getEvents(EventType.PLAYERDMG).isEmpty()) {
+			Graphics g = this.screen.getBuffer().getGraphics();
+			g.clearRect(0, 0, Screen.SCREEN_W, Screen.SCREEN_H);
+			g.setColor(new Color(153,0,0));
+			g.fillRect(0, 0, Screen.SCREEN_W, Screen.SCREEN_H);
+//			try {
+//				Thread.sleep(30);
+//			} catch (InterruptedException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+			return true;
+		}
+		return false;
+	}
 	
 	private CompSprite getSprite(Entity entity) { 
 		return (CompSprite) entity.getComponent("sprite"); 

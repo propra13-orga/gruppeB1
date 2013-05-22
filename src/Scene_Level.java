@@ -14,6 +14,7 @@ public class Scene_Level extends Scene {
 	private MovementSystem movementSystem;
 	private InteractionSystem interactionSystem;
 	private RenderSystem renderSystem;
+	private boolean playerDead;
 
 	public Scene_Level(Game g) {
 		super(g);
@@ -21,6 +22,7 @@ public class Scene_Level extends Scene {
 		this.events = this.initEventTable();
 		this.currentLevel = null;
 		this.nextLevel = null;
+		this.playerDead = false;
 		
 		this.eManager = new EntityManager(this);
 		this.aiSystem = new AISystem(this);
@@ -39,6 +41,7 @@ public class Scene_Level extends Scene {
 		
 		Entity player = new Entity("Tollkühner Held",eManager);
 		new CompMovement(player,movementSystem,2,5,0,0,16,false,true);
+		new CompHealth(player,interactionSystem,10);
 		new CompSprite(player,renderSystem,"player_2");
 		new CompControls(player,movementSystem);
 		new CompCamera(player,renderSystem);
@@ -50,6 +53,7 @@ public class Scene_Level extends Scene {
 		new CompAI(enemy,aiSystem);
 		new CompSprite(enemy,renderSystem,"character_1");
 		new CompControls(enemy,movementSystem);
+		new CompHealth(enemy,interactionSystem,5);
 		
 		Entity trigger = new Entity("Portal",eManager);
 		new CompMovement(trigger,movementSystem,19,12,0,0,0,true,true);
@@ -59,8 +63,18 @@ public class Scene_Level extends Scene {
 		new CompMovement(trigger2,movementSystem,24,7,0,0,0,true,true);
 		new CompTriggerLevelChange(trigger2,interactionSystem,EventType.COLLISION,3,0,4);
 		
+		Entity trap = new Entity("Falle",eManager);
+		new CompMovement(trap,movementSystem,2,7,0,0,0,true,true);
+		new CompTriggerAttack(trap,interactionSystem,EventType.COLLISION,9);
+		
+		
+		/*
+		 * Entitäten den Leveln hinzufügen nicht vergessen!!!
+		 */
 		level1.addEntity(enemy);
 		level1.addEntity(trigger);
+		level1.addEntity(trap);
+		
 		level2.addEntity(trigger2);
 		
 		this.levels.put(level1.getID(), level1);
@@ -73,16 +87,17 @@ public class Scene_Level extends Scene {
 	
 	@Override
 	public void update() {
+		this.check_playerDeath();
 		if (this.nextLevel != null) {
 			this.changeLevel();
 		}
 		this.clearEvents();
-		if (check_menu()) return;
-		this.eManager.update();
+		this.check_menu();
 		this.movementSystem.update();
 		this.interactionSystem.update();
 		this.aiSystem.update();
 		this.renderSystem.update();
+		this.eManager.update();
 	}
 	
 	public void addEvent(Event event) {
@@ -93,6 +108,10 @@ public class Scene_Level extends Scene {
 		this.nextLevel = this.levels.get(ID);
 		this.nextLevelSpawn[0] = x;
 		this.nextLevelSpawn[1] = y;
+	}
+	
+	public void setPlayerDead() {
+		this.playerDead = true;
 	}
 	
 	public Level getCurrentLevel() {
@@ -115,16 +134,28 @@ public class Scene_Level extends Scene {
 	/*
 	 * Prüft, ob ESC gedrückt wurde und ruft in diesem Fall das Spielmenü auf.
 	 */
-	private boolean check_menu() {
+	private void check_menu() {
 		if (game.getKeyHandler().getKey(KeyHandler.KEY_ESCAPE)) {
 			game.getKeyHandler().clear();
 			game.getKeyHandler().freeze(KeyHandler.KEY_ESCAPE, 20);
 			//Men� aufrufen
 			game.scene = new Scene_GameMenu(game, this);
-			return true;
+			//return true;
 		}
-		return false;
+		//return false;
 	}
+	
+	/*
+	 * Prüft, ob der Spieler gestorben ist und in diesem Fall das Game-Over-Menü
+	 * auf.
+	 */
+	private void check_playerDeath() {
+		if (this.playerDead) {
+			game.getKeyHandler().clear();
+			game.scene = new Scene_GameOver(game,this);
+		}
+	}
+	
 	
 	/*
 	 * Nimmt die nötigen Änderungen vor, um das Level zu wechseln.

@@ -5,7 +5,7 @@
  * Objekt erwartet und die Methode update, welche vom Gameobjekt aus aufgerufen wird.
  */
 
-public class Scene {
+abstract class Scene {
 
 	protected Game game;
 	
@@ -13,6 +13,6 @@ public class Scene {
 		game = g;
 	}
 	
-	public void update() {};
+	abstract public void update();
 
 }

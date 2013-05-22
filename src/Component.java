@@ -124,6 +124,27 @@ class CompCamera extends Component {
 	}
 }
 
+class CompHealth extends Component {
+	private int hp;
+	public CompHealth(Entity entity, ComponentSystem system, int hp) {
+		super("health",entity,system);
+		this.hp = hp;
+	}
+	
+	// Getters
+	
+	public int getHP() { return this.hp; }
+	
+	// Setters
+	
+	public void setHP(int hp) { this.hp = hp; }
+	public void addHP(int hp) { this.hp += hp; }
+	public void discountHP(int hp) { 
+		this.hp -= hp;
+		if (this.hp < 0) this.hp = 0;
+	}
+}
+
 /*
  * Entitäten mit dieser Komponente können gesteuert werden. Der Spieler über die
  * Tastatur, NPCs über die KI (kommt noch).
@@ -141,13 +162,19 @@ class CompControls extends Component {
  */
 abstract class CompTrigger extends Component {
 	private EventType eventType;
+	private boolean ready;
 	public CompTrigger(String type, Entity entity, ComponentSystem system, 
 			EventType eventType) {
 		super(type,entity,system);
 		this.eventType = eventType;
+		this.ready = true;
 	}
 	
 	public EventType getEventType() { return this.eventType; }
+	public boolean isReady() { return this.ready; }
+	
+	public void setReady() { this.ready = true; }
+	public void unsetReady() { this.ready = false; }
 }
 
 class CompTriggerLevelChange extends CompTrigger {
@@ -181,4 +208,16 @@ class CompTriggerLevelChange extends CompTrigger {
 		int[] XY = {this.getX(),this.getY()};
 		return XY;
 	}
+}
+
+class CompTriggerAttack extends CompTrigger {
+	private int ap;		// Angriffspunkte
+	
+	public CompTriggerAttack(Entity entity, ComponentSystem system,
+			EventType eventType, int ap) {
+		super("trigger_attack",entity,system,eventType);
+		this.ap = ap;
+	}
+	
+	public int getAP() { return this.ap; }
 }
