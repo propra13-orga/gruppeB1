@@ -31,8 +31,8 @@ public class Scene_Map extends Scene {
 		//Die meisten Initialisierungen werden noch ausgelagert
 		player = new Sprite("player_2", 3, 3);
 		//Sprite enemy1 = new Sprite("player_1", 6, 5);
-		Sprite enemy2 = new Sprite("character_1", 6, 9);
-		Sprite enemy3 = new Sprite("character_1", 17, 11);
+		//Sprite enemy2 = new Sprite("character_1", 6, 9);
+		//Sprite enemy3 = new Sprite("character_1", 17, 11);
 		current_map = new Map("map2");
 		sprites = new ArrayList<Sprite>();
 		screen_point = new int[2];

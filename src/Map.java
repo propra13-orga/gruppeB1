@@ -57,7 +57,7 @@ public class Map {
 			for (int x=0; x<width; x++) {
 				for (int l=0; l<layer; l++) {
 					int tile_id = getTileID(l, x, y);
-					if (tile_id == 5) continue;
+					if (tile_id == 99) continue;
 					if (tileset.getPassability(tile_id) == level) {
 						current_tile = tileset.getMapTile(maplayer[l][y][x]);
 						screen.getGraphics().drawImage(current_tile,
@@ -107,8 +107,8 @@ public class Map {
 				}
 			}
 			br.readLine();
-			fr.close();
 		}
+		fr.close();
 		br.close();
 	}
 	
