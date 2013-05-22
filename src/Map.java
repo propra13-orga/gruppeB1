@@ -43,8 +43,6 @@ public class Map {
 		//Es wird in jedem Maplayer nachgesehen, ob auf der angegebenen
 		//Position ein Tile liegt, welches begehbar ist, oder nicht
 		//Sprites werden hier nicht beachtet!
-		if (x < 0 || y < 0) return false;
-		if (x >= width || y >= height) return false;
 		for (int l=0; l<layer; l++) {
 			if (!tileset.isPassable(getTileID(l, x,y))) return false;
 		}
@@ -59,7 +57,7 @@ public class Map {
 			for (int x=0; x<width; x++) {
 				for (int l=0; l<layer; l++) {
 					int tile_id = getTileID(l, x, y);
-					if (tile_id == 5) continue;
+					if (tile_id == 99) continue;
 					if (tileset.getPassability(tile_id) == level) {
 						current_tile = tileset.getMapTile(maplayer[l][y][x]);
 						screen.getGraphics().drawImage(current_tile,
@@ -109,8 +107,8 @@ public class Map {
 				}
 			}
 			br.readLine();
-			fr.close();
 		}
+		fr.close();
 		br.close();
 	}
 	

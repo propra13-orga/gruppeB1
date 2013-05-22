@@ -10,6 +10,7 @@ public class Scene_Level extends Scene {
 	private Hashtable<Integer,Level> levels;
 	private Hashtable<EventType,List<Event>> events;
 	private EntityManager eManager;
+	private AISystem aiSystem;
 	private MovementSystem movementSystem;
 	private InteractionSystem interactionSystem;
 	private RenderSystem renderSystem;
@@ -22,6 +23,7 @@ public class Scene_Level extends Scene {
 		this.nextLevel = null;
 		
 		this.eManager = new EntityManager(this);
+		this.aiSystem = new AISystem(this);
 		this.movementSystem = new MovementSystem(this,game.getKeyHandler());
 		this.interactionSystem = new InteractionSystem(this);
 		this.renderSystem = new RenderSystem(this,game.getScreen());
@@ -33,6 +35,7 @@ public class Scene_Level extends Scene {
 		 */
 		Level level1 = new Level("map2", 1);
 		Level level2 = new Level("map3", 2);
+		Level level3 = new Level("map4", 3);
 		
 		Entity player = new Entity("Tollkühner Held",eManager);
 		new CompMovement(player,movementSystem,2,5,0,0,16,false,true);
@@ -44,17 +47,25 @@ public class Scene_Level extends Scene {
 		
 		Entity enemy = new Entity("Gegner",eManager);
 		new CompMovement(enemy,movementSystem,4,5,0,0,16,false,true);
+		new CompAI(enemy,aiSystem);
 		new CompSprite(enemy,renderSystem,"character_1");
+		new CompControls(enemy,movementSystem);
 		
 		Entity trigger = new Entity("Portal",eManager);
 		new CompMovement(trigger,movementSystem,19,12,0,0,0,true,true);
 		new CompTriggerLevelChange(trigger,interactionSystem,EventType.COLLISION,2,0,4);
 		
+		Entity trigger2 = new Entity("Portal",eManager);
+		new CompMovement(trigger2,movementSystem,24,7,0,0,0,true,true);
+		new CompTriggerLevelChange(trigger2,interactionSystem,EventType.COLLISION,3,0,4);
+		
 		level1.addEntity(enemy);
 		level1.addEntity(trigger);
+		level2.addEntity(trigger2);
 		
 		this.levels.put(level1.getID(), level1);
 		this.levels.put(level2.getID(), level2);
+		this.levels.put(level3.getID(), level3);
 		
 		this.currentLevel = levels.get(1);
 		this.currentLevel.init();
@@ -70,6 +81,7 @@ public class Scene_Level extends Scene {
 		this.eManager.update();
 		this.movementSystem.update();
 		this.interactionSystem.update();
+		this.aiSystem.update();
 		this.renderSystem.update();
 	}
 	

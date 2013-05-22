@@ -42,10 +42,6 @@ class RenderSystem extends ComponentSystem {
 	}
 	
 	
-	
-
-	
-	
 	/*
 	 * Privates.
 	 */

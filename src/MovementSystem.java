@@ -19,7 +19,8 @@ class MovementSystem extends ComponentSystem {
 				if (entity.isPlayer()) {
 					this.handlePlayerInput(compMovement);
 				}
-				else {
+				else if (entity.hasComponent("ai")) {
+					this.handleAI(compMovement);
 					/*
 					 * Hier muss dann die Gegnerbewegung behandelt werden. Meine
 					 * Idee ist, dies über einen "Pseudo-KeyHandler" zu machen,
@@ -29,6 +30,7 @@ class MovementSystem extends ComponentSystem {
 					 * unechten KeyHandler implementiert wird.
 					 */
 				}
+				this.handleOutOfLevel(compMovement);
 			}
 		}
 		
@@ -73,9 +75,13 @@ class MovementSystem extends ComponentSystem {
 				for (int j = 0; j < i; j++) {
 					CompMovement compMovement2 = (CompMovement) this.getEntitiesByType("movement").get(j).getComponent("movement");
 					// Haben beide Entitäten dieselbe Position?
-					if (compMovement1.x == compMovement2.x 
-							&& compMovement1.y == compMovement2.y
-							&& compMovement2.isCollidable()) {
+//					if (compMovement1.x == compMovement2.x 
+//							&& compMovement1.y == compMovement2.y
+//							&& compMovement2.isCollidable()) {
+					if (compMovement2.isCollidable()
+							&& ((compMovement1.getX() == compMovement2.getX()
+									&& compMovement1.getY() == compMovement2.getY())
+								|| this.changedPlaces(compMovement1, compMovement2))) {
 						collisions.add(new Event(EventType.COLLISION,compMovement1.getEntity(),compMovement2.getEntity()));
 						collisions.add(new Event(EventType.COLLISION,compMovement2.getEntity(),compMovement1.getEntity()));
 					}
@@ -85,6 +91,16 @@ class MovementSystem extends ComponentSystem {
 		return collisions;
 	}
 	
+	/*
+	 * Haben zwei Entitäten einfach die Plätze getauscht? Diese Bedingung ist
+	 * auch eine Kollision.
+	 */
+	private boolean changedPlaces(CompMovement compMovement1, CompMovement compMovement2) {
+		return compMovement1.getX() == compMovement2.getOldX()
+				&& compMovement1.getY() == compMovement2.getOldY()
+				&& compMovement2.getX() == compMovement1.getOldX()
+				&& compMovement2.getY() == compMovement1.getOldY();
+	}
 	
 	/*
 	 * Gibt eine Liste zurück, die Events enthält, welche die Teilnehmer einer
@@ -103,6 +119,60 @@ class MovementSystem extends ComponentSystem {
 		return illegalCollisions;
 	}
 	
+	private void handleAI(CompMovement compMovement) {
+		CompAI compAI = (CompAI) compMovement.getEntity().getComponent("ai");
+		if (compMovement.isMoveable()) {
+			int key = compAI.getKey();
+			this.handleInput(compMovement, key);
+		}
+	}
+	
+	
+	
+	/*
+	 * Setzt Tasteneingaben in Bewegungen um. Wird auch für die Gegnerbewegung
+	 * verwendet.
+	 */
+	private void handleInput(CompMovement compMovement, int key) {
+		int dx = 0;
+		int dy = 0;
+		switch(key) {
+		case 1: // UP
+			if (compMovement.getOrientation() != 1)	compMovement.setOrientation(1);
+			else {
+				dx = 0;
+				dy = -1;
+			}
+			break;
+		case 2: // DOWN
+			if (compMovement.getOrientation() != 2) compMovement.setOrientation(2);
+			else {
+				dx = 0;
+				dy = 1;				
+			}
+			break;
+		case 3: // LEFT
+			if (compMovement.getOrientation() != 3) compMovement.setOrientation(3);
+			else {
+				dx = -1;
+				dy = 0;					
+			}
+			break;
+		case 4: // RIGHT
+			if (compMovement.getOrientation() != 4) compMovement.setOrientation(4);
+			else {
+				dx = 1;
+				dy = 0;					
+			}
+			break;
+		default:
+			dx = 0;
+			dy = 0;
+		}
+		compMovement.setdX(dx);
+		compMovement.setdY(dy);
+	}
+	
 	/*
 	 * Überprüft, ob eine Entität bewegt werden darf.
 	 */
@@ -119,55 +189,26 @@ class MovementSystem extends ComponentSystem {
 	}
 	
 	/*
+	 * Setzt den Bewegungsvektor wieder zurück, falls die neue Position auf
+	 * einer nicht begehbaren Kachel oder außerhalb des Levels wäre.
+	 */
+	private void handleOutOfLevel(CompMovement compMovement) {
+		int newX = compMovement.getX()+compMovement.getdX();
+		int newY = compMovement.getY()+compMovement.getdY();
+		if (!this.walkable(newX, newY)) {
+			compMovement.setdX(0);
+			compMovement.setdY(0);
+		}
+		
+	}
+	
+	/*
 	 * Setzt Tasteneingaben vom Keyhandler in Bewegungen um.
 	 */
 	private void handlePlayerInput(CompMovement compMovement) {
 		if (compMovement.isMoveable()) {
-			int dx = 0;
-			int dy = 0;
-			switch(this.keyHandler.getLast()) {
-			case 1: // UP
-				compMovement.setOrientation(1);
-				dx = 0;
-				dy = -1;
-				break;
-			case 2: // DOWN
-				compMovement.setOrientation(2);
-				dx = 0;
-				dy = 1;
-				break;
-			case 3: // LEFT
-				compMovement.setOrientation(3);
-				dx = -1;
-				dy = 0;
-				break;
-			case 4: // RIGHT
-				compMovement.setOrientation(4);
-				dx = 1;
-				dy = 0;
-				break;
-			default:
-				//compMovement.setOrientation(0);
-				dx = 0;
-				dy = 0;
-			}
-			compMovement.setdX(dx);
-			compMovement.setdY(dy);
-			/*
-			 * Hier bereits Kollisionsabfrage mit der Map und im Falle einer
-			 * Kollision Richtungsvektor auf 0 setzen. Unschön, aber andere
-			 * Ansätze sind fehlerbehafteter.
-			 */
-			int newX = compMovement.getX()+dx;
-			int newY = compMovement.getY()+dy;
-			if (this.walkable(newX, newY)) {
-				compMovement.setdX(dx);
-				compMovement.setdY(dy);
-			}
-			else {
-				compMovement.setdX(0);
-				compMovement.setdY(0);
-			}
+			int key = this.keyHandler.getLast();
+			this.handleInput(compMovement,key);
 		}		
 	}
 	
