@@ -25,8 +25,4 @@ public class Window_Selectable extends Window_Base {
 		
 	}
 
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> 85c8cee54e8b7f323cca4d4494bfbc1927ca60ca
