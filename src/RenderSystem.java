@@ -45,6 +45,7 @@ class RenderSystem extends ComponentSystem {
 		if (!this.checkPlayerDMG()) {
 			this.screen.getBuffer().getGraphics().drawImage(map,0,0,null);
 		}
+		this.displayStats();
 	}
 	
 	
@@ -71,6 +72,15 @@ class RenderSystem extends ComponentSystem {
 			return true;
 		}
 		return false;
+	}
+	
+	private void displayStats() {
+		Entity player = this.getScene().getPlayer();
+		CompHealth compHealth = (CompHealth) player.getComponent("health");
+		int hp = compHealth.getHP();
+		String s = String.format("HP: %d", hp);
+		Graphics g = this.screen.getBuffer().getGraphics();
+		g.drawString(s,10,Screen.SCREEN_H-10);
 	}
 	
 	private CompSprite getSprite(Entity entity) { 
