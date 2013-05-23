@@ -20,8 +20,7 @@ public class start extends JFrame implements ActionListener{
 		
 		//start frame = new start("Menue");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setSize(640,480);
-		
+		frame.setSize(640,480);		
 		frame.setLayout(null);
 		frame.setVisible(true);
 
@@ -72,12 +71,10 @@ public static void auswahl(){
 			//fenster();
 			//Main.main(null);
 			//direkte verwendung von Main.main() gilt nicht, kommt Map und Rolle vor aber sie koennen nicht bewegen
+			
 			Frame main = new Frame();
 			main.start();			
 			frame.setVisible(false);
-			
-			//erzeuge ein Class von Frame, die der Funktion von Start der Game dient. Kann man Frame als Bruecke zwischen start_menue und Game
-			//der Grund von Erstellung der Thread ist Umgehen der Main().
 			
 		}
 		
