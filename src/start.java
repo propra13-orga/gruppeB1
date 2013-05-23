@@ -14,10 +14,11 @@ public class start extends JFrame implements ActionListener{
 	private JButton info;
 	private JButton ende;
 	static int SLEEP_TIME = 10;
+	private static start frame = new start("Menue");
 	
 	public static void main(String[] args) {
 		
-		start frame = new start("Menue");
+		//start frame = new start("Menue");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setSize(640,480);
 		
@@ -72,8 +73,9 @@ public static void auswahl(){
 			//Main.main(null);
 			//direkte verwendung von Main.main() gilt nicht, kommt Map und Rolle vor aber sie koennen nicht bewegen
 			Frame main = new Frame();
-			main.start();
-		
+			main.start();			
+			frame.setVisible(false);
+			
 			//erzeuge ein Class von Frame, die der Funktion von Start der Game dient. Kann man Frame als Bruecke zwischen start_menue und Game
 			//der Grund von Erstellung der Thread ist Umgehen der Main().
 			
