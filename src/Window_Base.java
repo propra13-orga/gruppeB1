@@ -3,14 +3,14 @@ import java.awt.Graphics;
 
 public class Window_Base {
 
-	static final Color BORDER = new Color(0,0,0);
-	static final Color FILL   = new Color(100,100,100);
+	static final Color BORDER = new Color(0,21,72);
+	static final Color FILL   = new Color(0,77,148);
 	
-	private Game game;
-	private int x;
-	private int y;
-	private int width;
-	private int height;
+	protected Game game;
+	protected int x;
+	protected int y;
+	protected int width;
+	protected int height;
 	
 	Window_Base(int x, int y, int width, int height, Game game) {
 		this.x = x;
@@ -32,12 +32,17 @@ public class Window_Base {
 				y,
 				width,
 				height);
-		g.setColor(FILL);
-		g.fillRect(
+		g.drawRect(
 				x+1,
 				y+1,
-				width-1,
-				height-1);
+				width-2,
+				height-2);
+		g.setColor(FILL);
+		g.fillRect(
+				x+2,
+				y+2,
+				width-3,
+				height-3);
 	}
 	
 }

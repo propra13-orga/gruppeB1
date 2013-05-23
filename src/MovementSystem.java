@@ -239,6 +239,7 @@ class MovementSystem extends ComponentSystem {
 			else {
 				compMovement.unsetMoving();
 				compMovement.setMoveable();
+				compMovement.nullifyTick();
 			}
 		}
 	}

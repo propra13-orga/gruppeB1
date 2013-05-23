@@ -139,22 +139,28 @@ class RenderSystem extends ComponentSystem {
 			
 			// Hier wird entschieden, welche Animationsgrafik angezeigt wird.
 			if (newpos < Level.TILESIZE-16) {
+				System.out.println("Eerste haelfte");
 				if (compSprite.getOldAnimation() == CompSprite.ANIMATION_LEFT) {
 					compSprite.setAniRight();
 				}
-				else compSprite.setAniLeft();
+				else {
+					compSprite.setAniLeft();
+				}
 			}
-			else compSprite.setAniMiddle();
-			
-			if (newpos >= Level.TILESIZE) {
+			else {
+				System.out.println("zweite hälfte");
+				compSprite.setAniMiddle();
+			}
+		}
+		else {
+			if (compMovement.getTick() == 1) {
+				System.out.println("ENDE");
 				if (compSprite.getOldAnimation() == CompSprite.ANIMATION_LEFT) {
 					compSprite.setOldAnimation(CompSprite.ANIMATION_RIGHT);
 				}
 				else compSprite.setOldAnimation(CompSprite.ANIMATION_LEFT);
 			}
-			
-		}
-		else {
+			compSprite.setAniMiddle();
 			compSprite.setX(compMovement.getX());
 			compSprite.setY(compMovement.getY());
 		}	

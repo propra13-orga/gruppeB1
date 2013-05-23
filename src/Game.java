@@ -22,7 +22,7 @@ public class Game {
 		//Screen und KeyHandler initialisieren
 		keyhandler = new KeyHandler();
 		screen = new Screen();
-		scene = new Scene_Level(this);
+		scene = new Scene_StartMenu(this);//Level(this);
 		
 		screen.setTitle(GAME_TITLE);
 		screen.addKeyListener(keyhandler);

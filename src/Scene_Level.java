@@ -16,7 +16,7 @@ public class Scene_Level extends Scene {
 	private RenderSystem renderSystem;
 	private boolean playerDead;
 	private boolean gameBeaten;
-
+	
 	public Scene_Level(Game g) {
 		super(g);
 		this.levels = new Hashtable<Integer,Level>();
@@ -42,7 +42,7 @@ public class Scene_Level extends Scene {
 		Level level3 = new Level("map4", 3);
 		
 		Entity player = new Entity("Tollkühner Held",eManager);
-		new CompMovement(player,movementSystem,2,5,0,0,8,false,true);
+		new CompMovement(player,movementSystem,2,5,0,0,16,false,true);
 		new CompHealth(player,interactionSystem,10);
 		new CompSprite(player,renderSystem,"player_2");
 		new CompControls(player,movementSystem);
@@ -100,7 +100,7 @@ public class Scene_Level extends Scene {
 		/*
 		 * Entitäten den Leveln hinzufügen nicht vergessen!!!
 		 */
-		level1.addEntity(enemy);
+		//level1.addEntity(enemy);
 		level1.addEntity(trigger);
 		level1.addEntity(instadeath);
 		
