@@ -5,6 +5,7 @@ public class Window_Selectable extends Window_Base {
 
 	boolean EXECUTED = true;
 	boolean CANCELED = false;
+	boolean EXIT_POSSIBLE = true;
 	
 	public static int BORDER_X = 20;
 	public static int BORDER_Y = 20;
@@ -59,6 +60,7 @@ public class Window_Selectable extends Window_Base {
 			if (cursor < 0) cursor = commands.size()-1;
 			break;
 		case KeyHandler.KEY_ESCAPE:
+			if (!EXIT_POSSIBLE) break;
 			EXECUTED = false;
 			CANCELED = true;
 			break;

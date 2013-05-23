@@ -2,14 +2,12 @@ import java.awt.Color;
 import java.awt.Graphics;
 
 public class Scene_GameOver extends Scene {
-	
-	private Scene_Level scene;
+
 	Window_Selectable menu;
 	Graphics g;
 	
-	public Scene_GameOver(Game game, Scene_Level scene) {
+	public Scene_GameOver(Game game) {
 		super(game);
-		this.scene = scene;
 		g = game.getScreen().getBuffer().getGraphics();
 		menu = new Window_Selectable(0,0,game);
 		menu.addCommand("Spiel neu starten");

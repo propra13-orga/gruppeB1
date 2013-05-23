@@ -1,7 +1,3 @@
-import java.awt.Color;
-import java.awt.Graphics;
-import java.util.ArrayList;
-
 
 public class Scene_GameMenu extends Scene {
 
@@ -33,10 +29,16 @@ public class Scene_GameMenu extends Scene {
 				//Ein Menüpunkt wurde bstätigt
 				switch (menu.cursor){
 				case 0: //Spiel speichern
-					System.out.println("Speichere Spiel");
+					System.out.println("Speichere Spiel... :D:D Nicht!");
+					menu.EXECUTED = true;
 					break;
 				case 1: //Spiel beenden
-					game.scene = null;
+					game.getKeyHandler().freeze(KeyHandler.KEY_ENTER, 40);
+					game.scene = new Scene_StartMenu(game);
+					return;
+				default:
+					System.out.println("Nur zu Testzwecken!");
+					menu.EXECUTED = true;
 				}
 			}
 		}

@@ -16,7 +16,7 @@
 
 public class Main {
 
-	static int SLEEP_TIME = 10;
+	static int SLEEP_TIME = 6;
 
 	public static void main(String[] args) {
 

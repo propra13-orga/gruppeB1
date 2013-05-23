@@ -176,7 +176,7 @@ public class Scene_Level extends Scene {
 	private void check_gameBeaten() {
 		if (this.gameBeaten) {
 			game.getKeyHandler().clear();
-			game.scene = new Scene_GameBeaten(game,this);
+			game.scene = new Scene_GameBeaten(game);
 		}
 	}
 	
@@ -201,7 +201,7 @@ public class Scene_Level extends Scene {
 	private void check_playerDeath() {
 		if (this.playerDead) {
 			game.getKeyHandler().clear();
-			game.scene = new Scene_GameOver(game,this);
+			game.scene = new Scene_GameOver(game);
 		}
 	}
 	
