@@ -20,7 +20,7 @@ public class Main {
 
 	public static void main(String[] args) {
 
-		Game game = new Game();
+		Object_Game game = new Object_Game();
 		long time;
 		long timeDiff;
 

@@ -6,13 +6,13 @@ public class Window_Base {
 	static final Color BORDER = new Color(0,21,72);
 	static final Color FILL   = new Color(0,77,148);
 	
-	protected Game game;
+	protected Object_Game game;
 	protected int x;
 	protected int y;
 	protected int width;
 	protected int height;
 	
-	Window_Base(int x, int y, int width, int height, Game game) {
+	Window_Base(int x, int y, int width, int height, Object_Game game) {
 		this.x = x;
 		this.y = y;
 		this.width = width;

@@ -10,9 +10,9 @@ import java.util.Random;
  * funktionstüchtig!
  */
 
-class AISystem extends ComponentSystem {
+class System_AI extends System_Component {
 
-	public AISystem(Scene scene) {
+	public System_AI(Scene scene) {
 		super(scene, "ai");
 		// TODO Auto-generated constructor stub
 	}
@@ -57,12 +57,12 @@ class AISystem extends ComponentSystem {
  * UNFERTIGE implementierung von A*.
  */
 class AStar {
-	private Level level;
+	private Object_Level level;
 	private int[] start;
 	private int[] goal;
 	private List<int[]> openList;
 	private List<int[]> closedList;
-	public AStar(Level level, int fromX, int fromY, int toX, int toY) {
+	public AStar(Object_Level level, int fromX, int fromY, int toX, int toY) {
 		this.level = level;
 		this.start = new int[2];
 		this.start[0] = fromX;
@@ -146,7 +146,7 @@ class CompAI extends Component {
 	private List<Integer> commands;
 	private Random generator;
 	private AStar aStarData;
-	public CompAI(Entity entity, ComponentSystem system) {
+	public CompAI(Entity entity, System_Component system) {
 		super("ai",entity,system);
 		this.commands = new LinkedList<Integer>();
 		this.commands.add(0);

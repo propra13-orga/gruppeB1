@@ -10,13 +10,13 @@ import java.util.List;
  */
 
 
-abstract class ComponentSystem {
+abstract class System_Component {
 	protected Scene scene;
 	protected String[] types;
 	protected List<Component> components;
 	protected Hashtable<String,List<Entity>> entitiesByType;
 	
-	public ComponentSystem(Scene scene, String ...types) {
+	public System_Component(Scene scene, String ...types) {
 		this.scene = scene;
 		this.components = new LinkedList<Component>();
 		this.types = types;
@@ -28,12 +28,12 @@ abstract class ComponentSystem {
 	
 	abstract public void update();
 	
-	public void addEvent(Event event) {
+	public void addEvent(Object_Event event) {
 		((Scene_Level) this.scene).addEvent(event);
 	}
 	
-	public void addEvents(List<Event> events) {
-		for (Event event : events) this.addEvent(event);
+	public void addEvents(List<Object_Event> events) {
+		for (Object_Event event : events) this.addEvent(event);
 	}
 	
 	public void register(Component component) {
@@ -50,7 +50,7 @@ abstract class ComponentSystem {
 		return this.entitiesByType.get(type);
 	}
 	
-	public List<Event> getEvents(EventType type) {
+	public List<Object_Event> getEvents(EventType type) {
 		return ((Scene_Level) this.scene).getEvents(type); 
 	}
 	

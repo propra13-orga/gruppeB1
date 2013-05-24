@@ -7,9 +7,9 @@
 
 abstract class Scene {
 
-	protected Game game;
+	protected Object_Game game;
 	
-	Scene(Game g) {
+	Scene(Object_Game g) {
 		game = g;
 	}
 	

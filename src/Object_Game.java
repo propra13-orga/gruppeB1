@@ -8,20 +8,20 @@
  * letztendlich im Gameloop der Klasse Main aufgerufen.
  */
 
-public class Game {
+public class Object_Game {
 
 	static String GAME_TITLE = "ProPra - 1. Meilenstein";
 	
 	Scene scene;
 	
-	private Screen screen;
-	private KeyHandler keyhandler;
+	private Object_Screen screen;
+	private Object_KeyHandler keyhandler;
 	
-	Game() {
+	Object_Game() {
 		
 		//Screen und KeyHandler initialisieren
-		keyhandler = new KeyHandler();
-		screen = new Screen();
+		keyhandler = new Object_KeyHandler();
+		screen = new Object_Screen();
 		scene = new Scene_StartMenu(this);//Level(this);
 		
 		screen.setTitle(GAME_TITLE);
@@ -39,11 +39,11 @@ public class Game {
 
 	//Getter / Setter
 	
-	public Screen getScreen() {
+	public Object_Screen getScreen() {
 		return screen;
 	}
 
-	public KeyHandler getKeyHandler() {
+	public Object_KeyHandler getKeyHandler() {
 		return keyhandler;
 	}
 

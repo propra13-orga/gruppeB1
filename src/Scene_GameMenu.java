@@ -4,7 +4,7 @@ public class Scene_GameMenu extends Scene {
 	Scene_Level current_map;
 	Window_Selectable menu;
 
-	Scene_GameMenu(Game g, Scene_Level m) {
+	Scene_GameMenu(Object_Game g, Scene_Level m) {
 		super(g);
 		current_map = m;
 		menu = new Window_Selectable(20,20,g);
@@ -21,7 +21,7 @@ public class Scene_GameMenu extends Scene {
 			if (menu.CANCELED) {
 				//Menü wurde beendet
 				game.getKeyHandler().clear();
-				game.getKeyHandler().freeze(KeyHandler.KEY_ESCAPE, 40);
+				game.getKeyHandler().freeze(Object_KeyHandler.KEY_ESCAPE, 40);
 				game.scene = current_map;
 				return;
 			}
@@ -33,7 +33,7 @@ public class Scene_GameMenu extends Scene {
 					menu.EXECUTED = true;
 					break;
 				case 1: //Spiel beenden
-					game.getKeyHandler().freeze(KeyHandler.KEY_ENTER, 40);
+					game.getKeyHandler().freeze(Object_KeyHandler.KEY_ENTER, 40);
 					game.scene = new Scene_StartMenu(game);
 					return;
 				default:

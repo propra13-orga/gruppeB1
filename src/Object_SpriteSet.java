@@ -10,11 +10,11 @@ import javax.imageio.ImageIO;
  * Für genauere Erklärung siehe dort...
  */
 
-public class SpriteSet {
+public class Object_SpriteSet {
 	
 	private BufferedImage set;
 	
-	SpriteSet(String filename) {
+	Object_SpriteSet(String filename) {
 		//Lade Tiles als Images in ein Array und speichere sie dort.
 		String path = "res/charset/"+filename+".png";
 		set = new BufferedImage(96, 256, BufferedImage.TYPE_INT_ARGB);
@@ -25,7 +25,7 @@ public class SpriteSet {
 			e.printStackTrace();
 		}
 		
-		Screen.makeTransparent(set);
+		Object_Screen.makeTransparent(set);
 	}
 	
 	public BufferedImage getSprite(int direction, int animation) {

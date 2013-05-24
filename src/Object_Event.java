@@ -16,12 +16,12 @@ enum EventType {
 	GAMEBEATEN
 	}
 
-class Event {
+class Object_Event {
 	protected EventType type;
 	protected Entity actor;
 	protected Entity undergoer;
 	
-	public Event(EventType type, Entity actor, Entity undergoer) {
+	public Object_Event(EventType type, Entity actor, Entity undergoer) {
 		this.type = type;
 		this.actor = actor;
 		this.undergoer = undergoer;

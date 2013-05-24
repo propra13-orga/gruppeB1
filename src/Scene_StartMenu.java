@@ -9,7 +9,7 @@ public class Scene_StartMenu extends Scene {
 	Window_Selectable menu;
 	Graphics g;
 	
-	Scene_StartMenu(Game game) {
+	Scene_StartMenu(Object_Game game) {
 		super(game);
 		g = game.getScreen().getBuffer().getGraphics();
 		g.setFont(new Font("Arial", Font.PLAIN, 20));
@@ -23,7 +23,7 @@ public class Scene_StartMenu extends Scene {
 	}
 	
 	public void update() {
-		g.clearRect(0, 0, Screen.SCREEN_W, Screen.SCREEN_H);
+		g.clearRect(0, 0, Object_Screen.SCREEN_W, Object_Screen.SCREEN_H);
 		if (menu.EXECUTED) menu.update();
 		else {
 			if (menu.CANCELED) {

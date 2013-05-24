@@ -31,7 +31,7 @@ import java.awt.event.KeyListener;
  * freeze(int key, int time)	Bietet die Möglichkeit, eine Taste für 'time' Frames zu sperren.
  */
 
-public class KeyHandler implements KeyListener {
+public class Object_KeyHandler implements KeyListener {
 	
 	final static int NUMBER_OF_KEYS = 100;
 	
@@ -48,7 +48,7 @@ public class KeyHandler implements KeyListener {
 	private int first;
 	private int second;
 	
-	KeyHandler() {
+	Object_KeyHandler() {
 		first = NO_KEY;
 		second = NO_KEY;
 		//Arrays sind von selbst mit 'false' und 0 initialisiert

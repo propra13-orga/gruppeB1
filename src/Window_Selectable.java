@@ -15,7 +15,7 @@ public class Window_Selectable extends Window_Base {
 	int cursor;
 	private Graphics g;
 
-	Window_Selectable(int x, int y, Game game) {
+	Window_Selectable(int x, int y, Object_Game game) {
 		super(x, y, 0, 0, game);
 		g = game.getScreen().getBuffer().getGraphics();
 		commands = new ArrayList<String>();
@@ -41,30 +41,30 @@ public class Window_Selectable extends Window_Base {
 	}
 	
 	public void center() {
-		x = Screen.SCREEN_W/2 - (width/2);
-		y = Screen.SCREEN_H/2 - (height/2);
+		x = Object_Screen.SCREEN_W/2 - (width/2);
+		y = Object_Screen.SCREEN_H/2 - (height/2);
 	}
 	
 	private void updateLogic() {
 		switch (game.getKeyHandler().getLast()) {
-		case KeyHandler.KEY_DOWN:
+		case Object_KeyHandler.KEY_DOWN:
 			game.getKeyHandler().clear();
-			game.getKeyHandler().freeze(KeyHandler.KEY_DOWN, 5);
+			game.getKeyHandler().freeze(Object_KeyHandler.KEY_DOWN, 5);
 			cursor++;
 			if (cursor >= commands.size()) cursor = 0;
 			break;
-		case KeyHandler.KEY_UP:
+		case Object_KeyHandler.KEY_UP:
 			game.getKeyHandler().clear();
-			game.getKeyHandler().freeze(KeyHandler.KEY_UP, 5);
+			game.getKeyHandler().freeze(Object_KeyHandler.KEY_UP, 5);
 			cursor--;
 			if (cursor < 0) cursor = commands.size()-1;
 			break;
-		case KeyHandler.KEY_ESCAPE:
+		case Object_KeyHandler.KEY_ESCAPE:
 			if (!EXIT_POSSIBLE) break;
 			EXECUTED = false;
 			CANCELED = true;
 			break;
-		case KeyHandler.KEY_ENTER:
+		case Object_KeyHandler.KEY_ENTER:
 			EXECUTED = false;
 			break;
 		}

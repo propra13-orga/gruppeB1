@@ -6,7 +6,7 @@ public class Scene_GameBeaten extends Scene {
 	Window_Selectable menu;
 	Graphics g;
 	
-	public Scene_GameBeaten(Game game) {
+	public Scene_GameBeaten(Object_Game game) {
 		super(game);
 		g = game.getScreen().getBuffer().getGraphics();
 		menu = new Window_Selectable(0,0,game);
@@ -19,7 +19,7 @@ public class Scene_GameBeaten extends Scene {
 
 	@Override
 	public void update() {
-		g.clearRect(0, 0, Screen.SCREEN_W, Screen.SCREEN_H);
+		g.clearRect(0, 0, Object_Screen.SCREEN_W, Object_Screen.SCREEN_H);
 		g.drawString("GEWONNEN!!!", 300,100);
 		if (menu.EXECUTED) menu.update();
 		else {

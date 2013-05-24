@@ -12,7 +12,7 @@ import javax.imageio.ImageIO;
  * entsprechende Gettermethoden (siehe Map.java und Scene_Map.java)
  */
 
-public class TileSet {
+public class Object_TileSet {
 	
 	static final int BELOW_SPRITE = 0;
 	static final int SAME_LEVEL_AS_SPRITE = 1;
@@ -21,7 +21,7 @@ public class TileSet {
 	private BufferedImage set;
 	int[][] passable;
 	
-	TileSet(String setname) throws IOException {
+	Object_TileSet(String setname) throws IOException {
 		//Jedes Tileset ist in einem Ordner gespeichert, der dessen Namen tr‰gt
 		//Darin muss sich eine 320x320 Pixel groﬂe Datei 'set.png' befinden, sowie
 		//eine Textdatei 'passable.txt', die aus 10 Zeilen besteht, die jeweils
@@ -36,7 +36,7 @@ public class TileSet {
 			e.printStackTrace();
 		}
 		//Hintergrundfarbe entfernen
-		Screen.makeTransparent(set);
+		Object_Screen.makeTransparent(set);
 		
 		//Lade 'passable.txt'
 		FileReader fr = new FileReader(path+"passable.txt");

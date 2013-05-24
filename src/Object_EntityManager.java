@@ -10,12 +10,12 @@ import java.util.List;
  */
 
 
-class EntityManager {
+class Object_EntityManager {
 	protected Scene scene;
 	protected List<Entity> entities;
 	protected Entity player;
 	
-	public EntityManager(Scene scene) {
+	public Object_EntityManager(Scene scene) {
 		this.scene = scene;
 		this.entities = new LinkedList<Entity>();
 	}
@@ -28,7 +28,7 @@ class EntityManager {
 		 * Sind Entitäten gestorben? Wenn ja, entferne diese. Der Spielertod
 		 * wird gesondert behandelt.
 		 */
-		for (Event event : this.getEvents(EventType.DEATH)) {
+		for (Object_Event event : this.getEvents(EventType.DEATH)) {
 			Entity entity = event.getUndergoer();
 			if (this.isPlayer(entity)) {
 				this.getScene().setPlayerDead();
@@ -82,7 +82,7 @@ class EntityManager {
 	 * Privates
 	 */
 	
-	private List<Event> getEvents(EventType type) {
+	private List<Object_Event> getEvents(EventType type) {
 		return ((Scene_Level) this.scene).getEvents(type); 
 	}
 	
@@ -104,11 +104,11 @@ class EntityManager {
 
 class Entity {
 	protected String name;
-	protected EntityManager manager;
+	protected Object_EntityManager manager;
 	private Hashtable<String,Component> components;;
 	protected boolean active = false;
 	
-	public Entity(String name, EntityManager manager) {
+	public Entity(String name, Object_EntityManager manager) {
 		this.name = name;
 		this.manager = manager;
 		this.components = new Hashtable<String,Component>();
@@ -139,7 +139,7 @@ class Entity {
 	}
 	
 	public Component getComponent(String type) { return this.components.get(type); }
-	public EntityManager getManager() {	return this.manager; }
+	public Object_EntityManager getManager() {	return this.manager; }
 	
 	public boolean isPlayer() {	return this.manager.isPlayer(this); }
 	

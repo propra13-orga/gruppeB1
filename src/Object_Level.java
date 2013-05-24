@@ -2,11 +2,11 @@ import java.util.LinkedList;
 import java.util.List;
 
 
-public class Level extends Map {
+public class Object_Level extends Object_Map {
 	List<Entity> entities;
 	int ID;
 
-	public Level(String mapname, int ID) {
+	public Object_Level(String mapname, int ID) {
 		super(mapname);
 		this.entities = new LinkedList<Entity>();
 		this.ID = ID;

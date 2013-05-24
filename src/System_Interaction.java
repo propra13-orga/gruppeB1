@@ -8,9 +8,9 @@
  */
 
 
-class InteractionSystem extends ComponentSystem {
+class System_Interaction extends System_Component {
 
-	public InteractionSystem(Scene scene) {
+	public System_Interaction(Scene scene) {
 		super(scene, "trigger_levelchange","trigger_attack","trigger_endgame","health");
 	}
 
@@ -22,7 +22,7 @@ class InteractionSystem extends ComponentSystem {
 		 * Wird noch ordentlich in Funktionen ausgelagert, sobald sich ein
 		 * Muster ergeben hat.
 		 */
-		for (Event event : this.getEvents(EventType.COLLISION)) {
+		for (Object_Event event : this.getEvents(EventType.COLLISION)) {
 			/*
 			 * Im Folgenden:
 			 * "entity" ist jeweils die Entität mit der Triggerkomponente.
@@ -36,21 +36,21 @@ class InteractionSystem extends ComponentSystem {
 				 * Die Komponente trigger_levelchange enthält alle wichtigen 
 				 * Daten für den Levelwechsel.
 				 */
-				CompTriggerLevelChange trigger = (CompTriggerLevelChange) entity.getComponent("trigger_levelchange");
+				Trigger_LevelChange trigger = (Trigger_LevelChange) entity.getComponent("trigger_levelchange");
 				int ID = trigger.getLevelID();
 				int x = trigger.getX();
 				int y = trigger.getY();
 				this.getScene().demandLevelChange(ID,x,y);
 			}
 			if (entity.hasComponent("trigger_attack")) {
-				CompTriggerAttack compTriggerAttack = ((CompTriggerAttack) entity.getComponent("trigger_attack"));
+				Trigger_Attack compTriggerAttack = ((Trigger_Attack) entity.getComponent("trigger_attack"));
 				if (compTriggerAttack.isReady()) {
 					if (actor.hasComponent("health")) {
-						CompHealth compHealth = this.getHealth(actor);
+						Component_Health compHealth = this.getHealth(actor);
 						int ap = compTriggerAttack.getAP();
 						compHealth.discountHP(ap);
 						if (this.getScene().getPlayer().equals(actor)) {
-							this.addEvent(new Event(EventType.PLAYERDMG,entity,actor));
+							this.addEvent(new Object_Event(EventType.PLAYERDMG,entity,actor));
 						}
 						compTriggerAttack.unsetReady();
 					}
@@ -63,13 +63,13 @@ class InteractionSystem extends ComponentSystem {
 		}
 		
 		for (Entity entity : this.getEntitiesByType("health")) {
-			int hp = ((CompHealth) entity.getComponent("health")).getHP();
-			if (hp <= 0) this.addEvent(new Event(EventType.DEATH,null,entity));
+			int hp = ((Component_Health) entity.getComponent("health")).getHP();
+			if (hp <= 0) this.addEvent(new Object_Event(EventType.DEATH,null,entity));
 		}
 	}
 	
-	private CompHealth getHealth(Entity entity) {
-		return (CompHealth) entity.getComponent("health");
+	private Component_Health getHealth(Entity entity) {
+		return (Component_Health) entity.getComponent("health");
 	}
 
 }

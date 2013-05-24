@@ -6,7 +6,7 @@ public class Scene_GameOver extends Scene {
 	Window_Selectable menu;
 	Graphics g;
 	
-	public Scene_GameOver(Game game) {
+	public Scene_GameOver(Object_Game game) {
 		super(game);
 		g = game.getScreen().getBuffer().getGraphics();
 		menu = new Window_Selectable(0,0,game);
@@ -18,8 +18,8 @@ public class Scene_GameOver extends Scene {
 	@Override
 	public void update() {
 		g.setColor(new Color(0,0,0));
-		g.clearRect(0, 0, Screen.SCREEN_W, Screen.SCREEN_H);
-		g.drawString("GAME OVER",Screen.SCREEN_W/2,20);
+		g.clearRect(0, 0, Object_Screen.SCREEN_W, Object_Screen.SCREEN_H);
+		g.drawString("GAME OVER",Object_Screen.SCREEN_W/2,20);
 		if (menu.EXECUTED) menu.update();
 		else {
 			if (menu.CANCELED) game.scene = null;

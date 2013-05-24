@@ -2,11 +2,11 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
-class RenderSystem extends ComponentSystem {
-	protected Screen screen;
+class System_Render extends System_Component {
+	protected Object_Screen screen;
 	protected int[] screen_point;
 	
-	public RenderSystem(Scene scene, Screen screen) {
+	public System_Render(Scene scene, Object_Screen screen) {
 		super(scene,"sprite","camera");
 		this.screen = screen;
 		this.screen_point = new int[2];
@@ -24,21 +24,21 @@ class RenderSystem extends ComponentSystem {
 		this.updateScreenPoint();
 		//Die gesamte Map wird als Bild berechnet
 		BufferedImage map = new BufferedImage(
-				this.getCurrentLevel().getWidth()*Level.TILESIZE,
-				this.getCurrentLevel().getHeight()*Level.TILESIZE,
+				this.getCurrentLevel().getWidth()*Object_Level.TILESIZE,
+				this.getCurrentLevel().getHeight()*Object_Level.TILESIZE,
 				BufferedImage.TYPE_INT_ARGB);
-		this.getCurrentLevel().drawTiles(map, TileSet.BELOW_SPRITE);
-		this.getCurrentLevel().drawTiles(map, TileSet.SAME_LEVEL_AS_SPRITE);
+		this.getCurrentLevel().drawTiles(map, Object_TileSet.BELOW_SPRITE);
+		this.getCurrentLevel().drawTiles(map, Object_TileSet.SAME_LEVEL_AS_SPRITE);
 		
 		//Sprites werden drauf gezeichnet
 		drawSprites(map);
-		this.getCurrentLevel().drawTiles(map, TileSet.ABOVE_SPRITE);
+		this.getCurrentLevel().drawTiles(map, Object_TileSet.ABOVE_SPRITE);
 		//Das sichtbare Feld um den Spieler wird ausgeschnitten...
 		map = map.getSubimage(
 				screen_point[0],
 				screen_point[1],
-				Screen.SCREEN_W,
-				Screen.SCREEN_H);
+				Object_Screen.SCREEN_W,
+				Object_Screen.SCREEN_H);
 		//...und angezeigt. Aber erst wird geschaut, ob der Spieler Schaden
 		// genommen hat.
 		
@@ -60,9 +60,9 @@ class RenderSystem extends ComponentSystem {
 	private boolean checkPlayerDMG() {
 		if (!this.getEvents(EventType.PLAYERDMG).isEmpty()) {
 			Graphics g = this.screen.getBuffer().getGraphics();
-			g.clearRect(0, 0, Screen.SCREEN_W, Screen.SCREEN_H);
+			g.clearRect(0, 0, Object_Screen.SCREEN_W, Object_Screen.SCREEN_H);
 			g.setColor(new Color(153,0,0));
-			g.fillRect(0, 0, Screen.SCREEN_W, Screen.SCREEN_H);
+			g.fillRect(0, 0, Object_Screen.SCREEN_W, Object_Screen.SCREEN_H);
 //			try {
 //				Thread.sleep(30);
 //			} catch (InterruptedException e) {
@@ -76,7 +76,7 @@ class RenderSystem extends ComponentSystem {
 	
 	private void displayStats() {
 		Entity player = this.getScene().getPlayer();
-		CompHealth compHealth = (CompHealth) player.getComponent("health");
+		Component_Health compHealth = (Component_Health) player.getComponent("health");
 		int hp = compHealth.getHP();
 		float fraction = (float) hp / (float) compHealth.getMaxHP();
 				
@@ -85,11 +85,11 @@ class RenderSystem extends ComponentSystem {
 		if (fraction < 0.3) g.setColor(new Color(200,0,0));
 		else if (fraction > 0.7) g.setColor(new Color(0,200,0));
 		else g.setColor(new Color(200,200,0));
-		g.drawString(s,10,Screen.SCREEN_H-10);
+		g.drawString(s,10,Object_Screen.SCREEN_H-10);
 	}
 	
-	private CompSprite getSprite(Entity entity) { 
-		return (CompSprite) entity.getComponent("sprite"); 
+	private Component_Sprite getSprite(Entity entity) { 
+		return (Component_Sprite) entity.getComponent("sprite"); 
 	}
 	
 	/*
@@ -97,8 +97,8 @@ class RenderSystem extends ComponentSystem {
 	 * der Positions- und Bewegungsdaten der jeweiligen Entitäten.
 	 */
 	private void updateSprite(Entity entity) {
-		CompMovement compMovement = (CompMovement) entity.getComponent("movement");
-		CompSprite compSprite = this.getSprite(entity);
+		Component_Movement compMovement = (Component_Movement) entity.getComponent("movement");
+		Component_Sprite compSprite = this.getSprite(entity);
 		// Ändere die Ausrichtung des Sprites entsprechend der aktuellen 
 		// "tatsächlichen" Bewegungsrichtung.
 		compSprite.setDirection(compMovement.getOrientation());
@@ -114,7 +114,7 @@ class RenderSystem extends ComponentSystem {
 			// Der Offset bestimmt die Anzahl an Pixeln, die der Sprite bewegt
 			// werden soll. Die Pixelanzahl ist abhängig vom Delay und der
 			// Kachelgröße.
-			int offset = Level.TILESIZE / compMovement.getDelay();
+			int offset = Object_Level.TILESIZE / compMovement.getDelay();
 			switch(compMovement.getOrientation()) {
 			case 1:
 				compSprite.addToY(-offset);
@@ -135,11 +135,11 @@ class RenderSystem extends ComponentSystem {
 			}
 			
 			// newpos gibt jetzt den Abstand von der letzten Kachel an.
-			newpos = Math.abs(newpos) % Level.TILESIZE;
+			newpos = Math.abs(newpos) % Object_Level.TILESIZE;
 			
 			// Hier wird entschieden, welche Animationsgrafik angezeigt wird.
-			if (newpos < Level.TILESIZE-16) {
-				if (compSprite.getOldAnimation() == CompSprite.ANIMATION_LEFT) {
+			if (newpos < Object_Level.TILESIZE-16) {
+				if (compSprite.getOldAnimation() == Component_Sprite.ANIMATION_LEFT) {
 					compSprite.setAniRight();
 				}
 				else {
@@ -152,10 +152,10 @@ class RenderSystem extends ComponentSystem {
 		}
 		else {
 			if (compMovement.getTick() == 1) {
-				if (compSprite.getOldAnimation() == CompSprite.ANIMATION_LEFT) {
-					compSprite.setOldAnimation(CompSprite.ANIMATION_RIGHT);
+				if (compSprite.getOldAnimation() == Component_Sprite.ANIMATION_LEFT) {
+					compSprite.setOldAnimation(Component_Sprite.ANIMATION_RIGHT);
 				}
-				else compSprite.setOldAnimation(CompSprite.ANIMATION_LEFT);
+				else compSprite.setOldAnimation(Component_Sprite.ANIMATION_LEFT);
 			}
 			compSprite.setAniMiddle();
 			compSprite.setX(compMovement.getX());
@@ -167,22 +167,22 @@ class RenderSystem extends ComponentSystem {
 	private void updateScreenPoint() {
 		Entity camera = this.getEntitiesByType("camera").get(0);
 
-		CompSprite compSprite = this.getSprite(camera);		
-		screen_point[0] = compSprite.getX() - (Screen.SCREEN_W / 2);
-		screen_point[1] = compSprite.getY() - (Screen.SCREEN_H / 2) + 16;
+		Component_Sprite compSprite = this.getSprite(camera);		
+		screen_point[0] = compSprite.getX() - (Object_Screen.SCREEN_W / 2);
+		screen_point[1] = compSprite.getY() - (Object_Screen.SCREEN_H / 2) + 16;
 		if (screen_point[0] < 0) screen_point[0] = 0;
-		if (screen_point[0] > this.getCurrentLevel().getWidth()*Map.TILESIZE-Screen.SCREEN_W) {
-			screen_point[0] = this.getCurrentLevel().getWidth()*Map.TILESIZE-Screen.SCREEN_W;
+		if (screen_point[0] > this.getCurrentLevel().getWidth()*Object_Map.TILESIZE-Object_Screen.SCREEN_W) {
+			screen_point[0] = this.getCurrentLevel().getWidth()*Object_Map.TILESIZE-Object_Screen.SCREEN_W;
 		}
 		if (screen_point[1] < 0) screen_point[1] = 0;
-		if (screen_point[1] > this.getCurrentLevel().getHeight()*Map.TILESIZE-Screen.SCREEN_H) {
-			screen_point[1] = this.getCurrentLevel().getHeight()*Map.TILESIZE-Screen.SCREEN_H;
+		if (screen_point[1] > this.getCurrentLevel().getHeight()*Object_Map.TILESIZE-Object_Screen.SCREEN_H) {
+			screen_point[1] = this.getCurrentLevel().getHeight()*Object_Map.TILESIZE-Object_Screen.SCREEN_H;
 		}
 	}
 
 	private void drawSprites(BufferedImage screen) {
 		for (Entity entity : this.getEntitiesByType("sprite")) {
-			CompSprite compSprite = this.getSprite(entity);
+			Component_Sprite compSprite = this.getSprite(entity);
 			screen.getGraphics().drawImage(
 					compSprite.getLowerHalf(),
 					compSprite.getX(),
@@ -191,7 +191,7 @@ class RenderSystem extends ComponentSystem {
 		}
 		
 		for (Entity entity : this.getEntitiesByType("sprite")) {
-			CompSprite compSprite = this.getSprite(entity);
+			Component_Sprite compSprite = this.getSprite(entity);
 			screen.getGraphics().drawImage(
 					compSprite.getUpperHalf(),
 					compSprite.getX(),
@@ -200,7 +200,7 @@ class RenderSystem extends ComponentSystem {
 		}
 	}
 	
-	private Level getCurrentLevel() {
+	private Object_Level getCurrentLevel() {
 		return ((Scene_Level) this.scene).getCurrentLevel();
 	}
 	

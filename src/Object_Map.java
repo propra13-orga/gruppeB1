@@ -15,7 +15,7 @@ import java.awt.image.BufferedImage;
  * welcher unterhalb der Sprites angezeigt wird.
  */
 
-public class Map {
+public class Object_Map {
 	
 	static final int TILESIZE = 32;
 	
@@ -24,12 +24,12 @@ public class Map {
 	boolean scrolling;
 	int layer;
 	
-	private TileSet			tileset;
+	private Object_TileSet			tileset;
 	private int 			width;
 	private int 			height;
 	private int[][][] 		maplayer;
 	
-	Map(String mapname) {
+	Object_Map(String mapname) {
 		String filename = "res/maps/"+mapname+".txt";
 		try {
 			readData(filename);
@@ -72,7 +72,7 @@ public class Map {
 		}
 	}
 	
-	public TileSet getTileset() {
+	public Object_TileSet getTileset() {
 		return tileset;
 	}
 	public int getWidth() {
@@ -87,7 +87,7 @@ public class Map {
 		//!!! NOCH IN ARBEIT! BIS JETZT MIESE UMSETZUNG
 		FileReader fr = new FileReader(filename);
 		BufferedReader br = new BufferedReader(fr);
-		tileset = new TileSet(br.readLine());
+		tileset = new Object_TileSet(br.readLine());
 		width = Integer.parseInt(br.readLine());
 		height = Integer.parseInt(br.readLine());
 		layer = Integer.parseInt(br.readLine());

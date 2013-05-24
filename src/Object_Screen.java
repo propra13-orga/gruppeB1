@@ -21,20 +21,20 @@ import javax.swing.JPanel;
  * ist es möglich, die Char- und Tilesets mit einer Hintergrundfarbe zu versehen!!!
  */
 
-public class Screen extends JFrame {
+public class Object_Screen extends JFrame {
 	
 	private static final long serialVersionUID = 1L;
 	
 	static int SCREEN_W = 640;
 	static int SCREEN_H = 480;
-	static int VISIBLE_TILES_X = SCREEN_W / Map.TILESIZE;
-	static int VISIBLE_TILES_Y = SCREEN_H / Map.TILESIZE;
+	static int VISIBLE_TILES_X = SCREEN_W / Object_Map.TILESIZE;
+	static int VISIBLE_TILES_Y = SCREEN_H / Object_Map.TILESIZE;
 	static Color TRANSPARENT = new Color(255, 0, 255, 255);
 	
 	private BufferedImage buffer;
 	private JPanel board;
 	
-	Screen() {
+	Object_Screen() {
 		//JFrame initialisieren
 		super();
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
