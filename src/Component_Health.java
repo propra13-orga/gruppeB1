@@ -3,7 +3,7 @@ class Component_Health extends Component {
 	private int hp;
 	private int maxhp;
 	
-	public Component_Health(Entity entity, System_Component system, int maxhp) {
+	public Component_Health(Object_Entity entity, System_Component system, int maxhp) {
 		super("health",entity,system);
 		this.maxhp = maxhp;
 		this.hp = maxhp;

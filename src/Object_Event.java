@@ -18,16 +18,16 @@ enum EventType {
 
 class Object_Event {
 	protected EventType type;
-	protected Entity actor;
-	protected Entity undergoer;
+	protected Object_Entity actor;
+	protected Object_Entity undergoer;
 	
-	public Object_Event(EventType type, Entity actor, Entity undergoer) {
+	public Object_Event(EventType type, Object_Entity actor, Object_Entity undergoer) {
 		this.type = type;
 		this.actor = actor;
 		this.undergoer = undergoer;
 	}
 	
 	public EventType getType() { return this.type; }
-	public Entity getActor() { return this.actor; }
-	public Entity getUndergoer() { return this.undergoer; }
+	public Object_Entity getActor() { return this.actor; }
+	public Object_Entity getUndergoer() { return this.undergoer; }
 }

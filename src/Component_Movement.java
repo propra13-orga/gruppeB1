@@ -9,7 +9,7 @@ class Component_Movement extends Component {
 	public int delay, tick;
 	public boolean moving, walkable, collidable, moveable;
 	
-	public Component_Movement(Entity entity, System_Component system,
+	public Component_Movement(Object_Entity entity, System_Component system,
 			int x, int y, int dx, int dy, int delay,
 			boolean walkable, boolean collidable) {
 		super("movement",entity,system);
@@ -29,7 +29,7 @@ class Component_Movement extends Component {
 		this.tick = 0;
 	}
 	
-	public Component_Movement(Entity entity, System_Component system, int x, int y) {
+	public Component_Movement(Object_Entity entity, System_Component system, int x, int y) {
 		this(entity,system,x,y,0,0,0,true,false);
 	}
 	

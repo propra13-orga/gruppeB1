@@ -28,8 +28,8 @@ class System_Interaction extends System_Component {
 			 * "entity" ist jeweils die Entität mit der Triggerkomponente.
 			 * "actor" ist jeweils die Entität, die den Trigger ausgelöst hat.
 			 */
-			Entity entity = event.getUndergoer();
-			Entity actor = event.getActor();
+			Object_Entity entity = event.getUndergoer();
+			Object_Entity actor = event.getActor();
 			if (entity.hasComponent("trigger_levelchange")
 					&& this.getScene().getPlayer().equals(actor)) {
 				/*
@@ -62,13 +62,13 @@ class System_Interaction extends System_Component {
 			}
 		}
 		
-		for (Entity entity : this.getEntitiesByType("health")) {
+		for (Object_Entity entity : this.getEntitiesByType("health")) {
 			int hp = ((Component_Health) entity.getComponent("health")).getHP();
 			if (hp <= 0) this.addEvent(new Object_Event(EventType.DEATH,null,entity));
 		}
 	}
 	
-	private Component_Health getHealth(Entity entity) {
+	private Component_Health getHealth(Object_Entity entity) {
 		return (Component_Health) entity.getComponent("health");
 	}
 

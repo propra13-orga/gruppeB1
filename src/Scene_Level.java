@@ -42,7 +42,7 @@ public class Scene_Level extends Scene {
 		Object_Level level2 = new Object_Level("map3", 2);
 		Object_Level level3 = new Object_Level("map4", 3);
 		
-		Entity player = new Entity("Tollkühner Held",eManager);
+		Object_Entity player = new Object_Entity("Tollkühner Held",eManager);
 		new Component_Movement(player,movementSystem,2,5,0,0,16,false,true);
 		new Component_Health(player,interactionSystem,10);
 		new Component_Sprite(player,renderSystem,"player_2");
@@ -51,47 +51,47 @@ public class Scene_Level extends Scene {
 		player.init();
 		eManager.setPlayer(player);
 		
-		Entity enemy = new Entity("Gegner",eManager);
+		Object_Entity enemy = new Object_Entity("Gegner",eManager);
 		new Component_Movement(enemy,movementSystem,4,5,0,0,16,false,true);
 		new CompAI(enemy,aiSystem);
 		new Component_Sprite(enemy,renderSystem,"character_1");
 		new Component_Controls(enemy,movementSystem);
 		new Component_Health(enemy,interactionSystem,5);
 		
-		Entity trigger = new Entity("Portal",eManager);
+		Object_Entity trigger = new Object_Entity("Portal",eManager);
 		new Component_Movement(trigger,movementSystem,19,12,0,0,0,true,true);
 		new Trigger_LevelChange(trigger,interactionSystem,EventType.COLLISION,2,0,4);
 		
-		Entity trap1 = new Entity("Falle",eManager);
+		Object_Entity trap1 = new Object_Entity("Falle",eManager);
 		new Component_Sprite(trap1,renderSystem,"trap_1");
 		new Component_Movement(trap1,movementSystem,5,10,0,0,32,true,true);
 		new Trigger_Attack(trap1,interactionSystem,EventType.COLLISION,4);
 		new CompAI(trap1,aiSystem);
 		new Component_Controls(trap1,movementSystem);
 		
-		Entity trap2 = new Entity("Falle",eManager);
+		Object_Entity trap2 = new Object_Entity("Falle",eManager);
 		new Component_Sprite(trap2,renderSystem,"trap_1");
 		new Component_Movement(trap2,movementSystem,9,11,0,0,32,true,true);
 		new Trigger_Attack(trap2,interactionSystem,EventType.COLLISION,4);
 		new CompAI(trap2,aiSystem);
 		new Component_Controls(trap2,movementSystem);
 		
-		Entity trap3 = new Entity("Falle",eManager);
+		Object_Entity trap3 = new Object_Entity("Falle",eManager);
 		new Component_Sprite(trap3,renderSystem,"trap_1");
 		new Component_Movement(trap3,movementSystem,15,11,0,0,32,true,true);
 		new Trigger_Attack(trap3,interactionSystem,EventType.COLLISION,4);
 		new CompAI(trap3,aiSystem);
 		new Component_Controls(trap3,movementSystem);
 		
-		Entity instadeath = new Entity("Toeter!",eManager);
+		Object_Entity instadeath = new Object_Entity("Toeter!",eManager);
 		new Component_Movement(instadeath,movementSystem,14,3,0,0,0,true,true);
 		new Trigger_Attack(instadeath,interactionSystem,EventType.COLLISION,1000);
 		
-		Entity trigger2 = new Entity("Portal",eManager);
+		Object_Entity trigger2 = new Object_Entity("Portal",eManager);
 		new Component_Movement(trigger2,movementSystem,24,7,0,0,0,true,true);
 		new Trigger_LevelChange(trigger2,interactionSystem,EventType.COLLISION,3,0,4);
 		
-		Entity trigger3 = new Entity("Spielende",eManager);
+		Object_Entity trigger3 = new Object_Entity("Spielende",eManager);
 		new Component_Movement(trigger3,movementSystem,22,2,0,0,0,true,true);
 		new Trigger_EndGame(trigger3,interactionSystem,EventType.COLLISION);
 		
@@ -162,7 +162,7 @@ public class Scene_Level extends Scene {
 		return this.events.get(type);
 	}
 	
-	public Entity getPlayer() {
+	public Object_Entity getPlayer() {
 		return this.eManager.getPlayer();
 	}
 	

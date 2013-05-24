@@ -14,15 +14,15 @@ abstract class System_Component {
 	protected Scene scene;
 	protected String[] types;
 	protected List<Component> components;
-	protected Hashtable<String,List<Entity>> entitiesByType;
+	protected Hashtable<String,List<Object_Entity>> entitiesByType;
 	
 	public System_Component(Scene scene, String ...types) {
 		this.scene = scene;
 		this.components = new LinkedList<Component>();
 		this.types = types;
-		this.entitiesByType = new Hashtable<String,List<Entity>>();
+		this.entitiesByType = new Hashtable<String,List<Object_Entity>>();
 		for (String type : this.types){
-			this.entitiesByType.put(type,new LinkedList<Entity>());
+			this.entitiesByType.put(type,new LinkedList<Object_Entity>());
 		}
 	}
 	
@@ -46,7 +46,7 @@ abstract class System_Component {
 		this.entitiesByType.get(component.type).remove(component.entity);
 	}
 	
-	public List<Entity> getEntitiesByType(String type) {
+	public List<Object_Entity> getEntitiesByType(String type) {
 		return this.entitiesByType.get(type);
 	}
 	

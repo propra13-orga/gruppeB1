@@ -29,7 +29,7 @@ class Component_Sprite extends Component {
 	private int pos_y;
 	
 	
-	public Component_Sprite(Entity entity, System_Component system,
+	public Component_Sprite(Object_Entity entity, System_Component system,
 			String filename, int x, int y) {
 		super("sprite",entity,system);
 		spriteset = new Object_SpriteSet(filename);
@@ -43,7 +43,7 @@ class Component_Sprite extends Component {
 		this.visible = true;
 	}
 	
-	public Component_Sprite(Entity entity, System_Component system, String filename) {
+	public Component_Sprite(Object_Entity entity, System_Component system, String filename) {
 		this(entity,system,filename,0,0);
 		this.visible = false;
 	}

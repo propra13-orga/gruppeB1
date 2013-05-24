@@ -19,7 +19,7 @@ class System_AI extends System_Component {
 
 	@Override
 	public void update() {
-		for (Entity entity : this.getEntitiesByType("ai")) {
+		for (Object_Entity entity : this.getEntitiesByType("ai")) {
 			//CompMovement compMovement = (CompMovement) entity.getComponent("movement");
 			CompAI compAI = (CompAI) entity.getComponent("ai");
 			if (compAI.nothingToDo()) {
@@ -43,7 +43,7 @@ class System_AI extends System_Component {
 	 * Pfadsuche.
 	 */
 	
-	private void findPath(Entity entity, int toX, int toY) {
+	private void findPath(Object_Entity entity, int toX, int toY) {
 		
 		
 	}
@@ -146,7 +146,7 @@ class CompAI extends Component {
 	private List<Integer> commands;
 	private Random generator;
 	private AStar aStarData;
-	public CompAI(Entity entity, System_Component system) {
+	public CompAI(Object_Entity entity, System_Component system) {
 		super("ai",entity,system);
 		this.commands = new LinkedList<Integer>();
 		this.commands.add(0);

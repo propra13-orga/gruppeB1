@@ -12,7 +12,7 @@ class System_Movement extends System_Component {
 	@Override
 	public void update() {
 		// Erst die Eingaben behandeln.
-		for (Entity entity : this.getEntitiesByType("controls")) {
+		for (Object_Entity entity : this.getEntitiesByType("controls")) {
 			if (entity.hasComponent("movement")) {
 				Component_Movement Component_Movement = (Component_Movement) entity.getComponent("movement");
 				this.handleMoveability(Component_Movement);
@@ -35,7 +35,7 @@ class System_Movement extends System_Component {
 		}
 		
 		// Nun die Entitäten bewegen.
-		for (Entity entity : this.getEntitiesByType("movement")) {
+		for (Object_Entity entity : this.getEntitiesByType("movement")) {
 			this.moveEntity(entity);
 		}
 		
@@ -223,7 +223,7 @@ class System_Movement extends System_Component {
 	/*
 	 * Bewegt eine Entität gemäß ihrer Richtungsdaten (dx und dy).
 	 */
-	private void moveEntity(Entity entity) {
+	private void moveEntity(Object_Entity entity) {
 		Component_Movement Component_Movement = (Component_Movement) entity.getComponent("movement");
 		if (Component_Movement.isMoveable()) {
 			int dx = Component_Movement.getdX();
