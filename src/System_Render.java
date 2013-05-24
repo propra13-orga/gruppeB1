@@ -17,7 +17,7 @@ class System_Render extends System_Component {
 	@Override
 	public void update() {
 		// Spritekomponente updaten.
-		for (Object_Entity entity : this.getEntitiesByType("sprite")) {
+		for (Entity entity : this.getEntitiesByType("sprite")) {
 			this.updateSprite(entity);
 		}
 		// Kamera updaten.
@@ -75,7 +75,7 @@ class System_Render extends System_Component {
 	}
 	
 	private void displayStats() {
-		Object_Entity player = this.getScene().getPlayer();
+		Entity player = this.getScene().getPlayer();
 		Component_Health compHealth = (Component_Health) player.getComponent("health");
 		int hp = compHealth.getHP();
 		float fraction = (float) hp / (float) compHealth.getMaxHP();
@@ -88,7 +88,7 @@ class System_Render extends System_Component {
 		g.drawString(s,10,Object_Screen.SCREEN_H-10);
 	}
 	
-	private Component_Sprite getSprite(Object_Entity entity) { 
+	private Component_Sprite getSprite(Entity entity) { 
 		return (Component_Sprite) entity.getComponent("sprite"); 
 	}
 	
@@ -96,7 +96,7 @@ class System_Render extends System_Component {
 	 * Aktualisiert alle Sprites (also Sprite-Komponenten) in Abhängigkeit von
 	 * der Positions- und Bewegungsdaten der jeweiligen Entitäten.
 	 */
-	private void updateSprite(Object_Entity entity) {
+	private void updateSprite(Entity entity) {
 		Component_Movement compMovement = (Component_Movement) entity.getComponent("movement");
 		Component_Sprite compSprite = this.getSprite(entity);
 		// Ändere die Ausrichtung des Sprites entsprechend der aktuellen 
@@ -165,7 +165,7 @@ class System_Render extends System_Component {
 	
 	
 	private void updateScreenPoint() {
-		Object_Entity camera = this.getEntitiesByType("camera").get(0);
+		Entity camera = this.getEntitiesByType("camera").get(0);
 
 		Component_Sprite compSprite = this.getSprite(camera);		
 		screen_point[0] = compSprite.getX() - (Object_Screen.SCREEN_W / 2);
@@ -181,7 +181,7 @@ class System_Render extends System_Component {
 	}
 
 	private void drawSprites(BufferedImage screen) {
-		for (Object_Entity entity : this.getEntitiesByType("sprite")) {
+		for (Entity entity : this.getEntitiesByType("sprite")) {
 			Component_Sprite compSprite = this.getSprite(entity);
 			screen.getGraphics().drawImage(
 					compSprite.getLowerHalf(),
@@ -190,7 +190,7 @@ class System_Render extends System_Component {
 					null);
 		}
 		
-		for (Object_Entity entity : this.getEntitiesByType("sprite")) {
+		for (Entity entity : this.getEntitiesByType("sprite")) {
 			Component_Sprite compSprite = this.getSprite(entity);
 			screen.getGraphics().drawImage(
 					compSprite.getUpperHalf(),

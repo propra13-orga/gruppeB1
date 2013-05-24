@@ -9,7 +9,7 @@ public class Scene_Level extends Scene {
 	private Object_Level nextLevel;
 	private int[] nextLevelSpawn = new int[2];
 	private Hashtable<Integer,Object_Level> levels;
-	private Hashtable<EventType,List<Object_Event>> events;
+	private Hashtable<EventType,List<Event>> events;
 	private Object_EntityManager eManager;
 	private System_AI aiSystem;
 	private System_Movement movementSystem;
@@ -42,7 +42,7 @@ public class Scene_Level extends Scene {
 		Object_Level level2 = new Object_Level("map3", 2);
 		Object_Level level3 = new Object_Level("map4", 3);
 		
-		Object_Entity player = new Object_Entity("Tollkühner Held",eManager);
+		Entity player = new Entity("Tollkühner Held",eManager);
 		new Component_Movement(player,movementSystem,2,5,0,0,16,false,true);
 		new Component_Health(player,interactionSystem,10);
 		new Component_Sprite(player,renderSystem,"player_2");
@@ -51,47 +51,47 @@ public class Scene_Level extends Scene {
 		player.init();
 		eManager.setPlayer(player);
 		
-		Object_Entity enemy = new Object_Entity("Gegner",eManager);
+		Entity enemy = new Entity("Gegner",eManager);
 		new Component_Movement(enemy,movementSystem,4,5,0,0,16,false,true);
 		new CompAI(enemy,aiSystem);
 		new Component_Sprite(enemy,renderSystem,"character_1");
 		new Component_Controls(enemy,movementSystem);
 		new Component_Health(enemy,interactionSystem,5);
 		
-		Object_Entity trigger = new Object_Entity("Portal",eManager);
+		Entity trigger = new Entity("Portal",eManager);
 		new Component_Movement(trigger,movementSystem,19,12,0,0,0,true,true);
 		new Trigger_LevelChange(trigger,interactionSystem,EventType.COLLISION,2,0,4);
 		
-		Object_Entity trap1 = new Object_Entity("Falle",eManager);
+		Entity trap1 = new Entity("Falle",eManager);
 		new Component_Sprite(trap1,renderSystem,"trap_1");
 		new Component_Movement(trap1,movementSystem,5,10,0,0,32,true,true);
 		new Trigger_Attack(trap1,interactionSystem,EventType.COLLISION,4);
 		new CompAI(trap1,aiSystem);
 		new Component_Controls(trap1,movementSystem);
 		
-		Object_Entity trap2 = new Object_Entity("Falle",eManager);
+		Entity trap2 = new Entity("Falle",eManager);
 		new Component_Sprite(trap2,renderSystem,"trap_1");
 		new Component_Movement(trap2,movementSystem,9,11,0,0,32,true,true);
 		new Trigger_Attack(trap2,interactionSystem,EventType.COLLISION,4);
 		new CompAI(trap2,aiSystem);
 		new Component_Controls(trap2,movementSystem);
 		
-		Object_Entity trap3 = new Object_Entity("Falle",eManager);
+		Entity trap3 = new Entity("Falle",eManager);
 		new Component_Sprite(trap3,renderSystem,"trap_1");
 		new Component_Movement(trap3,movementSystem,15,11,0,0,32,true,true);
 		new Trigger_Attack(trap3,interactionSystem,EventType.COLLISION,4);
 		new CompAI(trap3,aiSystem);
 		new Component_Controls(trap3,movementSystem);
 		
-		Object_Entity instadeath = new Object_Entity("Toeter!",eManager);
+		Entity instadeath = new Entity("Toeter!",eManager);
 		new Component_Movement(instadeath,movementSystem,14,3,0,0,0,true,true);
 		new Trigger_Attack(instadeath,interactionSystem,EventType.COLLISION,1000);
 		
-		Object_Entity trigger2 = new Object_Entity("Portal",eManager);
+		Entity trigger2 = new Entity("Portal",eManager);
 		new Component_Movement(trigger2,movementSystem,24,7,0,0,0,true,true);
 		new Trigger_LevelChange(trigger2,interactionSystem,EventType.COLLISION,3,0,4);
 		
-		Object_Entity trigger3 = new Object_Entity("Spielende",eManager);
+		Entity trigger3 = new Entity("Spielende",eManager);
 		new Component_Movement(trigger3,movementSystem,22,2,0,0,0,true,true);
 		new Trigger_EndGame(trigger3,interactionSystem,EventType.COLLISION);
 		
@@ -136,7 +136,7 @@ public class Scene_Level extends Scene {
 		this.eManager.update();
 	}
 	
-	public void addEvent(Object_Event event) {
+	public void addEvent(Event event) {
 		this.events.get(event.getType()).add(event);
 	}
 	
@@ -158,11 +158,18 @@ public class Scene_Level extends Scene {
 		return this.currentLevel;
 	}
 	
-	public List<Object_Event> getEvents(EventType type) {
+	/*
+	 * Gibt alle Entitäten zurück, die sich an Position xy befinden.
+	 */
+	public List<Entity> getEntitiesAt(int x, int y) {
+		return this.movementSystem.getEntitiesAt(x,y);
+	}
+	
+	public List<Event> getEvents(EventType type) {
 		return this.events.get(type);
 	}
 	
-	public Object_Entity getPlayer() {
+	public Entity getPlayer() {
 		return this.eManager.getPlayer();
 	}
 	
@@ -227,10 +234,10 @@ public class Scene_Level extends Scene {
 	/*
 	 * Initialisiert die Hashtabelle, in der die Events gespeichert werden.
 	 */
-	private Hashtable<EventType,List<Object_Event>> initEventTable() {
-		Hashtable<EventType,List<Object_Event>> events = new Hashtable<EventType,List<Object_Event>>();
+	private Hashtable<EventType,List<Event>> initEventTable() {
+		Hashtable<EventType,List<Event>> events = new Hashtable<EventType,List<Event>>();
 		for (EventType type : EventType.values()) {
-			events.put(type, new LinkedList<Object_Event>());
+			events.put(type, new LinkedList<Event>());
 		}
 		return events;
 	}

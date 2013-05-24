@@ -5,7 +5,7 @@
  */
 
 class Component_Camera extends Component {
-	public Component_Camera(Object_Entity entity, System_Component system) {
+	public Component_Camera(Entity entity, System_Component system) {
 		super("camera",entity,system);
 	}
 }

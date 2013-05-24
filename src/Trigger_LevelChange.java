@@ -2,7 +2,7 @@ class Trigger_LevelChange extends Trigger {
 	private int levelID;
 	private int x, y;
 	
-	public Trigger_LevelChange(Object_Entity entity, System_Component system, 
+	public Trigger_LevelChange(Entity entity, System_Component system, 
 			EventType eventType,
 			int levelID, int x, int y) {
 		super("trigger_levelchange",entity,system,eventType);

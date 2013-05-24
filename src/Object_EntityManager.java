@@ -12,12 +12,12 @@ import java.util.List;
 
 class Object_EntityManager {
 	protected Scene scene;
-	protected List<Object_Entity> entities;
-	protected Object_Entity player;
+	protected List<Entity> entities;
+	protected Entity player;
 	
 	public Object_EntityManager(Scene scene) {
 		this.scene = scene;
-		this.entities = new LinkedList<Object_Entity>();
+		this.entities = new LinkedList<Entity>();
 	}
 	
 	/*
@@ -28,8 +28,8 @@ class Object_EntityManager {
 		 * Sind Entitäten gestorben? Wenn ja, entferne diese. Der Spielertod
 		 * wird gesondert behandelt.
 		 */
-		for (Object_Event event : this.getEvents(EventType.DEATH)) {
-			Object_Entity entity = event.getUndergoer();
+		for (Event event : this.getEvents(EventType.DEATH)) {
+			Entity entity = event.getUndergoer();
 			if (this.isPlayer(entity)) {
 				this.getScene().setPlayerDead();
 			}
@@ -42,14 +42,14 @@ class Object_EntityManager {
 	/*
 	 * Füge eine Entität der Entitätenliste hinzu.
 	 */
-	public void register(Object_Entity entity) {
+	public void register(Entity entity) {
 		if (this.entities.contains(entity)) this.entities.add(entity);
 	}
 	
 	/*
 	 * Deinitialisiere und dann entferne eine Entität aus der Entitätenliste.
 	 */
-	public void deregister(Object_Entity entity) {
+	public void deregister(Entity entity) {
 		try {
 			entity.deinit();
 			this.entities.remove(entity);
@@ -61,14 +61,14 @@ class Object_EntityManager {
 	/*
 	 * Lege eine Entität als Spieler fest.
 	 */
-	public void setPlayer(Object_Entity entity) {
+	public void setPlayer(Entity entity) {
 		this.player = entity;
 	}
 	
 	/*
 	 * Ist die angegebene Entität der Spieler?
 	 */
-	public boolean isPlayer(Object_Entity entity) {
+	public boolean isPlayer(Entity entity) {
 		if (this.player.equals(entity)) return true;
 		return false;
 	}
@@ -76,13 +76,13 @@ class Object_EntityManager {
 	/*
 	 * Gebe die Spielerentität zurück.
 	 */
-	public Object_Entity getPlayer() { return this.player; }
+	public Entity getPlayer() { return this.player; }
 	
 	/*
 	 * Privates
 	 */
 	
-	private List<Object_Event> getEvents(EventType type) {
+	private List<Event> getEvents(EventType type) {
 		return ((Scene_Level) this.scene).getEvents(type); 
 	}
 	

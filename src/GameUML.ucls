@@ -217,7 +217,7 @@
       <operations public="true" package="true" protected="true" private="true"/>    
     </display>  
   </class>  
-  <class id="25" language="java" name="ComponentSystem" project="gruppeB1" file="/gruppeB1/src/ComponentSystem.java" 
+  <class id="25" language="java" name="System_Component" project="gruppeB1" file="/gruppeB1/src/System_Component.java" 
     binary="false" corner="BOTTOM_RIGHT">    
     <position height="259" width="246" x="1641" y="390"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 

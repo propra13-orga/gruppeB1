@@ -9,7 +9,7 @@ class Component_Movement extends Component {
 	public int delay, tick;
 	public boolean moving, walkable, collidable, moveable;
 	
-	public Component_Movement(Object_Entity entity, System_Component system,
+	public Component_Movement(Entity entity, System_Component system,
 			int x, int y, int dx, int dy, int delay,
 			boolean walkable, boolean collidable) {
 		super("movement",entity,system);
@@ -29,7 +29,7 @@ class Component_Movement extends Component {
 		this.tick = 0;
 	}
 	
-	public Component_Movement(Object_Entity entity, System_Component system, int x, int y) {
+	public Component_Movement(Entity entity, System_Component system, int x, int y) {
 		this(entity,system,x,y,0,0,0,true,false);
 	}
 	
@@ -49,6 +49,26 @@ class Component_Movement extends Component {
 	public boolean isWalkable() { return this.walkable; }
 	public boolean isCollidable() { return this.collidable; }
 	public boolean isMoveable() { return this.moveable; }
+	
+	public int[] orientationToVectior() { return this.orientationToVector(this.orientation); }
+	public int[] orientationToVector(int d) {
+		int[] dxdy = {0,0};
+		switch(d) {
+		case 1:
+			dxdy[1] = -1;
+			break;
+		case 2:
+			dxdy[1] = 1;
+			break;
+		case 3:
+			dxdy[0] = -1;
+			break;
+		case 4:
+			dxdy[0] = 1;
+			break;
+		}
+		return dxdy;
+	}
 	
 	// Setters
 	

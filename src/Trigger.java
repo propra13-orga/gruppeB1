@@ -9,7 +9,7 @@ abstract class Trigger extends Component {
 	private EventType eventType;
 	private boolean ready;
 	
-	public Trigger(String type, Object_Entity entity, System_Component system, 
+	public Trigger(String type, Entity entity, System_Component system, 
 			EventType eventType) {
 		super(type,entity,system);
 		this.eventType = eventType;
