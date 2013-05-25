@@ -12,7 +12,7 @@ import java.util.Random;
 
 class System_AI extends System_Component {
 
-	public System_AI(Scene scene) {
+	public System_AI(Abstract_Scene scene) {
 		super(scene, "ai");
 		// TODO Auto-generated constructor stub
 	}

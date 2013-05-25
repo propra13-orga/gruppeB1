@@ -1,44 +1,41 @@
 import java.awt.Color;
-import java.awt.Graphics;
 
-public class Window_Base {
+public class Window_Base extends Abstract_SubScene{
 
 	static final Color BORDER = new Color(0,21,72);
 	static final Color FILL   = new Color(0,77,148);
-	
-	protected Object_Game game;
+
 	protected int x;
 	protected int y;
 	protected int width;
 	protected int height;
 	
 	Window_Base(int x, int y, int width, int height, Object_Game game) {
+		super(game);
 		this.x = x;
 		this.y = y;
 		this.width = width;
 		this.height = height;
-		this.game = game;
 	}
-	
-	public void update() {
-		draw();
-	}
-	
-	protected void draw() {
-		Graphics g = game.getScreen().getBuffer().getGraphics();
-		g.setColor(BORDER);
-		g.drawRect(
+
+	@Override
+	public void updateData() {}
+
+	@Override
+	public void updateScreen() {
+		this.screen.setColor(BORDER);
+		this.screen.drawRect(
 				x,
 				y,
 				width,
 				height);
-		g.drawRect(
+		this.screen.drawRect(
 				x+1,
 				y+1,
 				width-2,
 				height-2);
-		g.setColor(FILL);
-		g.fillRect(
+		this.screen.setColor(FILL);
+		this.screen.fillRect(
 				x+2,
 				y+2,
 				width-3,

@@ -1,30 +1,39 @@
 import java.awt.Font;
-import java.awt.Graphics;
-
 import javax.swing.JOptionPane;
 
 
-public class Scene_StartMenu extends Scene {
+public class Scene_StartMenu extends Abstract_Scene {
 
 	Window_Selectable menu;
-	Graphics g;
 	
 	Scene_StartMenu(Object_Game game) {
 		super(game);
-		g = game.getScreen().getBuffer().getGraphics();
-		g.setFont(new Font("Arial", Font.PLAIN, 20));
+		this.screen.setFont(new Font("Arial", Font.PLAIN, 20));
+		this.keyhandler.clear();
 		menu = new Window_Selectable(0,0,game);
 		menu.EXIT_POSSIBLE = false;
 		menu.addCommand("Spiel starten");
 		menu.addCommand("Credits");
 		menu.addCommand("Spiel beenden");
 		menu.center();
-		game.getKeyHandler().clear();
+		
 	}
-	
-	public void update() {
-		g.clearRect(0, 0, Object_Screen.SCREEN_W, Object_Screen.SCREEN_H);
-		if (menu.EXECUTED) menu.update();
+
+	@Override
+	public void onStart() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onExit() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void updateData() {
+		if (menu.EXECUTED) menu.updateData();
 		else {
 			if (menu.CANCELED) {
 				game.scene = null;
@@ -54,6 +63,12 @@ public class Scene_StartMenu extends Scene {
 				}
 			}
 		}
+	}
+
+	@Override
+	public void updateScreen() {
+		this.game.getScreen().clear();
+		menu.updateScreen();
 	}
 	
 }

@@ -11,12 +11,12 @@ import java.util.List;
 
 
 abstract class System_Component {
-	protected Scene scene;
+	protected Abstract_Scene scene;
 	protected String[] types;
 	protected List<Component> components;
 	protected Hashtable<String,List<Entity>> entitiesByType;
 	
-	public System_Component(Scene scene, String ...types) {
+	public System_Component(Abstract_Scene scene, String ...types) {
 		this.scene = scene;
 		this.components = new LinkedList<Component>();
 		this.types = types;

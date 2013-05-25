@@ -1,14 +1,10 @@
-import java.awt.Color;
-import java.awt.Graphics;
 
-public class Scene_GameOver extends Scene {
+public class Scene_GameOver extends Abstract_Scene {
 
 	Window_Selectable menu;
-	Graphics g;
 	
 	public Scene_GameOver(Object_Game game) {
 		super(game);
-		g = game.getScreen().getBuffer().getGraphics();
 		menu = new Window_Selectable(0,0,game);
 		menu.addCommand("Spiel neu starten");
 		menu.addCommand("Spiel beenden");
@@ -16,11 +12,20 @@ public class Scene_GameOver extends Scene {
 	}
 
 	@Override
-	public void update() {
-		g.setColor(new Color(0,0,0));
-		g.clearRect(0, 0, Object_Screen.SCREEN_W, Object_Screen.SCREEN_H);
-		g.drawString("GAME OVER",Object_Screen.SCREEN_W/2,20);
-		if (menu.EXECUTED) menu.update();
+	public void onStart() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onExit() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void updateData() {
+		if (menu.EXECUTED) menu.updateData();
 		else {
 			if (menu.CANCELED) game.scene = null;
 			else {
@@ -33,6 +38,13 @@ public class Scene_GameOver extends Scene {
 				}
 			}
 		}
+	}
+
+	@Override
+	public void updateScreen() {
+		this.game.getScreen().clear();
+		this.screen.drawString("GAME OVER",Object_Screen.SCREEN_W/2,20);
+		menu.updateScreen();
 	}
 
 	

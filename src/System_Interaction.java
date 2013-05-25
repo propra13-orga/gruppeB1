@@ -10,8 +10,12 @@
 
 class System_Interaction extends System_Component {
 
-	public System_Interaction(Scene scene) {
-		super(scene, "trigger_levelchange","trigger_attack","trigger_endgame","health");
+	public System_Interaction(Abstract_Scene scene) {
+		super(scene,
+				"trigger_levelchange",
+				"trigger_attack",
+				"trigger_endgame",
+				"health");
 	}
 
 	@Override

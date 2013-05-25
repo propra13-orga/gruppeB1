@@ -12,7 +12,7 @@ public class Object_Game {
 
 	static String GAME_TITLE = "ProPra - 1. Meilenstein";
 	
-	Scene scene;
+	Abstract_Scene scene;
 	
 	private Object_Screen screen;
 	private Object_KeyHandler keyhandler;

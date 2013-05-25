@@ -1,7 +1,6 @@
-import java.awt.Graphics;
 import java.util.ArrayList;
 
-public class Window_Selectable extends Window_Base {
+public class Window_Selectable extends Abstract_SubScene {
 
 	boolean EXECUTED = true;
 	boolean CANCELED = false;
@@ -13,14 +12,14 @@ public class Window_Selectable extends Window_Base {
 	
 	private ArrayList<String> commands;
 	int cursor;
-	private Graphics g;
+	private Window_Base window;
 
 	Window_Selectable(int x, int y, Object_Game game) {
-		super(x, y, 0, 0, game);
-		g = game.getScreen().getBuffer().getGraphics();
+		super(game);
+		window  = new Window_Base(x, y, 0, 0, game);
 		commands = new ArrayList<String>();
 		cursor = 0;
-		CURSOR_HEIGHT = g.getFont().getSize() + 6;
+		CURSOR_HEIGHT = this.screen.getFont().getSize() + 6;
 		BORDER_X = CURSOR_HEIGHT / 2;
 		BORDER_Y = BORDER_X;
 	}
@@ -28,24 +27,34 @@ public class Window_Selectable extends Window_Base {
 	public void addCommand(String command) {
 		commands.add(command);
 		int new_width = 2*BORDER_X + command.length()*10;
-		if (width < new_width) width = new_width;
-		height = 2*BORDER_Y + commands.size()*CURSOR_HEIGHT;
-	}
-	
-	public void update() {
-		updateLogic();
-		//Fesnter zeichnen (superklasse)
-		draw();
-		drawCommands();
-		drawCursor();
+		if (window.width < new_width) window.width = new_width;
+		window.height = 2*BORDER_Y + commands.size()*CURSOR_HEIGHT;
 	}
 	
 	public void center() {
-		x = Object_Screen.SCREEN_W/2 - (width/2);
-		y = Object_Screen.SCREEN_H/2 - (height/2);
+		window.x = Object_Screen.SCREEN_W/2 - (window.width/2);
+		window.y = Object_Screen.SCREEN_H/2 - (window.height/2);
 	}
 	
-	private void updateLogic() {
+	private void drawCommands() {
+		int text_x = window.x + BORDER_X;
+		int text_y = window.y + BORDER_Y + this.screen.getFont().getSize() + CURSOR_HEIGHT/4;
+		for (String cmd : commands) {
+			this.screen.drawString(cmd, text_x, text_y);
+			text_y += CURSOR_HEIGHT;
+		}
+	}
+	
+	private void drawCursor() {
+		this.screen.drawRect(
+				window.x + BORDER_X,
+				window.y + BORDER_Y + (cursor*CURSOR_HEIGHT),
+				window.width - 2 * BORDER_X,
+				CURSOR_HEIGHT);
+	}
+
+	@Override
+	public void updateData() {
 		switch (game.getKeyHandler().getLast()) {
 		case Object_KeyHandler.KEY_DOWN:
 			game.getKeyHandler().clear();
@@ -69,22 +78,12 @@ public class Window_Selectable extends Window_Base {
 			break;
 		}
 	}
-	
-	private void drawCommands() {
-		int text_x = x + BORDER_X;
-		int text_y = y + BORDER_Y + g.getFont().getSize() + CURSOR_HEIGHT/4;
-		for (String cmd : commands) {
-			g.drawString(cmd, text_x, text_y);
-			text_y += CURSOR_HEIGHT;
-		}
-	}
-	
-	private void drawCursor() {
-		g.drawRect(
-				x+BORDER_X,
-				y+BORDER_Y+(cursor*CURSOR_HEIGHT),
-				width - 2*BORDER_X,
-				CURSOR_HEIGHT);
+
+	@Override
+	public void updateScreen() {
+		window.updateScreen();
+		drawCommands();
+		drawCursor();
 	}
 
 }

@@ -6,7 +6,7 @@ class System_Movement extends System_Component {
 	protected Object_KeyHandler keyHandler;
 	private HashMap<String,List<Entity>> entityPositions;
 	
-	public System_Movement(Scene scene, Object_KeyHandler keyHandler) {
+	public System_Movement(Abstract_Scene scene, Object_KeyHandler keyHandler) {
 		super(scene,"controls","movement");
 		this.keyHandler = keyHandler;
 		this.entityPositions = new HashMap<String,List<Entity>>();

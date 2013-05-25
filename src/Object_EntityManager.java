@@ -1,4 +1,3 @@
-import java.util.Hashtable;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -11,11 +10,11 @@ import java.util.List;
 
 
 class Object_EntityManager {
-	protected Scene scene;
+	protected Scene_Level scene;
 	protected List<Entity> entities;
 	protected Entity player;
 	
-	public Object_EntityManager(Scene scene) {
+	public Object_EntityManager(Scene_Level scene) {
 		this.scene = scene;
 		this.entities = new LinkedList<Entity>();
 	}
@@ -83,10 +82,10 @@ class Object_EntityManager {
 	 */
 	
 	private List<Event> getEvents(EventType type) {
-		return ((Scene_Level) this.scene).getEvents(type); 
+		return this.scene.getEvents(type); 
 	}
 	
 	private Scene_Level getScene() {
-		return (Scene_Level) this.scene;
+		return this.scene;
 	}
 }

@@ -62,6 +62,10 @@ public class Object_Screen extends JFrame {
 		return board;
 	}
 	
+	public void clear() {
+		buffer.getGraphics().clearRect(0, 0, SCREEN_W, SCREEN_H);
+	}
+	
 	public static void makeTransparent(BufferedImage b) {
 		int width = b.getWidth();
 		int height = b.getHeight();

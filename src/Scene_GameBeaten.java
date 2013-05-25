@@ -1,14 +1,10 @@
-import java.awt.Graphics;
 
-
-public class Scene_GameBeaten extends Scene {
+public class Scene_GameBeaten extends Abstract_Scene {
 	
 	Window_Selectable menu;
-	Graphics g;
 	
 	public Scene_GameBeaten(Object_Game game) {
 		super(game);
-		g = game.getScreen().getBuffer().getGraphics();
 		menu = new Window_Selectable(0,0,game);
 		menu.EXIT_POSSIBLE = false;
 		menu.addCommand("Spiel neu starten");
@@ -18,10 +14,20 @@ public class Scene_GameBeaten extends Scene {
 	}
 
 	@Override
-	public void update() {
-		g.clearRect(0, 0, Object_Screen.SCREEN_W, Object_Screen.SCREEN_H);
-		g.drawString("GEWONNEN!!!", 300,100);
-		if (menu.EXECUTED) menu.update();
+	public void onStart() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onExit() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void updateData() {
+		if (menu.EXECUTED) menu.updateData();
 		else {
 			switch (menu.cursor) {
 			case 0: //Neu starten
@@ -34,6 +40,13 @@ public class Scene_GameBeaten extends Scene {
 				game.scene = null;
 			}
 		}
+	}
+
+	@Override
+	public void updateScreen() {
+		this.game.getScreen().clear();
+		menu.updateScreen();
+		this.screen.drawString("GEWONNEN!!!", 300,100);
 	}
 
 }

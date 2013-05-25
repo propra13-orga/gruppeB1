@@ -6,7 +6,7 @@ class System_Render extends System_Component {
 	protected Object_Screen screen;
 	protected int[] screen_point;
 	
-	public System_Render(Scene scene, Object_Screen screen) {
+	public System_Render(Abstract_Scene scene, Object_Screen screen) {
 		super(scene,"sprite","camera");
 		this.screen = screen;
 		this.screen_point = new int[2];

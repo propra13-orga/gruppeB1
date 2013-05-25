@@ -1,5 +1,5 @@
 
-public class Scene_GameMenu extends Scene {
+public class Scene_GameMenu extends Abstract_Scene {
 
 	Scene_Level current_map;
 	Window_Selectable menu;
@@ -14,15 +14,28 @@ public class Scene_GameMenu extends Scene {
 		menu.addCommand("Ausrüstung");
 		menu.addCommand("Optionen");
 	}
-	
-	public void update() {
-		if (menu.EXECUTED) menu.update();
+
+	@Override
+	public void onStart() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onExit() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void updateData() {
+		if (menu.EXECUTED) menu.updateData();
 		else {
 			if (menu.CANCELED) {
 				//Menü wurde beendet
-				game.getKeyHandler().clear();
-				game.getKeyHandler().freeze(Object_KeyHandler.KEY_ESCAPE, 40);
-				game.scene = current_map;
+				this.keyhandler.clear();
+				this.keyhandler.freeze(Object_KeyHandler.KEY_ESCAPE, 40);
+				this.game.scene = current_map;
 				return;
 			}
 			else {
@@ -33,7 +46,7 @@ public class Scene_GameMenu extends Scene {
 					menu.EXECUTED = true;
 					break;
 				case 1: //Spiel beenden
-					game.getKeyHandler().freeze(Object_KeyHandler.KEY_ENTER, 40);
+					this.keyhandler.freeze(Object_KeyHandler.KEY_ENTER, 40);
 					game.scene = new Scene_StartMenu(game);
 					return;
 				default:
@@ -42,5 +55,11 @@ public class Scene_GameMenu extends Scene {
 				}
 			}
 		}
+	}
+
+	@Override
+	public void updateScreen() {
+		game.getScreen().clear();
+		menu.updateScreen();
 	}
 }

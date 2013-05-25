@@ -3,7 +3,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 
-public class Scene_Level extends Scene {
+public class Scene_Level extends Abstract_Scene {
 	
 	private Object_Level currentLevel;
 	private Object_Level nextLevel;
@@ -120,22 +120,6 @@ public class Scene_Level extends Scene {
 		this.currentLevel.init();
 	}
 	
-	@Override
-	public void update() {
-		this.check_playerDeath();
-		this.check_gameBeaten();
-		if (this.nextLevel != null) {
-			this.changeLevel();
-		}
-		this.clearEvents();
-		this.check_menu();
-		this.movementSystem.update();
-		this.interactionSystem.update();
-		this.aiSystem.update();
-		this.renderSystem.update();
-		this.eManager.update();
-	}
-	
 	public void addEvent(Event event) {
 		this.events.get(event.getType()).add(event);
 	}
@@ -249,5 +233,37 @@ public class Scene_Level extends Scene {
 		for (EventType type : this.events.keySet()) {
 			this.events.get(type).clear();
 		}
+	}
+
+	@Override
+	public void onStart() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onExit() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void updateData() {
+		this.check_playerDeath();
+		this.check_gameBeaten();
+		if (this.nextLevel != null) {
+			this.changeLevel();
+		}
+		this.clearEvents();
+		this.check_menu();
+		this.movementSystem.update();
+		this.interactionSystem.update();
+		this.aiSystem.update();
+		this.eManager.update();
+	}
+
+	@Override
+	public void updateScreen() {
+		this.renderSystem.update();
 	}
 }
