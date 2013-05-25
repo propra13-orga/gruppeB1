@@ -168,7 +168,7 @@ public class Scene_Level extends Abstract_Scene {
 	private void check_gameBeaten() {
 		if (this.gameBeaten) {
 			game.getKeyHandler().clear();
-			game.scene = new Scene_GameBeaten(game);
+			game.switchScene(new Scene_GameBeaten(game));
 		}
 	}
 	
@@ -180,7 +180,7 @@ public class Scene_Level extends Abstract_Scene {
 			game.getKeyHandler().clear();
 			game.getKeyHandler().freeze(Object_KeyHandler.KEY_ESCAPE, 20);
 			//Men� aufrufen
-			game.scene = new Scene_GameMenu(game, this);
+			game.switchScene(new Scene_GameMenu(game, this));
 			//return true;
 		}
 		//return false;
@@ -193,7 +193,7 @@ public class Scene_Level extends Abstract_Scene {
 	private void check_playerDeath() {
 		if (this.playerDead) {
 			game.getKeyHandler().clear();
-			game.scene = new Scene_GameOver(game);
+			game.switchScene(new Scene_GameOver(game));
 		}
 	}
 	

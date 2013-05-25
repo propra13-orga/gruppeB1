@@ -13,12 +13,12 @@ import java.util.List;
 abstract class System_Component {
 	protected Abstract_Scene scene;
 	protected String[] types;
-	protected List<Component> components;
+	protected List<Abstract_Component> components;
 	protected Hashtable<String,List<Entity>> entitiesByType;
 	
 	public System_Component(Abstract_Scene scene, String ...types) {
 		this.scene = scene;
-		this.components = new LinkedList<Component>();
+		this.components = new LinkedList<Abstract_Component>();
 		this.types = types;
 		this.entitiesByType = new Hashtable<String,List<Entity>>();
 		for (String type : this.types){
@@ -36,12 +36,12 @@ abstract class System_Component {
 		for (Event event : events) this.addEvent(event);
 	}
 	
-	public void register(Component component) {
+	public void register(Abstract_Component component) {
 		this.components.add(component);
 		this.entitiesByType.get(component.type).add(component.entity);
 	}
 	
-	public void deregister(Component component) {
+	public void deregister(Abstract_Component component) {
 		this.components.remove(component);
 		this.entitiesByType.get(component.type).remove(component.entity);
 	}

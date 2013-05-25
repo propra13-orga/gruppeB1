@@ -1,4 +1,4 @@
-class Component_Health extends Component {
+class Component_Health extends Abstract_Component {
 	
 	private int hp;
 	private int maxhp;

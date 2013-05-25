@@ -142,7 +142,7 @@ class AStar {
 	}
 }
 
-class CompAI extends Component {
+class CompAI extends Abstract_Component {
 	private List<Integer> commands;
 	private Random generator;
 	private AStar aStarData;

@@ -70,10 +70,12 @@ public class Window_Selectable extends Abstract_SubScene {
 			break;
 		case Object_KeyHandler.KEY_ESCAPE:
 			if (!EXIT_POSSIBLE) break;
+			game.getKeyHandler().clear();
 			EXECUTED = false;
 			CANCELED = true;
 			break;
 		case Object_KeyHandler.KEY_ENTER:
+			game.getKeyHandler().clear();
 			EXECUTED = false;
 			break;
 		}

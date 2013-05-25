@@ -1,13 +1,13 @@
 
 public class Scene_GameMenu extends Abstract_Scene {
 
-	Scene_Level current_map;
-	Window_Selectable menu;
+	private Scene_Level current_map;
+	private Window_Selectable menu;
 
-	Scene_GameMenu(Object_Game g, Scene_Level m) {
-		super(g);
+	Scene_GameMenu(Object_Game game, Scene_Level m) {
+		super(game);
 		current_map = m;
-		menu = new Window_Selectable(20,20,g);
+		menu = new Window_Selectable(20,20,game);
 		menu.addCommand("Spiel speichern");
 		menu.addCommand("Spiel beenden");
 		menu.addCommand("Inventar");
@@ -35,7 +35,7 @@ public class Scene_GameMenu extends Abstract_Scene {
 				//Menü wurde beendet
 				this.keyhandler.clear();
 				this.keyhandler.freeze(Object_KeyHandler.KEY_ESCAPE, 40);
-				this.game.scene = current_map;
+				this.game.switchScene(current_map);
 				return;
 			}
 			else {
@@ -47,7 +47,7 @@ public class Scene_GameMenu extends Abstract_Scene {
 					break;
 				case 1: //Spiel beenden
 					this.keyhandler.freeze(Object_KeyHandler.KEY_ENTER, 40);
-					game.scene = new Scene_StartMenu(game);
+					game.quit();
 					return;
 				default:
 					System.out.println("Nur zu Testzwecken!");

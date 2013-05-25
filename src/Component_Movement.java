@@ -3,7 +3,7 @@
  * Daten. Jede Entität, die auf der Karte erscheinen soll, braucht diese.
  */
 
-class Component_Movement extends Component {
+class Component_Movement extends Abstract_Component {
 	public int x, y, dx, dy;
 	public int orientation;
 	public int delay, tick;

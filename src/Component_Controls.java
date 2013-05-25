@@ -2,7 +2,7 @@
  * Entitäten mit dieser Komponente können gesteuert werden. Der Spieler über die
  * Tastatur, NPCs über die KI (kommt noch).
  */
-class Component_Controls extends Component {
+class Component_Controls extends Abstract_Component {
 	public Component_Controls(Entity entity, System_Component system) {
 		super("controls",entity,system);
 	}

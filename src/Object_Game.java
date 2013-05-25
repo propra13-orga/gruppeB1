@@ -10,41 +10,55 @@
 
 public class Object_Game {
 
-	static String GAME_TITLE = "ProPra - 1. Meilenstein";
+	static final String GAME_TITLE = "ProPra - 1. Meilenstein";
 	
-	Abstract_Scene scene;
-	
+	private Abstract_Scene scene;
 	private Object_Screen screen;
 	private Object_KeyHandler keyhandler;
 	
 	Object_Game() {
-		
 		//Screen und KeyHandler initialisieren
-		keyhandler = new Object_KeyHandler();
-		screen = new Object_Screen();
-		scene = new Scene_StartMenu(this);//Level(this);
+		this.keyhandler = new Object_KeyHandler();
+		this.screen = new Object_Screen();
+		this.scene = new Scene_StartMenu(this);//Level(this);
 		
-		screen.setTitle(GAME_TITLE);
-		screen.addKeyListener(keyhandler);
-		screen.setVisible(true);
+		this.screen.setTitle(GAME_TITLE);
+		this.screen.addKeyListener(keyhandler);
+		this.screen.setVisible(true);
 	}
 
-	//Die Ausfï¿½hrung dieser Methode entspricht genau einem Frame
+	//Die Ausführung dieser Methode entspricht genau einem Frame
 	public void update() {
-		scene.update();
-		keyhandler.freezeUpdate();		//Der Counter von eingefrorenen Tasten wird
-										//in jedem Frame dekrementiert
-		screen.update();
+		this.scene.update();
+		this.keyhandler.freezeUpdate();		//Der Counter von eingefrorenen Tasten wird
+											//in jedem Frame dekrementiert
+		this.screen.update();
 	}
 
 	//Getter / Setter
 	
+	public Abstract_Scene getScene() {
+		return this.scene;
+	}
+	
 	public Object_Screen getScreen() {
-		return screen;
+		return this.screen;
 	}
 
 	public Object_KeyHandler getKeyHandler() {
-		return keyhandler;
+		return this.keyhandler;
+	}
+	
+	//Szenen wechseln
+	
+	public void switchScene(Abstract_Scene next) {
+		this.scene.onExit();
+		this.scene = next;
+		this.scene.onStart();
+	}
+	
+	public void quit() {
+		this.scene = null;
 	}
 
 }

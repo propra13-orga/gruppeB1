@@ -4,7 +4,7 @@
  * weise dem Spieler).
  */
 
-class Component_Camera extends Component {
+class Component_Camera extends Abstract_Component {
 	public Component_Camera(Entity entity, System_Component system) {
 		super("camera",entity,system);
 	}

@@ -138,7 +138,7 @@ class System_Render extends System_Component {
 			newpos = Math.abs(newpos) % Object_Level.TILESIZE;
 			
 			// Hier wird entschieden, welche Animationsgrafik angezeigt wird.
-			if (newpos < Object_Level.TILESIZE-16) {
+			if (newpos < Object_Level.TILESIZE-10) {
 				if (compSprite.getOldAnimation() == Component_Sprite.ANIMATION_LEFT) {
 					compSprite.setAniRight();
 				}

@@ -12,19 +12,21 @@ import java.util.Hashtable;
  */
 
 class Entity {
+	
 	protected String name;
 	protected Object_EntityManager manager;
-	private Hashtable<String,Component> components;
 	protected boolean active = false;
+	
+	private Hashtable<String,Abstract_Component> components;
 	
 	public Entity(String name, Object_EntityManager manager) {
 		this.name = name;
 		this.manager = manager;
-		this.components = new Hashtable<String,Component>();
+		this.components = new Hashtable<String,Abstract_Component>();
 	}
 	
 	public void init() {
-		for (Component component : this.components.values()) {
+		for (Abstract_Component component : this.components.values()) {
 			component.init();
 		}
 		this.manager.register(this);
@@ -32,13 +34,13 @@ class Entity {
 	}
 	
 	public void deinit() {
-		for (Component component : this.components.values()) {
+		for (Abstract_Component component : this.components.values()) {
 			component.deinit();
 		}
 		this.active = false;
 	}
 	
-	public void addComponent(Component component) {
+	public void addComponent(Abstract_Component component) {
 		this.components.put(component.type, component);
 	}
 	
@@ -47,7 +49,7 @@ class Entity {
 		return false;
 	}
 	
-	public Component getComponent(String type) { return this.components.get(type); }
+	public Abstract_Component getComponent(String type) { return this.components.get(type); }
 	public Object_EntityManager getManager() {	return this.manager; }
 	
 	public boolean isPlayer() {	return this.manager.isPlayer(this); }

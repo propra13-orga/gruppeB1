@@ -4,7 +4,7 @@
  * was nach ihrer Auslösung passiert. 
  */
 
-abstract class Trigger extends Component {
+abstract class Trigger extends Abstract_Component {
 	
 	private EventType eventType;
 	private boolean ready;

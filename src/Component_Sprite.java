@@ -6,7 +6,7 @@ import java.awt.image.BufferedImage;
  * darzustellen.
  */
 
-class Component_Sprite extends Component {
+class Component_Sprite extends Abstract_Component {
 	
 	public static final int ANIMATION_LEFT = 0;
 	public static final int ANIMATION_MIDDLE = 1;

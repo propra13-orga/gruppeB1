@@ -1,5 +1,6 @@
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.image.BufferedImage;
 
 import javax.swing.JFrame;
@@ -45,6 +46,7 @@ public class Object_Screen extends JFrame {
 		pack();
 		//Rest initialisieren
 		buffer = new BufferedImage(SCREEN_W, SCREEN_H, BufferedImage.TYPE_INT_ARGB);
+		buffer.getGraphics().setFont(new Font("Arial", Font.PLAIN, 32));
 	}
 	
 	public void update() {

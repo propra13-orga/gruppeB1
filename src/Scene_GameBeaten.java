@@ -31,13 +31,13 @@ public class Scene_GameBeaten extends Abstract_Scene {
 		else {
 			switch (menu.cursor) {
 			case 0: //Neu starten
-				game.scene = new Scene_Level(game);
+				game.switchScene(new Scene_Level(game));
 				return;
 			case 1: // Hauptmenü
-				game.scene = new Scene_StartMenu(game);
+				game.switchScene(new Scene_StartMenu(game));
 				return;
 			case 2: //Ende
-				game.scene = null;
+				game.quit();
 			}
 		}
 	}

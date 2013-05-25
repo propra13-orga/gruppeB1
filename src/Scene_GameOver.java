@@ -27,14 +27,14 @@ public class Scene_GameOver extends Abstract_Scene {
 	public void updateData() {
 		if (menu.EXECUTED) menu.updateData();
 		else {
-			if (menu.CANCELED) game.scene = null;
+			if (menu.CANCELED) game.quit();
 			else {
 				switch (menu.cursor) {
 				case 0:
-					game.scene = new Scene_Level(game);
+					game.switchScene(new Scene_Level(game));
 					return;
 				case 1:
-					game.scene = null;
+					game.quit();
 				}
 			}
 		}

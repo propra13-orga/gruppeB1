@@ -26,7 +26,7 @@ public class Main {
 
 		
 		//Gameloop
-		while (game.scene != null) {
+		while (game.getScene() != null) {
 			
 			time = System.currentTimeMillis();
 			game.update();
