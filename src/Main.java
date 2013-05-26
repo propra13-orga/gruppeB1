@@ -16,44 +16,26 @@
 
 public class Main {
 
-	static int SLEEP_TIME = 6;
-
 	public static void main(String[] args) {
 
 		Object_Game game = new Object_Game();
-		long time;
-		long timeDiff;
-
 		
-		//Gameloop
+		int FRAMES_PER_SECOND = 100;
+		int SKIP_TIME = 1000 / FRAMES_PER_SECOND;
+		long start_time;
+		long time_diff;
+		
+		start_time = System.currentTimeMillis();
+		
 		while (game.getScene() != null) {
-			
-			time = System.currentTimeMillis();
-			game.update();
-			
-			try {
-				Thread.sleep(SLEEP_TIME);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			time_diff = System.currentTimeMillis() - start_time;
+			if (time_diff >= SKIP_TIME) {
+				game.update();
+				start_time = System.currentTimeMillis();
 			}
-
-			timeDiff = System.currentTimeMillis() - time;
-			if (timeDiff < SLEEP_TIME) {
-				try {
-					Thread.sleep(SLEEP_TIME - timeDiff);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-
-			//System.out.println(Math.round(1000.0 / timeDiff));
-
+			game.display();
 		}
-
-		// Programm per System.exit(0) beenden, damit auch die
-		// Swing-Anwendungen geschlossen werden!
+		
 		System.exit(0);
 	}
 }

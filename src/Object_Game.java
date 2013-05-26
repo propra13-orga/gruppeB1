@@ -32,6 +32,10 @@ public class Object_Game {
 		this.scene.update();
 		this.keyhandler.freezeUpdate();		//Der Counter von eingefrorenen Tasten wird
 											//in jedem Frame dekrementiert
+	}
+	
+	//Aktualisiert den tatsächlichen Bildschirm
+	public void display() {
 		this.screen.update();
 	}
 
