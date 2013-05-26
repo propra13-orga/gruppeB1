@@ -26,7 +26,7 @@ public class Window_Selectable extends Abstract_SubScene {
 	
 	public void addCommand(String command) {
 		commands.add(command);
-		int new_width = 2*BORDER_X + command.length()*10;
+		int new_width = 2*BORDER_X + this.screen.getFontMetrics().stringWidth(command);
 		if (window.width < new_width) window.width = new_width;
 		window.height = 2*BORDER_Y + commands.size()*CURSOR_HEIGHT;
 	}
