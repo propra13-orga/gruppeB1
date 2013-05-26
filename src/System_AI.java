@@ -1,6 +1,7 @@
-import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.PriorityQueue;
 import java.util.Random;
 
 /*
@@ -11,20 +12,29 @@ import java.util.Random;
  */
 
 class System_AI extends System_Component {
+	int w;
+	int h;
+	int[][] walkability;
+	int[][] entityPositions;
 
 	public System_AI(Abstract_Scene scene) {
 		super(scene, "ai");
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override
 	public void update() {
+		this.w = this.getScene().getCurrentLevel().getWidth();
+		this.h = this.getScene().getCurrentLevel().getHeight();
+		this.retrieveEntityPositions();
+		this.retrieveWalkability();
+		
 		for (Entity entity : this.getEntitiesByType("ai")) {
 			//CompMovement compMovement = (CompMovement) entity.getComponent("movement");
-			CompAI compAI = (CompAI) entity.getComponent("ai");
+			Component_AI compAI = (Component_AI) entity.getComponent("ai");
 			if (compAI.nothingToDo()) {
 				compAI.addRandomCommands();
 			}
+			this.findPath(entity, 2, 10);
 		}
 	}
 	
@@ -36,117 +46,220 @@ class System_AI extends System_Component {
 	 * Ist Kachel (x,y) begehbar?
 	 */
 	private boolean walkable(int x, int y) {
-		return ((Scene_Level) this.scene).getCurrentLevel().isPassable(x, y);
+		return this.getScene().getCurrentLevel().isPassable(x, y);
 	}
+	
+	
 	
 	/*
 	 * Pfadsuche.
 	 */
 	
 	private void findPath(Entity entity, int toX, int toY) {
-		
-		
+		Component_Movement compMovement = (Component_Movement) entity.getComponent("movement");
+		AStar astar = new AStar(compMovement.getX(),compMovement.getY(),toX,toY,this.walkability);
+		astar.findPath();
+		astar.reconstructPath();
 	}
 	
+	private void retrieveEntityPositions() {
+		this.entityPositions = this.getScene().getEntityPositions();
+	}
+	
+	private void retrieveWalkability() {
+		int[][] walkability = new int[this.h][this.w];
+		for (int i=0;i<walkability[0].length;i++) {
+			for (int j=0;j<walkability.length;j++) {
+				if (!this.walkable(i, j)) walkability[j][i] = 1;
+			}
+		}
+		this.walkability = walkability;
+	}
 	
 
 }
 
 
 /*
- * UNFERTIGE implementierung von A*.
+ * UNFERTIGE Implementierung von A*.
  */
 class AStar {
-	private Object_Level level;
-	private int[] start;
-	private int[] goal;
-	private List<int[]> openList;
-	private List<int[]> closedList;
-	public AStar(Object_Level level, int fromX, int fromY, int toX, int toY) {
-		this.level = level;
-		this.start = new int[2];
-		this.start[0] = fromX;
-		this.start[1] = fromY;
-		this.goal = new int[2];
-		this.goal[0] = toX;
-		this.goal[1] = toY; 
-		this.openList = new LinkedList<int[]>();
-		this.closedList = new LinkedList<int[]>();
-		this.closedList.add(start);
-	}
 	
-	public int getH(int x, int y) {
-		if (x == this.start[0] && y == this.start[1]) return 0;
-		return Math.abs(this.goal[0]-x)+Math.abs(this.goal[1]-y);
-	}
+	int fromX, fromY, toX, toY;
+	int distance;
+	private List<Node> closedList;
+	private PriorityQueue<Node> openList;
+	private int[][] walkability;
+	boolean found;
+	public AStar(int fromX, int fromY, int toX, int toY, int[][] walkability) {
+		this.fromX = fromX;
+		this.fromY = fromY;
+		this.toX = toX;
+		this.toY = toY;
+		this.closedList = new LinkedList<Node>();		
+		this.openList = new PriorityQueue<Node>();
+		this.walkability = walkability;
+		this.found = false;
+		this.distance = Integer.MAX_VALUE;
+		
+		Node start = new Node(fromX,fromY,0);
+		this.openList.add(start);
+	}	
 	
-	public int getH(int[] xy) {
-		return this.getH(xy[0], xy[1]);
-	}
-	
-	public boolean dismissable(int[] xy) {
-		return this.closedList.contains(xy);
-	}
-	
-	public void tryToAdd(int[] xy) {
-		for (int[] candidate : this.openList) {
-			//
+	private class Node implements Comparable<Node> {
+		int x;
+		int y;
+		int h;
+		int g;
+		Node from;
+		public Node(int x, int y, int g) {
+			this.x = x;
+			this.y = y;
+			this.g = g;
+			this.h = Math.abs(toX-x)+Math.abs(toY-y);
+			this.from = this;
+		}
+		
+		public Node(int x, int y) {
+			this.x = x;
+			this.y = y;
+		}
+		
+		public void setG(int g) { this.g = g; }
+		
+		private int f() {
+			return this.g+this.h;
+		}
+		
+		public void setFrom(Node s) { this.from = s; }
+		
+		@Override
+		public int compareTo(Node n) {
+			return this.f() - n.f();
 		}
 	}
 	
-	public void dismiss(int[] xy) {
-		this.closedList.add(xy);
+	public Node getNode(Node s) {
+		for (Node n : this.closedList) {
+			if (n.x == s.x && n.y == s.y) return n;
+		}
+		return null;
 	}
 	
-	public void dismiss(int x, int y) {
-		int xy[] = {x,y};
-		this.dismiss(xy);
+	public void reconstructPath() {
+		Node s = this.getNode(new Node(this.toX,this.toY));
+		Node e = this.getNode(new Node(this.fromX, this.fromY));
+		System.out.printf("(%d,%d)\t", s.x,s.y);
+		while (!s.equals(e)) {
+			s = s.from;
+			System.out.printf("(%d,%d)\t", s.x,s.y);
+		}
+		System.out.println("");
 	}
 	
 	public void findPath() {
-		
+		while (true) {
+			Node s = this.openList.remove();
+			this.closedList.add(s);
+			if (s.x == this.toX && s.y == this.toY) {
+				this.found = true;
+				this.distance = s.g;
+				break;
+			}
+			Node[] neighbours = this.getNeighbours(s);
+			for (int i=0;i<4;i++) {
+				if (neighbours[i] != null) {
+					Node t = neighbours[i];
+					if (!this.inList(this.openList, t)) {
+						t.setG(s.g+d(s,t));
+						t.setFrom(s);
+						this.openList.add(t);
+					}
+					else {
+						t = this.removeFromList(this.openList, t);
+						int newf = s.g+t.h+d(s,t);
+						if (newf < t.f()) {
+							t.setG(s.g+d(s,t));
+							t.setFrom(s);
+							this.openList.add(t);
+						}
+					}
+				}
+			}
+			if (openList.isEmpty()) break;
+		}
 	}
 	
+	private boolean inList(PriorityQueue<Node> L, Node t) {
+		for (Node n : L) {
+			if (n.x == t.x && n.y == t.y) return true;
+		}
+		return false;
+	}
 	
-	public void addNeighbours(List<int[]> neighbours) {
-		for (int[] xy : neighbours) {
-			if (!this.closedList.contains(xy)) {
-				//
+	private Node removeFromList(PriorityQueue<Node> L, Node t) {
+		for (Node n : L) {
+			if (n.x == t.x && n.y == t.y) {
+				L.remove(n);
+				return n;
 			}
 		}
+		return null;
 	}
 	
-	private List<int[]> getNeigbours(int x, int y) {
-		List<int[]> neighbours = new ArrayList<int[]>();
-		if (this.walkable(x+1,y)) {
-			int[] newXY = {x+1,y};
-			neighbours.add(newXY);
+	public int d(Node node1, Node node2) {
+		return 1;
+	}
+	
+	public int getDistance() {
+		return this.distance;
+	}
+	
+	public int[][] getPathMap() {
+		int w = this.walkability[0].length;
+		int h = this.walkability.length;
+		int[][] pathMap = new int[h][w];
+		for (Node node : this.closedList) {
+			pathMap[node.y][node.x] = node.g;
 		}
-		if (this.walkable(x-1,y)) {
-			int[] newXY = {x-1,y};
-			neighbours.add(newXY);
+		return pathMap;
+	}
+	
+	private Node[] getNeighbours(Node node) {
+		int x = node.x;
+		int y = node.y;
+		Node[] neighbours = new Node[4];
+		if (x-1 > -1 && this.walkability[y][x-1] == 0){
+			neighbours[0] = new Node(x-1,y,node.g+1);
 		}
-		if (this.walkable(x,y+1)) {
-			int[] newXY = {x,y+1};
-			neighbours.add(newXY);
+		if (x+1 < this.walkability[0].length && this.walkability[y][x+1] == 0) {
+			neighbours[1] = new Node(x+1,y,node.g+1);
 		}
-		if (this.walkable(x,y-1)) {
-			int[] newXY = {x,y-1};
-			neighbours.add(newXY);
-		}		
+		if (y-1 > -1 && this.walkability[y-1][x] == 0) {
+			neighbours[2] = new Node(x,y-1,node.g+1);
+		}
+		if (y+1 < this.walkability.length && this.walkability[y+1][x] == 0) {
+			neighbours[3] = new Node(x,y+1,node.g+1);
+		}
 		return neighbours;
 	}
 	
 	private boolean walkable(int x, int y) {
-		return this.level.isPassable(x, y);
+		int w = this.walkability[0].length;
+		int h = this.walkability.length;
+		if (x < 0 || y < 0 || x >= w || y >= h ) {
+			return false;
+		}
+		if (this.walkability[y][x] == 0) return true;
+		return false;
 	}
 }
 
-class CompAI extends Abstract_Component {
+class Component_AI extends Abstract_Component {
 	private List<Integer> commands;
 	private Random generator;
 	private AStar aStarData;
-	public CompAI(Entity entity, System_Component system) {
+	public Component_AI(Entity entity, System_Component system) {
 		super("ai",entity,system);
 		this.commands = new LinkedList<Integer>();
 		this.commands.add(0);

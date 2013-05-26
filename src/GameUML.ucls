@@ -82,8 +82,8 @@
       <operations public="true" package="true" protected="true" private="true"/>    
     </display>  
   </class>  
-  <class id="10" language="java" name="Component" project="gruppeB1" file="/gruppeB1/src/Component.java" binary="false" 
-    corner="BOTTOM_RIGHT">    
+  <class id="10" language="java" name="Abstract_Component" project="gruppeB1" 
+    file="/gruppeB1/src/Abstract_Component.java" binary="false" corner="BOTTOM_RIGHT">    
     <position height="151" width="241" x="1327" y="988"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      

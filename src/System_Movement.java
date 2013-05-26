@@ -70,13 +70,23 @@ class System_Movement extends System_Component {
 		return new LinkedList<Entity>();
 	}	
 	
+	
+	
 	/*
 	 * Gibt eine Hashtabelle zurück, die die Positionsdaten aller Entitäten
 	 * enthält.
 	 */
-	//public HashMap<int[],List<Entity>> getEntityPositions() {
-	public HashMap<String,List<Entity>> getEntityPositions() {
-		return this.entityPositions;
+	public int[][] getEntityPositions() {
+		int w = this.getScene().getCurrentLevel().getWidth();
+		int h = this.getScene().getCurrentLevel().getHeight();
+		int[][] positions = new int[h][w];
+		for (String xy : this.entityPositions.keySet()) {
+			String[] xxx = xy.split("x");
+			int x = Integer.parseInt(xxx[0]);
+			int y = Integer.parseInt(xxx[1]);
+			positions[y][x] = 1;
+		}
+		return positions;
 	}
 
 	
@@ -151,7 +161,7 @@ class System_Movement extends System_Component {
 	}
 	
 	private void handleAI(Component_Movement compMovement) {
-		CompAI compAI = (CompAI) compMovement.getEntity().getComponent("ai");
+		Component_AI compAI = (Component_AI) compMovement.getEntity().getComponent("ai");
 		if (compMovement.isMoveable()) {
 			int key = compAI.getKey();
 			this.handleInput(compMovement, key);

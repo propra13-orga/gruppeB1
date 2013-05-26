@@ -53,7 +53,7 @@ public class Scene_Level extends Abstract_Scene {
 		
 		Entity enemy = new Entity("Gegner",eManager);
 		new Component_Movement(enemy,movementSystem,4,5,0,0,16,false,true);
-		new CompAI(enemy,aiSystem);
+		new Component_AI(enemy,aiSystem);
 		new Component_Sprite(enemy,renderSystem,"character_1");
 		new Component_Controls(enemy,movementSystem);
 		new Component_Health(enemy,interactionSystem,5);
@@ -66,21 +66,21 @@ public class Scene_Level extends Abstract_Scene {
 		new Component_Sprite(trap1,renderSystem,"trap_1");
 		new Component_Movement(trap1,movementSystem,5,10,0,0,32,true,true);
 		new Trigger_Attack(trap1,interactionSystem,EventType.COLLISION,4);
-		new CompAI(trap1,aiSystem);
+		new Component_AI(trap1,aiSystem);
 		new Component_Controls(trap1,movementSystem);
 		
 		Entity trap2 = new Entity("Falle",eManager);
 		new Component_Sprite(trap2,renderSystem,"trap_1");
 		new Component_Movement(trap2,movementSystem,9,11,0,0,32,true,true);
 		new Trigger_Attack(trap2,interactionSystem,EventType.COLLISION,4);
-		new CompAI(trap2,aiSystem);
+		new Component_AI(trap2,aiSystem);
 		new Component_Controls(trap2,movementSystem);
 		
 		Entity trap3 = new Entity("Falle",eManager);
 		new Component_Sprite(trap3,renderSystem,"trap_1");
 		new Component_Movement(trap3,movementSystem,15,11,0,0,32,true,true);
 		new Trigger_Attack(trap3,interactionSystem,EventType.COLLISION,4);
-		new CompAI(trap3,aiSystem);
+		new Component_AI(trap3,aiSystem);
 		new Component_Controls(trap3,movementSystem);
 		
 		Entity instadeath = new Entity("Toeter!",eManager);
@@ -147,6 +147,14 @@ public class Scene_Level extends Abstract_Scene {
 	 */
 	public List<Entity> getEntitiesAt(int x, int y) {
 		return this.movementSystem.getEntitiesAt(x,y);
+	}
+	
+	/*
+	 * Gibt ein Array in den Maßen der aktuellen Map zurück mit einer 1 an den
+	 * Stellen, wo sich mindestens eine Entität befindet, und einer 0 sonst.
+	 */
+	public int[][] getEntityPositions() {
+		return this.movementSystem.getEntityPositions();
 	}
 	
 	public List<Event> getEvents(EventType type) {
