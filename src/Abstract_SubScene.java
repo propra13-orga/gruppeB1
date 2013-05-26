@@ -1,7 +1,7 @@
 import java.awt.Graphics;
 
 
-abstract class Abstract_SubScene implements Interface_SubScene {
+abstract class Abstract_SubScene implements ISubScene {
 
 	protected Object_Game game;
 	protected Graphics screen;

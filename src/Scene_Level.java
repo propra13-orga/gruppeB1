@@ -101,7 +101,7 @@ public class Scene_Level extends Abstract_Scene {
 		/*
 		 * Entitaeten den Leveln hinzufuegen nicht vergessen!!!
 		 */
-		//level1.addEntity(enemy);
+		level1.addEntity(enemy);
 		level1.addEntity(trigger);
 		level1.addEntity(instadeath);
 		
@@ -118,6 +118,40 @@ public class Scene_Level extends Abstract_Scene {
 		
 		this.currentLevel = levels.get(1);
 		this.currentLevel.init();
+	}
+	
+
+
+	@Override
+	public void onStart() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onExit() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void updateData() {
+		this.check_playerDeath();
+		this.check_gameBeaten();
+		if (this.nextLevel != null) {
+			this.changeLevel();
+		}
+		this.clearEvents();
+		this.check_menu();
+		this.movementSystem.update();
+		this.interactionSystem.update();
+		this.aiSystem.update();
+		this.eManager.update();
+	}
+
+	@Override
+	public void updateScreen() {
+		this.renderSystem.update();
 	}
 	
 	public void addEvent(Event event) {
@@ -224,6 +258,15 @@ public class Scene_Level extends Abstract_Scene {
 	}
 	
 	/*
+	 * Löscht alle Events.
+	 */
+	private void clearEvents() {
+		for (EventType type : this.events.keySet()) {
+			this.events.get(type).clear();
+		}
+	}
+	
+	/*
 	 * Initialisiert die Hashtabelle, in der die Events gespeichert werden.
 	 */
 	private Hashtable<EventType,List<Event>> initEventTable() {
@@ -232,46 +275,5 @@ public class Scene_Level extends Abstract_Scene {
 			events.put(type, new LinkedList<Event>());
 		}
 		return events;
-	}
-	
-	/*
-	 * Löscht alle Events.
-	 */
-	private void clearEvents() {
-		for (EventType type : this.events.keySet()) {
-			this.events.get(type).clear();
-		}
-	}
-
-	@Override
-	public void onStart() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void onExit() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void updateData() {
-		this.check_playerDeath();
-		this.check_gameBeaten();
-		if (this.nextLevel != null) {
-			this.changeLevel();
-		}
-		this.clearEvents();
-		this.check_menu();
-		this.movementSystem.update();
-		this.interactionSystem.update();
-		this.aiSystem.update();
-		this.eManager.update();
-	}
-
-	@Override
-	public void updateScreen() {
-		this.renderSystem.update();
 	}
 }

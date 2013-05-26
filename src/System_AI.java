@@ -1,4 +1,3 @@
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.PriorityQueue;
@@ -34,7 +33,7 @@ class System_AI extends System_Component {
 			if (compAI.nothingToDo()) {
 				compAI.addRandomCommands();
 			}
-			this.findPath(entity, 2, 10);
+			this.findPath(entity, 5, 5);
 		}
 	}
 	
@@ -243,22 +242,12 @@ class AStar {
 		}
 		return neighbours;
 	}
-	
-	private boolean walkable(int x, int y) {
-		int w = this.walkability[0].length;
-		int h = this.walkability.length;
-		if (x < 0 || y < 0 || x >= w || y >= h ) {
-			return false;
-		}
-		if (this.walkability[y][x] == 0) return true;
-		return false;
-	}
 }
 
 class Component_AI extends Abstract_Component {
 	private List<Integer> commands;
 	private Random generator;
-	private AStar aStarData;
+	private AStar aStar;
 	public Component_AI(Entity entity, System_Component system) {
 		super("ai",entity,system);
 		this.commands = new LinkedList<Integer>();
@@ -266,7 +255,7 @@ class Component_AI extends Abstract_Component {
 		this.generator = new Random();
 	}
 	
-	public void setAStarData(AStar aStarData) { this.aStarData = aStarData; }
+	public void setAStarData(AStar aStar) { this.aStar = aStar; }
 	
 	public int getKey() {
 		return this.commands.remove(0);
