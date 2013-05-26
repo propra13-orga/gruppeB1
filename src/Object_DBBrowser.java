@@ -41,7 +41,9 @@ public class Object_DBBrowser {
 		}
 		int row = this.entityTypes.get(entityType);
 		int col = this.headers.get(attribute);
-		return db[row][col];
+		String entry = db[row][col];
+		if (!entry.equals(" ")) return entry;
+		return null;
 	}
 	
 	

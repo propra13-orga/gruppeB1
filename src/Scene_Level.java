@@ -34,87 +34,7 @@ public class Scene_Level extends Abstract_Scene {
 		this.renderSystem = new System_Render(this,game.getScreen());
 		
 		
-		/*
-		 * Im Folgenden werden ein paar Level und Entitaeten erstellt. Das sollte
-		 * spaeter ausgelagert und aus Dateien eingelesen werden.
-		 */
-		Object_Level level1 = new Object_Level("map2", 1);
-		Object_Level level2 = new Object_Level("map3", 2);
-		Object_Level level3 = new Object_Level("map4", 3);
-		
-		Entity player = new Entity("Tollkühner Held",eManager);
-		new Component_Movement(player,movementSystem,2,5,0,0,16,false,true);
-		new Component_Health(player,interactionSystem,10);
-		new Component_Sprite(player,renderSystem,"player_2");
-		new Component_Controls(player,movementSystem);
-		new Component_Camera(player,renderSystem);
-		player.init();
-		eManager.setPlayer(player);
-		
-		Entity enemy = new Entity("Gegner",eManager);
-		new Component_Movement(enemy,movementSystem,4,5,0,0,16,false,true);
-		new Component_AI(enemy,aiSystem);
-		new Component_Sprite(enemy,renderSystem,"character_1");
-		new Component_Controls(enemy,movementSystem);
-		new Component_Health(enemy,interactionSystem,5);
-		
-		Entity trigger = new Entity("Portal",eManager);
-		new Component_Movement(trigger,movementSystem,19,12,0,0,0,true,true);
-		new Trigger_LevelChange(trigger,interactionSystem,EventType.COLLISION,2,0,4);
-		
-		Entity trap1 = new Entity("Falle",eManager);
-		new Component_Sprite(trap1,renderSystem,"trap_1");
-		new Component_Movement(trap1,movementSystem,5,10,0,0,32,true,true);
-		new Trigger_Attack(trap1,interactionSystem,EventType.COLLISION,4);
-		new Component_AI(trap1,aiSystem);
-		new Component_Controls(trap1,movementSystem);
-		
-		Entity trap2 = new Entity("Falle",eManager);
-		new Component_Sprite(trap2,renderSystem,"trap_1");
-		new Component_Movement(trap2,movementSystem,9,11,0,0,32,true,true);
-		new Trigger_Attack(trap2,interactionSystem,EventType.COLLISION,4);
-		new Component_AI(trap2,aiSystem);
-		new Component_Controls(trap2,movementSystem);
-		
-		Entity trap3 = new Entity("Falle",eManager);
-		new Component_Sprite(trap3,renderSystem,"trap_1");
-		new Component_Movement(trap3,movementSystem,15,11,0,0,32,true,true);
-		new Trigger_Attack(trap3,interactionSystem,EventType.COLLISION,4);
-		new Component_AI(trap3,aiSystem);
-		new Component_Controls(trap3,movementSystem);
-		
-		Entity instadeath = new Entity("Toeter!",eManager);
-		new Component_Movement(instadeath,movementSystem,14,3,0,0,0,true,true);
-		new Trigger_Attack(instadeath,interactionSystem,EventType.COLLISION,1000);
-		
-		Entity trigger2 = new Entity("Portal",eManager);
-		new Component_Movement(trigger2,movementSystem,24,7,0,0,0,true,true);
-		new Trigger_LevelChange(trigger2,interactionSystem,EventType.COLLISION,3,0,4);
-		
-		Entity trigger3 = new Entity("Spielende",eManager);
-		new Component_Movement(trigger3,movementSystem,22,2,0,0,0,true,true);
-		new Trigger_EndGame(trigger3,interactionSystem,EventType.COLLISION);
-		
-		
-		
-		
-		/*
-		 * Entitaeten den Leveln hinzufuegen nicht vergessen!!!
-		 */
-		level1.addEntity(enemy);
-		level1.addEntity(trigger);
-		level1.addEntity(instadeath);
-		
-		level2.addEntity(trigger2);
-		
-		level3.addEntity(trigger3);
-		level3.addEntity(trap1);
-		level3.addEntity(trap2);
-		level3.addEntity(trap3);
-		
-		this.levels.put(level1.getID(), level1);
-		this.levels.put(level2.getID(), level2);
-		this.levels.put(level3.getID(), level3);
+		this.BeispielInit();
 		
 		this.currentLevel = levels.get(1);
 		this.currentLevel.init();
@@ -199,6 +119,12 @@ public class Scene_Level extends Abstract_Scene {
 		return this.eManager.getPlayer();
 	}
 	
+	public System_Component getSystemMovement() { return this.movementSystem; }
+	public System_Component getSystemInteraction() { return this.interactionSystem; }
+	public System_Component getSystemAI() { return this.aiSystem; }
+	public System_Component getSystemRender() { return this.renderSystem; }
+	public Object_EntityManager getEntityManager() { return this.eManager; }
+	
 	
 	/*
 	 * Privates
@@ -275,5 +201,55 @@ public class Scene_Level extends Abstract_Scene {
 			events.put(type, new LinkedList<Event>());
 		}
 		return events;
+	}
+	
+	/*
+	 * Hier werden Level und Entitäten initialisiert. Wird später ausgelagert.
+	 */
+	private void BeispielInit() {
+		Object_Level level1 = new Object_Level("map2", 1);
+		Object_Level level2 = new Object_Level("map3", 2);
+		Object_Level level3 = new Object_Level("map4", 3);
+		this.levels.put(level1.getID(), level1);
+		this.levels.put(level2.getID(), level2);
+		this.levels.put(level3.getID(), level3);
+		
+		Factory factory = new Factory(this,"res/db.csv");
+		
+		Entity player = factory.buildEntity("PlayerRaw", "Held", 2, 5);
+		new Component_Camera(player,renderSystem);
+		player.init();
+		eManager.setPlayer(player);
+		
+		
+		Entity enemy = factory.buildEntity("NPC1", "Hannes", 4, 5);
+		Entity instadeath = factory.buildEntity("Instadeath","Toeter",14,3);
+		
+		EntityData triggerData = new EntityData(factory.getDB(),"Teleport","Portal",19,12);
+		triggerData.initTriggerLevelChange(2, 0, 4);
+		Entity trigger = factory.getEntity(triggerData);
+		
+		triggerData = new EntityData(factory.getDB(),"Teleport","Portal",24,7);
+		triggerData.initTriggerLevelChange(3, 0, 4);
+		Entity trigger2 = factory.getEntity(triggerData);
+		
+		Entity trigger3 = factory.buildEntity("Success1","Spiel-Ende", 22, 2);
+		
+		Entity trap1 = factory.buildEntity("Trap1", "Falle", 8, 10);
+		Entity trap2 = factory.buildEntity("Trap1", "Falle", 9, 11);
+		Entity trap3 = factory.buildEntity("Trap1", "Falle", 10, 12);
+		
+		
+		level1.addEntity(enemy);
+		level1.addEntity(trigger);
+		level1.addEntity(instadeath);
+		
+		level2.addEntity(trigger2);
+		
+		level2.addEntity(trap1);
+		level2.addEntity(trap2);
+		level2.addEntity(trap3);
+		
+		level3.addEntity(trigger3);
 	}
 }
