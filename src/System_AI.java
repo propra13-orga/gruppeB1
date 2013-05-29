@@ -148,12 +148,12 @@ class AStar {
 	public void reconstructPath() {
 		Node s = this.getNode(new Node(this.toX,this.toY));
 		Node e = this.getNode(new Node(this.fromX, this.fromY));
-		System.out.printf("(%d,%d)\t", s.x,s.y);
+		//System.out.printf("(%d,%d)\t", s.x,s.y);
 		while (!s.equals(e)) {
 			s = s.from;
-			System.out.printf("(%d,%d)\t", s.x,s.y);
+			//System.out.printf("(%d,%d)\t", s.x,s.y);
 		}
-		System.out.println("");
+		//System.out.println("");
 	}
 	
 	public void findPath() {

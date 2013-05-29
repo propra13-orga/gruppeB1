@@ -39,7 +39,7 @@ class System_Interaction extends System_Component {
 	
 	private void checkForDeath() {
 		for (Entity entity : this.getEntitiesByType("health")) {
-			int hp = ((Component_Health) entity.getComponent("health")).getHP();
+			int hp = ((Component_Battle) entity.getComponent("health")).getHP();
 			if (hp <= 0) this.addEvent(new Event(EventType.DEATH,null,entity));
 		}
 	}
@@ -47,8 +47,8 @@ class System_Interaction extends System_Component {
 	/*
 	 * Gibt die Health-Komponente einer Entität zurück.
 	 */
-	private Component_Health getHealth(Entity entity) {
-		return (Component_Health) entity.getComponent("health");
+	private Component_Battle getHealth(Entity entity) {
+		return (Component_Battle) entity.getComponent("health");
 	}
 	
 	/*
@@ -132,7 +132,7 @@ class System_Interaction extends System_Component {
 		if (trigger.getEventType() == type) {
 			if (trigger.isReady()) {
 				if (actor.hasComponent("health")) {
-					Component_Health Component_Health = this.getHealth(actor);
+					Component_Battle Component_Health = this.getHealth(actor);
 					int ap = trigger.getAP();
 					Component_Health.discountHP(ap);
 					if (this.getScene().getPlayer().equals(actor)) {
@@ -175,7 +175,7 @@ class System_Interaction extends System_Component {
 			Trigger_Attack Trigger_Attack = ((Trigger_Attack) entity.getComponent("trigger_attack"));
 			if (Trigger_Attack.isReady()) {
 				if (actor.hasComponent("health")) {
-					Component_Health Component_Health = this.getHealth(actor);
+					Component_Battle Component_Health = this.getHealth(actor);
 					int ap = Trigger_Attack.getAP();
 					Component_Health.discountHP(ap);
 					if (this.getScene().getPlayer().equals(actor)) {

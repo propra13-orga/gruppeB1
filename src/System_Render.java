@@ -76,7 +76,7 @@ class System_Render extends System_Component {
 	
 	private void displayStats() {
 		Entity player = this.getScene().getPlayer();
-		Component_Health compHealth = (Component_Health) player.getComponent("health");
+		Component_Battle compHealth = (Component_Battle) player.getComponent("health");
 		int hp = compHealth.getHP();
 		float fraction = (float) hp / (float) compHealth.getMaxHP();
 				
