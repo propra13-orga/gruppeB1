@@ -1,11 +1,11 @@
 
 public class Scene_GameOver extends Abstract_Scene {
 
-	Window_Selectable menu;
+	SubScene_WindowSelectable menu;
 	
 	public Scene_GameOver(Object_Game game) {
 		super(game);
-		menu = new Window_Selectable(0,0,game);
+		menu = new SubScene_WindowSelectable(0,0,game);
 		menu.addCommand("Spiel neu starten");
 		menu.addCommand("Spiel beenden");
 		menu.center();

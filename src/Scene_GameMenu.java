@@ -2,12 +2,12 @@
 public class Scene_GameMenu extends Abstract_Scene {
 
 	private Scene_Level current_map;
-	private Window_Selectable menu;
+	private SubScene_WindowSelectable menu;
 
 	Scene_GameMenu(Object_Game game, Scene_Level m) {
 		super(game);
 		current_map = m;
-		menu = new Window_Selectable(20,20,game);
+		menu = new SubScene_WindowSelectable(20,20,game);
 		menu.addCommand("Spiel speichern");
 		menu.addCommand("Spiel beenden");
 		menu.addCommand("Inventar");

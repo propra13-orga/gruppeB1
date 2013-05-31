@@ -4,13 +4,13 @@ import javax.swing.JOptionPane;
 
 public class Scene_StartMenu extends Abstract_Scene {
 
-	Window_Selectable menu;
+	SubScene_WindowSelectable menu;
 	
 	Scene_StartMenu(Object_Game game) {
 		super(game);
 		this.screen.setFont(new Font("Arial", Font.PLAIN, 20));
 		this.keyhandler.clear();
-		menu = new Window_Selectable(0,0,game);
+		menu = new SubScene_WindowSelectable(0,0,game);
 		menu.EXIT_POSSIBLE = false;
 		menu.addCommand("Spiel starten");
 		menu.addCommand("Credits");
