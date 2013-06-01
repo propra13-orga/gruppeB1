@@ -1,7 +1,5 @@
-import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Hashtable;
-
 
 public class Object_BattleActor implements IBattleActor, Comparable<Object_BattleActor> {
 
@@ -16,77 +14,75 @@ public class Object_BattleActor implements IBattleActor, Comparable<Object_Battl
 	private int maxSpeed;
 	private int action_cost;
 	private int iq;
+	private Object_BattleSpriteSet set;
+	private ArrayList<Entity> items;
+	private ArrayList<Entity> skills;
+	private Hashtable<String, Entity> weapons;
 	
 	@Override
 	public String getName() {
 		// TODO Auto-generated method stub
-		return null;
+		return this.name;
 	}
 
 	@Override
 	public int getHP() {
 		// TODO Auto-generated method stub
-		return 0;
+		return this.hp;
 	}
 
 	@Override
 	public int getMaxHP() {
 		// TODO Auto-generated method stub
-		return 0;
+		return this.maxHp;
 	}
 
 	@Override
 	public int getMP() {
 		// TODO Auto-generated method stub
-		return 0;
+		return this.mp;
 	}
 
 	@Override
 	public int getMaxMP() {
 		// TODO Auto-generated method stub
-		return 0;
+		return this.mapMp;
 	}
 
 	@Override
 	public int getATK() {
 		// TODO Auto-generated method stub
-		return 0;
+		return this.atk;
 	}
 
 	@Override
 	public int getDEF() {
 		// TODO Auto-generated method stub
-		return 0;
+		return this.def;
 	}
 
 	@Override
 	public int getIQ() {
 		// TODO Auto-generated method stub
-		return 0;
+		return this.iq;
 	}
 
 	@Override
 	public ArrayList<Entity> getItems() {
 		// TODO Auto-generated method stub
-		return null;
+		return this.items;
 	}
 
 	@Override
 	public ArrayList<Entity> getSkills() {
 		// TODO Auto-generated method stub
-		return null;
+		return this.skills;
 	}
 
 	@Override
 	public Hashtable<String, Entity> getEquipment() {
 		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public BufferedImage getBattleSprite() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.weapons;
 	}
 
 	@Override
@@ -98,7 +94,7 @@ public class Object_BattleActor implements IBattleActor, Comparable<Object_Battl
 	@Override
 	public int getActionCost() {
 		// TODO Auto-generated method stub
-		return 0;
+		return this.action_cost;
 	}
 	
 	@Override
@@ -123,7 +119,13 @@ public class Object_BattleActor implements IBattleActor, Comparable<Object_Battl
 	@Override
 	public int getSpeed() {
 		// TODO Auto-generated method stub
-		return 0;
+		return this.speed;
+	}
+
+	@Override
+	public Object_BattleSpriteSet getBattleSpriteSet() {
+		// TODO Auto-generated method stub
+		return this.set;
 	}
 
 	@Override

@@ -52,7 +52,7 @@ public class Scene_BattleSystem extends Abstract_Scene {
 	@Override
 	public void updateData() {
 		if (this.current_actor == null) {
-			this.current_actor = this.action_order.get(0);
+		 	this.current_actor = this.action_order.get(0);
 			if (this.ctx.getPlayers().contains(this.current_actor)) {
 				this.battle_type = BattleType.WAIT_FOR_PLAYER;
 			}
