@@ -1,7 +1,7 @@
-EntityType;Sprite;HP;CurrentHP;MP;CurrentMP;AP;Orientation;Speed;Controllable;Walkable;Collidable;AI;OnCollision;OnAction;OnAttack
-PlayerRaw;player_2;10; ;5; ;3; ;2;x; ;x; ; ; ; 
-Teleport; ; ; ; ; ; ; ; ; ;x;x; ;trigger_levelchange; ; 
-NPC1;character_1;10; ; ; ; ; ;2;x; ;x;x; ; ; 
-Trap1;trap_1; ; ; ; ;5;0;1;x;x;x;x;trigger_attack; ; 
-Success1; ; ; ; ; ; ; ; ; ;x;x;;trigger_endgame; ; 
-Instadeath; ; ; ; ; ;1000; ; ; ;x;x; ;trigger_attack; ; 
+EntityType;Name;Sprite;HP;CurrentHP;MP;CurrentMP;AP;Orientation;Speed;Controllable;Walkable;Collidable;AI;OnCollision;OnAction;OnAttack
+PlayerRaw; ;player_2;10; ;5; ;3; ;2;x; ;x; ; ; ; 
+Teleport;Portal; ; ; ; ; ; ; ; ; ;x;x; ;trigger_levelchange; ; 
+NPC1; ;character_1;10; ; ; ; ; ;2;x; ;x;x; ; ; 
+Trap1; ;trap_1; ; ; ; ;5;0;1;x;x;x;x;trigger_attack; ; 
+Success1;Spielende; ; ; ; ; ; ; ; ; ;x;x;;trigger_endgame; ; 
+Instadeath;Toeter; ; ; ; ; ;1000; ; ; ;x;x; ;trigger_attack; ; 

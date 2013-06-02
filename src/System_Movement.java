@@ -73,7 +73,7 @@ class System_Movement extends System_Component {
 	
 	
 	/*
-	 * Gibt eine Hashtabelle zurück, die die Positionsdaten aller Entitäten
+	 * Gibt ein Array zurück, die die Positionsdaten aller Entitäten
 	 * enthält.
 	 */
 	public int[][] getEntityPositions() {
@@ -163,8 +163,8 @@ class System_Movement extends System_Component {
 	private void handleAI(Component_Movement compMovement) {
 		Component_AI compAI = (Component_AI) compMovement.getEntity().getComponent("ai");
 		if (compMovement.isMoveable()) {
-			int key = compAI.getKey();
-			this.handleInput(compMovement, key);
+			//int key = compAI.getKey();
+			//this.handleInput(compMovement, key);
 		}
 	}
 	

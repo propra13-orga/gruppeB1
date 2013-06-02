@@ -5,16 +5,32 @@ import java.util.List;
 
 public class Scene_Level extends Abstract_Scene {
 	
+	/*
+	 * LEVELVERWALTUNG.
+	 */
 	private Object_Level currentLevel;
 	private Object_Level nextLevel;
 	private int[] nextLevelSpawn = new int[2];
 	private Hashtable<Integer,Object_Level> levels;
+	
+	/*
+	 * EVENTVERWALTUNG.
+	 */
 	private Hashtable<EventType,List<Event>> events;
+	private Abstract_Scene nextScene;
+	
+	/*
+	 * ENTITYMANAGER UND KOMPONENTENSYSTEME.
+	 */
 	private Object_EntityManager eManager;
 	private System_AI aiSystem;
 	private System_Movement movementSystem;
 	private System_Interaction interactionSystem;
 	private System_Render renderSystem;
+	
+	/*
+	 * FLAGS.
+	 */
 	private boolean playerDead;
 	private boolean gameBeaten;
 	
@@ -22,6 +38,7 @@ public class Scene_Level extends Abstract_Scene {
 		super(g);
 		this.levels = new Hashtable<Integer,Object_Level>();
 		this.events = this.initEventTable();
+		this.nextScene = null;
 		this.currentLevel = null;
 		this.nextLevel = null;
 		this.playerDead = false;
@@ -44,7 +61,7 @@ public class Scene_Level extends Abstract_Scene {
 
 	@Override
 	public void onStart() {
-		// TODO Auto-generated method stub
+		this.nextScene = null;
 		
 	}
 
@@ -61,11 +78,14 @@ public class Scene_Level extends Abstract_Scene {
 		if (this.nextLevel != null) {
 			this.changeLevel();
 		}
+		else if (this.nextScene != null) {
+			this.changeScene();
+		}
 		this.clearEvents();
 		this.check_menu();
+		this.aiSystem.update();
 		this.movementSystem.update();
 		this.interactionSystem.update();
-		this.aiSystem.update();
 		this.eManager.update();
 	}
 
@@ -87,6 +107,11 @@ public class Scene_Level extends Abstract_Scene {
 		this.nextLevelSpawn[0] = x;
 		this.nextLevelSpawn[1] = y;
 	}
+	
+	public void demandSceneChange(Abstract_Scene scene) {
+		this.nextScene = scene;
+	}
+	
 	
 	public void setPlayerDead() {
 		this.playerDead = true;
@@ -135,8 +160,8 @@ public class Scene_Level extends Abstract_Scene {
 	 */
 	private void check_gameBeaten() {
 		if (this.gameBeaten) {
-			game.getKeyHandler().clear();
-			game.switchScene(new Scene_GameBeaten(game));
+			this.game.getKeyHandler().clear();
+			this.game.switchScene(new Scene_GameBeaten(game));
 		}
 	}
 	
@@ -160,8 +185,8 @@ public class Scene_Level extends Abstract_Scene {
 	 */
 	private void check_playerDeath() {
 		if (this.playerDead) {
-			game.getKeyHandler().clear();
-			game.switchScene(new Scene_GameOver(game));
+			this.game.getKeyHandler().clear();
+			this.game.switchScene(new Scene_GameOver(game));
 		}
 	}
 	
@@ -182,6 +207,15 @@ public class Scene_Level extends Abstract_Scene {
 		compSprite.setY(compMovement.getY());
 		this.currentLevel.init();
 	}
+	
+	/*
+	 * 
+	 */
+	private void changeScene() {
+		this.game.getKeyHandler().clear();
+		this.game.switchScene(this.nextScene);
+	}
+	
 	
 	/*
 	 * Löscht alle Events.
@@ -218,11 +252,14 @@ public class Scene_Level extends Abstract_Scene {
 		
 		Entity player = factory.buildEntity("PlayerRaw", "Held", 2, 5);
 		new Component_Camera(player,renderSystem);
+		new Component_Inventory(player, interactionSystem);
 		player.init();
 		eManager.setPlayer(player);
 		
 		
 		Entity enemy = factory.buildEntity("NPC1", "Hannes", 4, 5);
+		new Trigger_Dialog(enemy,interactionSystem,EventType.ACTION,"blablabla");
+		
 		Entity instadeath = factory.buildEntity("Instadeath","Toeter",14,3);
 		
 		EntityData triggerData = new EntityData(factory.getDB(),"Teleport","Portal",19,12);
@@ -240,9 +277,18 @@ public class Scene_Level extends Abstract_Scene {
 		Entity trap3 = factory.buildEntity("Trap1", "Falle", 10, 12);
 		
 		
+		// Fehler: Sprite verschwindet nicht.
+//		Entity item = new Entity("testitem",this.eManager);
+//		new Component_Movement(item,movementSystem,5,8);
+//		new Component_Item(item, interactionSystem, "item", 0, 0, 0, 1, true, true, true);
+//		new Component_Sprite(item, renderSystem, "player");
+//		new Trigger_PickUp(item, interactionSystem, EventType.ACTION);
+		
+		
 		level1.addEntity(enemy);
 		level1.addEntity(trigger);
 		level1.addEntity(instadeath);
+//		level1.addEntity(item);
 		
 		level2.addEntity(trigger2);
 		

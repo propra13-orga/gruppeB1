@@ -6,7 +6,7 @@ class Component_Battle extends Abstract_Component {
 	
 	public Component_Battle(Entity entity, System_Component system, 
 			int maxhp, int maxmp, int ap) {
-		super("health",entity,system);
+		super("battle",entity,system);
 		this.maxhp = maxhp;
 		this.hp = maxhp;
 		this.maxmp = maxmp;

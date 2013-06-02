@@ -1,4 +1,3 @@
-
 public class Scene_GameMenu extends Abstract_Scene {
 
 	private Scene_Level current_map;

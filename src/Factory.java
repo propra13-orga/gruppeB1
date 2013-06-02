@@ -33,7 +33,7 @@ public class Factory {
 		}
 		
 		if (data.hasAI()) {
-			new Component_AI(entity,scene.getSystemAI());
+			new Component_AI(entity,scene.getSystemAI(),"basicenemy",3,8,10,0.8);
 		}
 		
 		if (data.isControllable()) {

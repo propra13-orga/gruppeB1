@@ -15,7 +15,11 @@ class System_Interaction extends System_Component {
 				"trigger_levelchange",
 				"trigger_attack",
 				"trigger_endgame",
-				"health");
+				"trigger_pickup",
+				"trigger_dialog",
+				"battle",
+				"item",
+				"inventory");
 	}
 
 	@Override
@@ -25,6 +29,8 @@ class System_Interaction extends System_Component {
 		
 		this.handleCollisionEvents();
 		this.handleActionEvents();
+		
+		this.handlePickUpEvents();
 		
 		this.checkForDeath();
 		
@@ -38,8 +44,8 @@ class System_Interaction extends System_Component {
 	 */
 	
 	private void checkForDeath() {
-		for (Entity entity : this.getEntitiesByType("health")) {
-			int hp = ((Component_Battle) entity.getComponent("health")).getHP();
+		for (Entity entity : this.getEntitiesByType("battle")) {
+			int hp = ((Component_Battle) entity.getComponent("battle")).getHP();
 			if (hp <= 0) this.addEvent(new Event(EventType.DEATH,null,entity));
 		}
 	}
@@ -47,8 +53,8 @@ class System_Interaction extends System_Component {
 	/*
 	 * Gibt die Health-Komponente einer Entität zurück.
 	 */
-	private Component_Battle getHealth(Entity entity) {
-		return (Component_Battle) entity.getComponent("health");
+	private Component_Battle getBattle(Entity entity) {
+		return (Component_Battle) entity.getComponent("battle");
 	}
 	
 	/*
@@ -64,6 +70,8 @@ class System_Interaction extends System_Component {
 			xy[0] += x;
 			xy[1] += y;
 			if (!this.getScene().getEntitiesAt(xy[0],xy[1]).isEmpty()) {
+				Entity undergoer = this.getScene().getEntitiesAt(xy[0],xy[1]).get(0);
+				this.addEvent(new Event(EventType.ACTION,entity,undergoer));
 				System.out.println("ACTION!");
 			}
 		}
@@ -85,6 +93,17 @@ class System_Interaction extends System_Component {
 		}
 	}
 	
+	private void handlePickUpEvents() {
+		for (Event event : this.getEvents(EventType.PICKUP)) {
+			Entity actor = event.getActor();
+			Entity undergoer = event.getUndergoer();
+			Component_Inventory compInventory = (Component_Inventory) actor.getComponent("inventory");
+			if (compInventory.addItem(undergoer)) {
+				((Component_Movement) undergoer.getComponent("movement")).deinit();
+			}
+		}
+	}
+	
 	private void handleTriggers(Event event) {
 		Entity entity = event.getUndergoer();
 
@@ -96,6 +115,36 @@ class System_Interaction extends System_Component {
 		}
 		else if (entity.hasComponent("trigger_attack")) {
 			this.handleTrigger_Attack(event);
+		}
+		else if (entity.hasComponent("trigger_dialog")) {
+			this.handleTrigger_Dialog(event);
+		}
+		if (entity.hasComponent("trigger_pickup")) {
+			this.handleTrigger_PickUp(event);
+		}
+	}
+	
+	private void handleTrigger_Dialog(Event event) {
+		Entity undergoer = event.getUndergoer();
+		Trigger_Dialog trigger = (Trigger_Dialog) undergoer.getComponent("trigger_dialog");
+		this.getScene().demandSceneChange(
+				new Scene_Dialog(
+						this.getScene().game,
+						this.getScene(),
+						trigger.getDialog()
+				)
+		);
+	}
+	
+	private void handleTrigger_PickUp(Event event) {
+		System.out.println("aaa");
+		Entity undergoer = event.getUndergoer();
+		Entity actor = event.getActor();
+		EventType type = event.getType();
+		Trigger_PickUp trigger = (Trigger_PickUp) undergoer.getComponent("trigger_pickup");
+		if (trigger.getEventType() == type
+				&& actor.hasComponent("inventory")) {
+			this.addEvent(new Event(EventType.PICKUP,actor,undergoer));
 		}
 	}
 	
@@ -131,10 +180,10 @@ class System_Interaction extends System_Component {
 		Trigger_Attack trigger = (Trigger_Attack) entity.getComponent("trigger_attack");
 		if (trigger.getEventType() == type) {
 			if (trigger.isReady()) {
-				if (actor.hasComponent("health")) {
-					Component_Battle Component_Health = this.getHealth(actor);
+				if (actor.hasComponent("battle")) {
+					Component_Battle compBattle = this.getBattle(actor);
 					int ap = trigger.getAP();
-					Component_Health.discountHP(ap);
+					compBattle.discountHP(ap);
 					if (this.getScene().getPlayer().equals(actor)) {
 						this.addEvent(new Event(EventType.PLAYERDMG,entity,actor));
 					}
@@ -174,8 +223,8 @@ class System_Interaction extends System_Component {
 		if (entity.hasComponent("trigger_attack")) {
 			Trigger_Attack Trigger_Attack = ((Trigger_Attack) entity.getComponent("trigger_attack"));
 			if (Trigger_Attack.isReady()) {
-				if (actor.hasComponent("health")) {
-					Component_Battle Component_Health = this.getHealth(actor);
+				if (actor.hasComponent("battle")) {
+					Component_Battle Component_Health = this.getBattle(actor);
 					int ap = Trigger_Attack.getAP();
 					Component_Health.discountHP(ap);
 					if (this.getScene().getPlayer().equals(actor)) {
