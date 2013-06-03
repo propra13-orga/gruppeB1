@@ -44,7 +44,7 @@ public class Window_Selectable extends Abstract_Update {
 	
 	private void drawCommands() {
 		int text_x = window.x + BORDER_X;
-		int text_y = window.y + BORDER_Y + this.screen.getFont().getSize() + CURSOR_HEIGHT/4;
+		int text_y = window.y + BORDER_Y + this.screen.getFont().getSize()+3;// + CURSOR_HEIGHT/4;
 		for (String cmd : commands) {
 			this.screen.drawString(cmd, text_x, text_y);
 			text_y += CURSOR_HEIGHT;

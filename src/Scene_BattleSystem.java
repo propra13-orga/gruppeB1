@@ -147,18 +147,20 @@ public class Scene_BattleSystem extends Abstract_Scene {
 	
 	private void drawStats() {
 		int x = 250;
-		int y = 20;
+		int y = 10;
 		for (Object_BattleActor b : this.ctx.players) {
 			String infoline = b.name + "    " + b.hp + "/" + b.maxHp;
-			this.screen.setColor(new Color(100,100,100));
-			this.screen.fillRect(x, y, 300, 20);
-			x += 20;
-			y += 10;
-			this.screen.setColor(new Color(255,255,255));
+			this.screen.setColor(new Color(200,200,200));
+			this.screen.fillRect(x+10, y, 330, 40);
+			y += 30;
+			this.screen.setColor(new Color(50,50,50));
+			this.screen.fillRect(x, y, 350, 10);
+			x += 10;
+			this.screen.setColor(new Color(0, 0, 0));
 			this.screen.setFont(Object_Game.FONT);
 			this.screen.drawString(infoline, x, y);
-			y += 10;
-			x -= 20;
+			y += 20;
+			x -= 10;
 		}
 	}
 	

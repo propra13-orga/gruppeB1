@@ -80,6 +80,6 @@ public class Object_BattleSprite extends Abstract_Update {
 			this.dest_x = ENEMY_POSITIONS[position][0];
 			this.dest_y = ENEMY_POSITIONS[position][1];
 		}
-		//moving = TRUE!
+		this.busy = true;
 	}
 }

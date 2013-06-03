@@ -28,24 +28,33 @@ public class Object_Game {
 		
 		Object_BattleActor b1 = new Object_BattleActor();
 		Object_BattleActor b2 = new Object_BattleActor();
+		Object_BattleActor b3 = new Object_BattleActor();
 		Object_BattleActor e1 = new Object_BattleActor();
 		Object_BattleActor e2 = new Object_BattleActor();
 		b1.sprite = new Object_BattleSprite("battlechar-1", 1, 13, BattleSide.PLAYER, this);
 		b2.sprite = new Object_BattleSprite("battlechar-1", 2, 14, BattleSide.PLAYER, this);
+		b3.sprite = new Object_BattleSprite("battlechar-1", 3, 13, BattleSide.PLAYER, this);
 		e1.side = BattleSide.ENEMY;
 		e2.side = BattleSide.ENEMY;
 		e1.sprite = new Object_BattleSprite("enemy-2", 1, 14, BattleSide.ENEMY, this);
 		e2.sprite = new Object_BattleSprite("enemy-2", 2, 13, BattleSide.ENEMY, this);
 		Object_BattleContext c1 = new Object_BattleContext();
 		c1.actors.add(b1);
+		c1.actors.add(b3);
 		c1.players.add(b1);
 		c1.players.add(b2);
+		c1.players.add(b3);
 		c1.actors.add(b2);
 		c1.actors.add(e1);
 		c1.actors.add(e2);
 		c1.enemies.add(e1);
 		c1.enemies.add(e2);
-		b2.speed=10000000;
+		
+		b1.name = "Alex";
+		b1.hp = 123;
+		b1.maxHp = 300;
+		b2.name = "Peter";
+		b3.name = "Jakob";
 		
 		this.scene = new Scene_BattleSystem(c1, null, this);
 		//this.scene = new Scene_StartMenu(this);
