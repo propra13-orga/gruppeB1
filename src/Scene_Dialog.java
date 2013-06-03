@@ -12,14 +12,14 @@
 
 public class Scene_Dialog extends Abstract_Scene {
 	private String dialog;
-	private SubScene_WindowMessage message;
+	private Window_Message message;
 	private Scene_Level parent;
 
 	public Scene_Dialog(Object_Game game, Scene_Level parent, String dialog) {
 		super(game);
 		this.parent = parent;
 		this.dialog = dialog;
-		this.message = new SubScene_WindowMessage(dialog,25,25,this.game);
+		this.message = new Window_Message(dialog,25,25,this.game);
 	}
 
 	@Override

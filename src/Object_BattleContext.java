@@ -2,42 +2,16 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 
-public class Object_BattleContext implements IBattleContext {
+public class Object_BattleContext {
 	
-	private ArrayList<Object_BattleActor> actors;
-	private ArrayList<Object_BattleActor> players;
-	private ArrayList<Object_BattleActor> enemies;
-	private String background = "bridge";
+	public ArrayList<Object_BattleActor> actors;
+	public ArrayList<Object_BattleActor> players;
+	public ArrayList<Object_BattleActor> enemies;
+	public String background = "forest1";
 	
-	Object_BattleContext(Object_BattleActor b, Object_BattleActor c) {
+	Object_BattleContext() {
 		this.actors = new ArrayList<Object_BattleActor>();
 		this.players = new ArrayList<Object_BattleActor>();
 		this.enemies = new ArrayList<Object_BattleActor>();
-		this.actors.add(b);
-		this.actors.add(c);
-	}
-
-	@Override
-	public ArrayList<Object_BattleActor> getActors() {
-		// TODO Auto-generated method stub
-		return this.actors;
-	}
-
-	@Override
-	public ArrayList<Object_BattleActor> getPlayers() {
-		// TODO Auto-generated method stub
-		return this.players;
-	}
-
-	@Override
-	public ArrayList<Object_BattleActor> getEnemies() {
-		// TODO Auto-generated method stub
-		return this.enemies;
-	}
-
-	@Override
-	public String getBackground() {
-		// TODO Auto-generated method stub
-		return this.background;
 	}
 }

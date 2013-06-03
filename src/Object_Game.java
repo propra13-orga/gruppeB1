@@ -1,3 +1,5 @@
+import java.awt.Font;
+
 /*
  * Game.java
  * Dies ist die Hauptklasse, welche den Screen und den KeyHandler (sp�ter auch evtl.
@@ -10,7 +12,8 @@
 
 public class Object_Game {
 
-	static final String GAME_TITLE = "ProPra - 1. Meilenstein";
+	public static final String GAME_TITLE = "ProPra - 1. Meilenstein";
+	public static final Font FONT = new Font("Hobo Std", Font.PLAIN, 20);
 	
 	private Abstract_Scene scene;
 	private Object_Screen screen;
@@ -20,13 +23,32 @@ public class Object_Game {
 		//Screen und KeyHandler initialisieren
 		this.keyhandler = new Object_KeyHandler();
 		this.screen = new Object_Screen();
+		this.screen.getBuffer().getGraphics().setFont(new Font("Arial", Font.PLAIN, 130));
 		//this.scene = new Scene_StartMenu(this);//Level(this);
 		
-		Object_BattleActor b1 = new Object_BattleActor(this, 460, 130, 9);
-		Object_BattleActor b2 = new Object_BattleActor(this, 470, 200, 10);
-		Object_BattleContext c1 = new Object_BattleContext(b1, b2);
+		Object_BattleActor b1 = new Object_BattleActor();
+		Object_BattleActor b2 = new Object_BattleActor();
+		Object_BattleActor e1 = new Object_BattleActor();
+		Object_BattleActor e2 = new Object_BattleActor();
+		b1.sprite = new Object_BattleSprite("battlechar-1", 1, 13, BattleSide.PLAYER, this);
+		b2.sprite = new Object_BattleSprite("battlechar-1", 2, 14, BattleSide.PLAYER, this);
+		e1.side = BattleSide.ENEMY;
+		e2.side = BattleSide.ENEMY;
+		e1.sprite = new Object_BattleSprite("enemy-2", 1, 14, BattleSide.ENEMY, this);
+		e2.sprite = new Object_BattleSprite("enemy-2", 2, 13, BattleSide.ENEMY, this);
+		Object_BattleContext c1 = new Object_BattleContext();
+		c1.actors.add(b1);
+		c1.players.add(b1);
+		c1.players.add(b2);
+		c1.actors.add(b2);
+		c1.actors.add(e1);
+		c1.actors.add(e2);
+		c1.enemies.add(e1);
+		c1.enemies.add(e2);
+		b2.speed=10000000;
 		
 		this.scene = new Scene_BattleSystem(c1, null, this);
+		//this.scene = new Scene_StartMenu(this);
 		
 		this.screen.setTitle(GAME_TITLE);
 		this.screen.addKeyListener(keyhandler);

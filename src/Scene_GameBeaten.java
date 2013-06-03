@@ -1,11 +1,11 @@
 
 public class Scene_GameBeaten extends Abstract_Scene {
 	
-	SubScene_WindowSelectable menu;
+	Window_Selectable menu;
 	
 	public Scene_GameBeaten(Object_Game game) {
 		super(game);
-		menu = new SubScene_WindowSelectable(0,0,game);
+		menu = new Window_Selectable(0,0,game);
 		menu.EXIT_POSSIBLE = false;
 		menu.addCommand("Spiel neu starten");
 		menu.addCommand("Zurück zum Startmenü");

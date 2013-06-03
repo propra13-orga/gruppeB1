@@ -1,6 +1,6 @@
 import java.awt.Color;
 
-public class SubScene_WindowBase extends Abstract_SubScene{
+public class Window_Base extends Abstract_Update{
 
 	static final Color BORDER = new Color(0,21,72);
 	static final Color FILL   = new Color(0,77,148);
@@ -10,7 +10,7 @@ public class SubScene_WindowBase extends Abstract_SubScene{
 	protected int width;
 	protected int height;
 	
-	SubScene_WindowBase(int x, int y, int width, int height, Object_Game game) {
+	Window_Base(int x, int y, int width, int height, Object_Game game) {
 		super(game);
 		this.x = x;
 		this.y = y;

@@ -1,6 +1,6 @@
 import java.util.ArrayList;
 
-public class SubScene_WindowSelectable extends Abstract_SubScene {
+public class Window_Selectable extends Abstract_Update {
 
 	boolean EXECUTED = true;
 	boolean CANCELED = false;
@@ -10,15 +10,19 @@ public class SubScene_WindowSelectable extends Abstract_SubScene {
 	public static int BORDER_Y = 20;
 	public static int CURSOR_HEIGHT = 30;
 	
+	public int min_x = 200;
+	public int max_x = Object_Screen.SCREEN_W;
+	
 	private ArrayList<String> commands;
 	int cursor;
-	private SubScene_WindowBase window;
+	private Window_Base window;
 
-	SubScene_WindowSelectable(int x, int y, Object_Game game) {
+	Window_Selectable(int x, int y, Object_Game game) {
 		super(game);
-		window  = new SubScene_WindowBase(x, y, 0, 0, game);
+		window  = new Window_Base(x, y, 0, 0, game);
 		commands = new ArrayList<String>();
 		cursor = 0;
+		this.screen.setFont(Object_Game.FONT);
 		CURSOR_HEIGHT = this.screen.getFont().getSize() + 6;
 		BORDER_X = CURSOR_HEIGHT / 2;
 		BORDER_Y = BORDER_X;
@@ -28,6 +32,8 @@ public class SubScene_WindowSelectable extends Abstract_SubScene {
 		commands.add(command);
 		int new_width = 2*BORDER_X + this.screen.getFontMetrics().stringWidth(command);
 		if (window.width < new_width) window.width = new_width;
+		if (window.width < min_x) window.width = min_x;
+		if (window.width > max_x) window.width = max_x;
 		window.height = 2*BORDER_Y + commands.size()*CURSOR_HEIGHT;
 	}
 	
