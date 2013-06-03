@@ -1,4 +1,9 @@
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
+
+import javax.imageio.ImageIO;
 
 
 enum BattleType {
@@ -14,6 +19,7 @@ public class Scene_BattleSystem extends Abstract_Scene {
 	private Abstract_Scene previous_scene;
 	private ArrayList<Object_BattleActor> action_order;
 	private BattleType battle_type;
+	private BufferedImage background;
 	
 	private Object_BattleActor current_actor;
 	private SubScene_WindowSelectable menu;
@@ -33,6 +39,16 @@ public class Scene_BattleSystem extends Abstract_Scene {
 		this.menu.addCommand("Item");
 		this.menu.addCommand("Flucht");
 		
+		String path = "res/background/"+this.ctx.getBackground()+".png";
+		System.out.println("Lade: "+path);
+		background = new BufferedImage(640, 480, BufferedImage.TYPE_INT_ARGB);
+		try {
+			background.getGraphics().drawImage(ImageIO.read(new File(path)),0,0,null);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		this.sortActors();
 	}
 
@@ -51,6 +67,7 @@ public class Scene_BattleSystem extends Abstract_Scene {
 
 	@Override
 	public void updateData() {
+		/*
 		if (this.current_actor == null) {
 		 	this.current_actor = this.action_order.get(0);
 			if (this.ctx.getPlayers().contains(this.current_actor)) {
@@ -81,12 +98,19 @@ public class Scene_BattleSystem extends Abstract_Scene {
 		else if (this.battle_type == BattleType.WAIT_FOR_ENEMY) {
 			this.current_actor = null;
 		}
+		*/
+		for (Object_BattleActor ba : this.ctx.getActors()) {
+			ba.getBattleSprite().updateData();
+		}
 	}
 
 	@Override
 	public void updateScreen() {
-		// TODO Auto-generated method stub
-		
+		this.screen.clearRect(0, 0, Object_Screen.SCREEN_W, Object_Screen.SCREEN_H);
+		this.screen.drawImage(this.background, 0, 0, null);
+		for (Object_BattleActor ba : this.ctx.getActors()) {
+			ba.getBattleSprite().updateScreen();
+		}
 	}
 	
 	private void sortActors() {

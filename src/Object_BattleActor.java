@@ -3,21 +3,25 @@ import java.util.Hashtable;
 
 public class Object_BattleActor implements IBattleActor, Comparable<Object_BattleActor> {
 
-	private String name;
-	private int hp;
-	private int maxHp;
-	private int mp;
-	private int mapMp;
-	private int atk;
-	private int def;
-	private int speed;
-	private int maxSpeed;
-	private int action_cost;
-	private int iq;
-	private Object_BattleSpriteSet set;
+	private String name = "Testinit Actor";
+	private int hp = 100;
+	private int maxHp = 100;
+	private int mp = 50;
+	private int mapMp = 50;
+	private int atk = 67;
+	private int def = 54;
+	private int speed = 200;
+	private int maxSpeed = 200;
+	private int action_cost = 80;
+	private int iq = 70;
+	private Object_BattleSprite sprite;
 	private ArrayList<Entity> items;
 	private ArrayList<Entity> skills;
 	private Hashtable<String, Entity> weapons;
+	
+	Object_BattleActor(Object_Game game, int x, int y, int delay) {
+		this.sprite = new Object_BattleSprite("battlechar-1", x, y, delay, game);
+	}
 	
 	@Override
 	public String getName() {
@@ -123,9 +127,9 @@ public class Object_BattleActor implements IBattleActor, Comparable<Object_Battl
 	}
 
 	@Override
-	public Object_BattleSpriteSet getBattleSpriteSet() {
+	public Object_BattleSprite getBattleSprite() {
 		// TODO Auto-generated method stub
-		return this.set;
+		return this.sprite;
 	}
 
 	@Override

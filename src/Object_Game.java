@@ -20,7 +20,13 @@ public class Object_Game {
 		//Screen und KeyHandler initialisieren
 		this.keyhandler = new Object_KeyHandler();
 		this.screen = new Object_Screen();
-		this.scene = new Scene_StartMenu(this);//Level(this);
+		//this.scene = new Scene_StartMenu(this);//Level(this);
+		
+		Object_BattleActor b1 = new Object_BattleActor(this, 460, 130, 9);
+		Object_BattleActor b2 = new Object_BattleActor(this, 470, 200, 10);
+		Object_BattleContext c1 = new Object_BattleContext(b1, b2);
+		
+		this.scene = new Scene_BattleSystem(c1, null, this);
 		
 		this.screen.setTitle(GAME_TITLE);
 		this.screen.addKeyListener(keyhandler);

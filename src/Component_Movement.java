@@ -92,6 +92,8 @@ class Component_Movement extends Abstract_Component {
 		this.dy = 0;
 		this.x = x;
 		this.y = y;
+		this.nullifyTick();
+		this.unsetMoving();
 	}
 	
 	public void tick() {

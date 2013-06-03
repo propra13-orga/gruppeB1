@@ -21,7 +21,7 @@ public interface IBattleActor {
 	public Hashtable<String, Entity> getEquipment();
 	
 	//BattleSprite
-	public Object_BattleSpriteSet getBattleSpriteSet();
+	public Object_BattleSprite getBattleSprite();
 	
 	//Die Daten im BattleActor werden während des Kampfes genutzt und verändert.
 	//writeBack() überträgt alle diese Daten auf die tatsächliche Spielerentität
