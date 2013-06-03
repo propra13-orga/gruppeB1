@@ -1,6 +1,5 @@
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.image.BufferedImage;
 
 import javax.swing.JFrame;

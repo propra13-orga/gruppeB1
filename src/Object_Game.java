@@ -18,12 +18,14 @@ public class Object_Game {
 	private Abstract_Scene scene;
 	private Object_Screen screen;
 	private Object_KeyHandler keyhandler;
+	private Object_SoundManager soundmanager;
 	
 	Object_Game() {
 		//Screen und KeyHandler initialisieren
 		this.keyhandler = new Object_KeyHandler();
 		this.screen = new Object_Screen();
 		this.screen.getBuffer().getGraphics().setFont(new Font("Arial", Font.PLAIN, 130));
+		this.soundmanager = new Object_SoundManager();
 		//this.scene = new Scene_StartMenu(this);//Level(this);
 		
 		Object_BattleActor b1 = new Object_BattleActor();
@@ -88,6 +90,10 @@ public class Object_Game {
 
 	public Object_KeyHandler getKeyHandler() {
 		return this.keyhandler;
+	}
+	
+	public Object_SoundManager getSoundManager() {
+		return this.soundmanager;
 	}
 	
 	//Szenen wechseln

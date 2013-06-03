@@ -1,6 +1,4 @@
-import java.awt.Font;
 import javax.swing.JOptionPane;
-
 
 public class Scene_StartMenu extends Abstract_Scene {
 

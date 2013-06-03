@@ -22,7 +22,8 @@ public class Scene_BattleSystem extends Abstract_Scene {
 	private BufferedImage background;
 	
 	private Object_BattleActor current_actor;
-	private Window_Selectable menu;
+	private Window_Selectable main_menu;
+	private Window_Selectable menu_enemy;
 	
 	Scene_BattleSystem(Object_BattleContext ctx, Abstract_Scene previous_scene, Object_Game game) {
 		super(game);
@@ -32,13 +33,16 @@ public class Scene_BattleSystem extends Abstract_Scene {
 		this.battle_type = GET_NEXT_ACTOR;
 		
 		this.current_actor = null;
-		this.menu = new Window_Selectable(0, 0, game);
-		this.menu.EXIT_POSSIBLE = false;
-		this.menu.EXECUTED = true;
-		this.menu.addCommand("Angriff");
-		this.menu.addCommand("Skills");
-		this.menu.addCommand("Item");
-		this.menu.addCommand("Flucht");
+		
+		this.main_menu = new Window_Selectable(0, 0, game);
+		this.main_menu.EXIT_POSSIBLE = false;
+		this.main_menu.addCommand("Angriff");
+		this.main_menu.addCommand("Skills");
+		this.main_menu.addCommand("Item");
+		this.main_menu.addCommand("Flucht");
+		
+		this.menu_enemy = new Window_Selectable(0, 0, game);
+		this.menu_enemy.EXECUTED = false;
 		
 		String path = "res/background/"+this.ctx.background+".png";
 		System.out.println("Lade: "+path);
@@ -62,6 +66,7 @@ public class Scene_BattleSystem extends Abstract_Scene {
 
 	@Override
 	public void onExit() {
+		// TODO Auto-generated method stub
 		
 	}
 
@@ -79,12 +84,16 @@ public class Scene_BattleSystem extends Abstract_Scene {
 			}
 			break;
 		case WAIT_FOR_PLAYER:
-			if (this.menu.EXECUTED) {
-				this.menu.updateData();
+			if (this.main_menu.EXECUTED) {
+				this.main_menu.updateData();
 			}
 			else {
-				switch (this.menu.cursor) {
+				switch (this.main_menu.cursor) {
 				case 0: //Angriff
+					for (Object_BattleActor b : this.ctx.enemies) {
+						this.menu_enemy.addCommand(b.name);
+					}
+					this.menu_enemy.EXECUTED = true;
 					break;
 				case 1: //Skills
 					break;
@@ -118,20 +127,12 @@ public class Scene_BattleSystem extends Abstract_Scene {
 		for (Object_BattleActor ba : this.ctx.actors) {
 			ba.sprite.updateScreen();
 		}
-		if (this.menu.EXECUTED) {
-			this.menu.updateScreen();
+		if (this.main_menu.EXECUTED) {
+			this.main_menu.updateScreen();
 		}
-		if (this.current_actor.side == BattleSide.PLAYER) {
-			Polygon p = new Polygon();
-			int x = this.current_actor.sprite.x+50;
-			int y = this.current_actor.sprite.y-30;
-			p.addPoint(x-10, y);
-			p.addPoint(x, y+20);
-			p.addPoint(x+10, y);
-			this.screen.setColor(new Color(255,0,0));
-			this.screen.fillPolygon(p);
-		}
+		this.drawArrow();
 		this.drawStats();
+		this.drawActionOrder();
 	}
 	
 	private void sortActors() {
@@ -145,9 +146,22 @@ public class Scene_BattleSystem extends Abstract_Scene {
 		}
 	}
 	
+	private void drawArrow() {
+		if (this.current_actor.side == BattleSide.PLAYER) {
+			Polygon p = new Polygon();
+			int x = this.current_actor.sprite.x+50;
+			int y = this.current_actor.sprite.y-20;
+			p.addPoint(x-10, y);
+			p.addPoint(x, y+20);
+			p.addPoint(x+10, y);
+			this.screen.setColor(new Color(255,0,0));
+			this.screen.fillPolygon(p);
+		}
+	}
+	
 	private void drawStats() {
-		int x = 250;
-		int y = 10;
+		int x = 280;
+		int y = 5;
 		for (Object_BattleActor b : this.ctx.players) {
 			String infoline = b.name + "    " + b.hp + "/" + b.maxHp;
 			this.screen.setColor(new Color(200,200,200));
@@ -161,6 +175,23 @@ public class Scene_BattleSystem extends Abstract_Scene {
 			this.screen.drawString(infoline, x, y);
 			y += 20;
 			x -= 10;
+		}
+	}
+	
+	private void drawActionOrder() {
+		this.screen.setColor(new Color(0, 77, 148));
+		this.screen.fillRect(0, 440, 640, 40);
+		int x = 10;
+		int y = 470;
+		boolean first = true;
+		this.screen.setColor(new Color(255,255,255));
+		for (Object_BattleActor b : this.action_order) {
+			this.screen.drawString(b.name, x, y);
+			if (first) {
+				first = false;
+				this.screen.setColor(new Color(150,150,150));
+			}
+			x += this.screen.getFontMetrics().stringWidth(b.name) + 20;
 		}
 	}
 	
