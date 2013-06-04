@@ -2,9 +2,9 @@
 public class Object_BattleSprite extends Abstract_Update {
 	
 	public static final int[][] PLAYER_POSITIONS = {
-		{480,210},
-		{530,300},
-		{515,380}
+		{480,170},
+		{530,260},
+		{515,340}
 	};
 	
 	public static final int[][] ENEMY_POSITIONS = {
@@ -21,15 +21,15 @@ public class Object_BattleSprite extends Abstract_Update {
 	
 	private int animation;
 	private int ani_delta;
-	private int move_delay;
+	private int move_delay = 8;
 	private int move_tick;
-	private int ani_delay = 16;
+	private int ani_delay;;
 	private int ani_tick;
 	private int dest_x;
 	private int dest_y;
 	private Object_BattleSpriteSet spriteset;
 	
-	Object_BattleSprite (String filename, int position, int delay, BattleSide side, Object_Game game) {
+	Object_BattleSprite (String filename, int position, int ani_delay, BattleSide side, Object_Game game) {
 		super(game);
 		this.spriteset = new Object_BattleSpriteSet(filename);
 		this.side = side;
@@ -45,7 +45,8 @@ public class Object_BattleSprite extends Abstract_Update {
 		this.busy = false;
 		this.animation = 1;
 		this.ani_delta = 1;
-		this.move_delay = delay;
+		this.ani_delay = ani_delay;
+		this.ani_tick = 0;
 		this.move_tick = 0;
 	}
 	
