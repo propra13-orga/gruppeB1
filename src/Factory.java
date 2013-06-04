@@ -40,14 +40,20 @@ public class Factory {
 			new Component_Controls(entity,scene.getSystemMovement());
 		}
 		
-		if (data.getHP() > -1 || data.getMP() > -1 || data.getAP() > -1) {
+		if (data.getHP() > -1 || data.getMP() > -1 || data.getATK() > -1) {
 			int hp = data.getHP();
 			int mp = data.getMP();
-			int ap = data.getAP();
+			int atk = data.getATK();
+			int def = data.getDEF();
+			int dex = data.getDEX();
+			int spd = data.getSPD();
 			if (hp < 0) hp = 1;
 			if (mp < 0) mp = 0;
-			if (ap < 0) ap = 0;
-			new Component_Battle(entity,scene.getSystemInteraction(),hp,mp,ap);
+			if (atk < 0) atk = 0;
+			if (def < 0) def = 0;
+			if (dex < 0) dex = 0;
+			if (spd < 0) spd = 1;
+			new Component_Battle(entity,scene.getSystemInteraction(),hp,mp,atk,def,spd,dex);
 		}
 		
 		if ((data.getX() > -1 && data.getY() > -1)) {
@@ -85,10 +91,13 @@ public class Factory {
 							data.toY());
 					break;
 				case "trigger_attack":
-					new Trigger_Attack(entity,scene.getSystemInteraction(),type,data.getAP());
+					new Trigger_Attack(entity,scene.getSystemInteraction(),type,data.getATK());
 					break;
 				case "trigger_endgame":
 					new Trigger_EndGame(entity,scene.getSystemInteraction(),type);
+					break;
+				case "trigger_buymenu":
+					new Trigger_BuyMenu(entity,scene.getSystemInteraction(),type);
 					break;
 				}
 			}
@@ -173,8 +182,36 @@ class EntityData implements IEntityData {
 	}
 
 	@Override
-	public int getAP() {
-		String entry = db.getEntry(entityType, "AP");
+	public int getATK() {
+		String entry = db.getEntry(entityType, "ATK");
+		if (entry != null) return Integer.parseInt(entry);
+		return -1;
+	}
+	
+	@Override
+	public int getDEF() {
+		String entry = db.getEntry(entityType, "DEF");
+		if (entry != null) return Integer.parseInt(entry);
+		return -1;
+	}
+
+	@Override
+	public int getDEX() {
+		String entry = db.getEntry(entityType, "DEX");
+		if (entry != null) return Integer.parseInt(entry);
+		return -1;
+	}
+
+	@Override
+	public int getSPD() {
+		String entry = db.getEntry(entityType, "SPD");
+		if (entry != null) return Integer.parseInt(entry);
+		return -1;
+	}
+
+	@Override
+	public int getCurrentSPD() {
+		String entry = db.getEntry(entityType, "CurrentSPD");
 		if (entry != null) return Integer.parseInt(entry);
 		return -1;
 	}
@@ -277,4 +314,6 @@ class EntityData implements IEntityData {
 		this.toX = x;
 		this.toY = y;
 	}
+
+	
 }

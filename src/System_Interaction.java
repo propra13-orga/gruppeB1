@@ -17,6 +17,7 @@ class System_Interaction extends System_Component {
 				"trigger_endgame",
 				"trigger_pickup",
 				"trigger_dialog",
+				"trigger_buymenu",
 				"battle",
 				"item",
 				"inventory");
@@ -93,6 +94,33 @@ class System_Interaction extends System_Component {
 		}
 	}
 	
+//	private void handleBattleEvents() {
+//		if (!this.getEvents(EventType.BATTLE).isEmpty()) {
+//			Entity player = this.getScene().getPlayer();
+//			List<IBattleActor> players = new ArrayList<IBattleActor>();
+//			List<IBattleActor> enemies = new ArrayList<IBattleActor>();
+//			players.add(new Object_BattleActorData(player));
+//			for (Event event : this.getEvents(EventType.BATTLE)) {
+//				Entity actor = event.getActor();
+//				Entity undergoer = event.getUndergoer();
+//				if (actor.equals(player)) {
+//					enemies.add(new Object_BattleActorData(undergoer));
+//				}
+//				else if (undergoer.equals(player)) {
+//					enemies.add(new Object_BattleActorData(actor));
+//				}
+//			}
+//			
+//			this.getScene().demandSceneChange(
+//					new Scene_BattleSystem(
+//							new Object_BattleContextData(players,enemies),
+//							this.getScene(),
+//							this.getScene().game
+//					)
+//			);
+//		}
+//	}
+	
 	private void handlePickUpEvents() {
 		for (Event event : this.getEvents(EventType.PICKUP)) {
 			Entity actor = event.getActor();
@@ -119,6 +147,9 @@ class System_Interaction extends System_Component {
 		else if (entity.hasComponent("trigger_dialog")) {
 			this.handleTrigger_Dialog(event);
 		}
+		else if (entity.hasComponent("trigger_buymenu")) {
+			this.handleTrigger_BuyMenu(event);
+		}
 		if (entity.hasComponent("trigger_pickup")) {
 			this.handleTrigger_PickUp(event);
 		}
@@ -127,13 +158,28 @@ class System_Interaction extends System_Component {
 	private void handleTrigger_Dialog(Event event) {
 		Entity undergoer = event.getUndergoer();
 		Trigger_Dialog trigger = (Trigger_Dialog) undergoer.getComponent("trigger_dialog");
-		this.getScene().demandSceneChange(
-				new Scene_Dialog(
-						this.getScene().game,
-						this.getScene(),
-						trigger.getDialog()
-				)
-		);
+		if (event.getType() == trigger.getEventType()) {
+			this.getScene().demandSceneChange(
+					new Scene_Dialog(
+							this.getScene().game,
+							this.getScene(),
+							trigger.getDialog()
+							)
+					);			
+		}
+	}
+	
+	private void handleTrigger_BuyMenu(Event event) {
+		Entity undergoer = event.getUndergoer();
+		Trigger_BuyMenu trigger = (Trigger_BuyMenu) undergoer.getComponent("trigger_buymenu");
+		if (event.getType() == trigger.getEventType()) {
+			this.getScene().demandSceneChange(
+					new Scene_BuyMenu(
+							this.getScene().game,
+							this.getScene()
+							)
+					);			
+		}
 	}
 	
 	private void handleTrigger_PickUp(Event event) {

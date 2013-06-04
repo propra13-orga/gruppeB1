@@ -256,9 +256,12 @@ public class Scene_Level extends Abstract_Scene {
 		player.init();
 		eManager.setPlayer(player);
 		
-		
+		String bla = "Sie hatten uns mit Zwang und Lügen in ihre Stöcke eingeschraubt. Sie hatten gnädig uns erlaubt, in ihrem Joch ihr Land zu pflügen. Sie saßen da in Prunk und Pracht mit vollgestopftem Magen und zwangen uns, für ihre Macht einander totzuschlagen. Doch wir, noch stolz auf unsere Fesseln, verbeugten uns vor ihren Sesseln.";
 		Entity enemy = factory.buildEntity("NPC1", "Hannes", 4, 5);
-		new Trigger_Dialog(enemy,interactionSystem,EventType.ACTION,"blablabla");
+		new Trigger_Dialog(enemy,interactionSystem,EventType.ACTION,bla);
+		
+		Entity salesperson = factory.buildEntity("Salesperson","Ladenhueter",1,4);
+		
 		
 		Entity instadeath = factory.buildEntity("Instadeath","Toeter",14,3);
 		
@@ -288,6 +291,7 @@ public class Scene_Level extends Abstract_Scene {
 		level1.addEntity(enemy);
 		level1.addEntity(trigger);
 		level1.addEntity(instadeath);
+		level1.addEntity(salesperson);
 //		level1.addEntity(item);
 		
 		level2.addEntity(trigger2);
