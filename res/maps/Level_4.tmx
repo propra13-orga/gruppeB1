@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="25" height="20" tilewidth="32" tileheight="32">
+ <tileset firstgid="1" name="tileset_1" tilewidth="32" tileheight="32">
+  <image source="tileset_1.png" trans="ff00ff" width="960" height="512"/>
+ </tileset>
+ <layer name="layer1" width="25" height="20">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAC31VQU7DQAzcfUEkBA3fILR9BgTIO6DNKXyh5cwbAOVIeQLkjPogbMUjJkPEYaTsrndsj+1NlVK6NBR5RGnf57J29HnEleHCUBlq278h21P7PgvbKnh7svNv514Z1rJ2LGKvCD+14d72HsLHf7ywe8wj952hkbVjGX5KihvcwByv6uPcW0Mra2iwpJxUQ+XtSTvWp407yAFraHBLOa3EXz+TG+6xPr3kpBpsIi/4Yn9zueEe6+Pxc04nni9pgLvwxf40N9auTdOaIKfrPKKWuirgD9rDX5envcE1QU7g2Bn2hFfDk9wvSHvk1gm/1oS5vwTu4y3/nTvu202a1n8tNQG/cw1hdyBtPiUXxM992xF/GfzgLogfsX7k0T/n/hLnOnd+9kx26CGOnbUZwuYY9u8UG+eiPdflX3/ooT1xD6TJIXJATN95Om+qGQAb1Nk1YO6Szv3sSHulzFtBfvbkCzaoM9eF39gmTedFZ5r7H35QP8wk6syz0ZAP7uVtmp9pfoNZN8wk+HfRu+BFrzdihxrwe8W69aKbzizHjF7X94W59J1X3XRmvdYc89w/sSGuRZp/59ED+rZj/QPmqeZt0AcAAA==
+  </data>
+ </layer>
+ <layer name="layer2" width="25" height="20">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAC5VU2w3CMAxMxRRMUrWTwAB0BOAfNuAhAV+wAY89eAwAEyAxAraopcPYSTjJaghuzj3nHMIHt/CNpgihbNc9ij5Fl2JN+xuKJ+S+1LtnWN8ieYghxahdr+j8cSSXEeO3MKOYUywolk5OlThjUMT/38P65OSUzr6HA8URfnvaakjPUuBvutDzCnu52mLPUrgTzyOiX9fYy+kZvjeh86fAYWmte+z1zLsLcv+tehl1+2ygjljPrHNy7r9GB/i4Z7vit45ceN+Wm8t3KuUlxj9eQB8gZ23k5nBjntShfeDVwPxaV49T6yM+wLrRq6kacqB9wBCvbgvfi9bMsPRliA8E2qtWDVgHgnWV+4t91j7QXpUaZC5XRh0CPl84RGM9Wxnaq5YXvZmBHKKx1c+c+erNDOQQjbGfbx0B1aTQBwAA
+  </data>
+ </layer>
+ <layer name="layer3" width="25" height="20">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAC+2TXQrCQAyEt7fUi6jv9QZWQT1Ff+7R1gPoCQoewVmoMCyp2UCeih8MG7Ih8zIJwYea6m5+N9DWaX+kp/oxvztob9zTQO3C30T1GzpBFXQ2egzQmDlb6yMizyKEV5E32+sjIiX2HzM9Jn1E5Ib998TDOztX7D8kPSk7v7JhhbNzob4lGxrS3UUs2dCQ7i5iyYZGendfpGx4I2Xjz/pYuu3G0YNvm/0GRw++bfaL/Q/krBXr0AcAAA==
+  </data>
+ </layer>
+ <objectgroup name="object" width="25" height="20">
+  <object name="teleport" type="Teleport" x="768" y="544" width="32" height="32">
+   <properties>
+    <property name="map" value="room1_map2"/>
+    <property name="x" value="3"/>
+    <property name="y" value="4"/>
+   </properties>
+  </object>
+  <object name="teleport" type="Teleport" x="0" y="416" width="32" height="32">
+   <properties>
+    <property name="map" value="room1_map1"/>
+    <property name="x" value="10"/>
+    <property name="y" value="13"/>
+   </properties>
+  </object>
+  <object name="teleport" type="Teleport" x="0" y="448" width="32" height="32">
+   <properties>
+    <property name="map" value="room1_map1"/>
+    <property name="x" value="10"/>
+    <property name="y" value="13"/>
+   </properties>
+  </object>
+  <object name="npc" type="NPC" x="448" y="288" width="32" height="32"/>
+  <object name="enemy" type="Enemy" x="480" y="416" width="32" height="32">
+   <properties>
+    <property name="type" value="wolf"/>
+   </properties>
+  </object>
+  <object name="enemy" type="Enemy" x="288" y="256" width="32" height="32">
+   <properties>
+    <property name="type" value="wolf"/>
+   </properties>
+  </object>
+ </objectgroup>
+</map>
