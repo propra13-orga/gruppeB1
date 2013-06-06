@@ -53,7 +53,7 @@ public class Factory {
 			if (def < 0) def = 0;
 			if (dex < 0) dex = 0;
 			if (spd < 0) spd = 1;
-			new Component_Battle(entity,scene.getSystemInteraction(),hp,mp,atk,def,spd,dex);
+			new Component_Battle(entity,scene.getSystemInteraction(),hp,mp,atk);//,def,spd,dex);
 		}
 		
 		if ((data.getX() > -1 && data.getY() > -1)) {
@@ -314,6 +314,12 @@ class EntityData implements IEntityData {
 		this.toLevel = ID;
 		this.toX = x;
 		this.toY = y;
+	}
+
+	@Override
+	public int getAP() {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 
 	
