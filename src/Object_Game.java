@@ -57,8 +57,8 @@ public class Object_Game {
 		b2.name = "Peter";
 		b3.name = "Jakob";
 		
-		this.scene = new Scene_BattleSystem(c1, null, this);
-		//this.scene = new Scene_StartMenu(this);
+		//this.scene = new Scene_BattleSystem(c1, null, this);
+		this.scene = new Scene_StartMenu(this);
 		
 		this.screen.setTitle(GAME_TITLE);
 		this.screen.addKeyListener(keyhandler);
