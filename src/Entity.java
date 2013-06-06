@@ -16,11 +16,13 @@ class Entity {
 	protected String name;
 	protected Object_EntityManager manager;
 	protected boolean active = false;
+	protected int ID;
 	
 	private Hashtable<String,Abstract_Component> components;
 	
 	public Entity(String name, Object_EntityManager manager) {
 		this.name = name;
+		this.ID = -1;
 		this.manager = manager;
 		this.components = new Hashtable<String,Abstract_Component>();
 	}
@@ -29,6 +31,7 @@ class Entity {
 		for (Abstract_Component component : this.components.values()) {
 			component.init();
 		}
+		if (this.ID == -1) this.ID = manager.receiveID(this);
 		this.manager.register(this);
 		this.active = true;
 	}
@@ -51,6 +54,8 @@ class Entity {
 	
 	public Abstract_Component getComponent(String type) { return this.components.get(type); }
 	public Object_EntityManager getManager() {	return this.manager; }
+	public int getID() { return this.ID; }
+	public String getName() { return this.name; }
 	
 	public boolean isPlayer() {	return this.manager.isPlayer(this); }
 	
