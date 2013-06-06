@@ -57,22 +57,22 @@ public class Object_Game {
 		b2.name = "Peter";
 		b3.name = "Jakob";
 		
-		this.scene = new Scene_BattleSystem(c1, null, this);
-		//this.scene = new Scene_StartMenu(this);
+		//this.scene = new Scene_BattleSystem(c1, null, this);
+		this.scene = new Scene_StartMenu(this);
 		
 		this.screen.setTitle(GAME_TITLE);
 		this.screen.addKeyListener(keyhandler);
 		this.screen.setVisible(true);
 	}
 
-	//Die Ausführung dieser Methode entspricht genau einem Frame
+	//Die Ausfï¿½hrung dieser Methode entspricht genau einem Frame
 	public void update() {
 		this.scene.update();
 		this.keyhandler.freezeUpdate();		//Der Counter von eingefrorenen Tasten wird
 											//in jedem Frame dekrementiert
 	}
 	
-	//Aktualisiert den tatsächlichen Bildschirm
+	//Aktualisiert den tatsï¿½chlichen Bildschirm
 	public void display() {
 		this.screen.update();
 	}

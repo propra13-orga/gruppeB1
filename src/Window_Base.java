@@ -40,6 +40,5 @@ public class Window_Base extends Abstract_Update{
 				y+2,
 				width-3,
 				height-3);
-	}
-	
+	}	
 }

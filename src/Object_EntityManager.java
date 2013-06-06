@@ -1,3 +1,4 @@
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -12,11 +13,15 @@ import java.util.List;
 class Object_EntityManager {
 	protected Scene_Level scene;
 	protected List<Entity> entities;
+	protected HashMap<Integer,Entity> entitiesByID;
 	protected Entity player;
+	protected int lastID;
 	
 	public Object_EntityManager(Scene_Level scene) {
 		this.scene = scene;
 		this.entities = new LinkedList<Entity>();
+		this.entitiesByID = new HashMap<Integer,Entity>();
+		this.lastID = 0;
 	}
 	
 	/*
@@ -38,11 +43,16 @@ class Object_EntityManager {
 		}
 	}
 	
+
+	
 	/*
 	 * Füge eine Entität der Entitätenliste hinzu.
 	 */
 	public void register(Entity entity) {
-		if (this.entities.contains(entity)) this.entities.add(entity);
+		if (!this.entities.contains(entity)) {
+			this.entities.add(entity);
+			this.entitiesByID.put(entity.getID(), entity);
+		}
 	}
 	
 	/*
@@ -51,6 +61,7 @@ class Object_EntityManager {
 	public void deregister(Entity entity) {
 		try {
 			entity.deinit();
+			this.entitiesByID.remove(entity.getID());
 			this.entities.remove(entity);
 		} catch (Exception e) {
 			// TODO: handle exception
@@ -77,6 +88,21 @@ class Object_EntityManager {
 	 */
 	public Entity getPlayer() { return this.player; }
 	
+	public Entity getEntityByID(int id) {
+		if (this.entitiesByID.containsKey(id)) return this.entitiesByID.get(id);
+		return null;
+	}
+	
+	/*
+	 * Entitäten können sich hier bei ihrer Initialisierung eine noch nicht
+	 * vergebene ID zur eindeutigen Identifizierung abholen.
+	 */
+	public int receiveID(Entity entity) {
+		int id = this.lastID;
+		this.lastID += 1;
+		return id;
+	}
+	
 	/*
 	 * Privates
 	 */
@@ -88,4 +114,5 @@ class Object_EntityManager {
 	private Scene_Level getScene() {
 		return this.scene;
 	}
+
 }

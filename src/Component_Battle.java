@@ -1,17 +1,24 @@
 class Component_Battle extends Abstract_Component {
 	
-	private int ap;
+	private int atk, def, dex, spd, maxspd;
 	private int hp,mp;
 	private int maxhp,maxmp;
+	private String sprite;
 	
 	public Component_Battle(Entity entity, System_Component system, 
-			int maxhp, int maxmp, int ap) {
+			int maxhp, int maxmp, int atk, int def, int maxspd,
+			int dex, String sprite) {
 		super("battle",entity,system);
 		this.maxhp = maxhp;
 		this.hp = maxhp;
 		this.maxmp = maxmp;
 		this.mp = maxmp;
-		this.ap = ap;
+		this.atk = atk;
+		this.def = def;
+		this.maxspd = maxspd;
+		this.spd = maxspd;
+		this.dex = dex;
+		this.sprite = sprite;
 	}
 	
 	// Getters
@@ -20,7 +27,12 @@ class Component_Battle extends Abstract_Component {
 	public int getHP() { return this.hp; }
 	public int getMaxMP() { return this.maxmp; }
 	public int getMP() { return this.mp; }
-	public int getAP() { return this.ap; }
+	public int getATK() { return this.atk; }
+	public int getDEF() { return this.def; }
+	public int getMaxSPD() { return this.maxspd; }
+	public int getSPD() { return this.spd; }
+	public int getDEX() { return this.dex; }
+	public String getSprite() { return this.sprite; }
 	
 	// Setters
 	
@@ -42,5 +54,7 @@ class Component_Battle extends Abstract_Component {
 		this.mp -= mp;
 		if (this.mp < 0) this.mp = 0;
 	}
-	public void setAP(int ap) { this.ap = ap; }
+	public void setATK(int atk) { this.atk = atk; }
+	public void setDEF(int def) { this.def = def; }
+	public void setDEX(int dex) { this.dex = dex; }
 }

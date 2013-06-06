@@ -7,11 +7,11 @@ class Component_Movement extends Abstract_Component {
 	public int x, y, dx, dy;
 	public int orientation;
 	public int delay, tick;
-	public boolean moving, walkable, collidable, moveable;
+	public boolean moving, walkable, collidable, moveable, visible;
 	
 	public Component_Movement(Entity entity, System_Component system,
 			int x, int y, int dx, int dy, int delay,
-			boolean walkable, boolean collidable) {
+			boolean walkable, boolean collidable, boolean visible) {
 		super("movement",entity,system);
 		this.x = x;
 		this.y = y;
@@ -21,6 +21,7 @@ class Component_Movement extends Abstract_Component {
 		this.walkable = walkable;
 		this.collidable = collidable;
 		this.moveable = true;
+		this.visible = visible;
 		// Das Delay bestimmt die Bewegungsgeschwindigkeit. Je höher, desto
 		// langsamer.
 		this.delay = delay;
@@ -30,7 +31,7 @@ class Component_Movement extends Abstract_Component {
 	}
 	
 	public Component_Movement(Entity entity, System_Component system, int x, int y) {
-		this(entity,system,x,y,0,0,0,true,false);
+		this(entity,system,x,y,0,0,0,true,false,true);
 	}
 	
 	// Getters
@@ -49,6 +50,7 @@ class Component_Movement extends Abstract_Component {
 	public boolean isWalkable() { return this.walkable; }
 	public boolean isCollidable() { return this.collidable; }
 	public boolean isMoveable() { return this.moveable; }
+	public boolean isVisible() { return this.visible; }
 	
 	public int[] orientationToVectior() { return this.orientationToVector(this.orientation); }
 	public int[] orientationToVector(int d) {
@@ -83,9 +85,11 @@ class Component_Movement extends Abstract_Component {
 	
 	public void setMoving() { this.moving = true; }
 	public void setMoveable() { this.moveable = true; }
+	public void setVisible() { this.visible = true; }
 	
 	public void unsetMoving() { this.moving = false; }
 	public void unsetMoveable() { this.moveable = false; }
+	public void unsetVisible() { this.visible = false; }
 	
 	public void warp(int x, int y) {		
 		this.dx = 0;
@@ -101,4 +105,16 @@ class Component_Movement extends Abstract_Component {
 	}
 	public void resetTick() { this.tick = this.delay; }
 	public void nullifyTick() { this.tick = 0; }
+	
+	public void drawFromMap() {
+		this.unsetVisible();
+		this.x = -1;
+		this.y = -1;
+	}
+	
+	public void putOnMap(int x, int y) {
+		this.setVisible();
+		this.x = x;
+		this.y = y;
+	}
 }

@@ -48,7 +48,7 @@ class System_Movement extends System_Component {
 		
 		// Jetzt solange illegale Kollisionen behandeln, bis alle behoben sind.
 		// Schleife läuft höchstens N-mal durch, wobei N = Anzahl Entitäten.
-		// Die Laufzeitkomplexität liegt aber (leider) bei höchstens N^3!
+		// Die Laufzeitkomplexität liegt aber (leider) bei N^3 (aber höchstens)!
 		List<Event> illegalCollisions;
 		while(true) {
 			collisions = this.getCollisions();
@@ -84,7 +84,7 @@ class System_Movement extends System_Component {
 			String[] xxx = xy.split("x");
 			int x = Integer.parseInt(xxx[0]);
 			int y = Integer.parseInt(xxx[1]);
-			positions[y][x] = 1;
+			if (x > -1 && y > -1) positions[y][x] = 1;
 		}
 		return positions;
 	}
@@ -259,7 +259,8 @@ class System_Movement extends System_Component {
 	 * Definiert, welche Kollisionen als illegal gelten.
 	 */
 	private boolean isIllegalCollision(Component_Movement compMovement1, Component_Movement compMovement2) {
-		if (!compMovement1.walkable && !compMovement2.walkable) return true;
+		if (!compMovement1.isVisible() || !compMovement2.isVisible()) return false;
+		if ((!compMovement1.walkable && !compMovement2.walkable)) return true;
 		return false;
 	}
 	
@@ -268,7 +269,7 @@ class System_Movement extends System_Component {
 	 */
 	private void moveEntity(Entity entity) {
 		Component_Movement compMovement = (Component_Movement) entity.getComponent("movement");
-		if (compMovement.isMoveable()) {
+		if (compMovement.isMoveable() && compMovement.isVisible()) {
 			int dx = compMovement.getdX();
 			int dy = compMovement.getdY();
 			

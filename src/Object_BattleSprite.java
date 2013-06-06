@@ -50,6 +50,11 @@ public class Object_BattleSprite extends Abstract_Update {
 		this.move_tick = 0;
 	}
 	
+	Object_BattleSprite(String filename, Object_Game game) {
+		super(game);
+		this.spriteset = new Object_BattleSpriteSet(filename);
+	}
+	
 	public void updateData() {
 		switch (this.action) {
 			//Hier noch einfuegen!!!

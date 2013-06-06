@@ -12,13 +12,13 @@ public class Object_BattleActor implements Comparable<Object_BattleActor> {
 	public String name = "Testinit Actor";
 	public BattleSide side = BattleSide.PLAYER;
 	public int hp = 100;
-	public int maxhp = 100;
+	public int maxHp = 100;
 	public int mp = 50;
-	public int maxmp = 50;
+	public int maxMp = 50;
 	public int atk = 67;
 	public int def = 54;
-	public int spd = 200;
-	public int maxspd = 200;
+	public int speed = 200;
+	public int maxSpeed = 200;
 	public int action_cost = 80;
 	public int dex = 70;
 	public Object_BattleSprite sprite;
@@ -29,6 +29,10 @@ public class Object_BattleActor implements Comparable<Object_BattleActor> {
 	private Entity entity;
 	
 	
+	public Object_BattleActor() {
+		
+	}
+	
 	public Object_BattleActor(Entity entity) {
 		Component_Battle compBattle = (Component_Battle) entity.getComponent("battle");
 		Component_Inventory compInventory = (Component_Inventory) entity.getComponent("inventory");
@@ -36,14 +40,14 @@ public class Object_BattleActor implements Comparable<Object_BattleActor> {
 		this.entity = entity;
 		this.name = entity.getName();
 		this.hp = compBattle.getHP();
-		this.maxhp = compBattle.getMaxHP();
+		this.maxHp = compBattle.getMaxHP();
 		this.mp = compBattle.getMP();
-		this.maxmp = compBattle.getMaxMP();
+		this.maxMp = compBattle.getMaxMP();
 		this.atk = compBattle.getATK();
 		this.def = compBattle.getDEF();
 		this.dex = compBattle.getDEX();
-		this.spd = compBattle.getSPD();
-		this.maxspd = compBattle.getMaxSPD();
+		this.speed = compBattle.getSPD();
+		this.maxSpeed = compBattle.getMaxSPD();
 		//this.items = Arrays.asList(compInventory.getInventory());
 		// Im Inventar sind momentan nur IDs gespeichert, über welche man im
 		// EntityManager Entitäten abrufen kann. Einfach aus Performanzgründen.
@@ -56,19 +60,19 @@ public class Object_BattleActor implements Comparable<Object_BattleActor> {
 
 	@Override
 	public int compareTo(Object_BattleActor arg0) {
-		int s1 = arg0.spd;
-		return Integer.compare(s1, this.spd);
+		int s1 = arg0.speed;
+		return Integer.compare(s1, this.speed);
 	}
 	
 	public String getName() { return this.name; }
 	public int getHP() { return this.hp; }
-	public int getMaxHP() { return this.maxhp; }
+	public int getMaxHP() { return this.maxHp; }
 	public int getMP() { return this.mp; }
-	public int getMaxMP() { return this.maxmp; }
+	public int getMaxMP() { return this.maxMp; }
 	public int getATK() { return this.atk; }
 	public int getDEF() { return this.def; }
-	public int getSpeed() { return this.spd; }
-	public int getMaxSpeed() { return this.maxspd; }
-	public int getActionCost() { return this.maxspd / 3; }
+	public int getSpeed() { return this.speed; }
+	public int getMaxSpeed() { return this.maxSpeed; }
+	public int getActionCost() { return this.maxSpeed / 3; }
 	public int getDEX() { return this.dex; }
 }
