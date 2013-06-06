@@ -13,7 +13,7 @@ import java.awt.Font;
 public class Object_Game {
 
 	public static final String GAME_TITLE = "ProPra - 1. Meilenstein";
-	public static final Font FONT = new Font("Hobo Std", Font.PLAIN, 20);
+	public static final Font FONT = new Font("Gentium Book Basic", Font.PLAIN, 20);
 	
 	private Abstract_Scene scene;
 	private Object_Screen screen;
@@ -26,7 +26,6 @@ public class Object_Game {
 		this.screen = new Object_Screen();
 		this.screen.getBuffer().getGraphics().setFont(new Font("Arial", Font.PLAIN, 130));
 		this.soundmanager = new Object_SoundManager();
-		//this.scene = new Scene_StartMenu(this);//Level(this);
 		
 		Object_BattleActor b1 = new Object_BattleActor();
 		Object_BattleActor b2 = new Object_BattleActor();

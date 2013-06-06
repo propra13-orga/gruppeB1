@@ -17,8 +17,8 @@ public class Window_DialogBox extends Abstract_Update {
 	private FontMetrics metrics;
 	
 	private static final int PADDING = 8;
-	private static final int LINES = 3;
-	private static final int HEIGHT = 80;
+	private static final int LINES = 4;
+	private static final int HEIGHT = 110; //80
 	
 	Window_DialogBox(String msg, Object_Game game) {
 		super(game);

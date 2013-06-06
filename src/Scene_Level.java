@@ -256,7 +256,10 @@ public class Scene_Level extends Abstract_Scene {
 		player.init();
 		eManager.setPlayer(player);
 		
-		String bla = "Sie hatten uns mit Zwang und LÃ¼gen in ihre StÃ¶cke eingeschraubt. Sie hatten gnÃ¤dig uns erlaubt, in ihrem Joch ihr Land zu pflÃ¼gen. Sie saÃŸen da in Prunk und Pracht mit vollgestopftem Magen und zwangen uns, fÃ¼r ihre Macht einander totzuschlagen. Doch wir, noch stolz auf unsere Fesseln, verbeugten uns vor ihren Sesseln.";
+		String bla = "Sie hatten uns mit Zwang und Lügen in ihre Stöcke eingeschraubt. Sie "+
+		"hatten gnädig uns erlaubt, in ihrem Joch ihr Land zu pflügen. Sie saßen da in Prunk und "+
+				"Pracht mit vollgestopftem Magen und zwangen uns, für ihre Macht einander totzuschlagen. "+
+		"Doch wir, noch stolz auf unsere Fesseln, verbeugten uns vor ihren Sesseln.";
 		Entity enemy = factory.buildEntity("NPC1", "Hannes", 4, 5);
 		new Trigger_Dialog(enemy,interactionSystem,EventType.ACTION,bla);
 		

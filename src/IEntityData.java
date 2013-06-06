@@ -35,4 +35,9 @@ public interface IEntityData {
 	int toLevel();
 	int toX();
 	int toY();
+	int getATK();
+	int getDEF();
+	int getDEX();
+	int getSPD();
+	int getCurrentSPD();
 }
