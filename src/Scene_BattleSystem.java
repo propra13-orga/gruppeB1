@@ -1,5 +1,4 @@
 import java.awt.Color;
-import java.awt.Font;
 import java.awt.Polygon;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -20,10 +19,13 @@ public class Scene_BattleSystem extends Abstract_Scene {
 	private ArrayList<Object_BattleActor> action_order;
 	private int battle_type;
 	private BufferedImage background;
-	
 	private Object_BattleActor current_actor;
-	private Window_Selectable main_menu;
-	private Window_Selectable menu_enemy;
+	
+	private Window_Menu main_menu;
+	private Window_Menu menu_enemy;
+	private Window_Menu menu_item;
+	private Window_Menu menu_skill;
+	private Window_Menu menu_player;
 	
 	Scene_BattleSystem(Object_BattleContext ctx, Abstract_Scene previous_scene, Object_Game game) {
 		super(game);
@@ -34,15 +36,36 @@ public class Scene_BattleSystem extends Abstract_Scene {
 		
 		this.current_actor = null;
 		
-		this.main_menu = new Window_Selectable(0, 0, game);
-		this.main_menu.EXIT_POSSIBLE = false;
-		this.main_menu.addCommand("Angriff");
-		this.main_menu.addCommand("Skills");
-		this.main_menu.addCommand("Item");
-		this.main_menu.addCommand("Flucht");
+		/*
+		 * Initialisiere Menues
+		 */
 		
-		this.menu_enemy = new Window_Selectable(0, 0, game);
-		this.menu_enemy.EXECUTED = false;
+		this.main_menu = new Window_Menu("main", 0, 0, game);
+		this.menu_enemy = new Window_Menu("enemy", 0, 0, game);
+		this.menu_item = new Window_Menu("item", 0, 0, game);
+		this.menu_skill = new Window_Menu("skills", 0, 0, game);
+		this.menu_player = new Window_Menu("player", 0, 0, game);
+		
+		for (Object_BattleActor enemy : this.ctx.enemies) {
+			this.menu_enemy.addReturnCommand(enemy.name);
+		}
+		
+		for (Object_BattleActor player : this.ctx.players) {
+			this.menu_player.addReturnCommand(player.name);
+		}
+		
+		//Hier zu Testzwecken das Itemmenü mit Einträgen füllen
+		this.menu_item.addReturnCommand("Kleiner Heiltrank");
+		this.menu_item.addReturnCommand("Großer Heiltrank");
+		
+		//Skill und Itemmenü wird erst mit Einträgen gefüllt, wenn es aufgerufen wird,
+		//weil dann der zugehörige Character feststeht (Player1 hat andere Skills als Player2)
+		
+		this.main_menu.EXIT_POSSIBLE = false;
+		this.main_menu.addMenuCommand("Angriff", this.menu_enemy);
+		this.main_menu.addMenuCommand("Skills", this.menu_skill);
+		this.main_menu.addMenuCommand("Item", this.menu_item);
+		this.main_menu.addReturnCommand("Verteidigung");
 		
 		String path = "res/background/"+this.ctx.background+".png";
 		System.out.println("Lade: "+path);
@@ -56,6 +79,7 @@ public class Scene_BattleSystem extends Abstract_Scene {
 		
 		this.sortActors();
 		print(this.action_order.toString());
+		//this.soundmanager.abspielen("battle");
 	}
 
 	@Override
@@ -72,9 +96,10 @@ public class Scene_BattleSystem extends Abstract_Scene {
 
 	@Override
 	public void updateData() {
+		
 		switch (this.battle_type) {
+		
 		case GET_NEXT_ACTOR:
-			print("Hole nächsten Actor");
 			this.current_actor = this.action_order.get(0);
 			if (this.ctx.players.contains(this.current_actor)) {
 				this.battle_type = WAIT_FOR_PLAYER;
@@ -83,36 +108,42 @@ public class Scene_BattleSystem extends Abstract_Scene {
 				this.battle_type = WAIT_FOR_ENEMY;
 			}
 			break;
+			
 		case WAIT_FOR_PLAYER:
-			if (this.main_menu.EXECUTED) {
+			if (this.main_menu.isExecuted()) {
 				this.main_menu.updateData();
 			}
 			else {
-				switch (this.main_menu.cursor) {
-				case 0: //Angriff
-					for (Object_BattleActor b : this.ctx.enemies) {
-						this.menu_enemy.addCommand(b.name);
+				
+				//Menu beendet, pruefe welches Menu zuletzt bedient wurde und
+				//pruefe dann dessen Einträge
+				
+				switch (this.main_menu.final_name) {
+				case "enemy":
+					//Gegner wurde gewählt
+					switch (this.main_menu.final_cursor) {
+					case 0: //Gegner 1
+						this.print("GEGNER 1");
+						break;
+					case 1:
+						print("Gegner 2!");
+						break;
+					case 2:
+						print("Gegner 3!");
 					}
-					this.menu_enemy.EXECUTED = true;
-					break;
-				case 1: //Skills
-					break;
-				case 2: //Item
-					break;
-				case 3: //Flucht
-					break;
+					
+				case "item":
+					print("item");
 				}
-				this.current_actor = null;
+				
 			}
-			break;
+			
 		case WAIT_FOR_ENEMY:
-			if (this.battle_type == WAIT_FOR_ENEMY) {
-				print("Wait for Enemy");
-				this.battle_type = GET_NEXT_ACTOR;
-			}
 			break;
+			
 		case ANIMATION:
 			break;
+			
 		}
 
 		for (Object_BattleActor ba : this.ctx.actors) {
@@ -127,7 +158,7 @@ public class Scene_BattleSystem extends Abstract_Scene {
 		for (Object_BattleActor ba : this.ctx.actors) {
 			ba.sprite.updateScreen();
 		}
-		if (this.main_menu.EXECUTED) {
+		if (this.main_menu.isExecuted()) {
 			this.main_menu.updateScreen();
 		}
 		this.drawArrow();
@@ -162,19 +193,28 @@ public class Scene_BattleSystem extends Abstract_Scene {
 	private void drawStats() {
 		int x = 280;
 		int y = 5;
+		int alpha;
 		for (Object_BattleActor b : this.ctx.players) {
+			if (this.current_actor == b) {
+				alpha = 255;
+			}
+			else {
+				alpha = 220;
+			}
 			String infoline = b.name + "    " + b.hp + "/" + b.maxHp;
-			this.screen.setColor(new Color(200,200,200));
+			this.screen.setColor(new Color(0,77,148));
 			this.screen.fillRect(x+10, y, 330, 40);
 			y += 30;
-			this.screen.setColor(new Color(50,50,50));
+			this.screen.setColor(new Color(0,21,72));
 			this.screen.fillRect(x, y, 350, 10);
-			x += 10;
-			this.screen.setColor(new Color(0, 0, 0));
+			x += 15;
+			this.screen.setColor(new Color(255, 255, 255, alpha));
 			this.screen.setFont(Object_Game.FONT);
+			y -= 8;
 			this.screen.drawString(infoline, x, y);
+			y+= 8;
 			y += 20;
-			x -= 10;
+			x -= 15;
 		}
 	}
 	

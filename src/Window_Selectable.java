@@ -6,7 +6,7 @@ public class Window_Selectable extends Abstract_Update {
 	public boolean EXECUTED = true;
 	public boolean CANCELED = false;
 	public boolean EXIT_POSSIBLE = true;
-	public int min_x = 200;
+	public int min_x = 250;
 	public int max_x = Object_Screen.SCREEN_W;
 	public int border_x = 20;
 	public int border_y = 20;
@@ -32,7 +32,9 @@ public class Window_Selectable extends Abstract_Update {
 	public void addCommand(String command) {
 		commands.add(command);
 		int new_width = 2*this.border_x + this.metrics.stringWidth(command);
+		System.out.println("Neue Breite: "+new_width);
 		if (window.width < new_width) window.width = new_width;
+		System.out.println("Breite: "+window.width);
 		if (window.width < min_x) window.width = min_x;
 		if (window.width > max_x) window.width = max_x;
 		window.height = 2*this.border_y + commands.size()*this.cursorheight;
@@ -45,7 +47,7 @@ public class Window_Selectable extends Abstract_Update {
 	
 	private void drawCommands() {
 		int text_x = window.x + this.border_x + 10;
-		int text_y = window.y + this.border_y + this.screen.getFont().getSize()+3;// + this.cursorheight/4;
+		int text_y = window.y + this.border_y + this.screen.getFont().getSize()+3;
 		for (String cmd : commands) {
 			this.screen.drawString(cmd, text_x, text_y);
 			text_y += this.cursorheight;
@@ -78,14 +80,18 @@ public class Window_Selectable extends Abstract_Update {
 			if (cursor < 0) cursor = commands.size()-1;
 			break;
 		case Object_KeyHandler.KEY_ESCAPE:
-			this.soundmanager.playSound2("cursor");
+			this.soundmanager.playSound2("cancel");
+			game.getKeyHandler().clear();
+			game.getKeyHandler().freeze(Object_KeyHandler.KEY_ESCAPE, 5);
 			if (!EXIT_POSSIBLE) break;
 			game.getKeyHandler().clear();
 			EXECUTED = false;
 			CANCELED = true;
 			break;
 		case Object_KeyHandler.KEY_ENTER:
-			this.soundmanager.playSound2("cursor");
+			this.soundmanager.playSound2("decision");
+			game.getKeyHandler().clear();
+			game.getKeyHandler().freeze(Object_KeyHandler.KEY_ENTER, 5);
 			game.getKeyHandler().clear();
 			EXECUTED = false;
 			break;
