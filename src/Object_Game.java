@@ -65,14 +65,14 @@ public class Object_Game {
 		this.screen.setVisible(true);
 	}
 
-	//Die Ausführung dieser Methode entspricht genau einem Frame
+	//Die Ausfï¿½hrung dieser Methode entspricht genau einem Frame
 	public void update() {
 		this.scene.update();
 		this.keyhandler.freezeUpdate();		//Der Counter von eingefrorenen Tasten wird
 											//in jedem Frame dekrementiert
 	}
 	
-	//Aktualisiert den tatsächlichen Bildschirm
+	//Aktualisiert den tatsï¿½chlichen Bildschirm
 	public void display() {
 		this.screen.update();
 	}

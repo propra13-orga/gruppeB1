@@ -1,3 +1,6 @@
+import java.util.ArrayList;
+import java.util.List;
+
 /*
  * InteractionSystem.java
  * 
@@ -18,6 +21,7 @@ class System_Interaction extends System_Component {
 				"trigger_pickup",
 				"trigger_dialog",
 				"trigger_buymenu",
+				"trigger_battle",
 				"battle",
 				"item",
 				"inventory");
@@ -32,11 +36,9 @@ class System_Interaction extends System_Component {
 		this.handleActionEvents();
 		
 		this.handlePickUpEvents();
+		this.handleBattleEvents();
 		
 		this.checkForDeath();
-		
-		
-		
 	}
 	
 	
@@ -94,40 +96,43 @@ class System_Interaction extends System_Component {
 		}
 	}
 	
-//	private void handleBattleEvents() {
-//		if (!this.getEvents(EventType.BATTLE).isEmpty()) {
-//			Entity player = this.getScene().getPlayer();
-//			List<IBattleActor> players = new ArrayList<IBattleActor>();
-//			List<IBattleActor> enemies = new ArrayList<IBattleActor>();
-//			players.add(new Object_BattleActorData(player));
-//			for (Event event : this.getEvents(EventType.BATTLE)) {
-//				Entity actor = event.getActor();
-//				Entity undergoer = event.getUndergoer();
-//				if (actor.equals(player)) {
-//					enemies.add(new Object_BattleActorData(undergoer));
-//				}
-//				else if (undergoer.equals(player)) {
-//					enemies.add(new Object_BattleActorData(actor));
-//				}
-//			}
-//			
-//			this.getScene().demandSceneChange(
-//					new Scene_BattleSystem(
-//							new Object_BattleContextData(players,enemies),
-//							this.getScene(),
-//							this.getScene().game
-//					)
-//			);
-//		}
-//	}
+	private void handleBattleEvents() {
+		if (!this.getEvents(EventType.BATTLE).isEmpty()) {
+			Entity player = this.getScene().getPlayer();
+			List<Object_BattleActor> players = new ArrayList<Object_BattleActor>();
+			List<Object_BattleActor> enemies = new ArrayList<Object_BattleActor>();
+			players.add(new Object_BattleActor(player));
+			for (Event event : this.getEvents(EventType.BATTLE)) {
+				Entity actor = event.getActor();
+				Entity undergoer = event.getUndergoer();
+				if (actor.equals(player)) {
+					enemies.add(new Object_BattleActor(undergoer));
+					players.add(new Object_BattleActor(actor));
+				}
+				else if (undergoer.equals(player)) {
+					enemies.add(new Object_BattleActor(actor));
+					players.add(new Object_BattleActor(undergoer));
+				}
+			}
+			
+			this.getScene().demandSceneChange(
+					new Scene_BattleSystem(
+							new Object_BattleContext(players,enemies),
+							this.getScene(),
+							this.getScene().game
+					)
+			);
+		}
+	}
 	
 	private void handlePickUpEvents() {
 		for (Event event : this.getEvents(EventType.PICKUP)) {
 			Entity actor = event.getActor();
 			Entity undergoer = event.getUndergoer();
 			Component_Inventory compInventory = (Component_Inventory) actor.getComponent("inventory");
-			if (compInventory.addItem(undergoer)) {
-				((Component_Movement) undergoer.getComponent("movement")).deinit();
+			if (compInventory.addItem(undergoer.getID())) {
+				((Component_Movement) undergoer.getComponent("movement")).drawFromMap();
+//				this.handleTriggers(event);
 			}
 		}
 	}
@@ -150,8 +155,19 @@ class System_Interaction extends System_Component {
 		else if (entity.hasComponent("trigger_buymenu")) {
 			this.handleTrigger_BuyMenu(event);
 		}
+		else if (entity.hasComponent("trigger_battle")) {
+			this.handleTrigger_Battle(event);
+		}
 		if (entity.hasComponent("trigger_pickup")) {
 			this.handleTrigger_PickUp(event);
+		}
+	}
+	
+	private void handleTrigger_Battle(Event event) {
+		Entity undergoer = event.getUndergoer();
+		Trigger_Battle trigger = (Trigger_Battle) undergoer.getComponent("trigger_battle");
+		if (event.getType() == trigger.getEventType()) {
+			this.addEvent(new Event(EventType.BATTLE,event.getActor(),undergoer));
 		}
 	}
 	
@@ -234,49 +250,6 @@ class System_Interaction extends System_Component {
 						this.addEvent(new Event(EventType.PLAYERDMG,entity,actor));
 					}
 					trigger.unsetReady();
-				}
-			}
-		}
-	}
-	
-	/*
-	 * 
-	 */
-	private void handleTriggersCollision(Event event) {
-		/*
-		 * Im Folgenden:
-		 * "entity" ist jeweils die Entität mit der Triggerkomponente.
-		 * "actor" ist jeweils die Entität, die den Trigger ausgelöst hat.
-		 */
-		Entity entity = event.getUndergoer();
-		Entity actor = event.getActor();
-		if (this.getScene().getPlayer().equals(actor)) {
-			if (entity.hasComponent("trigger_levelchange")) {
-				/*
-				 * Die Komponente trigger_levelchange enthält alle wichtigen 
-				 * Daten für den Levelwechsel.
-				 */
-				Trigger_LevelChange trigger = (Trigger_LevelChange) entity.getComponent("trigger_levelchange");
-				int ID = trigger.getLevelID();
-				int x = trigger.getX();
-				int y = trigger.getY();
-				this.getScene().demandLevelChange(ID,x,y);
-			}
-			if (entity.hasComponent("trigger_endgame")) {
-				this.getScene().beatGame();
-			}				
-		}
-		if (entity.hasComponent("trigger_attack")) {
-			Trigger_Attack Trigger_Attack = ((Trigger_Attack) entity.getComponent("trigger_attack"));
-			if (Trigger_Attack.isReady()) {
-				if (actor.hasComponent("battle")) {
-					Component_Battle Component_Health = this.getBattle(actor);
-					int ap = Trigger_Attack.getAP();
-					Component_Health.discountHP(ap);
-					if (this.getScene().getPlayer().equals(actor)) {
-						this.addEvent(new Event(EventType.PLAYERDMG,entity,actor));
-					}
-					Trigger_Attack.unsetReady();
 				}
 			}
 		}

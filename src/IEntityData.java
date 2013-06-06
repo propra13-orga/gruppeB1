@@ -17,6 +17,7 @@ public interface IEntityData {
 	int getMP();
 	int getCurrentMP();
 	int getAP();
+	String getBattleSprite();
 	
 	int getX();
 	int getY();

@@ -47,13 +47,14 @@ public class Factory {
 			int def = data.getDEF();
 			int dex = data.getDEX();
 			int spd = data.getSPD();
+			String sprite = data.getBattleSprite();
 			if (hp < 0) hp = 1;
 			if (mp < 0) mp = 0;
 			if (atk < 0) atk = 0;
 			if (def < 0) def = 0;
 			if (dex < 0) dex = 0;
 			if (spd < 0) spd = 1;
-			new Component_Battle(entity,scene.getSystemInteraction(),hp,mp,atk);//,def,spd,dex);
+			new Component_Battle(entity,scene.getSystemInteraction(),hp,mp,atk,def,spd,dex,sprite);
 		}
 		
 		if ((data.getX() > -1 && data.getY() > -1)) {
@@ -75,7 +76,8 @@ public class Factory {
 					x,y,0,0,
 					delay,
 					data.isWalkable(),
-					data.isCollidable());
+					data.isCollidable(),
+					true);
 		}
 		
 		EventType[] eventTypes = {EventType.COLLISION, EventType.ACTION};
@@ -98,6 +100,9 @@ public class Factory {
 					break;
 				case "trigger_buymenu":
 					new Trigger_BuyMenu(entity,scene.getSystemInteraction(),type);
+					break;
+				case "trigger_battle":
+					new Trigger_Battle(entity,scene.getSystemInteraction(),type);
 					break;
 				}
 			}
@@ -214,6 +219,13 @@ class EntityData implements IEntityData {
 		String entry = db.getEntry(entityType, "CurrentSPD");
 		if (entry != null) return Integer.parseInt(entry);
 		return -1;
+	}
+	
+	@Override
+	public String getBattleSprite() {
+		String entry = db.getEntry(entityType, "BattleSprite");
+		if (entry != null) return entry;
+		return null;
 	}
 
 	@Override
