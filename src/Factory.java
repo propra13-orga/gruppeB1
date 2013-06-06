@@ -75,7 +75,8 @@ public class Factory {
 					x,y,0,0,
 					delay,
 					data.isWalkable(),
-					data.isCollidable());
+					data.isCollidable(),
+					true);
 		}
 		
 		EventType[] eventTypes = {EventType.COLLISION, EventType.ACTION};
