@@ -84,7 +84,6 @@ public class Window_Selectable extends Abstract_Update {
 			game.getKeyHandler().clear();
 			game.getKeyHandler().freeze(Object_KeyHandler.KEY_ESCAPE, 5);
 			if (!EXIT_POSSIBLE) break;
-			game.getKeyHandler().clear();
 			EXECUTED = false;
 			CANCELED = true;
 			break;

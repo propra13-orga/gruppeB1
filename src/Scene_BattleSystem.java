@@ -54,18 +54,26 @@ public class Scene_BattleSystem extends Abstract_Scene {
 			this.menu_player.addReturnCommand(player.name);
 		}
 		
-		//Hier zu Testzwecken das Itemmenü mit Einträgen füllen
+		//Hier zu Testzwecken das Item/SKill-menü mit Einträgen füllen
 		this.menu_item.addReturnCommand("Kleiner Heiltrank");
 		this.menu_item.addReturnCommand("Großer Heiltrank");
+		
+		this.menu_skill.addReturnCommand("Doppelschlag");
+		this.menu_skill.addReturnCommand("Feuerball");
+		this.menu_skill.addReturnCommand("Kleine Heilung");
+		// !!! !!! !!! WICHTIG !!! !!! !!!
+		//später wenn pageable menu umgesetzt ist können skills nach physischen, magischen und
+		//heilenden skills sortiert werden
 		
 		//Skill und Itemmenü wird erst mit Einträgen gefüllt, wenn es aufgerufen wird,
 		//weil dann der zugehörige Character feststeht (Player1 hat andere Skills als Player2)
 		
-		this.main_menu.EXIT_POSSIBLE = false;
 		this.main_menu.addMenuCommand("Angriff", this.menu_enemy);
 		this.main_menu.addMenuCommand("Skills", this.menu_skill);
 		this.main_menu.addMenuCommand("Item", this.menu_item);
 		this.main_menu.addReturnCommand("Verteidigung");
+		
+		Window_Menu.setMainMenu(this.main_menu);
 		
 		String path = "res/background/"+this.ctx.background+".png";
 		System.out.println("Lade: "+path);
@@ -100,8 +108,11 @@ public class Scene_BattleSystem extends Abstract_Scene {
 		switch (this.battle_type) {
 		
 		case GET_NEXT_ACTOR:
+			this.getNextActor();
 			this.current_actor = this.action_order.get(0);
+			print("    NAME DES AKTUELLEN SPIELERS: "+this.current_actor.name);
 			if (this.ctx.players.contains(this.current_actor)) {
+				this.main_menu.reset();
 				this.battle_type = WAIT_FOR_PLAYER;
 			}
 			else {
@@ -110,35 +121,54 @@ public class Scene_BattleSystem extends Abstract_Scene {
 			break;
 			
 		case WAIT_FOR_PLAYER:
-			if (this.main_menu.isExecuted()) {
+			if (this.main_menu.final_decision == false) {
 				this.main_menu.updateData();
 			}
 			else {
 				
 				//Menu beendet, pruefe welches Menu zuletzt bedient wurde und
 				//pruefe dann dessen Einträge
-				
 				switch (this.main_menu.final_name) {
+				case "main":
+					//Normalerweise würde jetzt hier die Cursorposition
+					//abgefragt, aber der einzige return command in main ist
+					//Verteidugung, von daher ist klar, was gewählt wurde
+					print("VERTEIDUGUNG!");
+					break;
 				case "enemy":
 					//Gegner wurde gewählt
 					switch (this.main_menu.final_cursor) {
 					case 0: //Gegner 1
-						this.print("GEGNER 1");
+						this.print("Greife Gegner 1 an!");
 						break;
 					case 1:
-						print("Gegner 2!");
+						print("Greife Gegner 2 an!");
 						break;
 					case 2:
-						print("Gegner 3!");
+						print("Greife Gegner 3 an!");
 					}
+					break;
 					
 				case "item":
-					print("item");
+					//Hier dann dynamisch das gewählte Item wählen
+					print("Benutze Item!");
+					break;
+					
+				case "skill":
+					//Hier dynamisch den gewählten Skill wählen
+					print("Benutze Skill!");
+					break;
 				}
 				
+				this.battle_type = GET_NEXT_ACTOR;
+				
 			}
+			break;
 			
 		case WAIT_FOR_ENEMY:
+			print("GEGNER MACHT WAS");
+			print("DER NÄCHSTE BITTE");
+			this.battle_type = GET_NEXT_ACTOR;
 			break;
 			
 		case ANIMATION:
@@ -158,7 +188,7 @@ public class Scene_BattleSystem extends Abstract_Scene {
 		for (Object_BattleActor ba : this.ctx.actors) {
 			ba.sprite.updateScreen();
 		}
-		if (this.main_menu.isExecuted()) {
+		if (this.battle_type == WAIT_FOR_PLAYER) {
 			this.main_menu.updateScreen();
 		}
 		this.drawArrow();
@@ -175,6 +205,14 @@ public class Scene_BattleSystem extends Abstract_Scene {
 		for (Object_BattleActor b : this.action_order) {
 			print(""+b.speed);
 		}
+	}
+	
+	private void getNextActor() {
+		Object_BattleActor tmp = this.action_order.get(0);
+		for (int i=1; i<this.action_order.size(); i++) {
+			this.action_order.set(i-1, this.action_order.get(i));
+		}
+		this.action_order.set(this.action_order.size()-1,tmp);
 	}
 	
 	private void drawArrow() {
