@@ -1,6 +1,4 @@
 import java.util.ArrayList;
-import java.util.Hashtable;
-import java.util.List;
 
 /*
  * Window_Menu.java
@@ -16,6 +14,7 @@ import java.util.List;
 public class Window_Menu extends Abstract_Update {
 	
 	public boolean EXIT_POSSIBLE = true;
+	public boolean ALWAYS_VISIBLE = false;
 	
 	public boolean final_decision = false;
 	public String final_name;
@@ -55,12 +54,15 @@ public class Window_Menu extends Abstract_Update {
 				//Noch keine Bestaetigung oder Abbruch
 				this.menu.updateData();
 			}
-			else {
+			//Prüfe, ob das Menu abgebruchen wurde
+			if (!this.menu.EXECUTED) {
 				//Menu wurde beendet
 				if (this.menu.CANCELED) {
 					//Escape wurde gedrueckt
 					if (!this.EXIT_POSSIBLE) {
 						//Das war aber gar nicht erlaubt, also aktiviere das Menu wieder		HIER NOCH AENDERN!
+						//Weil das Menu wirklich erst beendet wird und der entsprechende Sound
+						//abgespielt wird, das soll aber nicht so sein
 						this.menu.EXECUTED = true;
 						this.menu.CANCELED = false;
 					}
@@ -68,10 +70,10 @@ public class Window_Menu extends Abstract_Update {
 						//Das Vorgaengermenu wird wieder aktiviert
 						this.previous_menu.next_menu = null;
 						this.previous_menu.menu.EXECUTED = true;
+						//this.reset();
 					}
 				}
 				else {
-					System.out.println("ENTER GEDRÜCKT");
 					//Es wurde Enter gedrueckt...
 					if (this.submenues.get(this.menu.cursor) == null) {
 						//...und es existiert fuer den gewaehlten Befehl kein Submenu
@@ -87,6 +89,7 @@ public class Window_Menu extends Abstract_Update {
 						this.next_menu = this.submenues.get(this.menu.cursor);
 						this.next_menu.previous_menu = this;
 						this.next_menu.menu.EXECUTED = true;
+						this.next_menu.menu.CANCELED = false;
 						this.next_menu.menu.cursor = 0;
 					}
 				}
@@ -96,15 +99,22 @@ public class Window_Menu extends Abstract_Update {
 	
 	@Override
 	public void updateScreen() {
-		//Dieses Menu ist...
-		if (this.next_menu != null) {
-			//...nicht das aktuell ausgefuehrte, also rufe update Methode
-			//des naechsten Menus auf
-			this.next_menu.updateScreen();
+		//Dieses Menue...
+		if (this.ALWAYS_VISIBLE) {
+			//...soll immer angezeigt werden
+			this.menu.updateScreen();
 		}
 		else {
-			//...das aktuell aufgefuehrte, also zeichne das entsprechende Window_Selectable neu
-			this.menu.updateScreen();
+			if (this.menu.EXECUTED) {
+				//...ist das aktuell ausgefuehrte Menue und muss angezeigt werden
+				this.menu.updateScreen();
+			}
+		}
+		//Pruefe fuer alle Menues ob ALWAYS_VISIBLE gesetzt ist
+		for (Window_Menu menu : this.submenues) {
+			if (menu != null) {
+				menu.updateScreen();
+			}
 		}
 	}
 	
@@ -135,19 +145,21 @@ public class Window_Menu extends Abstract_Update {
 	
 	public void reset() {
 		if (this.main_menu == this) {
+			this.final_decision = false;
 			this.EXIT_POSSIBLE = false;
 			this.menu.EXECUTED = true;
-			this.next_menu = null;
 		}
 		else {
 			this.EXIT_POSSIBLE = true;
 			this.menu.EXECUTED = false;
 		}
+		this.previous_menu = null;
+		this.next_menu = null;
 		this.menu.cursor = 0;
-		this.final_decision = false;
 		for (Window_Menu menu : this.submenues) {
-			if (menu == null) continue;
-			menu.reset();
+			if (menu != null) {
+				menu.reset();
+			}
 		}
 	}
 	
@@ -160,5 +172,6 @@ public class Window_Menu extends Abstract_Update {
 		menu.EXIT_POSSIBLE = false;
 		menu.menu.EXECUTED = true;
 		menu.previous_menu = null;
+		menu.main_menu = menu;
 	}
 }

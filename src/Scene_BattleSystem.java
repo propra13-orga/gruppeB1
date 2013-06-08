@@ -55,12 +55,12 @@ public class Scene_BattleSystem extends Abstract_Scene {
 		}
 		
 		//Hier zu Testzwecken das Item/SKill-menü mit Einträgen füllen
-		this.menu_item.addReturnCommand("Kleiner Heiltrank");
-		this.menu_item.addReturnCommand("Großer Heiltrank");
+		this.menu_item.addMenuCommand("Kleiner Heiltrank", this.menu_player);
+		this.menu_item.addMenuCommand("Großer Heiltrank", this.menu_player);
 		
-		this.menu_skill.addReturnCommand("Doppelschlag");
-		this.menu_skill.addReturnCommand("Feuerball");
-		this.menu_skill.addReturnCommand("Kleine Heilung");
+		this.menu_skill.addMenuCommand("Doppelschlag", this.menu_enemy);
+		this.menu_skill.addMenuCommand("Feuerball", this.menu_enemy);
+		this.menu_skill.addMenuCommand("Kleine Heilung", this.menu_enemy);
 		// !!! !!! !!! WICHTIG !!! !!! !!!
 		//später wenn pageable menu umgesetzt ist können skills nach physischen, magischen und
 		//heilenden skills sortiert werden
@@ -120,21 +120,28 @@ public class Scene_BattleSystem extends Abstract_Scene {
 			}
 			break;
 			
+			
+			
+			
+			
 		case WAIT_FOR_PLAYER:
+			print(""+this.main_menu.final_decision);
 			if (this.main_menu.final_decision == false) {
 				this.main_menu.updateData();
 			}
 			else {
-				
 				//Menu beendet, pruefe welches Menu zuletzt bedient wurde und
 				//pruefe dann dessen Einträge
+				print(this.main_menu.final_name);
 				switch (this.main_menu.final_name) {
+				
 				case "main":
 					//Normalerweise würde jetzt hier die Cursorposition
 					//abgefragt, aber der einzige return command in main ist
 					//Verteidugung, von daher ist klar, was gewählt wurde
 					print("VERTEIDUGUNG!");
 					break;
+					
 				case "enemy":
 					//Gegner wurde gewählt
 					switch (this.main_menu.final_cursor) {
@@ -149,7 +156,7 @@ public class Scene_BattleSystem extends Abstract_Scene {
 					}
 					break;
 					
-				case "item":
+				case "player":
 					//Hier dann dynamisch das gewählte Item wählen
 					print("Benutze Item!");
 					break;
@@ -165,11 +172,19 @@ public class Scene_BattleSystem extends Abstract_Scene {
 			}
 			break;
 			
+			
+			
+			
+			
 		case WAIT_FOR_ENEMY:
 			print("GEGNER MACHT WAS");
 			print("DER NÄCHSTE BITTE");
 			this.battle_type = GET_NEXT_ACTOR;
 			break;
+			
+			
+			
+			
 			
 		case ANIMATION:
 			break;
@@ -196,15 +211,10 @@ public class Scene_BattleSystem extends Abstract_Scene {
 		this.drawActionOrder();
 	}
 	
+	@SuppressWarnings("unchecked")
 	private void sortActors() {
 		this.action_order = (ArrayList<Object_BattleActor>) this.ctx.actors.clone();
-		for (Object_BattleActor b : this.action_order) {
-			print(""+b.speed);
-		}
 		java.util.Collections.sort(this.action_order);
-		for (Object_BattleActor b : this.action_order) {
-			print(""+b.speed);
-		}
 	}
 	
 	private void getNextActor() {
