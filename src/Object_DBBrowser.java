@@ -3,6 +3,9 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
 
 /*
  * Object_DBBrowser.java
@@ -46,6 +49,26 @@ public class Object_DBBrowser {
 		return null;
 	}
 	
+	/*
+	 * Gibt ein Set aller verfügbaren Attribute ("Überschriften") zurück.
+	 */
+	public Set<String> getAttributes() { return this.headers.keySet(); }
+	
+	
+	/*
+	 * Gibt eine liste aller Namen aller Attribute zurück, deren Werte in der 
+	 * Datenbank für den Typen entityType nicht leer (also null) sind.
+	 */
+	public List<String> getNonEmptyAttributes(String entityType) {
+		List<String> values = new LinkedList<String>();
+		for (String attribute : this.getAttributes()) {
+			if (this.getEntry(entityType, attribute) != null) {
+				values.add(attribute);
+			}
+		}
+		
+		return values;
+	}
 	
 	/*
 	 * Privates
