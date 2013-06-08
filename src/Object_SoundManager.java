@@ -1,8 +1,13 @@
 
 import java.applet.*;
 import java.io.File;
+import java.io.InputStream;
 import java.net.*;
 import java.util.*;
+
+import javax.sound.midi.MidiSystem;
+import javax.sound.midi.MidiUnavailableException;
+import javax.sound.midi.Sequencer;
 
 public class Object_SoundManager {
 	
@@ -53,5 +58,20 @@ public class Object_SoundManager {
 		 for(AudioClip c:lClips) {
 			 c.stop();
 		 }
+	 }
+	 
+	 public void playMidi(String filename) {
+		 Sequencer sequencer;
+		try {
+			sequencer = MidiSystem.getSequencer();
+			sequencer.open();
+			//InputStream midiFile = ClassLoader.getSystemResourceAsStream( "res/music/"+filename+".mid" );
+			File input = new File("res/music/"+filename+".mid");
+			sequencer.setSequence( MidiSystem.getSequence(input) );
+			sequencer.start();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	 }
 }

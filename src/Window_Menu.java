@@ -79,6 +79,8 @@ public class Window_Menu extends Abstract_Update {
 						//...und es existiert fuer den gewaehlten Befehl kein Submenu
 						//Also beende das ganze Menu und speichere den Namen und Cursorposition
 						//des zuletzt genutzten Menues
+						System.out.println("Final decision für menu: "+this.main_menu.name);
+						System.out.println("Main menu von item: "+this.main_menu.main_menu.name);
 						this.main_menu.final_decision = true;
 						this.main_menu.final_name = this.name;
 						this.main_menu.menu.cursor = this.menu.cursor;
@@ -134,13 +136,14 @@ public class Window_Menu extends Abstract_Update {
 		this.menu.addCommand(cmd);
 		this.submenues.add(menu);
 		if (menu != null) {
+			System.out.println("Registriere Menu: "+menu.name);
+			System.out.println("Übergebe als Main menu: "+this.main_menu.name);
 			menu.main_menu = this.main_menu;
 		}
 	}
 	
 	/*
 	 * Setzt das Menu und alle registrierten Untermenues wieder auf ihren Anfangszustand.
-	 * 
 	 */
 	
 	public void reset() {

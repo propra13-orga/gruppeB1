@@ -12,13 +12,14 @@ import java.awt.Font;
 
 public class Object_Game {
 
-	public static final String GAME_TITLE = "ProPra - 1. Meilenstein";
+	public static final String GAME_TITLE = "ProPra - 2. Meilenstein";
 	public static final Font FONT = new Font("Gentium Book Basic", Font.PLAIN, 20);
 	
 	private Abstract_Scene scene;
 	private Object_Screen screen;
 	private Object_KeyHandler keyhandler;
 	private Object_SoundManager soundmanager;
+	private Object_AnimationManager animationmanager;
 	
 	Object_Game() {
 		//Screen und KeyHandler initialisieren
@@ -26,6 +27,7 @@ public class Object_Game {
 		this.screen = new Object_Screen();
 		this.screen.getBuffer().getGraphics().setFont(new Font("Arial", Font.PLAIN, 130));
 		this.soundmanager = new Object_SoundManager();
+		this.animationmanager = new Object_AnimationManager(this);
 		
 		Object_BattleActor b1 = new Object_BattleActor();
 		Object_BattleActor b2 = new Object_BattleActor();
@@ -57,9 +59,9 @@ public class Object_Game {
 		b2.name = "Peter";
 		b3.name = "Jakob";
 		
-		//this.scene = new Scene_BattleSystem(c1, null, this);
+		this.scene = new Scene_BattleSystem(c1, null, this);
 		//this.scene = new Scene_StartMenu(this);
-		this.scene = new Scene_AnimationManagerTest(this);
+		//this.scene = new Scene_AnimationManagerTest(this);
 		
 		this.screen.setTitle(GAME_TITLE);
 		this.screen.addKeyListener(keyhandler);
@@ -94,6 +96,10 @@ public class Object_Game {
 	
 	public Object_SoundManager getSoundManager() {
 		return this.soundmanager;
+	}
+	
+	public Object_AnimationManager getAnimationManager() {
+		return this.animationmanager;
 	}
 	
 	//Szenen wechseln

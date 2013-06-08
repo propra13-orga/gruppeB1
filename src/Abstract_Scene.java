@@ -54,12 +54,14 @@ abstract class Abstract_Scene implements IScene {
 	protected Graphics screen;
 	protected Object_KeyHandler keyhandler;
 	protected Object_SoundManager soundmanager;
+	protected Object_AnimationManager animationmanager;
 	
 	Abstract_Scene(Object_Game game) {
 		this.game = game;
 		this.screen = game.getScreen().getBuffer().getGraphics();
 		this.keyhandler = game.getKeyHandler();
 		this.soundmanager = game.getSoundManager();
+		this.animationmanager = game.getAnimationManager();
 	}
 	
 	abstract public void onStart();

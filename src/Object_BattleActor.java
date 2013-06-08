@@ -21,6 +21,7 @@ public class Object_BattleActor implements Comparable<Object_BattleActor> {
 	public int maxSpeed = 200;
 	public int action_cost = 80;
 	public int dex = 70;
+	public boolean wait = false;
 	public Object_BattleSprite sprite;
 	public ArrayList<Entity> items;
 	public ArrayList<Entity> skills;

@@ -46,6 +46,8 @@ public class Scene_BattleSystem extends Abstract_Scene {
 		this.menu_skill = new Window_Menu("skills", 0, 0, game);
 		this.menu_player = new Window_Menu("player", 0, 0, game);
 		
+		Window_Menu.setMainMenu(this.main_menu);
+		
 		for (Object_BattleActor enemy : this.ctx.enemies) {
 			this.menu_enemy.addReturnCommand(enemy.name);
 		}
@@ -53,6 +55,11 @@ public class Scene_BattleSystem extends Abstract_Scene {
 		for (Object_BattleActor player : this.ctx.players) {
 			this.menu_player.addReturnCommand(player.name);
 		}
+		
+		this.main_menu.addMenuCommand("Angriff", this.menu_enemy);
+		this.main_menu.addMenuCommand("Skills", this.menu_skill);
+		this.main_menu.addMenuCommand("Item", this.menu_item);
+		this.main_menu.addReturnCommand("Verteidigung");
 		
 		//Hier zu Testzwecken das Item/SKill-menü mit Einträgen füllen
 		this.menu_item.addMenuCommand("Kleiner Heiltrank", this.menu_player);
@@ -68,13 +75,6 @@ public class Scene_BattleSystem extends Abstract_Scene {
 		//Skill und Itemmenü wird erst mit Einträgen gefüllt, wenn es aufgerufen wird,
 		//weil dann der zugehörige Character feststeht (Player1 hat andere Skills als Player2)
 		
-		this.main_menu.addMenuCommand("Angriff", this.menu_enemy);
-		this.main_menu.addMenuCommand("Skills", this.menu_skill);
-		this.main_menu.addMenuCommand("Item", this.menu_item);
-		this.main_menu.addReturnCommand("Verteidigung");
-		
-		Window_Menu.setMainMenu(this.main_menu);
-		
 		String path = "res/background/"+this.ctx.background+".png";
 		System.out.println("Lade: "+path);
 		background = new BufferedImage(640, 480, BufferedImage.TYPE_INT_ARGB);
@@ -87,7 +87,7 @@ public class Scene_BattleSystem extends Abstract_Scene {
 		
 		this.sortActors();
 		print(this.action_order.toString());
-		//this.soundmanager.abspielen("battle");
+		this.soundmanager.playMidi("battle");
 	}
 
 	@Override
@@ -108,9 +108,7 @@ public class Scene_BattleSystem extends Abstract_Scene {
 		switch (this.battle_type) {
 		
 		case GET_NEXT_ACTOR:
-			this.getNextActor();
 			this.current_actor = this.action_order.get(0);
-			print("    NAME DES AKTUELLEN SPIELERS: "+this.current_actor.name);
 			if (this.ctx.players.contains(this.current_actor)) {
 				this.main_menu.reset();
 				this.battle_type = WAIT_FOR_PLAYER;
@@ -125,7 +123,6 @@ public class Scene_BattleSystem extends Abstract_Scene {
 			
 			
 		case WAIT_FOR_PLAYER:
-			print(""+this.main_menu.final_decision);
 			if (this.main_menu.final_decision == false) {
 				this.main_menu.updateData();
 			}
@@ -154,6 +151,13 @@ public class Scene_BattleSystem extends Abstract_Scene {
 					case 2:
 						print("Greife Gegner 3 an!");
 					}
+					this.current_actor.speed -= 100;
+					this.current_actor.speed -= 100;
+					if (this.current_actor.speed <= 0) {
+						this.current_actor.speed = this.current_actor.maxSpeed;
+						this.current_actor.wait = true;
+					}
+					this.sortActors();
 					break;
 					
 				case "player":
@@ -212,17 +216,33 @@ public class Scene_BattleSystem extends Abstract_Scene {
 	}
 	
 	@SuppressWarnings("unchecked")
-	private void sortActors() {
+	private void sortActorsold() {
 		this.action_order = (ArrayList<Object_BattleActor>) this.ctx.actors.clone();
 		java.util.Collections.sort(this.action_order);
 	}
 	
-	private void getNextActor() {
-		Object_BattleActor tmp = this.action_order.get(0);
-		for (int i=1; i<this.action_order.size(); i++) {
-			this.action_order.set(i-1, this.action_order.get(i));
+	@SuppressWarnings("unchecked")
+	private void sortActors() {
+		ArrayList<Object_BattleActor> tmp_actors = (ArrayList<Object_BattleActor>) this.ctx.actors.clone();
+		Object_BattleActor actor;
+		this.action_order = new ArrayList<Object_BattleActor>();
+		for (int i=0; i<10; i++) {
+			java.util.Collections.sort(tmp_actors);
+			actor = tmp_actors.get(0);
+			if (actor.wait) {
+				actor.wait = false;
+				actor = tmp_actors.get(1);
+			}
+			actor.speed -= 100;
+			if (actor.speed <= 0) {
+				actor.speed = actor.maxSpeed;
+				actor.wait = true;
+			}
+			for (int j=1; j<tmp_actors.size(); j++) {
+				tmp_actors.get(j).wait = false;
+			}
+			this.action_order.add(actor);
 		}
-		this.action_order.set(this.action_order.size()-1,tmp);
 	}
 	
 	private void drawArrow() {
