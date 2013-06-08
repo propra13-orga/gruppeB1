@@ -34,6 +34,39 @@ class Component_Movement extends Abstract_Component {
 		this(entity,system,x,y,0,0,0,true,false,true);
 	}
 	
+	public Component_Movement(Component_Movement compMovement) {
+		super(compMovement);
+		this.x = compMovement.x;
+		this.y = compMovement.y;
+		this.dx = compMovement.dx;
+		this.dy = compMovement.dy;
+		this.orientation = compMovement.orientation;
+		this.delay = compMovement.delay;
+		this.tick = compMovement.tick;
+		this.moving = compMovement.moving;
+		this.moveable = compMovement.moveable;
+		this.walkable = compMovement.walkable;
+		this.collidable = compMovement.collidable;
+		this.visible = compMovement.visible;
+	}
+	
+	public Component_Movement(Abstract_Component comp, Entity entity, System_Component system) {
+		super(comp.getType(),entity,system);
+		Component_Movement compMovement = (Component_Movement) comp;
+		this.x = compMovement.x;
+		this.y = compMovement.y;
+		this.dx = compMovement.dx;
+		this.dy = compMovement.dy;
+		this.orientation = compMovement.orientation;
+		this.delay = compMovement.delay;
+		this.tick = compMovement.tick;
+		this.moving = compMovement.moving;
+		this.moveable = compMovement.moveable;
+		this.walkable = compMovement.walkable;
+		this.collidable = compMovement.collidable;
+		this.visible = compMovement.visible;
+	}
+	
 	// Getters
 	
 	public int getX() { return this.x; }

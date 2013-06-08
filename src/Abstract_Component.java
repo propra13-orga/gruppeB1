@@ -7,9 +7,9 @@
 /*
  * Die Klasse, von der alle Komponenten abgeleitet werden.
  */
-abstract class Abstract_Component {
+abstract class Abstract_Component implements java.io.Serializable {
 	
-	protected System_Component system;
+	transient protected System_Component system;
 	protected String type;
 	protected Entity entity;
 	protected boolean initiated;
@@ -22,9 +22,19 @@ abstract class Abstract_Component {
 		entity.addComponent(this);
 	}
 	
+	public Abstract_Component(Abstract_Component comp) {
+		this.system = comp.system;
+		this.type = comp.type;
+		this.entity = comp.entity;
+		this.initiated = comp.initiated;
+	}
+	
 	public Entity getEntity() { return this.entity; }
+	public String getType() { return this.type; }
 	
 	public boolean isInitiated() { return this.initiated; }
+	
+	public void setSystem(System_Component system) { this.system = system; }
 	
 	public void init() {
 		this.system.register(this);

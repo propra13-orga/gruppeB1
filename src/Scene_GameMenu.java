@@ -41,6 +41,7 @@ public class Scene_GameMenu extends Abstract_Scene {
 				//Ein Menüpunkt wurde bstätigt
 				switch (menu.cursor){
 				case 0: //Spiel speichern
+					this.current_map.serialize();
 					System.out.println("Speichere Spiel... :D:D Nicht!");
 					menu.EXECUTED = true;
 					break;

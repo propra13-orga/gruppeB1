@@ -1,3 +1,6 @@
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.util.Hashtable;
 import java.util.LinkedList;
 import java.util.List;
@@ -50,11 +53,17 @@ abstract class System_Component {
 		return this.entitiesByType.get(type);
 	}
 	
-	public List<Event> getEvents(EventType type) {
+	public List<Event> getEvents(EventType type) { 
 		return ((Scene_Level) this.scene).getEvents(type); 
 	}
 	
-	public Scene_Level getScene() {
-		return (Scene_Level) this.scene;
+	public Scene_Level getScene() { return (Scene_Level) this.scene; }
+	public String[] getTypes() { return this.types; }
+	
+	public boolean hasType(String type) {
+		for (String t : this.types) {
+			if (t.equals(type)) return true;
+		}
+		return false;
 	}
 }

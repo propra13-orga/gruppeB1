@@ -1,3 +1,6 @@
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.Hashtable;
 
 /*
@@ -11,14 +14,14 @@ import java.util.Hashtable;
  * "position", so verfügt sie über Positionsdaten.
  */
 
-class Entity {
-	
+class Entity implements java.io.Serializable {
+
 	protected String name;
-	protected Object_EntityManager manager;
+	transient protected Object_EntityManager manager;
 	protected boolean active = false;
 	protected int ID;
 	
-	private Hashtable<String,Abstract_Component> components;
+	protected Hashtable<String,Abstract_Component> components;
 	
 	public Entity(String name, Object_EntityManager manager) {
 		this.name = name;
@@ -26,6 +29,24 @@ class Entity {
 		this.manager = manager;
 		this.components = new Hashtable<String,Abstract_Component>();
 	}
+	
+	public Entity(Entity entity) {
+		this.name = entity.name;
+		this.manager = entity.manager;
+		this.active = entity.active;
+		this.ID = entity.ID;
+		this.components = entity.components;
+	}
+	
+	public Entity(Entity entity, Object_EntityManager manager) {
+		this.name = entity.name;
+		this.manager = manager;
+		this.active = entity.active;
+		this.ID = entity.ID;
+		this.components = entity.components;
+	}
+	
+	public void setManager(Object_EntityManager manager) { this.manager = manager; }
 	
 	public void init() {
 		for (Abstract_Component component : this.components.values()) {
@@ -59,4 +80,20 @@ class Entity {
 	
 	public boolean isPlayer() {	return this.manager.isPlayer(this); }
 	
+	
+	/*
+	 * Privates
+	 */
+	
+//	private void writeObject(ObjectOutputStream oos) throws IOException {
+//		oos.defaultWriteObject();
+//	}
+//	
+//	private void readObject(ObjectInputStream ois) throws IOException {
+//		try {
+//			ois.defaultReadObject();
+//			this.components = new Hashtable<String,Abstract_Component>();
+//		}
+//		catch (ClassNotFoundException e) { e.printStackTrace(); }
+//	}
 }

@@ -6,8 +6,8 @@ import javax.imageio.ImageIO;
 
 /*
  * SpriteSet.java
- * Ähnlich wie TileSet.java
- * Für genauere Erklärung siehe dort...
+ * ï¿½hnlich wie TileSet.java
+ * Fï¿½r genauere Erklï¿½rung siehe dort...
  */
 
 public class Object_SpriteSet {

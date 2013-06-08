@@ -1,28 +1,33 @@
 public class Component_Inventory extends Abstract_Component {
-	private int[] inventory;
+	private Entity[] inventory;
 	private int money;
 	
 	public Component_Inventory(Entity entity,
 			System_Component system, int money) {
 		super("inventory", entity, system);
-		this.inventory = this.baseInventory(50);	// = {-1,-1,...,-1}
+		this.inventory = new Entity[50];
 		this.money = money;
+	}
+	
+	public Component_Inventory(Component_Inventory compInventory) {
+		super(compInventory);
+		this.inventory = compInventory.inventory;
+		this.money = compInventory.money;
+	}
+	
+	public Component_Inventory(Abstract_Component comp, Entity entity, System_Component system) {
+		super(comp.getType(),entity,system);
+		Component_Inventory compInventory = (Component_Inventory) comp;
+		this.inventory = compInventory.inventory;
+		this.money = compInventory.money;
 	}
 	
 	/*
 	 * Getters
 	 */
 	
-	public int getIDAt(int i) { return this.inventory[i]; }
-	public int[] getInventory() { return this.inventory; }
+	public Entity[] getInventory() { return this.inventory; }
 	public int getMoney() { return this.money; }
-	public boolean contains(Entity entity) {
-		int entityID = entity.getID();
-		for (int id : this.inventory) {
-			if (id == entityID) return true;
-		}
-		return false;
-	}
 	
 	/*
 	 * Setters
@@ -36,10 +41,10 @@ public class Component_Inventory extends Abstract_Component {
 	 * Boolean Setters
 	 */
 	
-	public boolean addItem(int entityID) {
+	public boolean addItem(Entity item) {
 		for (int i=0;i<inventory.length;i++) {
-			if (this.inventory[i] == -1) {
-				this.inventory[i] = entityID;
+			if (this.inventory[i] == null) {
+				this.inventory[i] = item;
 				return true;
 			}
 		}

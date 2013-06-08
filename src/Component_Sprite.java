@@ -22,9 +22,10 @@ class Component_Sprite extends Abstract_Component {
 	int old_animation;
 	boolean visible;
 	
+	private String filename;
 	private int width;
 	private int height;
-	private Object_SpriteSet spriteset;
+	transient private Object_SpriteSet spriteset;
 	private int pos_x;
 	private int pos_y;
 	
@@ -32,6 +33,7 @@ class Component_Sprite extends Abstract_Component {
 	public Component_Sprite(Entity entity, System_Component system,
 			String filename, int x, int y) {
 		super("sprite",entity,system);
+		this.filename = filename;
 		spriteset = new Object_SpriteSet(filename);
 		pos_x = x*Object_Map.TILESIZE;
 		pos_y = y*Object_Map.TILESIZE;
@@ -46,6 +48,35 @@ class Component_Sprite extends Abstract_Component {
 	public Component_Sprite(Entity entity, System_Component system, String filename) {
 		this(entity,system,filename,0,0);
 		this.visible = false;
+	}
+	
+	public Component_Sprite(Component_Sprite compSprite) {
+		super(compSprite);
+		this.filename = compSprite.filename;
+		this.spriteset = new Object_SpriteSet(compSprite.filename);
+		this.pos_x = compSprite.pos_x;
+		this.pos_y = compSprite.pos_y;
+		this.direction = compSprite.direction;
+		this.animation = compSprite.animation;
+		this.old_animation = compSprite.old_animation;
+		this.width = compSprite.width;
+		this.height = compSprite.height;
+		this.visible = compSprite.visible;
+	}
+	
+	public Component_Sprite(Abstract_Component comp, Entity entity, System_Component system) {
+		super(comp.getType(),entity,system);
+		Component_Sprite compSprite = (Component_Sprite) comp;
+		this.filename = compSprite.filename;
+		this.spriteset = new Object_SpriteSet(compSprite.filename);
+		this.pos_x = compSprite.pos_x;
+		this.pos_y = compSprite.pos_y;
+		this.direction = compSprite.direction;
+		this.animation = compSprite.animation;
+		this.old_animation = compSprite.old_animation;
+		this.width = compSprite.width;
+		this.height = compSprite.height;
+		this.visible = compSprite.visible;		
 	}
 	
 	public void setX(int x) { this.pos_x = x*Object_Level.TILESIZE;}
@@ -66,6 +97,7 @@ class Component_Sprite extends Abstract_Component {
 	public BufferedImage getImage() {
 		//Gibt die Spritegrafik entsprechend der Blickrichtung und
 		//Animationsstufe zur�ck
+		if (spriteset == null) this.spriteset = new Object_SpriteSet(this.filename);
 		return spriteset.getSprite(direction, animation);
 	}
 	

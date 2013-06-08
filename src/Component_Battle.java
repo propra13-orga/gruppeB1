@@ -21,6 +21,35 @@ class Component_Battle extends Abstract_Component {
 		this.sprite = sprite;
 	}
 	
+	public Component_Battle(Component_Battle compBattle) {
+		super(compBattle);
+		this.maxhp = compBattle.maxhp;
+		this.hp = compBattle.hp;
+		this.maxmp = compBattle.maxmp;
+		this.mp = compBattle.mp;
+		this.atk = compBattle.atk;
+		this.def = compBattle.def;
+		this.maxspd = compBattle.def;
+		this.spd = compBattle.spd;
+		this.dex = compBattle.dex;
+		this.sprite = compBattle.sprite;
+	}
+	
+	public Component_Battle(Abstract_Component comp, Entity entity, System_Component system) {
+		super(comp.getType(),entity,system);
+		Component_Battle compBattle = (Component_Battle) comp;
+		this.maxhp = compBattle.maxhp;
+		this.hp = compBattle.hp;
+		this.maxmp = compBattle.maxmp;
+		this.mp = compBattle.mp;
+		this.atk = compBattle.atk;
+		this.def = compBattle.def;
+		this.maxspd = compBattle.def;
+		this.spd = compBattle.spd;
+		this.dex = compBattle.dex;
+		this.sprite = compBattle.sprite;
+	}
+	
 	// Getters
 	
 	public int getMaxHP() { return this.maxhp; }

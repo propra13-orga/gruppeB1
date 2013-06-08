@@ -1,8 +1,12 @@
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.util.LinkedList;
 import java.util.List;
 
 
-public class Object_Level extends Object_Map {
+public class Object_Level extends Object_Map implements java.io.Serializable {
 	List<Entity> entities;
 	int ID;
 
@@ -21,6 +25,9 @@ public class Object_Level extends Object_Map {
 	
 	public void addEntity(Entity entity) { this.entities.add(entity); }
 	public void addEntities(List<Entity> entities) { this.entities.addAll(entities); }
+	public void removeEntity(Entity entity) {
+		if (this.entities.contains(entity)) this.entities.remove(entity);
+	}
 	
 	public void init() {
 		for (Entity entity : this.entities) {
@@ -33,5 +40,4 @@ public class Object_Level extends Object_Map {
 			entity.getManager().deregister(entity);
 		}
 	}
-
 }

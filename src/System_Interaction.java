@@ -60,12 +60,22 @@ class System_Interaction extends System_Component {
 		return (Component_Battle) entity.getComponent("battle");
 	}
 	
+	private void printInventory(Entity entity) {
+		if (entity.hasComponent("inventory")) {
+			Component_Inventory compInventory = (Component_Inventory) entity.getComponent("inventory");
+			for (Entity item : compInventory.getInventory()) {
+				if (item != null) System.out.println(item.getName());
+			}
+		}
+	}
+	
 	/*
 	 * 
 	 */
 	private void handleActionCommands() {
 		for (Event event : this.getEvents(EventType.CMD_ACTION)) {
 			Entity entity = event.getActor();
+			this.printInventory(entity);
 			Component_Movement compMovement = (Component_Movement) entity.getComponent("movement");
 			int[] xy = compMovement.orientationToVector(compMovement.orientation);
 			int x = compMovement.getX();
@@ -130,8 +140,9 @@ class System_Interaction extends System_Component {
 			Entity actor = event.getActor();
 			Entity undergoer = event.getUndergoer();
 			Component_Inventory compInventory = (Component_Inventory) actor.getComponent("inventory");
-			if (compInventory.addItem(undergoer.getID())) {
+				if (compInventory.addItem(undergoer)) {
 				((Component_Movement) undergoer.getComponent("movement")).drawFromMap();
+				this.getScene().getCurrentLevel().removeEntity(undergoer);
 //				this.handleTriggers(event);
 			}
 		}

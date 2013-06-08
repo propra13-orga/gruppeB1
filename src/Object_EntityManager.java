@@ -1,3 +1,9 @@
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -51,7 +57,9 @@ class Object_EntityManager {
 	public void register(Entity entity) {
 		if (!this.entities.contains(entity)) {
 			this.entities.add(entity);
-			this.entitiesByID.put(entity.getID(), entity);
+			int id = entity.getID();
+			this.entitiesByID.put(id, entity);
+			if (id > this.lastID) this.lastID = id;
 		}
 	}
 	
@@ -73,6 +81,56 @@ class Object_EntityManager {
 	 */
 	public void setPlayer(Entity entity) {
 		this.player = entity;
+	}
+	
+	public void serializeEntities() {
+		for (int i=0;i<this.entities.size();i++) {
+			try {
+				Entity entity = this.entities.get(i);
+				String fpath = "";
+				if (this.isPlayer(entity)) {
+					fpath = "res/save/player.ser";
+				}
+				else fpath = String.format("res/save/entity%d.ser",entity.getID());
+				FileOutputStream fileOut = new FileOutputStream(fpath);
+				ObjectOutputStream out = new ObjectOutputStream(fileOut);
+				out.writeObject(entity);
+				out.close();
+				fileOut.close();
+			}
+			catch (IOException e) { e.printStackTrace(); }
+		}
+	}
+	
+	public List<Entity> deserializeEntities(Object_Level level) {
+		File folder = new File("res/save");
+		File[] listOfFiles = folder.listFiles();
+		
+		List<Entity> entities = new LinkedList<Entity>();
+		boolean isplayer = false;
+		
+		for (File file : listOfFiles) {
+			String fname = file.toString();
+			if (fname.contains("player.ser")) {
+				isplayer = true;
+			}
+			try {
+				FileInputStream fileIn = new FileInputStream(fname);
+				ObjectInputStream in = new ObjectInputStream(fileIn);
+				Entity entity = (Entity) in.readObject();
+				in.close();
+				fileIn.close();
+				entity.setManager(this);
+				for (Abstract_Component comp : entity.components.values()) {
+					comp.setSystem(this.getScene().getSystemByType(comp.getType()));
+				}
+				if (isplayer) this.player = entity;
+				else entities.add(entity);
+				isplayer = false;
+			}
+			catch (Exception e) { e.printStackTrace(); }
+		}
+		return entities;
 	}
 	
 	/*

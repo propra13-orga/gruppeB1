@@ -49,14 +49,37 @@ public class Scene_Level extends Abstract_Scene {
 		this.movementSystem = new System_Movement(this,game.getKeyHandler());
 		this.interactionSystem = new System_Interaction(this);
 		this.renderSystem = new System_Render(this,game.getScreen());
+	}
+	
+	public Scene_Level(Object_Game g, boolean load) {
+		this(g);
+		if (load) {
+			this.deserialize();
+			this.getPlayer().init();
+		}
+		else {
+			this.BeispielInit();
+		}
 		
-		
-		this.BeispielInit();
-		
-		this.currentLevel = levels.get(1);
 		this.currentLevel.init();
 	}
 	
+	public void serialize() {
+		Object_SaveLoadData.serialize(
+				new Object_SaveLoadData(
+						this.levels,
+						this.currentLevel.getID(),
+						this.getPlayer()
+				)
+		);
+	}
+	
+	public void deserialize() {
+		Object_SaveLoadData sld = Object_SaveLoadData.deserialize(this);
+		this.levels = sld.getRooms();
+		this.currentLevel = levels.get(sld.getCurrentRoom());
+		this.eManager.setPlayer(sld.getPlayer());
+	}
 
 
 	@Override
@@ -154,6 +177,14 @@ public class Scene_Level extends Abstract_Scene {
 	/*
 	 * Privates
 	 */
+	
+	public System_Component getSystemByType(String type) {
+		if (aiSystem.hasType(type)) return aiSystem;
+		if (movementSystem.hasType(type)) return movementSystem;
+		if (interactionSystem.hasType(type)) return interactionSystem;
+		if (renderSystem.hasType(type)) return renderSystem;
+		return null;
+	}
 	
 	/*
 	 * Überprüft, ob das Spiel als beendet erklärt wurde.
@@ -300,7 +331,7 @@ public class Scene_Level extends Abstract_Scene {
 		level1.addEntity(trigger);
 		level1.addEntity(instadeath);
 		level1.addEntity(salesperson);
-		//level1.addEntity(item);
+		level1.addEntity(item);
 		//level1.addEntity(item2);
 		level1.addEntity(enemy2);
 		
@@ -311,5 +342,7 @@ public class Scene_Level extends Abstract_Scene {
 		level2.addEntity(trap3);
 		
 		level3.addEntity(trigger3);
+		
+		this.currentLevel = this.levels.get(1);
 	}
 }

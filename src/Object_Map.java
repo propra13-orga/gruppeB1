@@ -15,7 +15,7 @@ import java.awt.image.BufferedImage;
  * welcher unterhalb der Sprites angezeigt wird.
  */
 
-public class Object_Map {
+public class Object_Map  implements java.io.Serializable  {
 	
 	static final int TILESIZE = 32;
 	
@@ -24,13 +24,15 @@ public class Object_Map {
 	boolean scrolling;
 	int layer;
 	
-	private Object_TileSet			tileset;
+	transient private Object_TileSet			tileset;
+	private String filename;
 	private int 			width;
 	private int 			height;
 	private int[][][] 		maplayer;
 	
 	Object_Map(String mapname) {
 		String filename = "res/maps/"+mapname+".txt";
+		this.filename = filename;
 		try {
 			readData(filename);
 		} catch (IOException e) {
@@ -45,7 +47,7 @@ public class Object_Map {
 		//Sprites werden hier nicht beachtet!
 		if (x < 0 || y < 0 || x >= width || y >= height) return false;
 		for (int l=0; l<layer; l++) {
-			if (!tileset.isPassable(getTileID(l, x,y))) return false;
+			if (!this.getTileset().isPassable(getTileID(l, x,y))) return false;
 		}
 		return true;
 	}
@@ -73,6 +75,12 @@ public class Object_Map {
 	}
 	
 	public Object_TileSet getTileset() {
+		if (this.tileset == null) {
+			try {
+				this.readData(this.filename);			
+			}
+			catch (IOException e) { e.printStackTrace(); }
+		}
 		return tileset;
 	}
 	public int getWidth() {

@@ -9,7 +9,8 @@ public class Scene_StartMenu extends Abstract_Scene {
 		this.keyhandler.clear();
 		menu = new Window_Selectable(0,0,game);
 		menu.EXIT_POSSIBLE = false;
-		menu.addCommand("Spiel starten");
+		menu.addCommand("Weiter");
+		menu.addCommand("Neues Spiel");
 		menu.addCommand("Kampfsystem starten");
 		menu.addCommand("Credits");
 		menu.addCommand("Spiel beenden");
@@ -36,10 +37,13 @@ public class Scene_StartMenu extends Abstract_Scene {
 		}
 		else {
 			switch (menu.cursor){
-			case 0: //Spiel starten
-				game.switchScene(new Scene_Level(game));
+			case 0: // Weiter
+				game.switchScene(new Scene_Level(game,true));
 				return;
-			case 1:
+			case 1: //Spiel starten
+				game.switchScene(new Scene_Level(game,false));
+				return;
+			case 2:
 				Object_BattleActor b1 = new Object_BattleActor();
 				Object_BattleActor b2 = new Object_BattleActor();
 				Object_BattleActor b3 = new Object_BattleActor();
@@ -72,14 +76,14 @@ public class Scene_StartMenu extends Abstract_Scene {
 				
 				this.game.switchScene(new Scene_BattleSystem(c1, null, this.game));
 				break;
-			case 2: //Credits
+			case 3: //Credits
 				String text = "1. Meilenstein\n\n"+
 							  "Programmierer:\n\n"  +
 							  "Victor Persien\n"    +
 							  "Bernard Darryl Oungouande\n" +
 							  "Hyojin Lee\n"        +
 							  "Elina Margamaeva\n"  +
-							  "Alexander Schäfer\n" ;
+							  "Alexander Schï¿½fer\n" ;
 				JOptionPane.showMessageDialog(
 						null,
 						text,
@@ -87,7 +91,7 @@ public class Scene_StartMenu extends Abstract_Scene {
 						JOptionPane.OK_CANCEL_OPTION);
 				menu.EXECUTED = true;
 				break;
-			case 3: //Spiel beenden
+			case 4: //Spiel beenden
 				game.quit();
 			}
 		}

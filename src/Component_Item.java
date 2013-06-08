@@ -26,6 +26,33 @@ public class Component_Item extends Abstract_Component implements IShopItem {
 		this.description = description;
 	}
 	
+	public Component_Item(Component_Item compItem) {
+		super(compItem);
+		this.itemType = compItem.itemType;
+		this.hp = compItem.hp;
+		this.mp = compItem.mp;
+		this.ap = compItem.ap;
+		this.value = compItem.value;
+		this.consumable = compItem.consumable;
+		this.permanent = compItem.permanent;
+		this.stackable = compItem.stackable;
+		this.description = compItem.description;
+	}
+	
+	public Component_Item(Abstract_Component comp, Entity entity, System_Component system) {
+		super(comp.getType(),entity,system);
+		Component_Item compItem = (Component_Item) comp;
+		this.itemType = compItem.itemType;
+		this.hp = compItem.hp;
+		this.mp = compItem.mp;
+		this.ap = compItem.ap;
+		this.value = compItem.value;
+		this.consumable = compItem.consumable;
+		this.permanent = compItem.permanent;
+		this.stackable = compItem.stackable;
+		this.description = compItem.description;
+	}
+	
 	/*
 	 * Getters
 	 */
