@@ -3,6 +3,7 @@
  * Tastatur, NPCs über die KI (kommt noch).
  */
 class Component_Controls extends Abstract_Component {
+
 	public Component_Controls(Entity entity, System_Component system) {
 		super("controls",entity,system);
 	}

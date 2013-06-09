@@ -1,4 +1,7 @@
 public class Component_Inventory extends Abstract_Component {
+
+	private static final long serialVersionUID = 1L;
+	
 	private Entity[] inventory;
 	private int money;
 	

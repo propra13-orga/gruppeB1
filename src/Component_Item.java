@@ -1,4 +1,6 @@
+
 public class Component_Item extends Abstract_Component implements IShopItem {
+
 	private String itemType;
 	private boolean consumable;
 	private boolean permanent;

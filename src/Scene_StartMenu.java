@@ -101,6 +101,8 @@ public class Scene_StartMenu extends Abstract_Scene {
 	public void updateScreen() {
 		this.game.getScreen().clear();
 		menu.updateScreen();
+		Window_Base tmp = new Window_Base(0,0,100,100,this.game);
+		tmp.updateScreen();
 	}
 	
 }

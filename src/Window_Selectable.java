@@ -1,3 +1,4 @@
+import java.awt.Color;
 import java.awt.FontMetrics;
 import java.util.ArrayList;
 
@@ -16,6 +17,8 @@ public class Window_Selectable extends Abstract_Update {
 	private ArrayList<String> commands;
 	private Window_Base window;
 	private FontMetrics metrics;
+	private int alpha = 50;
+	private int d_alpha = 3;
 
 	Window_Selectable(int x, int y, Object_Game game) {
 		super(game);
@@ -38,6 +41,7 @@ public class Window_Selectable extends Abstract_Update {
 		if (window.width < min_x) window.width = min_x;
 		if (window.width > max_x) window.width = max_x;
 		window.height = 2*this.border_y + commands.size()*this.cursorheight;
+		this.window.drawBox();
 	}
 	
 	public void center() {
@@ -55,6 +59,15 @@ public class Window_Selectable extends Abstract_Update {
 	}
 	
 	private void drawCursor() {
+		this.alpha += this.d_alpha;
+		this.screen.setColor(new Color(255,255,255,this.alpha));
+		this.screen.fillRect(
+				window.x + this.border_x,
+				window.y + this.border_y + (cursor*this.cursorheight),
+				window.width - 2 * this.border_x,
+				this.cursorheight);
+		if (this.alpha <= 40 || this.alpha >= 120) this.d_alpha *= -1;
+		this.screen.setColor(new Color(255,255,255));
 		this.screen.drawRect(
 				window.x + this.border_x,
 				window.y + this.border_y + (cursor*this.cursorheight),
@@ -100,8 +113,8 @@ public class Window_Selectable extends Abstract_Update {
 	@Override
 	public void updateScreen() {
 		window.updateScreen();
-		drawCommands();
 		drawCursor();
+		drawCommands();
 	}
 
 }

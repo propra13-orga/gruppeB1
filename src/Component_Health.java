@@ -1,3 +1,4 @@
+
 class Component_Health extends Abstract_Component {
 	
 	private int hp;

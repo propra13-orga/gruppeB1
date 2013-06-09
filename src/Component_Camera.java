@@ -5,6 +5,7 @@
  */
 
 class Component_Camera extends Abstract_Component {
+
 	public Component_Camera(Entity entity, System_Component system) {
 		super("camera",entity,system);
 	}

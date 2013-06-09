@@ -27,6 +27,7 @@ public class Object_TileSet {
 		//eine Textdatei 'passable.txt', die aus 10 Zeilen besteht, die jeweils
 		//10 Einsen und Nullen beinhalten und angeben, ob über die im Tileset
 		//entpsrechende Kachel gelaufen werden darf.
+		
 		set = new BufferedImage(320,320,BufferedImage.TYPE_INT_ARGB);
 		String path = "res/tileset/"+setname+"/";
 		try {
@@ -35,11 +36,12 @@ public class Object_TileSet {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+
 		//Hintergrundfarbe entfernen
 		Object_Screen.makeTransparent(set);
 		
 		//Lade 'passable.txt'
-		FileReader fr = new FileReader(path+"passable.txt");
+		FileReader fr = new FileReader(path+"/passable.txt");
 		BufferedReader br = new BufferedReader(fr);
 		passable = new int[10][10];
 		String[] line;
