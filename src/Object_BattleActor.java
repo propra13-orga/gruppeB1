@@ -8,9 +8,12 @@ enum BattleSide {
 }
 
 public class Object_BattleActor implements Comparable<Object_BattleActor> {
+	
+	public static int ID_COUNTER = 0;
 
 	public String name = "Testinit Actor";
 	public BattleSide side = BattleSide.PLAYER;
+	public int id;
 	public int hp = 100;
 	public int maxHp = 100;
 	public int mp = 50;
@@ -38,6 +41,8 @@ public class Object_BattleActor implements Comparable<Object_BattleActor> {
 		Component_Battle compBattle = (Component_Battle) entity.getComponent("battle");
 		Component_Inventory compInventory = (Component_Inventory) entity.getComponent("inventory");
 		
+		this.id = ID_COUNTER;
+		ID_COUNTER++;
 		this.entity = entity;
 		this.name = entity.getName();
 		this.hp = compBattle.getHP();
@@ -62,7 +67,8 @@ public class Object_BattleActor implements Comparable<Object_BattleActor> {
 	@Override
 	public int compareTo(Object_BattleActor arg0) {
 		int s1 = arg0.speed;
-		return Integer.compare(s1, this.speed);
+		int s2 = this.speed;
+		return Integer.compare(s1, s2);
 	}
 	
 	public String getName() { return this.name; }

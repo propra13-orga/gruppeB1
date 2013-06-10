@@ -13,7 +13,10 @@ import java.awt.Font;
 public class Object_Game {
 
 	public static final String GAME_TITLE = "ProPra - 2. Meilenstein";
-	public static final Font FONT = new Font("Gentium Book Basic", Font.PLAIN, 20);
+	//Fonts:
+	//Gentium Book Basic <--- Gut!
+	//Arial Black
+	public static final Font FONT = new Font("Arial", Font.PLAIN, 20);
 	
 	private Abstract_Scene scene;
 	private Object_Screen screen;
@@ -34,9 +37,26 @@ public class Object_Game {
 		Object_BattleActor b3 = new Object_BattleActor();
 		Object_BattleActor e1 = new Object_BattleActor();
 		Object_BattleActor e2 = new Object_BattleActor();
+		
 		b1.sprite = new Object_BattleSprite("battlechar-1", 1, 13, BattleSide.PLAYER, this);
+		b1.name = "Alex";
+		b1.hp = 123;
+		b1.maxHp = 300;
+		b1.speed = 210;
+		b1.maxSpeed = 210;
+		
 		b2.sprite = new Object_BattleSprite("battlechar-1", 2, 14, BattleSide.PLAYER, this);
+		b2.name = "Dagoberto";
+		b2.hp = 70;
+		b2.maxHp = 500;
+		b2.speed = 10;
+		b2.maxSpeed = 300;
+		
 		b3.sprite = new Object_BattleSprite("battlechar-1", 3, 13, BattleSide.PLAYER, this);
+		b3.name = "Victor";
+		b3.speed = 160;
+		b3.maxSpeed = 250;
+		
 		e1.side = BattleSide.ENEMY;
 		e2.side = BattleSide.ENEMY;
 		e1.sprite = new Object_BattleSprite("enemy-2", 1, 14, BattleSide.ENEMY, this);
@@ -52,12 +72,6 @@ public class Object_Game {
 		c1.actors.add(e2);
 		c1.enemies.add(e1);
 		c1.enemies.add(e2);
-		
-		b1.name = "Alex";
-		b1.hp = 123;
-		b1.maxHp = 300;
-		b2.name = "Peter";
-		b3.name = "Jakob";
 		
 		//this.scene = new Scene_BattleSystem(c1, null, this);
 		this.scene = new Scene_StartMenu(this);

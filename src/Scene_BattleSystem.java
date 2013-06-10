@@ -108,7 +108,13 @@ public class Scene_BattleSystem extends Abstract_Scene {
 		switch (this.battle_type) {
 		
 		case GET_NEXT_ACTOR:
-			this.current_actor = this.action_order.get(0);
+			int next_id = this.action_order.get(0).id;
+			for (Object_BattleActor b : this.ctx.actors) {
+				if (b.id == next_id) {
+					this.current_actor = b;
+					break;
+				}
+			}
 			if (this.ctx.players.contains(this.current_actor)) {
 				this.main_menu.reset();
 				this.battle_type = WAIT_FOR_PLAYER;
@@ -151,8 +157,7 @@ public class Scene_BattleSystem extends Abstract_Scene {
 					case 2:
 						print("Greife Gegner 3 an!");
 					}
-					this.current_actor.speed -= 100;
-					this.current_actor.speed -= 100;
+					this.current_actor.speed -= 50;
 					if (this.current_actor.speed <= 0) {
 						this.current_actor.speed = this.current_actor.maxSpeed;
 						this.current_actor.wait = true;
@@ -221,27 +226,26 @@ public class Scene_BattleSystem extends Abstract_Scene {
 		java.util.Collections.sort(this.action_order);
 	}
 	
-	@SuppressWarnings("unchecked")
 	private void sortActors() {
-		ArrayList<Object_BattleActor> tmp_actors = (ArrayList<Object_BattleActor>) this.ctx.actors.clone();
+		ArrayList<Object_BattleActor> tmp_actors = this.ctx.actors;
 		Object_BattleActor actor;
 		this.action_order = new ArrayList<Object_BattleActor>();
 		for (int i=0; i<10; i++) {
 			java.util.Collections.sort(tmp_actors);
+			for (int j=1; j<tmp_actors.size(); j++) {
+				tmp_actors.get(j).wait = false;
+			}
 			actor = tmp_actors.get(0);
 			if (actor.wait) {
 				actor.wait = false;
 				actor = tmp_actors.get(1);
 			}
+			this.action_order.add(actor);
 			actor.speed -= 100;
 			if (actor.speed <= 0) {
 				actor.speed = actor.maxSpeed;
 				actor.wait = true;
 			}
-			for (int j=1; j<tmp_actors.size(); j++) {
-				tmp_actors.get(j).wait = false;
-			}
-			this.action_order.add(actor);
 		}
 	}
 	

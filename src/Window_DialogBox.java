@@ -19,10 +19,15 @@ public class Window_DialogBox extends Abstract_Update {
 	private static final int PADDING = 8;
 	private static final int LINES = 4;
 	private static final int HEIGHT = 110; //80
+	private static final int BORDER = 8;
 	
 	Window_DialogBox(String msg, Object_Game game) {
 		super(game);
-		window = new Window_Base(0, Object_Screen.SCREEN_H-HEIGHT, Object_Screen.SCREEN_W, HEIGHT, game);
+		window = new Window_Base(BORDER,
+				Object_Screen.SCREEN_H-HEIGHT-BORDER,
+				Object_Screen.SCREEN_W-2*BORDER,
+				HEIGHT,
+				game);
 		this.screen.setFont(Object_Game.FONT);
 		this.metrics = this.screen.getFontMetrics();
 		this.message = new String[LINES];

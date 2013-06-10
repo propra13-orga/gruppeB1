@@ -55,7 +55,6 @@ public class Window_Base extends Abstract_Update{
 		//BG zeichnen
 		for (j=32; j<=this.height-32; j+=Object_Map.TILESIZE) {
 			for (i=32; i<=this.width-32; i+=Object_Map.TILESIZE) {
-				System.out.println("draw");
 				this.box.getGraphics().drawImage(
 						this.set.getSubimage(32, 32, 32, 32),
 						i,

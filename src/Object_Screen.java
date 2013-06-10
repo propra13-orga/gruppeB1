@@ -1,5 +1,11 @@
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.DisplayMode;
+import java.awt.GraphicsDevice;
+import java.awt.GraphicsEnvironment;
+import java.awt.Toolkit;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
 
 import javax.swing.JFrame;
@@ -37,6 +43,21 @@ public class Object_Screen extends JFrame {
 	Object_Screen() {
 		//JFrame initialisieren
 		super();
+		
+		// nested window listener:
+		// no borders:
+		this.setUndecorated(true);
+		// set to full screen:
+		GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
+		gd.setFullScreenWindow(this);
+		this.setResizable(false);
+		//wtf?!
+		if (!this.isDisplayable()) {
+		    this.setUndecorated(true);
+		}
+		//wft?!
+		gd.setFullScreenWindow(this);
+		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setResizable(false);
 		board = new JPanel();
@@ -45,6 +66,13 @@ public class Object_Screen extends JFrame {
 		pack();
 		//Rest initialisieren
 		buffer = new BufferedImage(SCREEN_W, SCREEN_H, BufferedImage.TYPE_INT_ARGB);
+		
+		setSize( Toolkit.getDefaultToolkit().getScreenSize() );
+	    GraphicsDevice device; 
+	    device=GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices()[0]; 
+	    device.setFullScreenWindow(this); 
+	    device.setDisplayMode(new DisplayMode(640,480,16,0));
+	    
 	}
 	
 	public void update() {

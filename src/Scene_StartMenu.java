@@ -1,8 +1,14 @@
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
 import javax.swing.JOptionPane;
 
 public class Scene_StartMenu extends Abstract_Scene {
 
 	Window_Selectable menu;
+	BufferedImage background;
 	
 	Scene_StartMenu(Object_Game game) {
 		super(game);
@@ -15,7 +21,18 @@ public class Scene_StartMenu extends Abstract_Scene {
 		menu.addCommand("Credits");
 		menu.addCommand("Spiel beenden");
 		menu.center();
+		//menu.setY(300);
 		
+		this.background = new BufferedImage(
+				Object_Screen.SCREEN_W,
+				Object_Screen.SCREEN_H,
+				BufferedImage.TYPE_INT_ARGB);
+		try {
+			this.background.getGraphics().drawImage(ImageIO.read(new File("res/background/castle.png")),0,0,null);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	@Override
@@ -100,9 +117,8 @@ public class Scene_StartMenu extends Abstract_Scene {
 	@Override
 	public void updateScreen() {
 		this.game.getScreen().clear();
+		this.screen.drawImage(this.background, 0, 0, null);
 		menu.updateScreen();
-		Window_Base tmp = new Window_Base(0,0,100,100,this.game);
-		tmp.updateScreen();
 	}
 	
 }

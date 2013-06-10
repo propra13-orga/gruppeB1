@@ -116,5 +116,18 @@ public class Window_Selectable extends Abstract_Update {
 		drawCursor();
 		drawCommands();
 	}
+	
+	public int getX() {
+		return this.window.x;
+	}
+	public int getY() {
+		return this.window.y;
+	}
+	public void setX(int x) {
+		this.window.x = x;
+	}
+	public void setY(int y) {
+		this.window.y = y;
+	}
 
 }
