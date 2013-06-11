@@ -30,6 +30,9 @@ public class Object_BattleActor implements Comparable<Object_BattleActor> {
 	public ArrayList<Entity> skills;
 	public Hashtable<String, Entity> weapons;
 	
+	//NOCH EINFUEGEN!
+	public boolean attackable = true;
+	
 	private Entity entity;
 	
 	

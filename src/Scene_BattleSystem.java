@@ -16,7 +16,7 @@ public class Scene_BattleSystem extends Abstract_Scene {
 	
 	private Object_BattleContext ctx;
 	private Abstract_Scene previous_scene;
-	private ArrayList<Object_BattleActor> action_order;
+	private ArrayList<Integer> action_order;
 	private int battle_type;
 	private BufferedImage background;
 	private Object_BattleActor current_actor;
@@ -31,7 +31,6 @@ public class Scene_BattleSystem extends Abstract_Scene {
 		super(game);
 		this.ctx = ctx;
 		this.previous_scene = previous_scene;
-		this.action_order = new ArrayList<Object_BattleActor>();
 		this.battle_type = GET_NEXT_ACTOR;
 		
 		this.current_actor = null;
@@ -49,7 +48,9 @@ public class Scene_BattleSystem extends Abstract_Scene {
 		Window_Menu.setMainMenu(this.main_menu);
 		
 		for (Object_BattleActor enemy : this.ctx.enemies) {
-			this.menu_enemy.addReturnCommand(enemy.name);
+			if (enemy.attackable) {
+				this.menu_enemy.addReturnCommand(enemy.name);
+			}
 		}
 		
 		for (Object_BattleActor player : this.ctx.players) {
@@ -84,9 +85,26 @@ public class Scene_BattleSystem extends Abstract_Scene {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
+		for (int k=0; k<this.ctx.actors.size(); k++) {
+			this.ctx.actors.get(k).id = k;
+		}
+
 		this.sortActors();
-		print(this.action_order.toString());
+		int next_id = this.action_order.get(0);
+		for (Object_BattleActor b : this.ctx.actors) {
+			if (b.id == next_id) {
+				this.current_actor = b;
+				break;
+			}
+		}
+		if (this.ctx.players.contains(this.current_actor)) {
+			this.main_menu.reset();
+			this.battle_type = WAIT_FOR_PLAYER;
+		}
+		else {
+			this.battle_type = WAIT_FOR_ENEMY;
+		}
 		this.soundmanager.playMidi("battle");
 	}
 
@@ -108,7 +126,9 @@ public class Scene_BattleSystem extends Abstract_Scene {
 		switch (this.battle_type) {
 		
 		case GET_NEXT_ACTOR:
-			int next_id = this.action_order.get(0).id;
+			this.action_order.add(this.action_order.get(0));
+			this.action_order.remove(0);
+			int next_id = this.action_order.get(0);
 			for (Object_BattleActor b : this.ctx.actors) {
 				if (b.id == next_id) {
 					this.current_actor = b;
@@ -157,12 +177,14 @@ public class Scene_BattleSystem extends Abstract_Scene {
 					case 2:
 						print("Greife Gegner 3 an!");
 					}
+					Object_BattleActor chosen_enemy = this.ctx.enemies.get(this.main_menu.final_cursor);
+					double damage = this.current_actor.action_cost*1.2 - (chosen_enemy.def*0.5);
+					chosen_enemy.hp -= (int) damage;
 					this.current_actor.speed -= 50;
 					if (this.current_actor.speed <= 0) {
 						this.current_actor.speed = this.current_actor.maxSpeed;
 						this.current_actor.wait = true;
 					}
-					this.sortActors();
 					break;
 					
 				case "player":
@@ -220,30 +242,30 @@ public class Scene_BattleSystem extends Abstract_Scene {
 		this.drawActionOrder();
 	}
 	
-	@SuppressWarnings("unchecked")
-	private void sortActorsold() {
-		this.action_order = (ArrayList<Object_BattleActor>) this.ctx.actors.clone();
-		java.util.Collections.sort(this.action_order);
-	}
-	
 	private void sortActors() {
-		ArrayList<Object_BattleActor> tmp_actors = this.ctx.actors;
 		Object_BattleActor actor;
-		this.action_order = new ArrayList<Object_BattleActor>();
-		for (int i=0; i<10; i++) {
-			java.util.Collections.sort(tmp_actors);
-			for (int j=1; j<tmp_actors.size(); j++) {
-				tmp_actors.get(j).wait = false;
+		int i;
+		this.action_order = new ArrayList<Integer>();
+		for (Object_BattleActor b : this.ctx.actors) {
+			print("ID: "+b.id);
+		}
+		while (this.action_order.size()<20) {
+			print("Neuer Durchlauf:");
+			java.util.Collections.sort(this.ctx.actors);
+			print("this.ctx.actors: "+this.ctx.actors.toString());
+			for (i=1; i<this.ctx.actors.size(); i++) {
+				this.ctx.actors.get(i).wait = false;
 			}
-			actor = tmp_actors.get(0);
+			actor = this.ctx.actors.get(0);
 			if (actor.wait) {
 				actor.wait = false;
-				actor = tmp_actors.get(1);
+				actor = this.ctx.actors.get(1);
 			}
-			this.action_order.add(actor);
-			actor.speed -= 100;
-			if (actor.speed <= 0) {
-				actor.speed = actor.maxSpeed;
+			print("Aktuelle Actor ID: "+actor.id);
+			this.action_order.add(actor.id);
+			actor.speed /= 2;
+			if (actor.speed <= actor.maxSpeed*0.2) {
+				actor.speed = (int) (actor.maxSpeed*0.9);
 				actor.wait = true;
 			}
 		}
@@ -288,22 +310,37 @@ public class Scene_BattleSystem extends Abstract_Scene {
 			y += 20;
 			x -= 15;
 		}
+		for (Object_BattleActor enemy : this.ctx.enemies) {
+			x = enemy.sprite.x;
+			y = enemy.sprite.y;
+			x += 75;
+			y += 15;
+			String info = enemy.hp + "/" + enemy.maxHp;
+			this.screen.drawString(info, x, y);
+		}
 	}
 	
 	private void drawActionOrder() {
+		Object_BattleActor actor = null;
 		this.screen.setColor(new Color(0, 77, 148));
 		this.screen.fillRect(0, 440, 640, 40);
 		int x = 10;
 		int y = 470;
 		boolean first = true;
 		this.screen.setColor(new Color(255,255,255));
-		for (Object_BattleActor b : this.action_order) {
-			this.screen.drawString(b.name, x, y);
+		for (int id : this.action_order) {
+			for (Object_BattleActor b : this.ctx.actors) {
+				if (b.id == id) {
+					actor = b;
+					break;
+				}
+			}
+			this.screen.drawString(actor.name, x, y);
 			if (first) {
 				first = false;
 				this.screen.setColor(new Color(150,150,150));
 			}
-			x += this.screen.getFontMetrics().stringWidth(b.name) + 20;
+			x += this.screen.getFontMetrics().stringWidth(actor.name) + 20;
 		}
 	}
 	

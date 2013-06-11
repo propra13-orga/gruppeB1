@@ -49,6 +49,26 @@ public class Window_Selectable extends Abstract_Update {
 		window.y = Object_Screen.SCREEN_H/2 - (window.height/2);
 	}
 	
+	public void topLeft() {
+		window.x = 0;
+		window.y = 0;
+	}
+	
+	public void topRight() {
+		window.x = Object_Screen.SCREEN_W-window.width;
+		window.y = 0;
+	}
+	
+	public void bottomLeft() {
+		window.x = 0;
+		window.y = Object_Screen.SCREEN_H-window.height;
+	}
+	
+	public void bottomRight() {
+		window.x = Object_Screen.SCREEN_W-window.width;
+		window.y = Object_Screen.SCREEN_H-window.height;
+	}
+	
 	private void drawCommands() {
 		int text_x = window.x + this.border_x + 10;
 		int text_y = window.y + this.border_y + this.screen.getFont().getSize()+3;

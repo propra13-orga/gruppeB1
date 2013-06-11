@@ -32,47 +32,6 @@ public class Object_Game {
 		this.soundmanager = new Object_SoundManager();
 		this.animationmanager = new Object_AnimationManager(this);
 		
-		Object_BattleActor b1 = new Object_BattleActor();
-		Object_BattleActor b2 = new Object_BattleActor();
-		Object_BattleActor b3 = new Object_BattleActor();
-		Object_BattleActor e1 = new Object_BattleActor();
-		Object_BattleActor e2 = new Object_BattleActor();
-		
-		b1.sprite = new Object_BattleSprite("battlechar-1", 1, 13, BattleSide.PLAYER, this);
-		b1.name = "Alex";
-		b1.hp = 123;
-		b1.maxHp = 300;
-		b1.speed = 210;
-		b1.maxSpeed = 210;
-		
-		b2.sprite = new Object_BattleSprite("battlechar-1", 2, 14, BattleSide.PLAYER, this);
-		b2.name = "Dagoberto";
-		b2.hp = 70;
-		b2.maxHp = 500;
-		b2.speed = 10;
-		b2.maxSpeed = 300;
-		
-		b3.sprite = new Object_BattleSprite("battlechar-1", 3, 13, BattleSide.PLAYER, this);
-		b3.name = "Victor";
-		b3.speed = 160;
-		b3.maxSpeed = 250;
-		
-		e1.side = BattleSide.ENEMY;
-		e2.side = BattleSide.ENEMY;
-		e1.sprite = new Object_BattleSprite("enemy-2", 1, 14, BattleSide.ENEMY, this);
-		e2.sprite = new Object_BattleSprite("enemy-2", 2, 13, BattleSide.ENEMY, this);
-		Object_BattleContext c1 = new Object_BattleContext();
-		c1.actors.add(b1);
-		c1.actors.add(b3);
-		c1.players.add(b1);
-		c1.players.add(b2);
-		c1.players.add(b3);
-		c1.actors.add(b2);
-		c1.actors.add(e1);
-		c1.actors.add(e2);
-		c1.enemies.add(e1);
-		c1.enemies.add(e2);
-		
 		//this.scene = new Scene_BattleSystem(c1, null, this);
 		this.scene = new Scene_StartMenu(this);
 		//this.scene = new Scene_AnimationManagerTest(this);

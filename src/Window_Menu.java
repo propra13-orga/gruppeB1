@@ -167,6 +167,30 @@ public class Window_Menu extends Abstract_Update {
 	}
 	
 	/*
+	 * Methoden zum Positionieren des Menues
+	 */
+	
+	public void center() {
+		this.menu.center();
+	}
+	
+	public void topLeft() {
+		this.menu.topLeft();
+	}
+	
+	public void topRight() {
+		this.menu.topRight();
+	}
+	
+	public void bottomLeft() {
+		this.menu.bottomLeft();
+	}
+	
+	public void bottomRight() {
+		this.menu.bottomRight();
+	}
+	
+	/*
 	 * Statische Methode, die alle Einstellungen vornimmt, um ein Menue als Hauptmenue
 	 * zu deklarieren
 	 */

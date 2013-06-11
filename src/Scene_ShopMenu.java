@@ -8,11 +8,10 @@
                                      3. Versuch wie bei Window_Menu die Funktion Menu/Submenue
                                        einzuarbeiten
  */
+
 import java.util.ArrayList;
 
-
-
-public class Scene_ShopMenu extract Abstract_Scene {
+public class Scene_ShopMenu extends Abstract_Scene {
 	
 	public boolean ALWAYS_POSSIBLE = false ;       
 	public boolean EXIT_POSSIBLE = true;
@@ -20,9 +19,9 @@ public class Scene_ShopMenu extract Abstract_Scene {
 	
     private Scene_BuyMenu shop_map;
 	private Window_Selectable menu1;
-	private Window_menu main_shopmenu;
-	private Window_menu next_shopmenu;
-	private Window_menu previous_shopmenu;
+	private Window_Menu main_shopmenu;
+	private Window_Menu next_shopmenu;
+	private Window_Menu previous_shopmenu;
 	private ArrayList<Window_Menu> submenu1;
 	private ArrayList<Window_Menu> submenu2;
 
@@ -31,9 +30,9 @@ public class Scene_ShopMenu extract Abstract_Scene {
 	Scene_ShopMenu(Object_Game game,int x, int y,Scene_BuyMenu m1) {
 		super(game);
 		shop_map = m1;
-		main_shopmenu = new Window_Menu(10,10,game);
-		next_shopmenu = new Window_Menu(10,10,game);
-		previous_shopmenu = new Window_Menu(10,10,game);
+		main_shopmenu = new Window_Menu("main", 10,10,game);
+		next_shopmenu = new Window_Menu("next", 10,10,game);
+		previous_shopmenu = new Window_Menu("previous", 10,10,game);
 		
 		menu1 = new Window_Selectable(20,20,game);
 		submenu1 = new ArrayList<Window_Menu>();
@@ -156,6 +155,24 @@ static void setMainMenu(Window_Menu menu1) {
 	menu1.menu1.EXECUTED = true;
 	menu1.previous_shopmenu = null;
 	menu1.main_shopmenu = this.menu1;
+}
+
+
+
+
+@Override
+public void onStart() {
+	// TODO Auto-generated method stub
+	
+}
+
+
+
+
+@Override
+public void onExit() {
+	// TODO Auto-generated method stub
+	
 }
 }
 

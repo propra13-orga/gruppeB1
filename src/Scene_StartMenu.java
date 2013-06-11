@@ -66,9 +66,28 @@ public class Scene_StartMenu extends Abstract_Scene {
 				Object_BattleActor b3 = new Object_BattleActor();
 				Object_BattleActor e1 = new Object_BattleActor();
 				Object_BattleActor e2 = new Object_BattleActor();
+				
 				b1.sprite = new Object_BattleSprite("battlechar-1", 1, 13, BattleSide.PLAYER, this.game);
+				b1.name = "Alex";
+				b1.hp = 123;
+				b1.maxHp = 300;
+				b1.speed = 210;
+				b1.maxSpeed = 260;
+				
 				b2.sprite = new Object_BattleSprite("battlechar-1", 2, 14, BattleSide.PLAYER, this.game);
+				b2.name = "Dagoberto";
+				b2.hp = 70;
+				b2.maxHp = 500;
+				b2.speed = 230;
+				b2.maxSpeed = 300;
 				b3.sprite = new Object_BattleSprite("battlechar-1", 3, 13, BattleSide.PLAYER, this.game);
+				b3.name = "Victor";
+				b3.speed = 160;
+				b3.maxSpeed = 250;
+				e1.speed = 278;
+				e1.maxSpeed = 300;
+				e2.speed = 100;
+				e2.speed = 340;
 				e1.side = BattleSide.ENEMY;
 				e2.side = BattleSide.ENEMY;
 				e1.sprite = new Object_BattleSprite("enemy-2", 1, 14, BattleSide.ENEMY, this.game);
@@ -84,12 +103,6 @@ public class Scene_StartMenu extends Abstract_Scene {
 				c1.actors.add(e2);
 				c1.enemies.add(e1);
 				c1.enemies.add(e2);
-				
-				b1.name = "Alex";
-				b1.hp = 123;
-				b1.maxHp = 300;
-				b2.name = "Peter";
-				b3.name = "Jakob";
 				
 				this.game.switchScene(new Scene_BattleSystem(c1, null, this.game));
 				break;
