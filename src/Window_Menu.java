@@ -79,11 +79,9 @@ public class Window_Menu extends Abstract_Update {
 						//...und es existiert fuer den gewaehlten Befehl kein Submenu
 						//Also beende das ganze Menu und speichere den Namen und Cursorposition
 						//des zuletzt genutzten Menues
-						System.out.println("Final decision für menu: "+this.main_menu.name);
-						System.out.println("Main menu von item: "+this.main_menu.main_menu.name);
 						this.main_menu.final_decision = true;
 						this.main_menu.final_name = this.name;
-						this.main_menu.menu.cursor = this.menu.cursor;
+						this.main_menu.final_cursor = this.menu.cursor;
 					}
 					else {
 						//...und es ist ein Sumenu registriert, also wird dieses jetzt
@@ -188,6 +186,17 @@ public class Window_Menu extends Abstract_Update {
 	
 	public void bottomRight() {
 		this.menu.bottomRight();
+	}
+	
+	public ArrayList<String> getMenuPath() {
+		ArrayList<String> path = new ArrayList<String>();
+		Window_Menu current = this;
+		path.add(current.name);
+		while (current.next_menu != null) {
+			current = current.next_menu;
+			path.add(current.name);
+		}
+		return path;
 	}
 	
 	/*

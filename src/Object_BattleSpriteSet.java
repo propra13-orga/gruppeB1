@@ -4,16 +4,6 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-enum AnimationType {
-	STAND,
-	DEAD,
-	ATTACK,
-	HIT,
-	BACK,
-	DAMAGE,
-	USE
-}
-
 public class Object_BattleSpriteSet {
 	
 	public final static int ANIMATION_STAND		= 0;
@@ -40,7 +30,7 @@ public class Object_BattleSpriteSet {
 		Object_Screen.makeTransparent(set);
 	}
 	
-	public BufferedImage getSprite(int type, int ani_counter) {
-		return set.getSubimage((ani_counter-1)*96, type*96, 96, 96);
+	public BufferedImage getSprite(int animation, int animation_counter) {
+		return set.getSubimage((animation_counter)*96, animation*96, 96, 96);
 	}
 }

@@ -1,52 +1,54 @@
 
-public class Object_BattleSprite extends Abstract_Update {
+/*
+ * Stellt Methoden zu verschiedenen Animationen des BattleSprites bereit
+ */
+
+class Object_BattleSprite extends Abstract_Update {
 	
-	public static final int[][] PLAYER_POSITIONS = {
-		{480,170},
-		{530,260},
-		{515,340}
-	};
+	public static final int PLAYER = 0;
+	public static final int ENEMY = 1;
 	
-	public static final int[][] ENEMY_POSITIONS = {
-		{50,200},
-		{20, 290},
-		{60, 380}
-	};
+	//Attribute die spaeter auch gelesen werden koenen
+	private int x;
+	private int y;
+	private int animation_type;
+	private int position;
+	private int battletype;
+	private Object_BattleSpriteSet spriteset;
+	private boolean moving = false;
 	
-	public int x;
-	public int y;
-	public int action;
-	public boolean busy;
-	public BattleSide side;
-	
-	private int animation;
-	private int ani_delta;
+	//Private Attribute, die nur fuer die Animation gebraucht werden
 	private int move_delay = 8;
 	private int move_tick;
-	private int ani_delay;;
-	private int ani_tick;
+	
+	private int animation;
+	private int animation_delta;
+	private int animation_delay;
+	private int animation_tick;
+	
 	private int dest_x;
 	private int dest_y;
-	private Object_BattleSpriteSet spriteset;
 	
-	Object_BattleSprite (String filename, int position, int ani_delay, BattleSide side, Object_Game game) {
+	Object_BattleSprite (String filename, int position, int animation_delay, int battletype, Object_Game game) {
 		super(game);
 		this.spriteset = new Object_BattleSpriteSet(filename);
-		this.side = side;
-		if (this.side == BattleSide.PLAYER) {
-			this.x = PLAYER_POSITIONS[position-1][0];
-			this.y = PLAYER_POSITIONS[position-1][1];
+		this.position = position;
+		this.animation_delay = animation_delay;
+		this.battletype = battletype;
+
+		if (this.battletype == PLAYER) {
+			this.x = Scene_BattleSystem.PLAYER_POSITIONS[position-1][0];
+			this.y = Scene_BattleSystem.PLAYER_POSITIONS[position-1][1];
 		}
 		else {
-			this.x = ENEMY_POSITIONS[position-1][0];
-			this.y = ENEMY_POSITIONS[position-1][1];
+			this.x = Scene_BattleSystem.ENEMY_POSITIONS[position-1][0];
+			this.y = Scene_BattleSystem.ENEMY_POSITIONS[position-1][1];
 		}
-		this.action = Object_BattleSpriteSet.ANIMATION_STAND;
-		this.busy = false;
-		this.animation = 1;
-		this.ani_delta = 1;
-		this.ani_delay = ani_delay;
-		this.ani_tick = 0;
+		
+		this.animation_type = Object_BattleSpriteSet.ANIMATION_STAND;
+		this.animation = 0;
+		this.animation_delta = 1;
+		this.animation_tick = 0;
 		this.move_tick = 0;
 	}
 	
@@ -55,37 +57,68 @@ public class Object_BattleSprite extends Abstract_Update {
 		this.spriteset = new Object_BattleSpriteSet(filename);
 	}
 	
+	public int getPosition() {
+		return this.position;
+	}
+	
 	public void updateData() {
-		switch (this.action) {
-			//Hier noch einfuegen!!!
+		switch (this.animation_type) {
+		case Object_BattleSpriteSet.ANIMATION_ATTACK:
+			break;
+		case Object_BattleSpriteSet.ANIMATION_BACK:
+			break;
+		case Object_BattleSpriteSet.ANIMATION_DAMAGE:
+			break;
+		case Object_BattleSpriteSet.ANIMATION_DEAD:
+			break;
+		case Object_BattleSpriteSet.ANIMATION_HIT:
+			break;
+		case Object_BattleSpriteSet.ANIMATION_STAND:
+			break;
+		case Object_BattleSpriteSet.ANIMATION_USE:
+			break;
 		}
-		this.ani_tick++;
-		if (this.ani_tick == this.ani_delay) {
-			this.ani_tick = 0;
-			this.animation += this.ani_delta;
-			if (this.animation != 2) {
-				this.ani_delta *= -1;
+		this.animation_tick++;
+		if (this.animation_tick == this.animation_delay) {
+			this.animation_tick = 0;
+			this.animation += this.animation_delta;
+			if (this.animation != 1) {
+				this.animation_delta *= -1;
 			}
 		}
 	}
 	
 	public void updateScreen() {
-		this.screen.drawImage(this.spriteset.getSprite(this.action, this.animation), this.x, this.y, null);
+		this.screen.drawImage(this.spriteset.getSprite(this.animation_type, this.animation), this.x, this.y, null);
 	}
 	
 	public void setAnimationDelay(int delay) {
-		this.ani_delay = delay;
+		this.animation_delay = delay;
 	}
 	
-	public void moveToPosition(BattleSide side, int position) {
-		if (side == BattleSide.PLAYER) {
-			this.dest_x = PLAYER_POSITIONS[position][0];
-			this.dest_y = PLAYER_POSITIONS[position][1];
+	//Dieser Code wird spaeter in updateData ausgelagert, fuer verschiedene Animationen wird dann nur
+	//attack(), defend(), useSkill(), ... aufgerufen
+	public void moveToPosition(int battletype, int position) {
+		if (battletype == PLAYER) {
+			this.dest_x = Scene_BattleSystem.PLAYER_POSITIONS[position][0];
+			this.dest_y = Scene_BattleSystem.PLAYER_POSITIONS[position][1];
 		}
 		else {
-			this.dest_x = ENEMY_POSITIONS[position][0];
-			this.dest_y = ENEMY_POSITIONS[position][1];
+			this.dest_x = Scene_BattleSystem.ENEMY_POSITIONS[position][0];
+			this.dest_y = Scene_BattleSystem.ENEMY_POSITIONS[position][1];
 		}
-		this.busy = true;
+		this.moving = true;
+	}
+	
+	public void attack(Object_BattleSprite target) {
+		
+	}
+	
+	public int getX() {
+		return this.x;
+	}
+	
+	public int getY() {
+		return this.y;
 	}
 }
