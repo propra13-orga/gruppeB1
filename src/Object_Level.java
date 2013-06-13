@@ -1,12 +1,11 @@
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
 import java.util.LinkedList;
 import java.util.List;
 
-
 public class Object_Level extends Object_Map implements java.io.Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 8032513502291500180L;
 	List<Entity> entities;
 	int ID;
 

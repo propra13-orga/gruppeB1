@@ -110,24 +110,27 @@ class System_Interaction extends System_Component {
 		if (!this.getEvents(EventType.BATTLE).isEmpty()) {
 			Entity player = this.getScene().getPlayer();
 			List<Object_BattleActor> players = new ArrayList<Object_BattleActor>();
-			List<Object_BattleActor> enemies = new ArrayList<Object_BattleActor>();
 			players.add(new Object_BattleActor(player));
 			for (Event event : this.getEvents(EventType.BATTLE)) {
 				Entity actor = event.getActor();
 				Entity undergoer = event.getUndergoer();
+				Object_BattleActor ba_actor = new Object_BattleActor(actor);
+				Object_BattleActor ba_undergoer = new Object_BattleActor(undergoer);
+				players.add(ba_undergoer);
+				players.add(ba_actor);
 				if (actor.equals(player)) {
-					enemies.add(new Object_BattleActor(undergoer));
-					players.add(new Object_BattleActor(actor));
+					ba_actor.side = BattleSide.PLAYER;
+					ba_undergoer.side = BattleSide.ENEMY;
 				}
 				else if (undergoer.equals(player)) {
-					enemies.add(new Object_BattleActor(actor));
-					players.add(new Object_BattleActor(undergoer));
+					ba_undergoer.side = BattleSide.PLAYER;
+					ba_actor.side = BattleSide.ENEMY;
 				}
 			}
 			
 			this.getScene().demandSceneChange(
 					new Scene_BattleSystem(
-							new Object_BattleContext(players,enemies),
+							new Object_BattleContext(players),
 							this.getScene(),
 							this.getScene().game
 					)

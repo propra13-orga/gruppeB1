@@ -9,6 +9,10 @@
  */
 abstract class Abstract_Component implements java.io.Serializable {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 210641426922785825L;
 	transient protected System_Component system;
 	protected String type;
 	protected Entity entity;

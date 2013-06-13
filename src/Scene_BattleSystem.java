@@ -125,7 +125,6 @@ public class Scene_BattleSystem extends Abstract_Scene {
 		}
 
 		for (Object_BattleActor ba : this.ctx.getAliveActors()) {
-			print(ba.name);
 			ba.sprite.updateData();
 		}
 	}

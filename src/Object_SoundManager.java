@@ -1,12 +1,9 @@
-
 import java.applet.*;
 import java.io.File;
-import java.io.InputStream;
 import java.net.*;
 import java.util.*;
 
 import javax.sound.midi.MidiSystem;
-import javax.sound.midi.MidiUnavailableException;
 import javax.sound.midi.Sequencer;
 
 public class Object_SoundManager {
@@ -30,6 +27,7 @@ public class Object_SoundManager {
 		
 	}
 
+	@SuppressWarnings("deprecation")
 	public void playSound2(String name) {
 		File f = new File("res/sound/"+name+".wav");
 		AudioClip sound;

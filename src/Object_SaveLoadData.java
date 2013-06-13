@@ -1,12 +1,9 @@
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.Hashtable;
-import java.util.LinkedList;
-import java.util.List;
 
 //public final class Static_SaveLoad {
 //	public static final String PATH = "res/save/";
@@ -73,6 +70,11 @@ import java.util.List;
 //}
 
 class Object_SaveLoadData implements java.io.Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 5376363191835331279L;
+
 	public static final String PATH = "res/save/";
 	
 	private Hashtable<Integer,Object_Level> rooms;

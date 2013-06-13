@@ -17,6 +17,11 @@ import java.awt.image.BufferedImage;
 
 public class Object_Map  implements java.io.Serializable  {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 6361397300456376156L;
+
 	static final int TILESIZE = 32;
 	
 	//Wichtig zur korrekten Anzeige des Spielers auf der Karte (muss beim Scrolling

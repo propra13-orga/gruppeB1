@@ -1,5 +1,4 @@
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Hashtable;
 
 enum BattleSide {
@@ -33,9 +32,7 @@ public class Object_BattleActor implements Comparable<Object_BattleActor> {
 	
 	//NOCH EINFUEGEN!
 	public boolean attackable = true;
-	
-	private Entity entity;
-	
+	public Entity entity;
 	
 	public Object_BattleActor() {
 		
