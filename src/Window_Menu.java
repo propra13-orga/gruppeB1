@@ -140,6 +140,11 @@ public class Window_Menu extends Abstract_Update {
 		}
 	}
 	
+	public void clear() {
+		this.submenues = new ArrayList<Window_Menu>();
+		this.menu.clear();
+	}
+	
 	/*
 	 * Setzt das Menu und alle registrierten Untermenues wieder auf ihren Anfangszustand.
 	 */

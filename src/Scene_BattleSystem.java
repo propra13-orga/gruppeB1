@@ -152,28 +152,9 @@ public class Scene_BattleSystem extends Abstract_Scene {
 	}
 	
 	private void sortActors() {
-		Object_BattleActor actor;
-		int i;
 		this.action_order = new ArrayList<Integer>();
-		for (Object_BattleActor b : this.ctx.getAliveActors()) {
-			print("ID: "+b.id);
-		}
-		while (this.action_order.size()<20) {
-			java.util.Collections.sort(this.ctx.getActors());
-			for (i=1; i<this.ctx.getActors().size(); i++) {
-				this.ctx.getActors().get(i).wait = false;
-			}
-			actor = this.ctx.getActors().get(0);
-			if (actor.wait) {
-				actor.wait = false;
-				actor = this.ctx.getActors().get(1);
-			}
-			this.action_order.add(actor.id);
-			actor.speed /= 2;
-			if (actor.speed <= actor.maxSpeed*0.2) {
-				actor.speed = (int) (actor.maxSpeed*0.9);
-				actor.wait = true;
-			}
+		while (this.action_order.size()<10) {
+			addNextActor();
 		}
 	}
 	
@@ -193,11 +174,12 @@ public class Scene_BattleSystem extends Abstract_Scene {
 				//abgefragt, aber der einzige return command in main ist
 				//Verteidugung, von daher ist klar, was gewählt wurde
 				defend(this.current_actor);
+				this.battle_type = WAIT_FOR_PLAYER;
 				break;
 				
 			case "enemy":
 				//Gegner wurde gewählt
-				Object_BattleActor chosen_enemy = this.ctx.getEnemies().get(this.main_menu.final_cursor);
+				Object_BattleActor chosen_enemy = this.ctx.getAliveEnemies().get(this.main_menu.final_cursor);
 				this.attack(this.current_actor, chosen_enemy);
 				
 				this.current_actor.sprite.attack(chosen_enemy.sprite);
@@ -226,8 +208,10 @@ public class Scene_BattleSystem extends Abstract_Scene {
 	
 	private void attack(Object_BattleActor actor, Object_BattleActor target) {
 		//Berechne Schaden
-		double damage = this.current_actor.action_cost*1.2 - (target.def*0.5);
-		target.hp -= (int) damage;
+		int damage = (2*actor.atk-target.def)/4;
+		damage += random(-damage/20, damage/20);
+		if (damage < 0) damage = (int) random(1, 5);
+		target.hp -= damage;
 		//Pruefe ob target tot ist
 		if (target.hp <= 0) {
 			actorDied(target);
@@ -242,12 +226,30 @@ public class Scene_BattleSystem extends Abstract_Scene {
 	
 	private void actorDied(Object_BattleActor actor) {
 		actor.dead = true;
+		actor.hp = 0;
 		removeFromOrder(actor);
+		if (actor.side == BattleSide.ENEMY) {
+			//GEGNER GESTORBEN
+			this.menu_enemy.clear();
+			for (Object_BattleActor enemy : this.ctx.getAliveEnemies()) {
+				if (enemy.attackable) {
+					this.menu_enemy.addReturnCommand(enemy.name);
+				}
+			}
+		}
+		else {
+			//SPIELER GESTORBEN
+			this.menu_player.clear();
+			for (Object_BattleActor player : this.ctx.getAlivePlayers()) {
+				this.menu_player.addReturnCommand(player.name);
+			}
+		}
 	}
 	
 	private void getEnemyInput() {
-		print("GEGNER MACHT WAS");
-		print("DER NÄCHSTE BITTE");
+		int i = (int) random(0, this.ctx.getAlivePlayers().size()-1);
+		Object_BattleActor target = this.ctx.getAlivePlayers().get(i);
+		attack(this.current_actor, target);
 		this.battle_type = GET_NEXT_ACTOR;
 	}
 	
@@ -335,15 +337,19 @@ public class Scene_BattleSystem extends Abstract_Scene {
 	}
 	
 	private void getNextActor() {
+		//Naechsten Actor bestimmten und aus action_order entfernen
 		this.action_order.add(this.action_order.get(0));
 		this.action_order.remove(0);
 		int next_id = this.action_order.get(0);
 		for (Object_BattleActor b : this.ctx.getActors()) {
 			if (b.id == next_id) {
 				this.current_actor = b;
+				print("Nächster: "+b.name);
 				break;
 			}
 		}
+		//Neues Element in der actino_order bestimmen
+		addNextActor();
 		if (this.ctx.getPlayers().contains(this.current_actor)) {
 			this.main_menu.reset();
 			this.battle_type = WAIT_FOR_PLAYER;
@@ -353,18 +359,30 @@ public class Scene_BattleSystem extends Abstract_Scene {
 		}
 	}
 	
+	private void addNextActor() {
+		ArrayList<Object_BattleActor> actors = this.ctx.getAliveActors();
+		java.util.Collections.sort(actors);
+		for (int i=1; i<actors.size(); i++) {
+			actors.get(i).wait = false;
+		}
+		Object_BattleActor actor = actors.get(0);
+		if (actor.wait) {
+			actor.wait = false;
+			actor = actors.get(1);
+		}
+		this.action_order.add(actor.id);
+		actor.speed *= 0.7;
+		if (actor.speed <= 0) {
+			actor.speed = (int) (actor.maxSpeed*0.8) + (int) random(-actor.maxSpeed/10, actor.maxSpeed/10);
+			actor.wait = true;
+		}
+	}
+	
 	private void checkWinLose() {
-		if (this.ctx.getEnemies().size() == 0) {
+		if (this.ctx.getAliveEnemies().size() == 0) {
 			this.battle_type = WIN;
 		}
-		boolean lose = true;
-		for (Object_BattleActor b : this.ctx.getActors()) {
-			if (!b.dead) {
-				lose = false;
-				break;
-			}
-		}
-		if (lose) {
+		if (this.ctx.getAlivePlayers().size() == 0) {
 			this.battle_type = LOSE;
 		}
 	}

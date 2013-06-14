@@ -44,6 +44,10 @@ public class Window_Selectable extends Abstract_Update {
 		this.window.drawBox();
 	}
 	
+	public void clear() {
+		this.commands = new ArrayList<String>();
+	}
+	
 	public void center() {
 		window.x = Object_Screen.SCREEN_W/2 - (window.width/2);
 		window.y = Object_Screen.SCREEN_H/2 - (window.height/2);

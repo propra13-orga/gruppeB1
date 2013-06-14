@@ -13,10 +13,8 @@ import java.awt.Font;
 public class Object_Game {
 
 	public static final String GAME_TITLE = "ProPra - 2. Meilenstein";
-	//Fonts:
-	//Gentium Book Basic <--- Gut!
-	//Arial Black
 	public static final Font FONT = new Font("Arial", Font.PLAIN, 20);
+	public static final boolean FULLSCREEN = false;
 	
 	private Abstract_Scene scene;
 	private Object_Screen screen;

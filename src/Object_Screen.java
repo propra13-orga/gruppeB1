@@ -42,19 +42,16 @@ public class Object_Screen extends JFrame {
 		//JFrame initialisieren
 		super();
 		
-		// nested window listener:
-		// no borders:
-		this.setUndecorated(true);
-		// set to full screen:
-		GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
-		gd.setFullScreenWindow(this);
-		this.setResizable(false);
-		//wtf?!
-		if (!this.isDisplayable()) {
-		    this.setUndecorated(true);
+		if (Object_Game.FULLSCREEN) {
+			this.setUndecorated(true);
+			GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
+			gd.setFullScreenWindow(this);
+			setSize( Toolkit.getDefaultToolkit().getScreenSize() );
+		    GraphicsDevice device; 
+		    device=GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices()[0]; 
+		    device.setFullScreenWindow(this); 
+		    device.setDisplayMode(new DisplayMode(640,480,16,0));
 		}
-		//wft?!
-		gd.setFullScreenWindow(this);
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setResizable(false);
@@ -64,12 +61,6 @@ public class Object_Screen extends JFrame {
 		pack();
 		//Rest initialisieren
 		buffer = new BufferedImage(SCREEN_W, SCREEN_H, BufferedImage.TYPE_INT_ARGB);
-		
-		setSize( Toolkit.getDefaultToolkit().getScreenSize() );
-	    GraphicsDevice device; 
-	    device=GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices()[0]; 
-	    device.setFullScreenWindow(this); 
-	    device.setDisplayMode(new DisplayMode(640,480,16,0));
 	    
 	}
 	

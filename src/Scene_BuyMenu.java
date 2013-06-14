@@ -28,8 +28,7 @@ public class Scene_BuyMenu extends Abstract_Scene {
 
 	@Override
 	public void updateScreen() {
-		// TODO Auto-generated method stub
-
+		
 	}
 
 }
