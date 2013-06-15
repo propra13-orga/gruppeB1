@@ -29,19 +29,21 @@ public class Object_BattleActor implements Comparable<Object_BattleActor> {
 	public ArrayList<Entity> items;
 	public ArrayList<Entity> skills;
 	public Hashtable<String, Entity> weapons;
-	
+	public Scene_BattleSystem battle_system;
+
 	//NOCH EINFUEGEN!
 	public boolean attackable = true;
 	public Entity entity;
 	
-	public Object_BattleActor() {
-		
+	public Object_BattleActor(Scene_BattleSystem scene) {
+		this.battle_system = scene;
 	}
 	
-	public Object_BattleActor(Entity entity) {
+	public Object_BattleActor(Entity entity, Scene_BattleSystem scene) {
 		Component_Battle compBattle = (Component_Battle) entity.getComponent("battle");
 		Component_Inventory compInventory = (Component_Inventory) entity.getComponent("inventory");
 		
+		this.battle_system = scene;
 		this.id = ID_COUNTER;
 		ID_COUNTER++;
 		this.entity = entity;

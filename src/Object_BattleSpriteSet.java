@@ -6,13 +6,14 @@ import javax.imageio.ImageIO;
 
 public class Object_BattleSpriteSet {
 	
-	public final static int ANIMATION_STAND		= 0;
-	public final static int ANIMATION_DEAD		= 1;
-	public final static int ANIMATION_ATTACK	= 2;
-	public final static int ANIMATION_HIT		= 3;
-	public final static int ANIMATION_BACK		= 4;
-	public final static int ANIMATION_DAMAGE	= 5;
-	public final static int ANIMATION_USE		= 6;
+	public final static int ANIMATION_STAND			= 0;
+	public final static int ANIMATION_DEAD			= 1;
+	public final static int ANIMATION_FRONT_ATTACK	= 2;
+	public final static int ANIMATION_BACK_ATTACK	= 3;
+	public final static int ANIMATION_HIT			= 4;
+	public final static int ANIMATION_BACK			= 5;
+	public final static int ANIMATION_DAMAGE		= 6;
+	public final static int ANIMATION_USE			= 7;
 	
 	private BufferedImage set;
 	

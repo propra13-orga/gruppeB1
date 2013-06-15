@@ -38,7 +38,7 @@ public class Scene_BattleSystem extends Abstract_Scene {
 	public static final int ANIMATION = 3;
 	public static final int WIN = 4;
 	public static final int LOSE = 5;
-	public static final int GET_NEXT_STATUS = 6;
+	public static final int UPDATE_DATA = 6;
 	public static final Random RANDOM = new Random(System.nanoTime());
 	
 	/*
@@ -46,10 +46,15 @@ public class Scene_BattleSystem extends Abstract_Scene {
 	 * Wenn eine Animation stattfindet, tut das Kampfsystem nichts, ausser alle
 	 * Grafikdaten upzudaten. Parallel dazu fragt es in jedem Frame ab, ob EXIT_ANIMATION
 	 * true ist. Wenn ja, dann wird STATUS auf NEXT_STATUS gesetzt und das System faehrt fort
+	 * Wenn in updateData ein Angriff gestartet wird und eine Animation ausgefuehrt wird
+	 * soll das Kampfsystem solange warten, bis die Animation vorbei ist. Ausserdem
+	 * sollen die HP Werte und so erst geupdatet werden, wenn der Angriff vorbei ist
+	 * EXIT_UPDATE bricht die updateData Methode dann entsprechend ab
 	 */
 	
 	public boolean HALT = false;
 	public boolean EXIT_ANIMATION = false;
+	public boolean EXIT_UPDATE = false;
 	
 	/*
 	 * Interne Daten
@@ -74,13 +79,11 @@ public class Scene_BattleSystem extends Abstract_Scene {
 		this.previous_scene = previous_scene;
 		this.battle_type = GET_NEXT_ACTOR;
 		this.current_actor = null;
-		test_init();
 	}
 
 	@Override
 	public void onStart() {
-		// TODO Auto-generated method stub
-		
+		test_init();
 	}
 
 	@Override
@@ -112,6 +115,7 @@ public class Scene_BattleSystem extends Abstract_Scene {
 			
 		case ANIMATION:
 			if (EXIT_ANIMATION) {
+				EXIT_ANIMATION = false;
 				this.battle_type = this.next_battle_type;
 			}
 			break;
@@ -122,6 +126,16 @@ public class Scene_BattleSystem extends Abstract_Scene {
 			
 		case LOSE:
 			lose();
+			break;
+			
+		case UPDATE_DATA:
+			//okay, nothing to to except updating player and enemy data
+			break;
+		}
+		
+		if (this.EXIT_UPDATE) {
+			this.EXIT_UPDATE = false;
+			return;
 		}
 
 		for (Object_BattleActor ba : this.ctx.getAliveActors()) {
@@ -222,6 +236,9 @@ public class Scene_BattleSystem extends Abstract_Scene {
 			this.current_actor.speed = this.current_actor.maxSpeed;
 			this.current_actor.wait = true;
 		}
+		actor.sprite.attack(target.sprite);
+		this.battle_type = ANIMATION;
+		this.next_battle_type = UPDATE_DATA;
 	}
 	
 	private void actorDied(Object_BattleActor actor) {
@@ -357,6 +374,10 @@ public class Scene_BattleSystem extends Abstract_Scene {
 		else {
 			this.battle_type = WAIT_FOR_ENEMY;
 		}
+	}
+	
+	public void setContext(Object_BattleContext ctx) {
+		this.ctx = ctx;
 	}
 	
 	private void addNextActor() {

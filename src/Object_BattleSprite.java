@@ -15,11 +15,18 @@ class Object_BattleSprite extends Abstract_Update {
 	private int position;
 	private int battletype;
 	private Object_BattleSpriteSet spriteset;
+	private Object_BattleActor actor;
 	private boolean moving = false;
 	
 	//Private Attribute, die nur fuer die Animation gebraucht werden
 	private int move_delay = 8;
 	private int move_tick;
+	private int move_dx;
+	private int move_dy;
+	private int move_dx_delay;
+	private int move_dx_tick;
+	private int move_dy_delay;
+	private int move_dy_tick;
 	
 	private int animation;
 	private int animation_delta;
@@ -29,12 +36,14 @@ class Object_BattleSprite extends Abstract_Update {
 	private int dest_x;
 	private int dest_y;
 	
-	Object_BattleSprite (String filename, int position, int animation_delay, int battletype, Object_Game game) {
+	Object_BattleSprite (String filename, int position, int animation_delay,
+			int battletype, Object_Game game, Object_BattleActor actor) {
 		super(game);
 		this.spriteset = new Object_BattleSpriteSet(filename);
 		this.position = position;
 		this.animation_delay = animation_delay;
 		this.battletype = battletype;
+		this.actor = actor;
 
 		if (this.battletype == PLAYER) {
 			this.x = Scene_BattleSystem.PLAYER_POSITIONS[position-1][0];
@@ -63,7 +72,29 @@ class Object_BattleSprite extends Abstract_Update {
 	
 	public void updateData() {
 		switch (this.animation_type) {
-		case Object_BattleSpriteSet.ANIMATION_ATTACK:
+		case Object_BattleSpriteSet.ANIMATION_FRONT_ATTACK:
+			//Normaler Angriff, Sprite bewegt sich zum Targetsprite
+			if (this.x < this.dest_x) {
+				this.x++;
+			}
+			else if (this.x > this.dest_x) {
+				this.x--;
+			}
+			else {
+				this.animation_type = Object_BattleSpriteSet.ANIMATION_HIT;
+			}
+			break;
+		case Object_BattleSpriteSet.ANIMATION_BACK_ATTACK:
+			if (this.x < this.dest_x) {
+				this.x++;
+			}
+			else if (this.x > this.dest_x) {
+				this.x--;
+			}
+			else {
+				this.animation_type = Object_BattleSpriteSet.ANIMATION_STAND;
+			}
+			this.actor.battle_system.EXIT_UPDATE = true;
 			break;
 		case Object_BattleSpriteSet.ANIMATION_BACK:
 			break;
@@ -72,6 +103,8 @@ class Object_BattleSprite extends Abstract_Update {
 		case Object_BattleSpriteSet.ANIMATION_DEAD:
 			break;
 		case Object_BattleSpriteSet.ANIMATION_HIT:
+			this.moveToPosition(this.battletype, this.position);
+			this.animation_type = Object_BattleSpriteSet.ANIMATION_BACK_ATTACK;
 			break;
 		case Object_BattleSpriteSet.ANIMATION_STAND:
 			break;
@@ -100,18 +133,19 @@ class Object_BattleSprite extends Abstract_Update {
 	//attack(), defend(), useSkill(), ... aufgerufen
 	public void moveToPosition(int battletype, int position) {
 		if (battletype == PLAYER) {
-			this.dest_x = Scene_BattleSystem.PLAYER_POSITIONS[position][0];
-			this.dest_y = Scene_BattleSystem.PLAYER_POSITIONS[position][1];
+			this.dest_x = Scene_BattleSystem.PLAYER_POSITIONS[position-1][0];
+			this.dest_y = Scene_BattleSystem.PLAYER_POSITIONS[position-1][1];
 		}
 		else {
-			this.dest_x = Scene_BattleSystem.ENEMY_POSITIONS[position][0];
-			this.dest_y = Scene_BattleSystem.ENEMY_POSITIONS[position][1];
+			this.dest_x = Scene_BattleSystem.ENEMY_POSITIONS[position-1][0];
+			this.dest_y = Scene_BattleSystem.ENEMY_POSITIONS[position-1][1];
 		}
 		this.moving = true;
 	}
 	
 	public void attack(Object_BattleSprite target) {
-		
+		this.animation_type = Object_BattleSpriteSet.ANIMATION_FRONT_ATTACK;
+		this.moveToPosition(target.battletype, target.position);
 	}
 	
 	public int getX() {

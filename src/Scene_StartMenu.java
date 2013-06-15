@@ -61,49 +61,52 @@ public class Scene_StartMenu extends Abstract_Scene {
 				game.switchScene(new Scene_Level(game,false));
 				return;
 			case 2:
-				Object_BattleActor b1 = new Object_BattleActor();
-				Object_BattleActor b2 = new Object_BattleActor();
-				Object_BattleActor b3 = new Object_BattleActor();
-				Object_BattleActor e1 = new Object_BattleActor();
-				Object_BattleActor e2 = new Object_BattleActor();
+				Object_BattleContext c1 = new Object_BattleContext();
+				Scene_BattleSystem s = new Scene_BattleSystem(c1, null, this.game);
+				Object_BattleActor b1 = new Object_BattleActor(s);
+				Object_BattleActor b2 = new Object_BattleActor(s);
+				Object_BattleActor b3 = new Object_BattleActor(s);
+				Object_BattleActor e1 = new Object_BattleActor(s);
+				Object_BattleActor e2 = new Object_BattleActor(s);
 				
-				b1.sprite = new Object_BattleSprite("battlechar-1", 1, 13, Object_BattleSprite.PLAYER, this.game);
+				b1.sprite = new Object_BattleSprite("battlechar-1", 1, 13, Object_BattleSprite.PLAYER, this.game, b1);
 				b1.name = "Alex";
 				b1.hp = 123;
 				b1.maxHp = 300;
 				b1.speed = 210;
 				b1.maxSpeed = 350;
 
-				b2.sprite = new Object_BattleSprite("battlechar-1", 2, 14, Object_BattleSprite.PLAYER, this.game);
+				b2.sprite = new Object_BattleSprite("battlechar-1", 2, 14, Object_BattleSprite.PLAYER, this.game, b2);
 				b2.name = "Dagoberto";
 				b2.hp = 70;
 				b2.maxHp = 500;
 				b2.speed = 230;
 				b2.maxSpeed = 271;
 				
-				b3.sprite = new Object_BattleSprite("battlechar-1", 3, 13, Object_BattleSprite.PLAYER, this.game);
+				b3.sprite = new Object_BattleSprite("battlechar-1", 3, 13, Object_BattleSprite.PLAYER, this.game, b3);
 				b3.name = "Victor";
 				b3.speed = 160;
 				b3.maxSpeed = 250;
 				
 				e1.name = "Hyojin";
 				e1.side = BattleSide.ENEMY;
-				e1.sprite = new Object_BattleSprite("enemy-2", 1, 14, Object_BattleSprite.ENEMY, this.game);
+				e1.sprite = new Object_BattleSprite("enemy-2", 1, 14, Object_BattleSprite.ENEMY, this.game, e1);
 				e1.speed = 180;
 				e1.maxSpeed = 300;
 				
 				e2.name = "Elina";
 				e2.side = BattleSide.ENEMY;
-				e2.sprite = new Object_BattleSprite("enemy-2", 2, 13, Object_BattleSprite.ENEMY, this.game);
+				e2.sprite = new Object_BattleSprite("enemy-2", 2, 13, Object_BattleSprite.ENEMY, this.game, e2);
 				e2.speed = 210;
 				
-				
-				Object_BattleContext c1 = new Object_BattleContext();
+
 				c1.getActors().add(b1);
 				c1.getActors().add(b3);
 				c1.getActors().add(b2);
 				c1.getActors().add(e1);
 				c1.getActors().add(e2);
+				
+				s.setContext(c1);
 				
 				this.game.switchScene(new Scene_BattleSystem(c1, null, this.game));
 				break;
