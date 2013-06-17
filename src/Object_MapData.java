@@ -10,14 +10,14 @@ import org.newdawn.slick.tiled.TiledMap;
  * hier habe ich Slick2D und lwjgl verwendete
  * und schon ins lib folder speichert
  * */
-public class Level {
+public class Object_MapData {
 	//1.[] ist layer
 	//2.[] ist height
 	//3.[] ist width
 	//wert von num[][][] ist gid
 	public int width = 25,height = 20;
 	public int[][][] num = new int[3][20][25];
-	public Background[][] bg = new Background[width][height];
+	public int[][] bg = new int[width][height];
 	
 	//Den Name von Map nenne ich als Level_1,dann Level_2 oder irgendwas
 	public String Dpath = "res/tiled_map";
@@ -25,7 +25,7 @@ public class Level {
 	
 	public TiledMap map = null;
 	
-	public Level(String path){
+	public Object_MapData(String path){
 	//public Level(String tiled_map){
 		
 		this.path = path;
