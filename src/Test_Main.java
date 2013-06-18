@@ -4,6 +4,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.List;
 
 
 public class Test_Main {
@@ -25,6 +28,20 @@ public class Test_Main {
 		
 		System.out.println("Die Anzahle von Room[]:\n"+test.size_tmx);
 		
+		for(Romm_i = 0; Romm_i < test.size_tmx; Romm_i++){
+			
+			List a = test.Room[Romm_i].getEntityData();
+				
+			Iterator it=a.iterator();
+				 
+			while(it.hasNext()){
+				
+				 System.out.println("Entity von Romm"+Romm_i+it.next());
+				   
+			}
+			
+		}
+			
 		
 		for(Romm_i = 0; Romm_i < test.size_tmx; Romm_i++){
 		
@@ -52,7 +69,6 @@ public class Test_Main {
 			String layer_index = String.valueOf(Layer_i);
 			
 			bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("res/Room"+romm_index+"_Layer"+layer_index+".txt")));
-			System.out.println("Daten ubernehmn!" + "\n");
 			String line = null;
 			
 			try {

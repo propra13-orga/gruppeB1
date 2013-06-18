@@ -1,6 +1,7 @@
 import java.io.File;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.List;
 
 
 public class Object_LevelData {
@@ -8,16 +9,23 @@ public class Object_LevelData {
 	File dir;
 	File[] files;
 	String add = null;
-	int size = 0;
+	int size_tmx = 0;
+	int size_csv = 0;
 	int index = 0;	
 
 	LinkedHashMap tmx = new LinkedHashMap();    
 	LinkedHashMap csv = new LinkedHashMap();    
+	
+	
 	Object_RoomData[] Room;
+	Object_EntityData[] Entity_Data;
+	
+	String address;
 
 
 	public Object_LevelData(String address){
 	
+		this.address = address;
 		File dir = new File(address);
 		File[] files = dir.listFiles();
 	
@@ -29,17 +37,21 @@ public class Object_LevelData {
 					System.out.println("Es gibt noch Folder");
 				}else{
 					String Path = files[i].getPath();
-					System.out.println(Path);
+					//System.out.println(Path);
 					String Name = files[i].getName();
-					System.out.println(Name);
+					//System.out.println(Name);
 					String ArrayName[] = Name.split("\\.");
-					System.out.println(ArrayName[1]);
+					//System.out.println(ArrayName[1]);
 					if(ArrayName[1].equals("tmx")){
 						tmx.put(ArrayName[0],Path);
+						//System.out.println(tmx.entrySet());
 					}
 					if(ArrayName[1].equals("csv")){
 						csv.put(ArrayName[0],Path);
 					}
+					/*else{
+						System.out.println("\nFile "+ArrayName[0]+"."+ArrayName[1]+" ist nicht *.csv oder *.tmx");
+					}*/
 					
 				}
 						
@@ -47,12 +59,26 @@ public class Object_LevelData {
 						
 		}
 		
-		size = tmx.size();
-		Room = new Object_RoomData[size];
-		for(int k=0;k<size;k++){
+		size_tmx = tmx.size();
+		Room = new Object_RoomData[size_tmx];
+		for(int k=0;k<size_tmx;k++){
 			Room[k]=new Object_RoomData();
 		}
+		
+		for (Iterator it =  csv.keySet().iterator();it.hasNext();){
 			
+			Object key = it.next();
+		    String csv_add = (String) csv.get(key);		
+			Object_EntityData Entity_Data = new Object_EntityData(csv_add);
+			for(int i = 0; i < Entity_Data.Size_Entity; i++){
+				Room[index].addEntityData(Entity_Data.Entity_List[i]);
+			}
+
+		index++;
+ 
+		}
+		
+	    index = 0;
 		/*
 		System.out.println(tmx.entrySet());
 		System.out.println(csv.entrySet());
@@ -61,21 +87,15 @@ public class Object_LevelData {
 		
 		for (Iterator it =  tmx.keySet().iterator();it.hasNext();){
 		    
-			Object key = it.next();
-		    System.out.println( key+"="+ tmx.get(key));		
-		    add = (String) tmx.get(key); 
-		    System.out.println(add);	
+			Object key = it.next();	
+		    add = (String) tmx.get(key); 	
 		    Object_MapData RoomMap;
 			RoomMap = new Object_MapData(add);
 			Room[index].setRoom(RoomMap.num);		
-			System.out.println(index);
 			index++;
 
 		   }
 		
-		int[][][] test = Room[0].getRoom();
-		System.out.println("weiduceshi ");
-		System.out.println(test.length);
 		
 		/*
 		for(int i = 0; i <Room[0].room.length; i++){
