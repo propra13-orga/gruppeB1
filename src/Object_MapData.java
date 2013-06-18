@@ -6,10 +6,11 @@ import java.awt.Rectangle;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.tiled.TiledMap;
 
-/*
- * hier habe ich Slick2D und lwjgl verwendete
- * und schon ins lib folder speichert
- * */
+
+/*hier habe ich Slick2D und lwjgl verwendete
+und schon ins lib folder speichert
+*/
+
 public class Object_MapData {
 	//1.[] ist layer
 	//2.[] ist height
@@ -20,17 +21,14 @@ public class Object_MapData {
 	public int[][] bg = new int[width][height];
 	
 	//Den Name von Map nenne ich als Level_1,dann Level_2 oder irgendwas
-	public String Dpath = "res/tiled_map";
-	public String path;
+	//public String Dpath = "res/tiled_map";
 	
+	public String path;
 	public TiledMap map = null;
 	
 	public Object_MapData(String path){
-	//public Level(String tiled_map){
 		
 		this.path = path;
-		
-		//path = tmx.get(tiled_map);
 		
 		System.out.println(path);
 		
@@ -41,16 +39,7 @@ public class Object_MapData {
 		}
 		
 		loadWorld();
-		
-	  /*for(int x = 0; x < bg.length; x++){
-			for(int y = 0;y < bg[0].length;y++){
-				bg[x][y] = new Background(new Rectangle(x *Tile.size, y*Tile.size,Tile.size,Tile.size),Tile.blank);
-			}
-		}*/
-		//ctrl + shift + / ==> Commentare 
-		//verkehrt ist ctrl + shift + \ 
-		
-		
+				
 	}
 	
 	public void loadWorld(){
@@ -88,46 +77,10 @@ public class Object_MapData {
 							
 				num[2][y][x] = (map.getTileId(x, y, layer3));
 				//System.out.println(num[2][y][x]);
-				
-				
-				
-				
-				
-				//die 50, 51 und 227 ist GID von "bg"
-				//alle GID davon wird mit file "GID" dargestellt
-				/*if (map.getTileId(x, y, layer1) == 50){
-					bg[x][y].id = Tile.terrain_1;
-					
-				}
-				if (map.getTileId(x, y, layer1) == 51){
-					bg[x][y].id = Tile.terrain_2;
-
-				}
-				if (map.getTileId(x, y, layer1) == 227){
-					bg[x][y].id = Tile.terrain_3;
-
-				}
-				*/				
+ 		
 			}
 	     }
       }
-	
-	// die folgende Code sind nicht wichtig, diese dient zu Probierung
-	public void tick(){
-		
-	}
-	
-	// die folgende Code sind nicht wichtig, diese dient zu Probierung
-
-	/*public void render(Graphics g, int camX, int camY, int renX, int renY){
-		for(int x = (camX/Tile.size); x < (camX/Tile.size)+renX; x++){
-			for(int y = (camY / Tile.size); y < (camY / Tile.size) + renY; y++){
-				if(x >= 0 && y >=0 && x < width && y < height){
-					bg[x][y].render(g);
-				}
-			}
-		}
-	}*/
 }
 	
 	
