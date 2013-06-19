@@ -2,7 +2,7 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
@@ -18,11 +18,14 @@ import java.util.Set;
  * andere Typen gecastet werden.
  */
 
+/*
+ * Instanz entstehen mit LinkedHashMap ohne HashMap--->hyojin
+*/
 
 public class Object_DBBrowser {
 	String filename;
-	HashMap<String,Integer> entityTypes;
-	HashMap<String,Integer> headers;
+	LinkedHashMap<String,Integer> entityTypes;
+	LinkedHashMap<String,Integer> headers;
 	String[][] db;
 	
 	public Object_DBBrowser(String filename) {
@@ -93,7 +96,7 @@ public class Object_DBBrowser {
 				for (int j=1;j<entries.length;j++) {
 					db[i-1][j-1] = entries[j];
 				}
-				i++;
+				i++; 
 			}
 			br.close();
 		}
@@ -103,14 +106,14 @@ public class Object_DBBrowser {
 		return db;
 	}
 	
-	private HashMap<String,Integer> getHeaders() {
-		HashMap<String,Integer> headers = new HashMap<String,Integer>();
+	private LinkedHashMap<String,Integer> getHeaders() {
+		LinkedHashMap<String,Integer> headers = new LinkedHashMap<String,Integer>();
 		try {
 			BufferedReader br = new BufferedReader(new FileReader(this.filename));
 			
 			String[] entries = br.readLine().split(";");
 			for (int i=1;i<entries.length;i++) {
-				headers.put(entries[i], i-1);
+				headers.put(entries[i], i-1);//Value von Wert ist egal! oder ist Rangfolge von "put".
 			}
 			br.close();
 		} catch (FileNotFoundException e) {
@@ -121,8 +124,8 @@ public class Object_DBBrowser {
 		return headers;
 	}
 	
-	private HashMap<String,Integer> getEntityTypes() {
-		HashMap<String,Integer> entityTypes = new HashMap<String,Integer>();
+	private LinkedHashMap<String,Integer> getEntityTypes() {
+		LinkedHashMap<String,Integer> entityTypes = new LinkedHashMap<String,Integer>();
 		try {
 			BufferedReader br = new BufferedReader(new FileReader(this.filename));
 			String line;
@@ -130,7 +133,7 @@ public class Object_DBBrowser {
 			br.readLine();		// Kopfzeile überspringen.
 			while ((line = br.readLine()) != null) {
 				String[] entries = line.split(";");
-				entityTypes.put(entries[0], i-1);
+				entityTypes.put(entries[0], i-1);//hier ist auch, tatsachlich kann man linkedhashmap benutzen
 				i++;
 			}
 			br.close();
