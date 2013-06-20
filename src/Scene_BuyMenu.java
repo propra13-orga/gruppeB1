@@ -53,8 +53,8 @@ public class Scene_BuyMenu extends Abstract_Scene {
 	@Override
 	public void updateScreen() {
 
-		this.screen.getBuffer().getGraphics().setColor(Color.BLUE);
-		this.screen.getBuffer().getGraphics().clearRect(320,240,Screen.SCREEN_W,Screen.SCREEN_H);
+		this.screen.setColor(Color.BLUE);
+		this.screen.clearRect(320,240,Screen.SCREEN_W,Screen.SCREEN_H);
 
 
 	}
