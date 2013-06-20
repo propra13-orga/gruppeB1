@@ -67,18 +67,18 @@ public class Scene_BuyMenu extends Abstract_Scene {
 				case 0: //Menu-Kaufen öffnen
 					System.out.println("Oeffene Menu-Kaufen");
 					main_menu.ALWAYS_VISIBLE = true;
-					menu_buy.ALWAYS_VISIBLE = true;
+					
 					break;
 					
 				case 1: //Menu-Verkaufen öffnen
 					System.out.println("Oeffene Menu-Verkaufen");
 					main_menu.ALWAYS_VISIBLE = true;
-					menu_sell.ALWAYS_VISIBLE = true;
+					
 					break;
 					
-				case 2: //Spiel beenden
+				case 2: //Buy_Menu beenden
 					this.keyhandler.freeze(Object_KeyHandler.KEY_ENTER, 40);
-					game.quit();
+					this.game.switchScene(parent);
 					return;
 					
 				default:
