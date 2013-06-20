@@ -51,15 +51,50 @@ public class Scene_BuyMenu extends Abstract_Scene {
 
 	@Override
 	public void updateData() {
-		
+		if (main_menu.ALWAYS_VISIBLE) 
+			main_menu.updateData();
+		else {
+			if (main_menu.EXIT_POSSIBLE) {
+				//MenÃ¼ wurde beendet
+				this.keyhandler.clear();
+				this.keyhandler.freeze(Object_KeyHandler.KEY_ESCAPE, 40);
+				this.game.switchScene(parent);
+				return;
+			}
+			else {
+				//Ein MenÃ¼punkt wurde bstÃ¤tigt
+				switch (main_menu.final_cursor){
+				case 0: //Menu-Kaufen öffnen
+					System.out.println("Oeffene Menu-Kaufen");
+					main_menu.ALWAYS_VISIBLE = true;
+					menu_buy.ALWAYS_VISIBLE = true;
+					break;
+					
+				case 1: //Menu-Verkaufen öffnen
+					System.out.println("Oeffene Menu-Verkaufen");
+					main_menu.ALWAYS_VISIBLE = true;
+					menu_sell.ALWAYS_VISIBLE = true;
+					break;
+					
+				case 2: //Spiel beenden
+					this.keyhandler.freeze(Object_KeyHandler.KEY_ENTER, 40);
+					game.quit();
+					return;
+					
+				default:
+					System.out.println("Fehler! Tue gar nix!");
+					main_menu.ALWAYS_VISIBLE = true;
+					return;
+				}
+			
 
 	}
-
+		}
+	}
 	@Override
 	public void updateScreen() {
 
-	    this.screen.clearRect(320,240,Object_Screen.SCREEN_W,Object_Screen.SCREEN_H);
-	    this.screen.setColor(Color.BLUE);
+	  	this.screen.setColor(Color.BLUE);
         main_menu.updateScreen();
         menu_buy.updateScreen();
         menu_sell.updateScreen();
