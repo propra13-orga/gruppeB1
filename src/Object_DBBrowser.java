@@ -48,7 +48,7 @@ public class Object_DBBrowser {
 		int row = this.entityTypes.get(entityType);
 		int col = this.headers.get(attribute);
 		String entry = db[row][col];
-		if (!entry.equals(" ")) return entry;
+		if (!entry.equals(" ") && !entry.equals("") && entry != null) return entry;
 		return null;
 	}
 	
@@ -65,6 +65,7 @@ public class Object_DBBrowser {
 	public List<String> getNonEmptyAttributes(String entityType) {
 		List<String> values = new LinkedList<String>();
 		for (String attribute : this.getAttributes()) {
+			System.out.println(attribute);
 			if (this.getEntry(entityType, attribute) != null) {
 				values.add(attribute);
 			}
@@ -92,9 +93,11 @@ public class Object_DBBrowser {
 			int i = 1;
 			br.readLine();
 			while ((line = br.readLine()) != null) {
+				line = line.replaceAll(";", " ;");
+				line += " ";
 				entries = line.split(";");
 				for (int j=1;j<entries.length;j++) {
-					db[i-1][j-1] = entries[j];
+					db[i-1][j-1] = entries[j].trim();
 				}
 				i++; 
 			}

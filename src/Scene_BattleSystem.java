@@ -178,21 +178,21 @@ public class Scene_BattleSystem extends Abstract_Scene {
 		}
 		else {
 			//Menu beendet, pruefe welches Menu zuletzt bedient wurde und
-			//pruefe dann dessen Einträge
+			//pruefe dann dessen Eintrï¿½ge
 			ArrayList<String> menupath = this.main_menu.getMenuPath();
 			
 			switch (this.main_menu.final_name) {
 			
 			case "main":
-				//Normalerweise würde jetzt hier die Cursorposition
+				//Normalerweise wï¿½rde jetzt hier die Cursorposition
 				//abgefragt, aber der einzige return command in main ist
-				//Verteidugung, von daher ist klar, was gewählt wurde
+				//Verteidugung, von daher ist klar, was gewï¿½hlt wurde
 				defend(this.current_actor);
 				this.battle_type = WAIT_FOR_PLAYER;
 				break;
 				
 			case "enemy":
-				//Gegner wurde gewählt
+				//Gegner wurde gewï¿½hlt
 				Object_BattleActor chosen_enemy = this.ctx.getAliveEnemies().get(this.main_menu.final_cursor);
 				this.attack(this.current_actor, chosen_enemy);
 				
@@ -201,12 +201,12 @@ public class Scene_BattleSystem extends Abstract_Scene {
 				break;
 				
 			case "player":
-				//Hier dann dynamisch das gewählte Item wählen
+				//Hier dann dynamisch das gewï¿½hlte Item wï¿½hlen
 				print("Benutze Item!");
 				break;
 				
 			case "skill":
-				//Hier dynamisch den gewählten Skill wählen
+				//Hier dynamisch den gewï¿½hlten Skill wï¿½hlen
 				print("Benutze Skill!");
 				break;
 			}
@@ -361,7 +361,7 @@ public class Scene_BattleSystem extends Abstract_Scene {
 		for (Object_BattleActor b : this.ctx.getActors()) {
 			if (b.id == next_id) {
 				this.current_actor = b;
-				print("Nächster: "+b.name);
+				print("Nï¿½chster: "+b.name);
 				break;
 			}
 		}
@@ -441,18 +441,18 @@ public class Scene_BattleSystem extends Abstract_Scene {
 		this.main_menu.addMenuCommand("Item", this.menu_item);
 		this.main_menu.addReturnCommand("Verteidigung");
 		
-		//Hier zu Testzwecken das Item/SKill-menü mit Einträgen füllen
+		//Hier zu Testzwecken das Item/SKill-menï¿½ mit Eintrï¿½gen fï¿½llen
 		this.menu_item.addMenuCommand("Kleiner Heiltrank", this.menu_player);
-		this.menu_item.addMenuCommand("Großer Heiltrank", this.menu_player);
+		this.menu_item.addMenuCommand("Groï¿½er Heiltrank", this.menu_player);
 		this.menu_skill.addMenuCommand("Doppelschlag", this.menu_enemy);
 		this.menu_skill.addMenuCommand("Feuerball", this.menu_enemy);
 		this.menu_skill.addMenuCommand("Kleine Heilung", this.menu_enemy);
 		// !!! !!! !!! WICHTIG !!! !!! !!!
-		//später wenn pageable menu umgesetzt ist können skills nach physischen, magischen und
+		//spï¿½ter wenn pageable menu umgesetzt ist kï¿½nnen skills nach physischen, magischen und
 		//heilenden skills sortiert werden
 		
-		//Skill und Itemmenü wird erst mit Einträgen gefüllt, wenn es aufgerufen wird,
-		//weil dann der zugehörige Character feststeht (Player1 hat andere Skills als Player2)
+		//Skill und Itemmenï¿½ wird erst mit Eintrï¿½gen gefï¿½llt, wenn es aufgerufen wird,
+		//weil dann der zugehï¿½rige Character feststeht (Player1 hat andere Skills als Player2)
 		String path = "res/background/"+this.ctx.background+".png";
 		background = new BufferedImage(640, 480, BufferedImage.TYPE_INT_ARGB);
 		try {

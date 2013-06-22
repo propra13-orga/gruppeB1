@@ -14,28 +14,18 @@ class System_Movement extends System_Component {
 	
 	@Override
 	public void update() {
-		// Erst die Eingaben behandeln.
-		for (Entity entity : this.getEntitiesByType("controls")) {
-			if (entity.hasComponent("movement")) {
-				Component_Movement compMovement = (Component_Movement) entity.getComponent("movement");
-				this.handleMoveability(compMovement);
-				if (entity.isPlayer()) {
-					this.handlePlayerInput(compMovement);
-				}
-				else if (entity.hasComponent("ai")) {
-					this.handleAI(compMovement);
-					/*
-					 * Hier muss dann die Gegnerbewegung behandelt werden. Meine
-					 * Idee ist, dies über einen "Pseudo-KeyHandler" zu machen,
-					 * dem dieselben Werte zuweisbar sind, wie dem echten.
-					 * Am besten ginge das über ein Interface mit Funktionen wie
-					 * "boolean getUp()", welches dann vom echten und vom
-					 * unechten KeyHandler implementiert wird.
-					 */
-				}
-				this.handleOutOfLevel(compMovement);
-			}
+		// Alle Bewegungsvektoren zurücksetzen.
+		for (Entity entity : this.getEntitiesByType("movement")) {
+			Component_Movement compMovement = (Component_Movement) entity.getComponent("movement");
+			compMovement.setdX(0);
+			compMovement.setdY(0);
 		}
+		
+		// Tastatureingabe verarbeiten.
+		this.handlePlayerInput();
+		
+		// Bewegungsevents verarbeiten.
+		this.handleEvents();
 		
 		// Nun die Entitäten bewegen.
 		for (Entity entity : this.getEntitiesByType("movement")) {
@@ -160,60 +150,45 @@ class System_Movement extends System_Component {
 		return illegalCollisions;
 	}
 	
-	private void handleAI(Component_Movement compMovement) {
-		Component_AI compAI = (Component_AI) compMovement.getEntity().getComponent("ai");
-		if (compMovement.isMoveable()) {
-			//int key = compAI.getKey();
-			//this.handleInput(compMovement, key);
-		}
-	}
-	
-	
 	
 	/*
-	 * Setzt Tasteneingaben in Bewegungen um. Wird auch für die Gegnerbewegung
-	 * verwendet.
+	 * Setzt bestimmte Events in Bewegungen um.
 	 */
-	private void handleInput(Component_Movement compMovement, int key) {
-		int dx = 0;
-		int dy = 0;
-		switch(key) {
-		case 1: // UP
-			if (compMovement.getOrientation() != 1)	compMovement.setOrientation(1);
-			else {
-				dx = 0;
-				dy = -1;
+	private void handleEvents() {
+		for (Event event : this.getEvents(EventType.CMD_UP,EventType.CMD_DOWN,EventType.CMD_LEFT,EventType.CMD_RIGHT)) {
+			Entity entity = event.getActor();
+			Component_Movement compMovement = (Component_Movement) entity.getComponent("movement");
+
+			switch(event.getType()) {
+			case CMD_UP:
+				if (compMovement.getOrientation() != 1)	compMovement.setOrientation(1);
+				else {
+					compMovement.setdY(-1);
+				}
+				break;
+			case CMD_DOWN:
+				if (compMovement.getOrientation() != 2)	compMovement.setOrientation(2);
+				else {
+					compMovement.setdY(1);
+				}
+				break;
+			case CMD_LEFT:
+				if (compMovement.getOrientation() != 3)	compMovement.setOrientation(3);
+				else {
+					compMovement.setdX(-1);
+				}
+				break;
+			case CMD_RIGHT:
+				if (compMovement.getOrientation() != 4)	compMovement.setOrientation(4);
+				else {
+					compMovement.setdX(1);
+				}
+				break;
+			default:
+				break;
 			}
-			break;
-		case 2: // DOWN
-			if (compMovement.getOrientation() != 2) compMovement.setOrientation(2);
-			else {
-				dx = 0;
-				dy = 1;				
-			}
-			break;
-		case 3: // LEFT
-			if (compMovement.getOrientation() != 3) compMovement.setOrientation(3);
-			else {
-				dx = -1;
-				dy = 0;					
-			}
-			break;
-		case 4: // RIGHT
-			if (compMovement.getOrientation() != 4) compMovement.setOrientation(4);
-			else {
-				dx = 1;
-				dy = 0;					
-			}
-			break;
-		case 6: // ENTER
-			this.addEvent(new Event(EventType.CMD_ACTION,compMovement.getEntity(),null));
-		default:
-			dx = 0;
-			dy = 0;
+			this.handleOutOfLevel(compMovement);
 		}
-		compMovement.setdX(dx);
-		compMovement.setdY(dy);
 	}
 	
 	/*
@@ -246,12 +221,34 @@ class System_Movement extends System_Component {
 	}
 	
 	/*
-	 * Setzt Tasteneingaben vom Keyhandler in Bewegungen um.
+	 * Setzt Tasteneingaben vom Keyhandler in Events um.
 	 */
-	private void handlePlayerInput(Component_Movement compMovement) {
-		if (compMovement.isMoveable()) {
-			int key = this.keyHandler.getLast();
-			this.handleInput(compMovement,key);
+	private void handlePlayerInput() {
+		Entity player = this.getScene().getPlayer();
+		if (player.hasComponent("movement") && player.hasComponent("controls")) {
+			Component_Movement compMovement = (Component_Movement) player.getComponent("movement");
+			this.handleMoveability(compMovement);
+			if (compMovement.isMoveable()) {
+				switch(this.keyHandler.getLast()) {
+				case Object_KeyHandler.KEY_UP:
+					this.addEvent(new Event(EventType.CMD_UP,player,null));
+					break;
+				case Object_KeyHandler.KEY_DOWN:
+					this.addEvent(new Event(EventType.CMD_DOWN,player,null));
+					break;
+				case Object_KeyHandler.KEY_LEFT:
+					this.addEvent(new Event(EventType.CMD_LEFT,player,null));
+					break;
+				case Object_KeyHandler.KEY_RIGHT:
+					this.addEvent(new Event(EventType.CMD_RIGHT,player,null));
+					break;
+				case Object_KeyHandler.KEY_ENTER:
+					this.addEvent(new Event(EventType.CMD_ACTION,player,null));
+					break;
+				default:
+					break;
+				}
+			}
 		}		
 	}
 	

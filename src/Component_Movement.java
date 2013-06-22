@@ -10,14 +10,14 @@ class Component_Movement extends Abstract_Component {
 	public boolean moving, walkable, collidable, moveable, visible;
 	
 	public Component_Movement(Entity entity, System_Component system,
-			int x, int y, int dx, int dy, int delay,
+			int x, int y, int dx, int dy, int orientation, int delay,
 			boolean walkable, boolean collidable, boolean visible) {
 		super("movement",entity,system);
 		this.x = x;
 		this.y = y;
 		this.dx = dx;
 		this.dy = dy;
-		this.orientation = 2;
+		this.orientation = orientation;
 		this.walkable = walkable;
 		this.collidable = collidable;
 		this.moveable = true;
@@ -31,7 +31,7 @@ class Component_Movement extends Abstract_Component {
 	}
 	
 	public Component_Movement(Entity entity, System_Component system, int x, int y) {
-		this(entity,system,x,y,0,0,0,true,false,true);
+		this(entity,system,x,y,0,0,0,0,true,false,true);
 	}
 	
 	public Component_Movement(Component_Movement compMovement) {

@@ -53,8 +53,8 @@ abstract class System_Component {
 		return this.entitiesByType.get(type);
 	}
 	
-	public List<Event> getEvents(EventType type) { 
-		return ((Scene_Level) this.scene).getEvents(type); 
+	public List<Event> getEvents(EventType... types) { 
+		return ((Scene_Level) this.scene).getEvents(types); 
 	}
 	
 	public Scene_Level getScene() { return (Scene_Level) this.scene; }

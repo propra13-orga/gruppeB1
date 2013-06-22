@@ -45,6 +45,7 @@ public class Component_Inventory extends Abstract_Component {
 	 */
 	
 	public boolean addItem(Entity item) {
+		if (!item.hasComponent("item")) return false;
 		for (int i=0;i<inventory.length;i++) {
 			if (this.inventory[i] == null) {
 				this.inventory[i] = item;
