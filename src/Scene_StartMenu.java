@@ -7,20 +7,28 @@ import javax.swing.JOptionPane;
 
 public class Scene_StartMenu extends Abstract_Scene {
 
-	Window_Selectable menu;
+	Window_Menu menu;
 	BufferedImage background;
 	
 	Scene_StartMenu(Object_Game game) {
 		super(game);
 		this.keyhandler.clear();
-		menu = new Window_Selectable(0,0,game);
-		menu.EXIT_POSSIBLE = false;
-		menu.addCommand("Weiter");
-		menu.addCommand("Neues Spiel");
-		menu.addCommand("Kampfsystem starten");
-		menu.addCommand("Credits");
-		menu.addCommand("Spiel beenden");
+		menu = new Window_Menu(game, "main");
+		
+		Window_Menu test = new Window_Menu(game, "test");
+		test.addReturnCommand("1", false);
+		test.addReturnCommand("2", false);
+		test.addReturnCommand("3", false);
+		
+		menu.addReturnCommand("Weiter", false);
+		menu.addReturnCommand("Neues Spiel", false);
+		menu.addReturnCommand("Kampfsystem starten", false);
+		menu.addReturnCommand("Credits", true);
+		menu.addReturnCommand("Spiel beenden", false);
+		menu.addMenuCommand("Test", test, false);
 		menu.center();
+		Window_Menu.setMainMenu(menu);
+		menu.setExitPossible(true);
 		//menu.setY(300);
 		
 		this.background = new BufferedImage(
@@ -49,13 +57,15 @@ public class Scene_StartMenu extends Abstract_Scene {
 
 	@Override
 	public void updateData() {
-		if (menu.EXECUTED) {
+		if (menu.isExecuted()) {
 			menu.updateData();
 		}
 		else {
-			switch (menu.cursor){
+			menu.setupMenuPath();
+			switch (menu.getCurrentCursor()){
 			case 0: // Weiter
-				game.switchScene(new Scene_Level(game,true));
+				//game.switchScene(new Scene_Level(game,true));
+				this.animationmanager.playAnimation("test", 8, 100, 100);
 				return;
 			case 1: //Spiel starten
 				game.switchScene(new Scene_Level(game,false));
@@ -123,7 +133,7 @@ public class Scene_StartMenu extends Abstract_Scene {
 						text,
 						"ProPra 13 - Erster Meilenstein",
 						JOptionPane.OK_CANCEL_OPTION);
-				menu.EXECUTED = true;
+				menu.reset();
 				break;
 			case 4: //Spiel beenden
 				game.quit();

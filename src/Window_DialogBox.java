@@ -23,11 +23,10 @@ public class Window_DialogBox extends Abstract_Update {
 	
 	Window_DialogBox(String msg, Object_Game game) {
 		super(game);
-		window = new Window_Base(BORDER,
+		window = new Window_Base(game, BORDER,
 				Object_Screen.SCREEN_H-HEIGHT-BORDER,
 				Object_Screen.SCREEN_W-2*BORDER,
-				HEIGHT,
-				game);
+				HEIGHT);
 		this.screen.setFont(Object_Game.FONT);
 		this.metrics = this.screen.getFontMetrics();
 		this.message = new String[LINES];

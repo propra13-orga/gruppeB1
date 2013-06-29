@@ -1,45 +1,84 @@
+import java.awt.image.BufferedImage;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
 
-/*
- * Also, diese Klasse musst du fertig machen. Eine Testanimation habe ich schon als Datei fertig gemacht,
- * du findest alles in den Ordnern animationset und animation. Daran sollst du auch gar nichts ändern, die Dateien
- * werden später alle genau so aufgebaut sein, das heisst, wenn dein Programm mit den Testdateien funktioniert dann
- * funktioniert es auch später mit allen anderen.
- * Ich habe auch schon eine kurze Scene geschrieben, in der du dein Programm testen kannst. Da kannst du auch sehen,
- * WIE deine Klasse später benutzt werden soll. Wie gesagt, an den anderen Dateien bitte nichts ändern, die sollen genau
- * so bleiben.
- */
+import javax.imageio.ImageIO;
+
 
 public class Object_AnimationManager extends Abstract_Update {
 
+	private ArrayList<Animation> animations;
+	
 	Object_AnimationManager(Object_Game game) {
 		super(game);
-		// TODO Auto-generated constructor stub
+		this.animations = new ArrayList<Animation>();
 	}
 
 	@Override
 	public void updateData() {
-		// TODO Auto-generated method stub
-		
+		for (Animation a : this.animations) {
+			a.updateData();
+		}
+		for (int i=0; i<this.animations.size(); i++) {
+			if (this.animations.get(i).isDone()) {
+				this.animations.remove(i);
+			}
+		}
 	}
 
 	@Override
 	public void updateScreen() {
-		// TODO Auto-generated method stub
-		
+		for (Animation a : this.animations) {
+			a.updateScreen();
+		}
 	}
 	
-	/*
-	 * Diese Methode soll die Animation 'filename' abspielen
-	 * Du lädst also die Datei "res/animation/filename.txt" und dann das darin gespeicherte
-	 * Animationsset und speicherst das in der Klasse
-	 * Außerdem soll es eine Möglichkeit geben, anzugeben wie schnell die Animation laufen soll.
-	 * Dies wird in der Variable delay gespeichert. Sie gibt sozusagen an, in jedem wie vielten Frame
-	 * die Animation aktualisiert wird. delay = 1 bedeutet, dass sie mit ganz normaler Geschwindigkeit
-	 * abgespielt wird.
-	 */
-	
-	public void playAnimation(String filename, int delay) {
-		
+	public void playAnimation(String filename, int delay, int x, int y) {
+		try {
+			String							setname;
+			String							tmp;
+			BufferedImage					set;
+			ArrayList<ArrayList<String[]>>	frames;
+			ArrayList<String[]>				current_frame;
+			
+			FileReader						fr = new FileReader("res/animation/"+filename+".txt");
+			BufferedReader					br = new BufferedReader(fr);
+			
+			//Loading animation set
+			setname = br.readLine();
+			set = new BufferedImage(480, 480, BufferedImage.TYPE_INT_ARGB);
+			try {
+				set.getGraphics().drawImage(ImageIO.read(new File("res/animationset/"+setname+".png")),0,0,null);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			Object_Screen.makeTransparent(set);
+			
+			//Creating frames
+			frames = new ArrayList<ArrayList<String[]>>();
+			current_frame = new ArrayList<String[]>();
+			tmp = br.readLine();
+			while (!tmp.equals("!")) {
+				while (tmp.length() != 0) {
+					current_frame.add(tmp.split(" "));
+					tmp = br.readLine();
+				}
+				frames.add(current_frame);
+				current_frame = new ArrayList<String[]>();
+				tmp = br.readLine();
+			}
+			
+			Animation ani = new Animation(this.game, x, y, delay, frames, set);
+			this.animations.add(ani);
+			
+			br.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 }

@@ -9,8 +9,8 @@ public class Object_Level extends Object_Map implements java.io.Serializable {
 	List<Entity> entities;
 	int ID;
 
-	public Object_Level(String mapname, int ID) {
-		super(mapname);
+	public Object_Level(Object_Game game, String mapname, int ID) {
+		super(game, mapname);
 		this.entities = new LinkedList<Entity>();
 		this.ID = ID;
 	}

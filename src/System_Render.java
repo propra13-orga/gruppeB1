@@ -27,12 +27,13 @@ class System_Render extends System_Component {
 				this.getCurrentLevel().getWidth()*Object_Level.TILESIZE,
 				this.getCurrentLevel().getHeight()*Object_Level.TILESIZE,
 				BufferedImage.TYPE_INT_ARGB);
-		this.getCurrentLevel().drawTiles(map, Object_TileSet.BELOW_SPRITE);
-		this.getCurrentLevel().drawTiles(map, Object_TileSet.SAME_LEVEL_AS_SPRITE);
+		map.getGraphics().drawImage(this.getCurrentLevel().getBackground(),0,0,null);
+		map.getGraphics().drawImage(this.getCurrentLevel().getLowTiles(),0,0,null);
+		map.getGraphics().drawImage(this.getCurrentLevel().getSameLevelTiles(),0,0,null);
 		
 		//Sprites werden drauf gezeichnet
 		drawSprites(map);
-		this.getCurrentLevel().drawTiles(map, Object_TileSet.ABOVE_SPRITE);
+		map.getGraphics().drawImage(this.getCurrentLevel().getAboveTiles(),0,0,null);
 		//Das sichtbare Feld um den Spieler wird ausgeschnitten...
 		map = map.getSubimage(
 				screen_point[0],

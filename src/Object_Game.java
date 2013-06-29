@@ -81,6 +81,11 @@ public class Object_Game {
 		this.scene.onStart();
 	}
 	
+	public void exitOnError(String msg) {
+		System.out.println("Programmabbruch: "+msg);
+		this.quit();
+	}
+	
 	public void quit() {
 		this.scene = null;
 	}

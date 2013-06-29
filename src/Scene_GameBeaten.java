@@ -1,15 +1,14 @@
 
 public class Scene_GameBeaten extends Abstract_Scene {
 	
-	Window_Selectable menu;
+	Window_Menu menu;
 	
 	public Scene_GameBeaten(Object_Game game) {
 		super(game);
-		menu = new Window_Selectable(0,0,game);
-		menu.EXIT_POSSIBLE = false;
-		menu.addCommand("Spiel neu starten");
-		menu.addCommand("Zurück zum Startmenü");
-		menu.addCommand("Spiel beenden");
+		menu = new Window_Menu(game, "main");
+		menu.addReturnCommand("Spiel neu starten");
+		menu.addReturnCommand("Zurück zum Startmenü");
+		menu.addReturnCommand("Spiel beenden");
 		menu.center();
 	}
 
@@ -27,9 +26,10 @@ public class Scene_GameBeaten extends Abstract_Scene {
 
 	@Override
 	public void updateData() {
-		if (menu.EXECUTED) menu.updateData();
+		if (menu.isExecuted()) menu.updateData();
 		else {
-			switch (menu.cursor) {
+			menu.setupMenuPath();
+			switch (menu.getCurrentCursor()) {
 			case 0: //Neu starten
 				game.switchScene(new Scene_Level(game));
 				return;

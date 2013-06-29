@@ -280,34 +280,34 @@ public class Scene_Level extends Abstract_Scene {
 	 * Hier werden Level und Entitäten initialisiert. Wird später ausgelagert.
 	 */
 	private void BeispielInit() {
-		Object_Level level1 = new Object_Level("map2", 1);
-		Object_Level level2 = new Object_Level("map3", 2);
-		Object_Level level3 = new Object_Level("map4", 3);
+		Object_Level level1 = new Object_Level(this.game, "level-1", 1);
+		Object_Level level2 = new Object_Level(this.game, "level_2", 2);
+		Object_Level level3 = new Object_Level(this.game, "map4", 3);
 		this.levels.put(level1.getID(), level1);
 		this.levels.put(level2.getID(), level2);
 		this.levels.put(level3.getID(), level3);
 		
 		Factory factory = new Factory(this,"res/db.csv");
 		
-		Entity player = factory.build("PlayerRaw", "Held", 2, 5);
+		Entity player = factory.build("PlayerRaw", "Held", 10, 10);
 		new Component_Camera(player,renderSystem);
 		new Component_Inventory(player, interactionSystem, 50);
 		player.init();
 		eManager.setPlayer(player);
 		
-		String bla = "Sie hatten uns mit Zwang und Lügen in ihre Stöcke eingeschraubt. Sie hatten gnädig uns erlaubt, in ihrem Joch ihr Land zu pflügen. Sie saßen da in Prunk und Pracht mit vollgestopftem Magen und zwangen uns, für ihre Macht einander totzuschlagen. Doch wir, noch stolz auf unsere Fesseln, verbeugten uns vor ihren Sesseln.";
-		Entity enemy = factory.build("NPC1", "Hannes", 4, 5);
+		String bla = "PENIS PENIS PENIS!!!";
+		Entity enemy = factory.build("NPC1", "Hannes", 8, 8);
 		Hashtable<String,String> prop_dialog = new Hashtable<String,String>();
 		prop_dialog.put("dialog", bla);
 		new Component_Trigger(enemy,this.getSystemInteraction(),EventType.ACTION,EventType.OPEN_DIALOG,prop_dialog);
 		
-		Entity salesperson = factory.build("Salesperson","Ladenhueter",1,4);
+		Entity salesperson = factory.build("Salesperson","Ladenhueter",2,10);
 
 		Entity trigger = factory.build("Teleport","Tuer 1",19,12);
 		Hashtable<String,String> prop_trigger = new Hashtable<String,String>();
 		prop_trigger.put("toLevel", "2");
 		prop_trigger.put("toX", "0");
-		prop_trigger.put("toY", "4");
+		prop_trigger.put("toY", "13");
 		new Component_Trigger(trigger,this.getSystemInteraction(),EventType.COLLISION,EventType.CHANGELEVEL,prop_trigger);
 
 		Entity trigger2 = factory.build("Teleport","Tuer 2",24,7);
@@ -318,12 +318,6 @@ public class Scene_Level extends Abstract_Scene {
 		new Component_Trigger(trigger2,this.getSystemInteraction(),EventType.COLLISION,EventType.CHANGELEVEL,prop_trigger2);
 		
 		Entity trigger3 = factory.build("Success1","Spiel-Ende", 22, 2);
-		
-		Entity trap1 = factory.build("Trap1", "Falle", 8, 10);
-		Entity trap2 = factory.build("Trap1", "Falle", 9, 11);
-		Entity trap3 = factory.build("Trap1", "Falle", 10, 12);
-		
-		
 		
 		Entity item = new Entity("testitem",this.eManager);
 		new Component_Movement(item,movementSystem,5,8,0,0,2,31,true,false,true);
@@ -343,10 +337,6 @@ public class Scene_Level extends Abstract_Scene {
 //		level1.addEntity(enemy2);
 		
 		level2.addEntity(trigger2);
-		
-		level2.addEntity(trap1);
-		level2.addEntity(trap2);
-		level2.addEntity(trap3);
 		
 		level3.addEntity(trigger3);
 		

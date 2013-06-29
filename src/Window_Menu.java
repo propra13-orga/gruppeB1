@@ -1,3 +1,6 @@
+import java.awt.Color;
+import java.awt.FontMetrics;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 /*
@@ -11,35 +14,80 @@ import java.util.ArrayList;
  * 
  */
 
-public class Window_Menu extends Abstract_Update {
+public class Window_Menu extends Window_Base {
 	
-	public boolean EXIT_POSSIBLE = true;
-	public boolean ALWAYS_VISIBLE = false;
+	public static final Color		COLOR_FONT_STANDARD			= new Color(240, 240, 240);
+	public static final Color		COLOR_FONT_DISABLED			= new Color(100, 100, 100);
+	public static final Color		COLOR_CURSOR_BORDER			= new Color(255, 255, 255);
+	public static final Color		COLOR_CURSOR_FILL			= new Color(255, 255, 255);
+	public static final int			MIN_X						= Object_Map.TILESIZE;
+	public static final int			MAX_X						= Object_Screen.SCREEN_W;
+	public static final int			BORDER_BOX					= Object_Map.TILESIZE/2;
+	public static final int			BORDER_CURSOR				= 5;
+	public static final int			CURSOR_SPACE				= 5; //Der vertikale Platz zwischen zwei Befehlen
 	
-	public boolean final_decision = false;
-	public String final_name;
-	public int final_cursor;
-
-	private String name;
-	private Window_Menu previous_menu;
-	private Window_Menu next_menu;
-	private Window_Menu main_menu;
-	private Window_Selectable menu;
-	private ArrayList<Window_Menu> submenues;
+	public boolean					exit_possible				= true;
 	
-	Window_Menu(String name, int x, int y, Object_Game game) {
-		super(game);
-		this.name = name;
-		this.previous_menu = null;
-		this.next_menu = null;
-		this.main_menu = this;
-		this.menu = new Window_Selectable(0, 0, game);
-		this.menu.EXECUTED = false;
-		this.submenues = new ArrayList<Window_Menu>();
+	private boolean					executed;					//Wird das Menue ausgefuehrt
+	private boolean					canceled;					//Wurde das Menue abgebrochen
+	private boolean					visible;					//Ist das Menu sichtbar
+	private int						cursor;						//Index des aktuell ausgewaehlten Befehls
+	private int						cursor_alpha = 50;			//Zur Animation des Cursors
+	private int						d_alpha = 3;				// " "
+	private int						cursorheight;				//Hoehe des Menuecursors
+	private String					name;						//Jedes Menue besitzt einen eigenen Namen
+	private Window_Menu				previous_menu;				//Das Vorgaengermenue
+	private Window_Menu				next_menu;					//Das an das Menue gekoppelte Untermenue
+	private Window_Menu				main_menu;					//Jedes Menue kann auf sein Hauptmenue zugreifen
+	private Window_Menu				current_menu;				//Wird nur benutzt, wen das Menue das Hauptmenue ist
+	private ArrayList<String>		commands;					//Alle im Menue vorhandenen Befehle
+	private ArrayList<Window_Menu>	submenues;					//Alle im Menue vorhandenen Untermenues (evtl. null)
+	private ArrayList<Integer>		disabled;					//Liste der Indices von ausgeschalteten Befehlen
+	private FontMetrics				metrics;					//Zur Berechnung von Hoehe und Breite von Strings
+	private BufferedImage			background;
+	
+	/*
+	 * contructors
+	 */
+	
+	Window_Menu(Object_Game game, String name, int x, int y, int width, int height) {
+		super(game, x, y, width, height);
+		init(name);
+	}
+	
+	Window_Menu(Object_Game game, String name, int x, int y) {
+		super(game, x, y, -1, -1);
+		init(name);
+	}
+	
+	Window_Menu(Object_Game game, String name) {
+		super(game, 0, 0, -1, -1);
+		init(name);
+	}
+	
+	private void init(String name) {
+		if (name == "null") {
+			this.game.exitOnError("Menuename darf nicht 'null' sein");
+		}
+		this.screen.setFont(Object_Game.FONT);
+		this.name			=	name;
+		this.cursor			=	0;
+		this.visible		=	false;
+		this.previous_menu	=	null;
+		this.next_menu		=	null;
+		this.main_menu		=	this;
+		this.executed		=	false;
+		this.submenues		=	new ArrayList<Window_Menu>();
+		this.commands		=	new ArrayList<String>();
+		this.disabled		=	new ArrayList<Integer>();
+		this.metrics		=	this.screen.getFontMetrics();
+		this.cursorheight	=	Math.round(this.metrics.getLineMetrics("ApgL", this.screen).getHeight());
+		this.background		=	new BufferedImage(Object_Screen.SCREEN_W, Object_Screen.SCREEN_H, BufferedImage.TYPE_INT_ARGB);
+		this.background.getGraphics().drawImage(this.game.getScreen().getBuffer(),0,0,null);
 	}
 	
 	/*
-	 * updateData() und updateScreen()
+	 * update methods
 	 */
 	
 	@Override
@@ -50,47 +98,79 @@ public class Window_Menu extends Abstract_Update {
 		}
 		else {
 			//Dieses Submenu ist das aktuell aufgefuehrte
-			if (this.menu.EXECUTED) {
+			if (this.executed) {
 				//Noch keine Bestaetigung oder Abbruch
-				this.menu.updateData();
+				switch (this.keyhandler.getLast()) {
+				case Object_KeyHandler.KEY_DOWN:
+					this.soundmanager.playSound("cursor");
+					this.cursor++;
+					if (this.cursor >= this.commands.size()) this.cursor = 0;
+					break;
+				case Object_KeyHandler.KEY_UP:
+					this.soundmanager.playSound("cursor");
+					this.cursor--;
+					if (this.cursor < 0) this.cursor = this.commands.size()-1;
+					break;
+				case Object_KeyHandler.KEY_ESCAPE:
+					if (!this.exit_possible) {
+						break;
+					}
+					this.soundmanager.playSound("cancel");
+					this.executed = false;
+					this.canceled = true;
+					break;
+				case Object_KeyHandler.KEY_ENTER:
+					if (this.disabled.contains(this.cursor)) {
+						this.soundmanager.playSound("invalid");
+						break;
+					}
+					this.soundmanager.playSound("decision");
+					this.keyhandler.clear();
+					this.executed = false;
+					this.canceled = false;
+					break;
+				}
+				handleKeyInput(this.keyhandler.getLast());
+				//Handle alpha value
+				this.cursor_alpha += this.d_alpha;
+				if (this.cursor_alpha <= 40 || this.cursor_alpha >= 120) {
+					this.d_alpha *= -1;
+				}
 			}
 			//Prüfe, ob das Menu abgebruchen wurde
-			if (!this.menu.EXECUTED) {
+			if (!this.executed) {
 				//Menu wurde beendet
-				if (this.menu.CANCELED) {
+				if (this.canceled) {
 					//Escape wurde gedrueckt
-					if (!this.EXIT_POSSIBLE) {
-						//Das war aber gar nicht erlaubt, also aktiviere das Menu wieder		HIER NOCH AENDERN!
-						//Weil das Menu wirklich erst beendet wird und der entsprechende Sound
-						//abgespielt wird, das soll aber nicht so sein
-						this.menu.EXECUTED = true;
-						this.menu.CANCELED = false;
+					if (!this.exit_possible) {
+						//Das war aber gar nicht erlaubt, also aktiviere das Menu wieder
+						this.executed = true;
+						this.canceled = false;
 					}
 					else {
 						//Das Vorgaengermenu wird wieder aktiviert
-						this.previous_menu.next_menu = null;
-						this.previous_menu.menu.EXECUTED = true;
-						//this.reset();
+						if (this.previous_menu == null) {
+							//Hauptmenue wurde durch Escape beendet
+							this.reset();
+							this.executed = false;
+						}
+						else {
+							this.cursor = 0;
+							this.previous_menu.next_menu = null;
+							this.previous_menu.executed = true;
+						}
 					}
 				}
 				else {
 					//Es wurde Enter gedrueckt...
-					if (this.submenues.get(this.menu.cursor) == null) {
-						//...und es existiert fuer den gewaehlten Befehl kein Submenu
-						//Also beende das ganze Menu und speichere den Namen und Cursorposition
-						//des zuletzt genutzten Menues
-						this.main_menu.final_decision = true;
-						this.main_menu.final_name = this.name;
-						this.main_menu.final_cursor = this.menu.cursor;
-					}
-					else {
+					if (this.submenues.get(this.cursor) != null) {
 						//...und es ist ein Sumenu registriert, also wird dieses jetzt
 						//aktiviert und ausgeführt
-						this.next_menu = this.submenues.get(this.menu.cursor);
+						this.next_menu = this.submenues.get(this.cursor);
 						this.next_menu.previous_menu = this;
-						this.next_menu.menu.EXECUTED = true;
-						this.next_menu.menu.CANCELED = false;
-						this.next_menu.menu.cursor = 0;
+						this.next_menu.executed = true;
+						this.next_menu.canceled = false;
+						this.next_menu.cursor = 0;
 					}
 				}
 			}
@@ -100,49 +180,174 @@ public class Window_Menu extends Abstract_Update {
 	@Override
 	public void updateScreen() {
 		//Dieses Menue...
-		if (this.ALWAYS_VISIBLE) {
-			//...soll immer angezeigt werden
-			this.menu.updateScreen();
+		if (this.next_menu != null) {
+			this.next_menu.updateScreen();
 		}
 		else {
-			if (this.menu.EXECUTED) {
-				//...ist das aktuell ausgefuehrte Menue und muss angezeigt werden
-				this.menu.updateScreen();
-			}
-		}
-		//Pruefe fuer alle Menues ob ALWAYS_VISIBLE gesetzt ist
-		for (Window_Menu menu : this.submenues) {
-			if (menu != null) {
-				menu.updateScreen();
+			//...ist das aktuell ausgefuehrte Menue und muss angezeigt werden
+			if (this.visible || this.executed) {
+				this.screen.drawImage(this.background,0,0,null);
+				super.updateScreen();
+				draw_cursor();
+				drawCommands();
 			}
 		}
 	}
 	
 	/*
-	 * Fügt dem Menue einen Befehl hinzu, der kein weiteres Untermenue aufruft
+	 * Fuegt dem Menue einen Befehl hinzu, der kein weiteres Untermenue aufruft
 	 */
 	
+	public void addReturnCommand(String cmd, boolean disabled) {
+		this.addMenuCommand(cmd, null, disabled);
+	}
+	
 	public void addReturnCommand(String cmd) {
-		this.addMenuCommand(cmd, null);
+		this.addMenuCommand(cmd, null, false);
+	}
+	
+	/*
+	 * Fuegt dem Menue einen Befehl hinzu, der entweder in das vorige Menue zurueck
+	 * springt oder das Menue komplett beendet
+	 */
+	
+	public void addCancelCommand(String cmd, boolean disabled) {
+		this.addMenuCommand(cmd, this.previous_menu, disabled);
+	}
+	
+	public void addCancelCommand(String cmd) {
+		this.addMenuCommand(cmd, this.previous_menu, false);
 	}
 	
 	/*
 	 * Fügt dem Menue einen Befehl hinzu, der bei Bestaetigung ein weiteres Menu aufruft
 	 */
 	
-	public void addMenuCommand(String cmd, Window_Menu menu) {
-		this.menu.addCommand(cmd);
+	public void addMenuCommand(String cmd, Window_Menu menu, boolean disabled) {
+		this.addCommand(cmd);
 		this.submenues.add(menu);
 		if (menu != null) {
-			System.out.println("Registriere Menu: "+menu.name);
-			System.out.println("Übergebe als Main menu: "+this.main_menu.name);
 			menu.main_menu = this.main_menu;
+		}
+		if (disabled) {
+			//Speichere den index des neuen commands in der disabled liste
+			this.disabled.add(this.commands.size()-1);
+		}
+		this.refresh_box();
+	}
+	
+	public void addMenuCommand(String cmd, Window_Menu menu) {
+		this.addMenuCommand(cmd, menu, false);
+	}
+	
+	/*
+	 * Setzt den current_menu Zeiger auf das naechste aufgerufene Menue
+	 */
+	
+	public void setupMenuPath() {
+		this.current_menu = this;
+	}
+	
+	public void nextMenu() {
+		this.current_menu = this.current_menu.submenues.get(this.current_menu.cursor);
+	}
+	
+	public String getCurrentName() {
+		if (this.current_menu == null) {
+			return "null";
+		}
+		return this.current_menu.name;
+	}
+	
+	public String getCurrentChoice() {
+		return this.current_menu.commands.get(this.current_menu.cursor);
+	}
+	
+	public int getCurrentCursor() {
+		return this.current_menu.cursor;
+	}
+	
+	public Window_Menu getLastMenu() {
+		if (this.next_menu == null) {
+			return this;
+		}
+		else {
+			return this.next_menu.getLastMenu();
 		}
 	}
 	
+	public int getLastCursor() {
+		if (this.next_menu == null) {
+			return this.cursor;
+		}
+		else {
+			return this.next_menu.getLastCursor();
+		}
+	}
+	
+	/*
+	 * Mache einen bereits vorhandenen Befehl aufrufbar
+	 */
+	
+	public void enableCommand(int idx) {
+		if (this.disabled.contains(idx)) {
+			this.disabled.remove(this.disabled.indexOf(idx));
+		}
+	}
+	
+	/*
+	 * Mache einen bereits vorhandenen Befehl nicht mehr aufrufbar
+	 */
+	
+	public void disableCommand(int idx) {
+		if (!this.disabled.contains(idx)) {
+			this.disabled.add(idx);
+		}
+	}
+	
+	/*
+	 * Loescht alle Untermenues
+	 */
+	
 	public void clear() {
 		this.submenues = new ArrayList<Window_Menu>();
-		this.menu.clear();
+		this.commands.clear();
+	}
+	
+	/*
+	 * Das Menue kann mit Escape beendet werden
+	 */
+	
+	public void setExitPossible(boolean value) {
+		this.exit_possible = value;
+	}
+	
+	/*
+	 * Setzt this.executed (wieder) auf true
+	 */
+	
+	public void restart() {
+		this.executed = true;
+	}
+	
+	public void stop() {
+		this.executed = false;
+	}
+	
+	/*
+	 * Das Menue wird immer angezeigt
+	 */
+	
+	public void show() {
+		this.visible = true;
+	}
+	
+	/*
+	 * Das Menue wird nur angezeigt, wenn es ausgefuehrt wird
+	 */
+	
+	public void hide() {
+		this.visible = false;
 	}
 	
 	/*
@@ -151,19 +356,18 @@ public class Window_Menu extends Abstract_Update {
 	
 	public void reset() {
 		if (this.main_menu == this) {
-			this.final_decision = false;
-			this.EXIT_POSSIBLE = false;
-			this.menu.EXECUTED = true;
+			this.exit_possible = false;
+			this.executed = true;
 		}
 		else {
-			this.EXIT_POSSIBLE = true;
-			this.menu.EXECUTED = false;
+			this.exit_possible = true;
+			this.executed = false;
 		}
 		this.previous_menu = null;
 		this.next_menu = null;
-		this.menu.cursor = 0;
+		this.cursor = 0;
 		for (Window_Menu menu : this.submenues) {
-			if (menu != null) {
+			if (menu != null && menu != this.previous_menu) {
 				menu.reset();
 			}
 		}
@@ -174,24 +378,36 @@ public class Window_Menu extends Abstract_Update {
 	 */
 	
 	public void center() {
-		this.menu.center();
+		this.x = Object_Screen.SCREEN_W/2 - (this.width/2);
+		this.y = Object_Screen.SCREEN_H/2 - (this.height/2);
 	}
 	
 	public void topLeft() {
-		this.menu.topLeft();
+		this.x = 0;
+		this.y = 0;
 	}
 	
 	public void topRight() {
-		this.menu.topRight();
+		this.x = Object_Screen.SCREEN_W-this.width;
+		this.y = 0;
 	}
 	
 	public void bottomLeft() {
-		this.menu.bottomLeft();
+		this.x = 0;
+		this.y = Object_Screen.SCREEN_H-this.height;
 	}
 	
 	public void bottomRight() {
-		this.menu.bottomRight();
+		this.x = Object_Screen.SCREEN_W-this.width;
+		this.y = Object_Screen.SCREEN_H-this.height;
 	}
+	
+	/*
+	 * getMenuPath muss noch gearbeitet werden, spaeter kann man dadurch den Verlauf
+	 * des Cursors durch das Menue verfolgen, also beispielsweise:
+	 * 
+	 * main-item-heiltrank-spieler1
+	 */
 	
 	public ArrayList<String> getMenuPath() {
 		ArrayList<String> path = new ArrayList<String>();
@@ -203,6 +419,107 @@ public class Window_Menu extends Abstract_Update {
 		}
 		return path;
 	}
+
+	/*
+	 * Getters
+	 */
+	
+	public boolean isExecuted() {
+		if (this.next_menu == null) {
+			return this.executed;
+		}
+		else {
+			return this.next_menu.isExecuted();
+		}
+	}
+	
+	public boolean isCanceled() {
+		if (this.next_menu == null) {
+			return this.canceled;
+		}
+		else {
+			return this.next_menu.isCanceled();
+		}
+	}
+	
+	public boolean isEnabled(int idx) {
+		return !isDisabled(idx);
+	}
+	
+	public boolean isDisabled(int idx) {
+		return this.disabled.contains(idx);
+	}
+	
+	public String getName() {
+		return this.name;
+	}
+	
+	public int getCursor() {
+		return this.cursor;
+	}
+	
+	//Private Methoden
+	
+	private void addCommand(String command) {
+		commands.add(command);
+		int new_width = 2*BORDER_BOX + 2*BORDER_CURSOR + this.metrics.stringWidth(command);
+		if (this.width < new_width) this.width = new_width;
+		if (this.width < MIN_X) this.width = MIN_X;
+		if (this.width > MAX_X) this.width = MAX_X;
+		this.height = 2*BORDER_BOX + commands.size()*(2*BORDER_CURSOR+this.cursorheight);
+		if (this.commands.size() > 1) {
+			this.height += (this.commands.size()-1)*CURSOR_SPACE;
+		}
+	}
+	
+	private void drawCommands() {
+		int text_x = this.x + BORDER_BOX + BORDER_CURSOR;
+		int text_y = this.y + BORDER_BOX + BORDER_CURSOR + this.cursorheight - this.metrics.getDescent();
+		int index = 0;
+		for (String cmd : commands) {
+			if (this.disabled.contains(index)) {
+				this.screen.setColor(COLOR_FONT_DISABLED);
+				this.screen.drawString(cmd, text_x, text_y);
+				this.screen.setColor(COLOR_FONT_STANDARD);
+			}
+			else {
+				this.screen.drawString(cmd, text_x, text_y);
+			}
+			text_y += this.cursorheight + 2*BORDER_CURSOR + CURSOR_SPACE;
+			index++;
+		}
+	}
+	
+	private void draw_cursor() {
+		this.screen.setColor(new Color(	COLOR_CURSOR_FILL.getRed(),
+										COLOR_CURSOR_FILL.getGreen(),
+										COLOR_CURSOR_FILL.getBlue(),
+										this.cursor_alpha));
+		int x = this.x + BORDER_BOX;
+		int y = this.y + BORDER_BOX + this.cursor*this.cursorheight;
+		if (this.cursor >= 1) {
+			y += (this.cursor)*2*BORDER_CURSOR;
+			y += (this.cursor)*CURSOR_SPACE;
+		}
+		int width = this.width - 2*BORDER_BOX;
+		int height = this.cursorheight + 2*BORDER_CURSOR;
+		this.screen.fillRect(
+				x,
+				y,
+				width,
+				height);
+		this.screen.setColor(COLOR_CURSOR_BORDER);
+		this.screen.drawRect(
+				x,
+				y,
+				width,
+				height);
+	}
+	
+	private void handleKeyInput(int key) {
+		this.keyhandler.clear();
+		this.keyhandler.freeze(key, 5);
+	}
 	
 	/*
 	 * Statische Methode, die alle Einstellungen vornimmt, um ein Menue als Hauptmenue
@@ -210,8 +527,8 @@ public class Window_Menu extends Abstract_Update {
 	 */
 	
 	static void setMainMenu(Window_Menu menu) {
-		menu.EXIT_POSSIBLE = false;
-		menu.menu.EXECUTED = true;
+		menu.exit_possible = false;
+		menu.executed = true;
 		menu.previous_menu = null;
 		menu.main_menu = menu;
 	}

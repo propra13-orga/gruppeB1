@@ -1,13 +1,13 @@
 
 public class Scene_GameOver extends Abstract_Scene {
 
-	Window_Selectable menu;
+	Window_Menu menu;
 	
 	public Scene_GameOver(Object_Game game) {
 		super(game);
-		menu = new Window_Selectable(0,0,game);
-		menu.addCommand("Spiel neu starten");
-		menu.addCommand("Spiel beenden");
+		menu = new Window_Menu(game, "main");
+		menu.addReturnCommand("Spiel neu starten", false);
+		menu.addReturnCommand("Spiel beenden", false);
 		menu.center();
 	}
 
@@ -25,17 +25,15 @@ public class Scene_GameOver extends Abstract_Scene {
 
 	@Override
 	public void updateData() {
-		if (menu.EXECUTED) menu.updateData();
+		if (menu.isExecuted()) menu.updateData();
 		else {
-			if (menu.CANCELED) game.quit();
-			else {
-				switch (menu.cursor) {
-				case 0:
-					game.switchScene(new Scene_Level(game));
-					return;
-				case 1:
-					game.quit();
-				}
+			this.menu.setupMenuPath();
+			switch (this.menu.getCurrentCursor()) {
+			case 0:
+				game.switchScene(new Scene_Level(game));
+				return;
+			case 1:
+				game.quit();
 			}
 		}
 	}

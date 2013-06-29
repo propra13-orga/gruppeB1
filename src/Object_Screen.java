@@ -95,4 +95,18 @@ public class Object_Screen extends JFrame {
 			}
 		}
 	}
+	
+	public static void setTransparency(BufferedImage b, int alpha) {
+		int width = b.getWidth();
+		int height = b.getHeight();
+		for (int y=0; y<height; y++) {
+			for (int x=0; x<width; x++) {
+				int rgb = b.getRGB(x, y);
+				if ((rgb& 0xFF000000) != 0x00) {
+					rgb = (rgb&0x00FFFFFF) + (alpha<<24);
+					b.setRGB(x, y, rgb);
+				}
+			}
+		}
+	}
 }

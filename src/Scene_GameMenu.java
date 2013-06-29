@@ -1,17 +1,19 @@
 public class Scene_GameMenu extends Abstract_Scene {
 
 	private Scene_Level current_map;
-	private Window_Selectable menu;
+	private Window_Menu menu;
 
 	Scene_GameMenu(Object_Game game, Scene_Level m) {
 		super(game);
 		current_map = m;
-		menu = new Window_Selectable(20,20,game);
-		menu.addCommand("Spiel speichern");
-		menu.addCommand("Spiel beenden");
-		menu.addCommand("Inventar");
-		menu.addCommand("Ausrüstung");
-		menu.addCommand("Optionen");
+		menu = new Window_Menu(game, "main");
+		menu.addReturnCommand("Spiel speichern");
+		menu.addReturnCommand("Spiel beenden");
+		menu.addReturnCommand("Inventar");
+		menu.addReturnCommand("Ausruestung");
+		menu.addReturnCommand("Optionen");
+		menu.topLeft();
+		Window_Menu.setMainMenu(menu);
 	}
 
 	@Override
@@ -28,22 +30,22 @@ public class Scene_GameMenu extends Abstract_Scene {
 
 	@Override
 	public void updateData() {
-		if (menu.EXECUTED) menu.updateData();
+		if (menu.isExecuted()) menu.updateData();
 		else {
-			if (menu.CANCELED) {
-				//Menü wurde beendet
+			if (menu.isCanceled()) {
+				//Menue wurde beendet
 				this.keyhandler.clear();
 				this.keyhandler.freeze(Object_KeyHandler.KEY_ESCAPE, 40);
 				this.game.switchScene(current_map);
 				return;
 			}
 			else {
-				//Ein Menüpunkt wurde bstätigt
-				switch (menu.cursor){
+				menu.setupMenuPath();
+				switch (menu.getCurrentCursor()){
 				case 0: //Spiel speichern
 					this.current_map.serialize();
 					System.out.println("Speichere Spiel... :D:D Nicht!");
-					menu.EXECUTED = true;
+					menu.restart();
 					break;
 				case 1: //Spiel beenden
 					this.keyhandler.freeze(Object_KeyHandler.KEY_ENTER, 40);
@@ -51,7 +53,7 @@ public class Scene_GameMenu extends Abstract_Scene {
 					return;
 				default:
 					System.out.println("Nur zu Testzwecken!");
-					menu.EXECUTED = true;
+					menu.restart();
 				}
 			}
 		}

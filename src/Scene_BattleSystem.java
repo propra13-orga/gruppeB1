@@ -173,17 +173,14 @@ public class Scene_BattleSystem extends Abstract_Scene {
 	}
 	
 	private void getPlayerInput() {
-		if (this.main_menu.final_decision == false) {
+		if (this.main_menu.isExecuted()) {
 			this.main_menu.updateData();
 		}
 		else {
-			//Menu beendet, pruefe welches Menu zuletzt bedient wurde und
-			//pruefe dann dessen Eintr�ge
-			ArrayList<String> menupath = this.main_menu.getMenuPath();
+			this.main_menu.setupMenuPath();
+			switch (this.main_menu.getCurrentChoice()) {
 			
-			switch (this.main_menu.final_name) {
-			
-			case "main":
+			case "null":
 				//Normalerweise w�rde jetzt hier die Cursorposition
 				//abgefragt, aber der einzige return command in main ist
 				//Verteidugung, von daher ist klar, was gew�hlt wurde
@@ -193,7 +190,8 @@ public class Scene_BattleSystem extends Abstract_Scene {
 				
 			case "enemy":
 				//Gegner wurde gew�hlt
-				Object_BattleActor chosen_enemy = this.ctx.getAliveEnemies().get(this.main_menu.final_cursor);
+				this.main_menu.nextMenu();
+				Object_BattleActor chosen_enemy = this.ctx.getAliveEnemies().get(this.main_menu.getCurrentCursor());
 				this.attack(this.current_actor, chosen_enemy);
 				
 				this.current_actor.sprite.attack(chosen_enemy.sprite);
@@ -250,7 +248,7 @@ public class Scene_BattleSystem extends Abstract_Scene {
 			this.menu_enemy.clear();
 			for (Object_BattleActor enemy : this.ctx.getAliveEnemies()) {
 				if (enemy.attackable) {
-					this.menu_enemy.addReturnCommand(enemy.name);
+					this.menu_enemy.addReturnCommand(enemy.name, false);
 				}
 			}
 		}
@@ -258,7 +256,7 @@ public class Scene_BattleSystem extends Abstract_Scene {
 			//SPIELER GESTORBEN
 			this.menu_player.clear();
 			for (Object_BattleActor player : this.ctx.getAlivePlayers()) {
-				this.menu_player.addReturnCommand(player.name);
+				this.menu_player.addReturnCommand(player.name, false);
 			}
 		}
 	}
@@ -326,7 +324,7 @@ public class Scene_BattleSystem extends Abstract_Scene {
 	
 	private void lose() {
 		print("VERLOREN");
-		this.game.quit();
+		this.game.switchScene(this.previous_scene);
 	}
 	
 	private void drawActionOrder() {
@@ -421,11 +419,11 @@ public class Scene_BattleSystem extends Abstract_Scene {
 		 * Initialisiere Menues
 		 */
 		
-		this.main_menu = new Window_Menu("main", 0, 0, game);
-		this.menu_enemy = new Window_Menu("enemy", 0, 0, game);
-		this.menu_item = new Window_Menu("item", 0, 0, game);
-		this.menu_skill = new Window_Menu("skills", 0, 0, game);
-		this.menu_player = new Window_Menu("player", 0, 0, game);
+		this.main_menu = new Window_Menu(game, "main", 0, 0);
+		this.menu_enemy = new Window_Menu(game, "enemy", 0, 0);
+		this.menu_item = new Window_Menu(game, "item", 0, 0);
+		this.menu_skill = new Window_Menu(game, "skills", 0, 0);
+		this.menu_player = new Window_Menu(game, "player", 0, 0);
 		Window_Menu.setMainMenu(this.main_menu);
 		
 		for (Object_BattleActor enemy : this.ctx.getEnemies()) {

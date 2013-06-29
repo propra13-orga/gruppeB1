@@ -12,27 +12,26 @@ public class Scene_BuyMenu extends Abstract_Scene {
 	public Scene_BuyMenu(Object_Game game, Scene_Level parent) {
 		super(game);
 		this.parent = parent;
-		this.main_menu = new Window_Menu("main",0,0,game);        // Die verschiedenen Menupunkte
-		this.menu_buy = new Window_Menu("buy",0,0,game);          //
-		this.menu_sell = new Window_Menu("sell",0,0,game);
+		this.main_menu = new Window_Menu(game,"main",0,0);        // Die verschiedenen Menupunkte
+		this.menu_buy = new Window_Menu(game,"buy",0,0);          //
+		this.menu_sell = new Window_Menu(game,"sell",0,0);
 		
-		Window_Menu.setMainMenu(this.main_menu);
+		this.main_menu.addMenuCommand("Kaufen", this.menu_buy, false);      // Die verschiedenen Erst_
+		this.main_menu.addMenuCommand("Verkaufen", this.menu_sell, false);  // Menu Funktionen
+		this.main_menu.addCancelCommand("Beenden", false);
 		
-		this.main_menu.addMenuCommand("Kaufen", this.menu_buy);      // Die verschiedenen Erst_
-		this.main_menu.addMenuCommand("Verkaufen", this.menu_sell);  // Menu Funktionen
-		this.main_menu.addReturnCommand("Beenden");
-		
-		this.menu_buy.addReturnCommand("Großer Heiltrank");         // Die verschiedenen Zweit-
-		this.menu_buy.addReturnCommand("Kleiner Heiltrank");        // Menu Funktionen beim
-		this.menu_buy.addReturnCommand("Attacke 1");                //öffnen von "Kaufen"
-		this.menu_buy.addReturnCommand("Attacke 2");
+		this.menu_buy.addReturnCommand("Großer Heiltrank", false);         // Die verschiedenen Zweit-
+		this.menu_buy.addReturnCommand("Kleiner Heiltrank", false);        // Menu Funktionen beim
+		this.menu_buy.addReturnCommand("Attacke 1", false);                //öffnen von "Kaufen"
+		this.menu_buy.addReturnCommand("Attacke 2", true);
 		/*Hier die Frage mit welchen mittel der player die items kauft*/
 		
-		this.menu_sell.addReturnCommand("Großer Heiltrank");     // Die verschiedenen Zweit-Menu
-		this.menu_sell.addReturnCommand("Kleiner Heiltrank");    // Funktionen beim öffnen von
-		this.menu_sell.addReturnCommand("Attacke 1");            // "Verkaufen
-		this.menu_sell.addReturnCommand("Attacke 2");
+		this.menu_sell.addReturnCommand("Großer Heiltrank", false);     // Die verschiedenen Zweit-Menu
+		this.menu_sell.addReturnCommand("Kleiner Heiltrank", false);    // Funktionen beim öffnen von
+		this.menu_sell.addReturnCommand("Attacke 1", true);            // "Verkaufen
+		this.menu_sell.addReturnCommand("Attacke 2", true);
 		
+		Window_Menu.setMainMenu(this.main_menu);
 		this.soundmanager.playMidi("shop");     // Hintergrundmusik beim benutzen des Buy_Menu
 		                                                      
 	}
@@ -51,55 +50,37 @@ public class Scene_BuyMenu extends Abstract_Scene {
 
 	@Override
 	public void updateData() {
-		if (main_menu.ALWAYS_VISIBLE) 
+		if (main_menu.isExecuted()) {
 			main_menu.updateData();
+		}
 		else {
-			if (main_menu.EXIT_POSSIBLE) {
-				//MenÃ¼ wurde beendet
-				this.keyhandler.clear();
+			System.out.println("NICHT MEHR AUSGEFUEHRT");
+			this.main_menu.setupMenuPath();
+			this.main_menu.nextMenu();
+			System.out.println("current name: "+this.main_menu.getCurrentName());
+			switch(this.main_menu.getCurrentName()) {
+			
+			case "buy": //Oeffne Kaufmenue
+				System.out.println(this.main_menu.getCurrentChoice()+" wurde gekauft");
+				this.main_menu.getLastMenu().restart();
+				break;
+				
+			case "sell":
+				System.out.println(this.main_menu.getCurrentChoice()+" wurde verkauft");
+				this.main_menu.getLastMenu().restart();
+				break;
+				
+			case "null":
 				this.keyhandler.freeze(Object_KeyHandler.KEY_ESCAPE, 40);
 				this.game.switchScene(parent);
 				return;
 			}
-			else {
-				//Ein MenÃ¼punkt wurde bstÃ¤tigt
-				switch (main_menu.final_cursor){
-				case 0: //Menu-Kaufen öffnen
-					System.out.println("Oeffene Menu-Kaufen");
-					main_menu.ALWAYS_VISIBLE = true;
-					
-					break;
-					
-				case 1: //Menu-Verkaufen öffnen
-					System.out.println("Oeffene Menu-Verkaufen");
-					main_menu.ALWAYS_VISIBLE = true;
-					
-					break;
-					
-				case 2: //Buy_Menu beenden
-					this.keyhandler.freeze(Object_KeyHandler.KEY_ENTER, 40);
-					this.game.switchScene(parent);
-					return;
-					
-				default:
-					System.out.println("Fehler! Tue gar nix!");
-					main_menu.ALWAYS_VISIBLE = true;
-					return;
-				}
-			
-
-	}
 		}
 	}
+	
 	@Override
 	public void updateScreen() {
-
-	  	this.screen.setColor(Color.BLUE);
         main_menu.updateScreen();
-        menu_buy.updateScreen();
-        menu_sell.updateScreen();
-        
-
 	}
 
 }

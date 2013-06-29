@@ -28,7 +28,7 @@ public class Window_Message extends Abstract_Update {
 		this.screen.setFont(Object_Game.FONT);
 		this.metrics = this.screen.getFontMetrics();
 		this.prepareMessage(msg, x, y);
-		window = new Window_Base(x,y,WIDTH,this.height,game);
+		window = new Window_Base(game,x,y,WIDTH,this.height);
 	}
 
 	@Override
