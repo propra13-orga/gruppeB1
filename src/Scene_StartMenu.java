@@ -16,16 +16,16 @@ public class Scene_StartMenu extends Abstract_Scene {
 		menu = new Window_Menu(game, "main");
 		
 		Window_Menu test = new Window_Menu(game, "test");
-		test.addReturnCommand("1", false);
-		test.addReturnCommand("2", false);
-		test.addReturnCommand("3", false);
+		test.addReturnCommand("1");
+		test.addReturnCommand("2");
+		test.addReturnCommand("3");
 		
-		menu.addReturnCommand("Weiter", false);
-		menu.addReturnCommand("Neues Spiel", false);
-		menu.addReturnCommand("Kampfsystem starten", false);
-		menu.addReturnCommand("Credits", true);
-		menu.addReturnCommand("Spiel beenden", false);
-		menu.addMenuCommand("Test", test, false);
+		menu.addReturnCommand("Weiter");
+		menu.addReturnCommand("Neues Spiel");
+		menu.addReturnCommand("Kampfsystem starten");
+		menu.addReturnCommand("Credits");
+		menu.addReturnCommand("Spiel beenden");
+		menu.addMenuCommand("Test", test);
 		menu.center();
 		Window_Menu.setMainMenu(menu);
 		menu.setExitPossible(true);
