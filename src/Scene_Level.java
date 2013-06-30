@@ -289,28 +289,28 @@ public class Scene_Level extends Abstract_Scene {
 		
 		Factory factory = new Factory(this,"res/db.csv");
 		
-		Entity player = factory.build("PlayerRaw", "Held", 10, 10);
+		Entity player = factory.build("PlayerRaw", "Held", 17, 16);
 		new Component_Camera(player,renderSystem);
 		new Component_Inventory(player, interactionSystem, 50);
 		player.init();
 		eManager.setPlayer(player);
 		
 		String bla = "PENIS PENIS PENIS!!!";
-		Entity enemy = factory.build("NPC1", "Hannes", 8, 8);
+		Entity enemy = factory.build("NPC1", "Hannes", 13, 14);
 		Hashtable<String,String> prop_dialog = new Hashtable<String,String>();
 		prop_dialog.put("dialog", bla);
 		new Component_Trigger(enemy,this.getSystemInteraction(),EventType.ACTION,EventType.OPEN_DIALOG,prop_dialog);
 		
-		Entity salesperson = factory.build("Salesperson","Ladenhueter",2,10);
+		Entity salesperson = factory.build("Salesperson","Ladenhueter",14,14);
 
-		Entity trigger = factory.build("Teleport","Tuer 1",19,12);
+		Entity trigger = factory.build("Teleport","Tuer 1",19,15);
 		Hashtable<String,String> prop_trigger = new Hashtable<String,String>();
 		prop_trigger.put("toLevel", "2");
 		prop_trigger.put("toX", "0");
 		prop_trigger.put("toY", "13");
 		new Component_Trigger(trigger,this.getSystemInteraction(),EventType.COLLISION,EventType.CHANGELEVEL,prop_trigger);
 
-		Entity trigger2 = factory.build("Teleport","Tuer 2",24,7);
+		Entity trigger2 = factory.build("Teleport","Tuer 2",12,14);
 		Hashtable<String,String> prop_trigger2 = new Hashtable<String,String>();
 		prop_trigger2.put("toLevel", "3");
 		prop_trigger2.put("toX", "0");
@@ -320,7 +320,7 @@ public class Scene_Level extends Abstract_Scene {
 		Entity trigger3 = factory.build("Success1","Spiel-Ende", 22, 2);
 		
 		Entity item = new Entity("testitem",this.eManager);
-		new Component_Movement(item,movementSystem,5,8,0,0,2,31,true,false,true);
+		new Component_Movement(item,movementSystem,10,14,0,0,2,31,true,false,true);
 		new Component_Item(item, interactionSystem, "item", "Tolles Item", null, null, null);
 		new Component_Sprite(item, renderSystem, "player");
 		new Component_Trigger(item,this.getSystemInteraction(),EventType.ACTION,EventType.PICKUP);

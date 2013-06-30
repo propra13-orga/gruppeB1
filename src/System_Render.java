@@ -27,7 +27,7 @@ class System_Render extends System_Component {
 				this.getCurrentLevel().getWidth()*Object_Level.TILESIZE,
 				this.getCurrentLevel().getHeight()*Object_Level.TILESIZE,
 				BufferedImage.TYPE_INT_ARGB);
-		map.getGraphics().drawImage(this.getCurrentLevel().getBackground(),0,0,null);
+		map.getGraphics().drawImage(this.getCurrentLevel().getBackground(),this.screen_point[0],this.screen_point[1],null);
 		map.getGraphics().drawImage(this.getCurrentLevel().getLowTiles(),0,0,null);
 		map.getGraphics().drawImage(this.getCurrentLevel().getSameLevelTiles(),0,0,null);
 		
@@ -46,7 +46,7 @@ class System_Render extends System_Component {
 		if (!this.checkPlayerDMG()) {
 			this.screen.getBuffer().getGraphics().drawImage(map,0,0,null);
 		}
-		this.displayStats();
+		//this.displayStats();
 	}
 	
 	

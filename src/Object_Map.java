@@ -97,17 +97,88 @@ public class Object_Map extends Abstract_Update {
 		drawTiles(above, 2);
 	}
 	
+	/*
+	 * drawTiles ist ne miese Methode :D
+	 * Die Map teilt sich in drei Schichten ein:
+	 * 
+	 * 	1 -	Die Schicht, die unter den Sprites angezeigt wird (BELOW)
+	 * 
+	 * 	2 - Die Schicht die unter den Sprites, aber über BELOW angezeigt wird (SAME_LEVEL)
+	 * 		Hier werden Mapelemente angesiedelt, welche den Sprites 'im Weg stehen' koennen
+	 * 
+	 *  3 -	Die Schicht, die ueber den Sprites angezeigt wird (ABOVE)
+	 *  
+	 *  Jedes Tile ist eindeutig einer dieser Schichten zugetiled (...:D)
+	 *  
+	 *  drawTiles uebernimmt nun als Parameter ein BufferedImage und die ID der darauf
+	 *  zu zeichnenden Schicht.
+	 */
+	
 	private void drawTiles(BufferedImage b, int level) {
-		System.out.println("DRAW TILES!!");
-		BufferedImage current_tile;
-		for (int y=0; y<height; y++) {
-			for (int x=0; x<width; x++) {
-				for (int l=0; l<layer.length; l++) {
-					int tile_id = getTileID(l, x, y);
-					if (tile_id == -1) continue;
-					if (tileset.getPassability(tile_id) == level) {
-						current_tile = tileset.getMapTile(this.layer[l][y][x]);
-						b.getGraphics().drawImage(current_tile,x*Object_Map.TILESIZE,y*Object_Map.TILESIZE,null);
+		
+		BufferedImage	current_tile;
+		int				tile_id;
+		int				tile_passability;
+		int				x;
+		int				y;
+		int				l;
+		int				max_l;
+		int				min_l;
+		int				min_passability;
+		boolean			draw;
+		
+		for (y=0; y<height; y++) {
+			for (x=0; x<width; x++) {
+				
+				draw				= true;
+				max_l				= layer.length-1;
+				min_l				= 0;
+				min_passability		= level;
+				
+				//Bestimmte min_l, max_l, min_passability und draw
+				for (l=layer.length-1; l>=0; l--) {
+					tile_id = getTileID(l, x, y);
+					if (tile_id == -1) {
+						continue;
+					}
+					tile_passability = tileset.getPassability(tile_id);
+					if (tile_passability < level) {
+						draw = false;
+						break;
+					}
+					if (tile_passability == level) {
+						min_passability = tile_passability;
+						max_l = l;
+						//Bestimmte min_l
+						for (min_l=max_l; min_l>=0; min_l--) {
+							if (getTileID(min_l,x,y) == -1) {
+								continue;
+							}
+							if (tileset.getPassability(getTileID(min_l,x,y))<tile_passability) {
+								break;
+							}
+						}
+						if (min_l == -1) {
+							min_l=0;
+						}
+						break;
+					}
+				}
+				if (l == -1) {
+					draw = false;
+				}
+				
+				//Zeichne alle relevanten Tiles
+				if (draw) {
+					for (l=min_l; l<=max_l; l++) {
+						tile_id = getTileID(l, x, y);
+						if (tile_id == -1) {
+							continue;
+						}
+						if (tileset.getPassability(tile_id) >= min_passability) {
+							current_tile = tileset.getMapTile(this.layer[l][y][x]);
+							b.getGraphics().drawImage(current_tile,x*Object_Map.TILESIZE,y*Object_Map.TILESIZE,null);
+						}
 					}
 				}
 			}
