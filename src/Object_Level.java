@@ -32,6 +32,9 @@ public class Object_Level extends Object_Map implements java.io.Serializable {
 		for (Entity entity : this.entities) {
 			entity.init();
 		}
+		if (this.properties.containsKey("music")) {
+			this.soundmanager.playMidi(this.properties.get("music"));
+		}
 	}
 	
 	public void deinit() {

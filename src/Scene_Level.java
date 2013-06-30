@@ -295,7 +295,8 @@ public class Scene_Level extends Abstract_Scene {
 		player.init();
 		eManager.setPlayer(player);
 		
-		String bla = "PENIS PENIS PENIS!!!";
+		String bla =	"Willkommen zu "+Object_Game.GAME_TITLE+"! Dies ist die erste Karte, die bis jetzt nur" +
+						"zu Testzwecken existiert...";
 		Entity enemy = factory.build("NPC1", "Hannes", 13, 14);
 		Hashtable<String,String> prop_dialog = new Hashtable<String,String>();
 		prop_dialog.put("dialog", bla);

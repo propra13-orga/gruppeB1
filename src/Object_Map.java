@@ -15,10 +15,11 @@ public class Object_Map extends Abstract_Update {
 	
 	public static final int	TILESIZE = 32;
 	
+	protected Hashtable<String, String>		properties;
+	
 	private int								width;
 	private int								height;
 	private int[][][]						layer;
-	private Hashtable<String, String>		properties;
 	private Object_TileSet					tileset;
 
 	private BufferedImage					background;
