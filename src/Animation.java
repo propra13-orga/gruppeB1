@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 public class Animation extends Abstract_Update {
 
+	private long								id;
 	private int									x;
 	private int									y;
 	private int									delay;
@@ -15,8 +16,9 @@ public class Animation extends Abstract_Update {
 	private ArrayList<String[]>					current_frame;
 	private BufferedImage						set;
 	
-	Animation(Object_Game game, int x, int y, int delay, ArrayList<ArrayList<String[]>> frames, BufferedImage set) {
+	Animation(Object_Game game, long id, int x, int y, int delay, ArrayList<ArrayList<String[]>> frames, BufferedImage set) {
 		super(game);
+		this.id					= id;
 		this.x					= x;
 		this.y					= y;
 		this.delay				= delay;
@@ -76,6 +78,10 @@ public class Animation extends Abstract_Update {
 	
 	public boolean isDone() {
 		return this.done;
+	}
+	
+	public long getID() {
+		return this.id;
 	}
 
 }

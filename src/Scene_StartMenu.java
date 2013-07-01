@@ -20,12 +20,11 @@ public class Scene_StartMenu extends Abstract_Scene {
 		test.addReturnCommand("2");
 		test.addReturnCommand("3");
 		
-		menu.addReturnCommand("Weiter");
+		menu.addReturnCommand("Weiter", true);
 		menu.addReturnCommand("Neues Spiel");
-		menu.addReturnCommand("Kampfsystem starten");
+		menu.addReturnCommand("Kampfsystem starten", true);
 		menu.addReturnCommand("Credits");
 		menu.addReturnCommand("Spiel beenden");
-		menu.addMenuCommand("Test", test);
 		menu.center();
 		Window_Menu.setMainMenu(menu);
 		menu.setExitPossible(true);
@@ -116,18 +115,18 @@ public class Scene_StartMenu extends Abstract_Scene {
 				c1.getActors().add(e1);
 				c1.getActors().add(e2);
 				
-				s.setContext(c1);
+				//s.setContext(c1);  <<<<<-----------------------------------------------------------------------
 				
 				this.game.switchScene(new Scene_BattleSystem(c1, null, this.game));
 				break;
 			case 3: //Credits
 				String text = "1. Meilenstein\n\n"+
 							  "Programmierer:\n\n"  +
+							  "Alexander Schaefer\n" +
 							  "Victor Persien\n"    +
 							  "Bernard Darryl Oungouande\n" +
 							  "Hyojin Lee\n"        +
-							  "Elina Margamaeva\n"  +
-							  "Alexander Sch�fer\n" ;
+							  "Elina Margamaeva\n";
 				JOptionPane.showMessageDialog(
 						null,
 						text,

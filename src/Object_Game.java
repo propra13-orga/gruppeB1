@@ -46,7 +46,7 @@ public class Object_Game {
 											//in jedem Frame dekrementiert
 	}
 	
-	//Aktualisiert den tats�chlichen Bildschirm
+	//Aktualisiert den tats�chlichen Bildschirm (muss nicht notwendigerweise mit update() synchron laufen!)
 	public void display() {
 		this.screen.update();
 	}

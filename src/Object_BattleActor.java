@@ -53,16 +53,16 @@ public class Object_BattleActor implements Comparable<Object_BattleActor> {
 		 * vorhanden sein. Daher sollten Default-Werte festgelegt sein und wenn
 		 * einer ohne HP ankommt, kriegt er halt den Wert 0, etc.
 		 */
-//		this.name = entity.getName();
-//		this.hp = compBattle.getHP();
-//		this.maxHp = compBattle.getMaxHP();
-//		this.mp = compBattle.getMP();
-//		this.maxMp = compBattle.getMaxMP();
-//		this.atk = compBattle.getATK();
-//		this.def = compBattle.getDEF();
-//		this.dex = compBattle.getDEX();
-//		this.speed = compBattle.getSPD();
-//		this.maxSpeed = compBattle.getMaxSPD();
+		//		this.name = entity.getName();
+		//		this.hp = compBattle.getHP();
+		//		this.maxHp = compBattle.getMaxHP();
+		//		this.mp = compBattle.getMP();
+		//		this.maxMp = compBattle.getMaxMP();
+		//		this.atk = compBattle.getATK();
+		//		this.def = compBattle.getDEF();
+		//		this.dex = compBattle.getDEX();
+		//		this.speed = compBattle.getSPD();
+		//		this.maxSpeed = compBattle.getMaxSPD();
 		//this.items = Arrays.asList(compInventory.getInventory());
 		// Im Inventar sind momentan nur IDs gespeichert, über welche man im
 		// EntityManager Entitäten abrufen kann. Einfach aus Performanzgründen.

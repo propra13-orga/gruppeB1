@@ -10,11 +10,13 @@ import javax.imageio.ImageIO;
 
 public class Object_AnimationManager extends Abstract_Update {
 
-	private ArrayList<Animation> animations;
+	private long					counter;
+	private ArrayList<Animation>	animations;
 	
 	Object_AnimationManager(Object_Game game) {
 		super(game);
-		this.animations = new ArrayList<Animation>();
+		this.counter	= 0;
+		this.animations	= new ArrayList<Animation>();
 	}
 
 	@Override
@@ -72,13 +74,26 @@ public class Object_AnimationManager extends Abstract_Update {
 				tmp = br.readLine();
 			}
 			
-			Animation ani = new Animation(this.game, x, y, delay, frames, set);
+			this.counter++;
+			Animation ani = new Animation(this.game, this.counter, x, y, delay, frames, set);
 			this.animations.add(ani);
 			
 			br.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public boolean isAnimationExecuted(long id) {
+		if (this.animations.size() == 0) {
+			return false;
+		}
+		for (Animation animation : this.animations) {
+			if (animation.getID() == id) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 }

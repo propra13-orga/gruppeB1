@@ -9,14 +9,14 @@ class Object_BattleSprite extends Abstract_Update {
 	public static final int ENEMY = 1;
 	
 	//Attribute die spaeter auch gelesen werden koenen
-	private int x;
-	private int y;
-	private int animation_type;
-	private int position;
-	private int battletype;
-	private Object_BattleSpriteSet spriteset;
-	private Object_BattleActor actor;
-	private boolean moving = false;
+	public int x;
+	public int y;
+	public int animation_type;
+	public int position;
+	public int battletype;
+	public Object_BattleSpriteSet spriteset;
+	public Object_BattleActor actor;
+	public boolean moving = false;
 	
 	//Private Attribute, die nur fuer die Animation gebraucht werden
 	private int move_delay = 8;
@@ -28,7 +28,7 @@ class Object_BattleSprite extends Abstract_Update {
 	private int move_dy_delay;
 	private int move_dy_tick;
 	
-	private int animation;
+	public int animation;
 	private int animation_delta;
 	private int animation_delay;
 	private int animation_tick;
@@ -94,7 +94,6 @@ class Object_BattleSprite extends Abstract_Update {
 			else {
 				this.animation_type = Object_BattleSpriteSet.ANIMATION_STAND;
 			}
-			this.actor.battle_system.EXIT_UPDATE = true;
 			break;
 		case Object_BattleSpriteSet.ANIMATION_BACK:
 			break;
