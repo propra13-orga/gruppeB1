@@ -304,14 +304,14 @@ public class Scene_Level extends Abstract_Scene {
 		
 		Entity salesperson = factory.build("Salesperson","Ladenhueter",14,14);
 
-		Entity trigger = factory.build("Teleport","Tuer 1",19,15);
+		Entity trigger = factory.build("Teleport","Tuer 1",0,0);
 		Hashtable<String,String> prop_trigger = new Hashtable<String,String>();
 		prop_trigger.put("toLevel", "2");
 		prop_trigger.put("toX", "0");
 		prop_trigger.put("toY", "13");
 		new Component_Trigger(trigger,this.getSystemInteraction(),EventType.COLLISION,EventType.CHANGELEVEL,prop_trigger);
 
-		Entity trigger2 = factory.build("Teleport","Tuer 2",12,14);
+		Entity trigger2 = factory.build("Teleport","Tuer 2",0,0);
 		Hashtable<String,String> prop_trigger2 = new Hashtable<String,String>();
 		prop_trigger2.put("toLevel", "3");
 		prop_trigger2.put("toX", "0");

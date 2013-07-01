@@ -45,6 +45,7 @@ public class Object_SoundManager {
 		if (!MUTED) {
 			if (this.sounds.containsKey(name)) {
 				this.sounds.get(name).start();
+				this.sounds.get(name).setFramePosition(0);
 			}
 		}
 	}
