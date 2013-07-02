@@ -34,10 +34,12 @@ public class Scene_Level extends Abstract_Scene {
 	private boolean playerDead;
 	private boolean gameBeaten;
 	private boolean load;
+	private boolean already_running;
 	
 	public Scene_Level(Object_Game g) {
 		super(g);
 		this.load = false;
+		this.already_running = false;
 	}
 	
 	public Scene_Level(Object_Game g, boolean load) {
@@ -65,6 +67,9 @@ public class Scene_Level extends Abstract_Scene {
 
 	@Override
 	public void onStart() {
+		if (this.already_running) {
+			return;
+		}
 		this.nextScene = null;
 		this.levels = new Hashtable<Integer,Object_Level>();
 		this.events = this.initEventTable();
@@ -89,6 +94,7 @@ public class Scene_Level extends Abstract_Scene {
 		}
 		
 		this.currentLevel.init();
+		this.already_running = true;
 	}
 
 	@Override
@@ -215,7 +221,7 @@ public class Scene_Level extends Abstract_Scene {
 			game.getKeyHandler().clear();
 			game.getKeyHandler().freeze(Object_KeyHandler.KEY_ESCAPE, 20);
 			//Men� aufrufen
-			game.switchScene(new Scene_GameMenu(game, this));
+			game.switchScene(new Scene_GameMenu(game, this), true);
 			//return true;
 		}
 		//return false;
@@ -345,17 +351,5 @@ public class Scene_Level extends Abstract_Scene {
 		level3.addEntity(trigger3);
 		
 		this.currentLevel = this.levels.get(1);
-	}
-
-	@Override
-	public void updateDataOnSwitching() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void updateScreenOnSwitching() {
-		// TODO Auto-generated method stub
-		
 	}
 }

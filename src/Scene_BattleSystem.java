@@ -108,16 +108,4 @@ public class Scene_BattleSystem extends Abstract_Scene {
         return pMin + RANDOM.nextFloat() * (pMax - pMin);
 	}
 
-	@Override
-	public void updateDataOnSwitching() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void updateScreenOnSwitching() {
-		// TODO Auto-generated method stub
-		
-	}
-
 }

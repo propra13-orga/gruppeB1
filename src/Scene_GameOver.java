@@ -44,18 +44,4 @@ public class Scene_GameOver extends Abstract_Scene {
 		this.screen.drawString("GAME OVER",Object_Screen.SCREEN_W/2,20);
 		menu.updateScreen();
 	}
-
-	@Override
-	public void updateDataOnSwitching() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void updateScreenOnSwitching() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	
 }

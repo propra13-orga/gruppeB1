@@ -66,8 +66,8 @@ public class Scene_StartMenu extends Abstract_Scene {
 				game.switchScene(new Scene_Level(game,true));
 				return;
 			case 1: //Spiel starten
-				this.menu.restart();
-				game.switchScene(new Scene_Level(game,false));
+				//this.menu.restart();
+				game.switchScene(new Scene_Level(game,false), true);
 				return;
 			case 2:
 				Object_BattleContext c1 = new Object_BattleContext();
@@ -145,17 +145,4 @@ public class Scene_StartMenu extends Abstract_Scene {
 		this.screen.drawImage(this.background, 0, 0, null);
 		menu.updateScreen();
 	}
-
-	@Override
-	public void updateDataOnSwitching() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void updateScreenOnSwitching() {
-		// TODO Auto-generated method stub
-		
-	}
-	
 }

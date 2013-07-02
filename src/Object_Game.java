@@ -12,9 +12,9 @@ import java.awt.Font;
 
 public class Object_Game {
 
-	public static final String GAME_TITLE = "ProPra - 2. Meilenstein";
+	public static final String GAME_TITLE = "ProPra - 3. Meilenstein";
 	public static final Font FONT = new Font("Arial", Font.PLAIN, 20);
-	public static final boolean FULLSCREEN = false;
+	public static final boolean FULLSCREEN = true;
 	
 	private boolean switching;
 	private Abstract_Scene scene;
@@ -72,10 +72,17 @@ public class Object_Game {
 			
 		}
 		else {
+			
 			this.screen.clear();
 
 			this.scene.updateData();
 			this.animationmanager.updateData();
+			
+			//Evtl hat sich die Scene nach updateData() selbst beendet
+			if (this.scene == null) {
+				return;
+			}
+			
 			this.keyhandler.freezeUpdate();
 			
 			this.scene.updateScreen();
@@ -121,6 +128,9 @@ public class Object_Game {
 		else {
 			this.scene.onExit();
 			this.scene = next;
+			if (this.scene == null) {
+				return;
+			}
 			this.scene.onStart();
 		}
 	}

@@ -37,7 +37,7 @@ public class Scene_GameMenu extends Abstract_Scene {
 				//Menue wurde beendet
 				this.keyhandler.clear();
 				this.keyhandler.freeze(Object_KeyHandler.KEY_ESCAPE, 40);
-				this.game.switchScene(current_map);
+				this.game.switchScene(current_map, true);
 				return;
 			}
 			else {
@@ -64,17 +64,5 @@ public class Scene_GameMenu extends Abstract_Scene {
 	public void updateScreen() {
 		game.getScreen().clear();
 		menu.updateScreen();
-	}
-
-	@Override
-	public void updateDataOnSwitching() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void updateScreenOnSwitching() {
-		// TODO Auto-generated method stub
-		
 	}
 }

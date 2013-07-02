@@ -68,8 +68,16 @@ abstract class Abstract_Scene implements IScene {
 	abstract public void onExit();
 	abstract public void updateData();
 	abstract public void updateScreen();
-	abstract public void updateDataOnSwitching();
-	abstract public void updateScreenOnSwitching();
+	
+	public void updateDataOnSwitching() {
+		 //Eingabe und Datenverabrietung werden eingefroren
+	 }
+	
+	public void updateScreenOnSwitching() {
+		//Da updateData() nicht mehr aufgerufen wird, generiert updateScreen() immer das selbe
+		//Bild, der Bildschirm wird also eingefroren
+		this.updateScreen();
+	}
 	
 	public final void update() {
 		updateData();
