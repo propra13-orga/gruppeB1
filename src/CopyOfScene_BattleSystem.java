@@ -489,4 +489,16 @@ public class CopyOfScene_BattleSystem extends Abstract_Scene {
 		this.soundmanager.playMidi("fight");
 	}
 
+	@Override
+	public void updateDataOnSwitching() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void updateScreenOnSwitching() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

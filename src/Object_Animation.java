@@ -2,7 +2,7 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 
-public class Animation extends Abstract_Update {
+public class Object_Animation extends Abstract_Update {
 
 	private long								id;
 	private int									x;
@@ -16,7 +16,7 @@ public class Animation extends Abstract_Update {
 	private ArrayList<String[]>					current_frame;
 	private BufferedImage						set;
 	
-	Animation(Object_Game game, long id, int x, int y, int delay, ArrayList<ArrayList<String[]>> frames, BufferedImage set) {
+	Object_Animation(Object_Game game, long id, int x, int y, int delay, ArrayList<ArrayList<String[]>> frames, BufferedImage set) {
 		super(game);
 		this.id					= id;
 		this.x					= x;

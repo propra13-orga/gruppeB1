@@ -1,3 +1,4 @@
+import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.File;
@@ -10,18 +11,38 @@ import javax.imageio.ImageIO;
 
 public class Object_AnimationManager extends Abstract_Update {
 
-	private long					counter;
-	private ArrayList<Animation>	animations;
+	private long						counter;
+	private int							fade_alpha;
+	private int							fade_delta;
+	private int							fade_delay;
+	private int							fade_tick;
+	private boolean						fading;
+	private ArrayList<Object_Animation>	animations;
 	
 	Object_AnimationManager(Object_Game game) {
 		super(game);
 		this.counter	= 0;
-		this.animations	= new ArrayList<Animation>();
+		this.fade_alpha	= 0;
+		this.fade_delta	= 0;
+		this.fading		= false;
+		this.animations	= new ArrayList<Object_Animation>();
 	}
 
 	@Override
 	public void updateData() {
-		for (Animation a : this.animations) {
+		if (this.fading) {
+			this.fade_tick++;
+			if (this.fade_tick >= this.fade_delay) {
+				this.fade_tick = 0;
+				this.fade_alpha += this.fade_delta;
+				if (this.fade_alpha < 0) this.fade_alpha = 0;
+				if (this.fade_alpha > 255) this.fade_alpha = 255;
+				if (this.fade_alpha == 0 || this.fade_alpha == 255) {
+					this.fading = false;
+				}
+			}
+		}
+		for (Object_Animation a : this.animations) {
 			a.updateData();
 		}
 		for (int i=0; i<this.animations.size(); i++) {
@@ -33,9 +54,11 @@ public class Object_AnimationManager extends Abstract_Update {
 
 	@Override
 	public void updateScreen() {
-		for (Animation a : this.animations) {
+		for (Object_Animation a : this.animations) {
 			a.updateScreen();
 		}
+		this.screen.setColor(new Color(0,0,0,this.fade_alpha));
+		this.screen.fillRect(0, 0, 640, 480);
 	}
 	
 	public void playAnimation(String filename, int delay, int x, int y) {
@@ -75,7 +98,7 @@ public class Object_AnimationManager extends Abstract_Update {
 			}
 			
 			this.counter++;
-			Animation ani = new Animation(this.game, this.counter, x, y, delay, frames, set);
+			Object_Animation ani = new Object_Animation(this.game, this.counter, x, y, delay, frames, set);
 			this.animations.add(ani);
 			
 			br.close();
@@ -84,11 +107,31 @@ public class Object_AnimationManager extends Abstract_Update {
 		}
 	}
 	
+	public void fadeIn(int delay, int delta) {
+		this.fade_alpha = 255;
+		this.fade_delta = (-1) * delta;
+		this.fade_delay = delay;
+		this.fade_tick = 0;
+		this.fading = true;
+	}
+	
+	public void fadeOut(int delay, int delta) {
+		this.fade_alpha = 0;
+		this.fade_delta = delta;
+		this.fade_delay = delay;
+		this.fade_tick = 0;
+		this.fading = true;
+	}
+	
+	public boolean isFading() {
+		return this.fading;
+	}
+	
 	public boolean isAnimationExecuted(long id) {
 		if (this.animations.size() == 0) {
 			return false;
 		}
-		for (Animation animation : this.animations) {
+		for (Object_Animation animation : this.animations) {
 			if (animation.getID() == id) {
 				return true;
 			}

@@ -83,4 +83,16 @@ public class Scene_BuyMenu extends Abstract_Scene {
         main_menu.updateScreen();
 	}
 
+	@Override
+	public void updateDataOnSwitching() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void updateScreenOnSwitching() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

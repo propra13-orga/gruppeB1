@@ -68,6 +68,8 @@ abstract class Abstract_Scene implements IScene {
 	abstract public void onExit();
 	abstract public void updateData();
 	abstract public void updateScreen();
+	abstract public void updateDataOnSwitching();
+	abstract public void updateScreenOnSwitching();
 	
 	public final void update() {
 		updateData();

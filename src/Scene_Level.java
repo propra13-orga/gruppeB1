@@ -33,35 +33,16 @@ public class Scene_Level extends Abstract_Scene {
 	 */
 	private boolean playerDead;
 	private boolean gameBeaten;
+	private boolean load;
 	
 	public Scene_Level(Object_Game g) {
 		super(g);
-		this.levels = new Hashtable<Integer,Object_Level>();
-		this.events = this.initEventTable();
-		this.nextScene = null;
-		this.currentLevel = null;
-		this.nextLevel = null;
-		this.playerDead = false;
-		this.gameBeaten = false;
-		
-		this.eManager = new Object_EntityManager(this);
-		this.aiSystem = new System_AI(this);
-		this.movementSystem = new System_Movement(this,game.getKeyHandler());
-		this.interactionSystem = new System_Interaction(this);
-		this.renderSystem = new System_Render(this,game.getScreen());
+		this.load = false;
 	}
 	
 	public Scene_Level(Object_Game g, boolean load) {
 		this(g);
-		if (load) {
-			this.deserialize();
-			this.getPlayer().init();
-		}
-		else {
-			this.BeispielInit();
-		}
-		
-		this.currentLevel.init();
+		this.load = load;
 	}
 	
 	public void serialize() {
@@ -85,7 +66,29 @@ public class Scene_Level extends Abstract_Scene {
 	@Override
 	public void onStart() {
 		this.nextScene = null;
+		this.levels = new Hashtable<Integer,Object_Level>();
+		this.events = this.initEventTable();
+		this.nextScene = null;
+		this.currentLevel = null;
+		this.nextLevel = null;
+		this.playerDead = false;
+		this.gameBeaten = false;
 		
+		this.eManager = new Object_EntityManager(this);
+		this.aiSystem = new System_AI(this);
+		this.movementSystem = new System_Movement(this,game.getKeyHandler());
+		this.interactionSystem = new System_Interaction(this);
+		this.renderSystem = new System_Render(this,game.getScreen());
+		
+		if (this.load) {
+			this.deserialize();
+			this.getPlayer().init();
+		}
+		else {
+			this.BeispielInit();
+		}
+		
+		this.currentLevel.init();
 	}
 
 	@Override
@@ -342,5 +345,17 @@ public class Scene_Level extends Abstract_Scene {
 		level3.addEntity(trigger3);
 		
 		this.currentLevel = this.levels.get(1);
+	}
+
+	@Override
+	public void updateDataOnSwitching() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void updateScreenOnSwitching() {
+		// TODO Auto-generated method stub
+		
 	}
 }

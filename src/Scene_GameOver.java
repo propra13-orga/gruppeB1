@@ -45,5 +45,17 @@ public class Scene_GameOver extends Abstract_Scene {
 		menu.updateScreen();
 	}
 
+	@Override
+	public void updateDataOnSwitching() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void updateScreenOnSwitching() {
+		// TODO Auto-generated method stub
+		
+	}
+
 	
 }

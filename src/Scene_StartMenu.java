@@ -63,10 +63,10 @@ public class Scene_StartMenu extends Abstract_Scene {
 			menu.setupMenuPath();
 			switch (menu.getCurrentCursor()){
 			case 0: // Weiter
-				//game.switchScene(new Scene_Level(game,true));
-				this.animationmanager.playAnimation("test", 8, 100, 100);
+				game.switchScene(new Scene_Level(game,true));
 				return;
 			case 1: //Spiel starten
+				this.menu.restart();
 				game.switchScene(new Scene_Level(game,false));
 				return;
 			case 2:
@@ -120,7 +120,7 @@ public class Scene_StartMenu extends Abstract_Scene {
 				this.game.switchScene(new Scene_BattleSystem(c1, null, this.game));
 				break;
 			case 3: //Credits
-				String text = "1. Meilenstein\n\n"+
+				String text = "3. Meilenstein\n\n"+
 							  "Programmierer:\n\n"  +
 							  "Alexander Schaefer\n" +
 							  "Victor Persien\n"    +
@@ -130,7 +130,7 @@ public class Scene_StartMenu extends Abstract_Scene {
 				JOptionPane.showMessageDialog(
 						null,
 						text,
-						"ProPra 13 - Erster Meilenstein",
+						"ProPra 13 - Dritter Meilenstein",
 						JOptionPane.OK_CANCEL_OPTION);
 				menu.reset();
 				break;
@@ -142,9 +142,20 @@ public class Scene_StartMenu extends Abstract_Scene {
 
 	@Override
 	public void updateScreen() {
-		this.game.getScreen().clear();
 		this.screen.drawImage(this.background, 0, 0, null);
 		menu.updateScreen();
+	}
+
+	@Override
+	public void updateDataOnSwitching() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void updateScreenOnSwitching() {
+		// TODO Auto-generated method stub
+		
 	}
 	
 }

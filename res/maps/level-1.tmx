@@ -5,7 +5,7 @@
   <property name="music" value="peace"/>
  </properties>
  <tileset firstgid="1" name="tileset_2" tilewidth="32" tileheight="32">
-  <image source="../../../gruppeB2_Meilenstein2/res/tileset/tileset_2.png" trans="ff00ff" width="960" height="512"/>
+  <image source="../tileset/tileset_2.png" trans="ff00ff" width="960" height="512"/>
  </tileset>
  <layer name="Kachelebene 1" width="25" height="20">
   <data>
@@ -1843,8 +1843,8 @@
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
-   <tile gid="178"/>
-   <tile gid="179"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
@@ -1868,8 +1868,8 @@
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
-   <tile gid="208"/>
-   <tile gid="209"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
@@ -1893,8 +1893,8 @@
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
-   <tile gid="478"/>
-   <tile gid="479"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
@@ -1918,8 +1918,8 @@
    <tile gid="0"/>
    <tile gid="178"/>
    <tile gid="179"/>
-   <tile gid="387"/>
-   <tile gid="388"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
    <tile gid="178"/>
    <tile gid="0"/>
    <tile gid="447"/>
@@ -1943,8 +1943,8 @@
    <tile gid="0"/>
    <tile gid="208"/>
    <tile gid="209"/>
-   <tile gid="410"/>
-   <tile gid="411"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
    <tile gid="208"/>
    <tile gid="447"/>
    <tile gid="0"/>
@@ -1968,8 +1968,8 @@
    <tile gid="0"/>
    <tile gid="478"/>
    <tile gid="479"/>
-   <tile gid="409"/>
-   <tile gid="120"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
    <tile gid="478"/>
    <tile gid="0"/>
    <tile gid="0"/>

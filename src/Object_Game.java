@@ -16,7 +16,9 @@ public class Object_Game {
 	public static final Font FONT = new Font("Arial", Font.PLAIN, 20);
 	public static final boolean FULLSCREEN = false;
 	
+	private boolean switching;
 	private Abstract_Scene scene;
+	private Abstract_Scene next_scene;
 	private Object_Screen screen;
 	private Object_KeyHandler keyhandler;
 	private Object_SoundManager soundmanager;
@@ -32,6 +34,8 @@ public class Object_Game {
 		
 		//this.scene = new Scene_BattleSystem(c1, null, this);
 		this.scene = new Scene_StartMenu(this);
+		this.next_scene = null;
+		this.switching = false;
 		//this.scene = new Scene_AnimationManagerTest(this);
 		
 		this.screen.setTitle(GAME_TITLE);
@@ -41,9 +45,42 @@ public class Object_Game {
 
 	//Die Ausf�hrung dieser Methode entspricht genau einem Frame
 	public void update() {
-		this.scene.update();
-		this.keyhandler.freezeUpdate();		//Der Counter von eingefrorenen Tasten wird
-											//in jedem Frame dekrementiert
+		
+		if (this.switching) {
+			
+			if (!this.animationmanager.isFading()) {
+				System.out.println("\t\t\tTAUSCHEN");
+				//Fadeout abgeschlossen, tausche die scenes
+				this.scene.onExit();
+				this.scene = this.next_scene;
+				if (this.scene == null) {
+					return;
+				}
+				this.scene.onStart();
+				this.switching = false;
+				this.next_scene = null;
+				this.animationmanager.fadeIn(1, 10);
+				return;
+			}
+			
+			this.screen.clear();
+			this.scene.updateDataOnSwitching();
+			this.animationmanager.updateData();
+			this.keyhandler.freezeUpdate();
+			this.scene.updateScreenOnSwitching();
+			this.animationmanager.updateScreen();
+			
+		}
+		else {
+			this.screen.clear();
+
+			this.scene.updateData();
+			this.animationmanager.updateData();
+			this.keyhandler.freezeUpdate();
+			
+			this.scene.updateScreen();
+			this.animationmanager.updateScreen();
+		}
 	}
 	
 	//Aktualisiert den tats�chlichen Bildschirm (muss nicht notwendigerweise mit update() synchron laufen!)
@@ -75,10 +112,21 @@ public class Object_Game {
 	
 	//Szenen wechseln
 	
-	public void switchScene(Abstract_Scene next) {
-		this.scene.onExit();
-		this.scene = next;
-		this.scene.onStart();
+	public void switchScene(Abstract_Scene next, boolean fading) {
+		if (fading) {
+			this.animationmanager.fadeOut(1,10);
+			this.switching = true;
+			this.next_scene = next;
+		}
+		else {
+			this.scene.onExit();
+			this.scene = next;
+			this.scene.onStart();
+		}
+	}
+	
+	public void switchScene(Abstract_Scene scene) {
+		switchScene(scene, false);
 	}
 	
 	public void exitOnError(String msg) {
@@ -87,7 +135,7 @@ public class Object_Game {
 	}
 	
 	public void quit() {
-		this.scene = null;
+		this.switchScene(null);
 	}
 
 }

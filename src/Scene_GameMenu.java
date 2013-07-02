@@ -14,6 +14,7 @@ public class Scene_GameMenu extends Abstract_Scene {
 		menu.addReturnCommand("Optionen");
 		menu.topLeft();
 		Window_Menu.setMainMenu(menu);
+		menu.setExitPossible(true);
 	}
 
 	@Override
@@ -63,5 +64,17 @@ public class Scene_GameMenu extends Abstract_Scene {
 	public void updateScreen() {
 		game.getScreen().clear();
 		menu.updateScreen();
+	}
+
+	@Override
+	public void updateDataOnSwitching() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void updateScreenOnSwitching() {
+		// TODO Auto-generated method stub
+		
 	}
 }

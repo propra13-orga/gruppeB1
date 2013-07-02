@@ -59,4 +59,16 @@ public class Scene_Dialog extends Abstract_Scene {
 		this.message.updateScreen();
 	}
 
+	@Override
+	public void updateDataOnSwitching() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void updateScreenOnSwitching() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

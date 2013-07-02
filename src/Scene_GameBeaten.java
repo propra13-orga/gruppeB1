@@ -49,4 +49,16 @@ public class Scene_GameBeaten extends Abstract_Scene {
 		this.screen.drawString("GEWONNEN!!!", 300,100);
 	}
 
+	@Override
+	public void updateDataOnSwitching() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void updateScreenOnSwitching() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }
