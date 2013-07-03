@@ -12,6 +12,7 @@ public class Scene_StartMenu extends Abstract_Scene {
 	
 	Scene_StartMenu(Object_Game game) {
 		super(game);
+		
 		this.keyhandler.clear();
 		menu = new Window_Menu(game, "main");
 		
@@ -22,7 +23,7 @@ public class Scene_StartMenu extends Abstract_Scene {
 		
 		menu.addReturnCommand("Weiter", true);
 		menu.addReturnCommand("Neues Spiel");
-		menu.addReturnCommand("Kampfsystem starten", true);
+		menu.addReturnCommand("Kampfsystem starten");
 		menu.addReturnCommand("Credits");
 		menu.addReturnCommand("Spiel beenden");
 		menu.center();
@@ -115,7 +116,7 @@ public class Scene_StartMenu extends Abstract_Scene {
 				c1.getActors().add(e1);
 				c1.getActors().add(e2);
 				
-				//s.setContext(c1);  <<<<<-----------------------------------------------------------------------
+				s.setCtx(c1);
 				
 				this.game.switchScene(new Scene_BattleSystem(c1, null, this.game));
 				break;

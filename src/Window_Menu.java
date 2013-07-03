@@ -6,8 +6,8 @@ import java.util.ArrayList;
 /*
  * Window_Menu.java
  * 
- * Mit dieser Klasse ist es möglich, verschachtelte Menues zu erstellen.
- * Zuerst müssen alle Menues einzeln erstellt werden. Anschliessend kann jedem Menue
+ * Mit dieser Klasse ist es mï¿½glich, verschachtelte Menues zu erstellen.
+ * Zuerst mï¿½ssen alle Menues einzeln erstellt werden. Anschliessend kann jedem Menue
  * mit den Befehlen entweder absolute Befehle (addReturnCommand) oder Befehle, die ein
  * weiteres Menue oeffnen (addMenuCommand) hinzufuegen.
  * Fuer ein Verwendungsbeispiel siehe Scene_BattleSystem.java
@@ -83,7 +83,7 @@ public class Window_Menu extends Window_Base {
 		this.metrics		=	this.screen.getFontMetrics();
 		this.cursorheight	=	Math.round(this.metrics.getLineMetrics("ApgL", this.screen).getHeight());
 		this.background		=	new BufferedImage(Object_Screen.SCREEN_W, Object_Screen.SCREEN_H, BufferedImage.TYPE_INT_ARGB);
-		this.background.getGraphics().drawImage(this.game.getScreen().getBuffer(),0,0,null);
+		//this.background.getGraphics().drawImage(this.game.getScreen().getBuffer(),0,0,null);
 	}
 	
 	/*
@@ -137,7 +137,7 @@ public class Window_Menu extends Window_Base {
 					this.d_alpha *= -1;
 				}
 			}
-			//Prüfe, ob das Menu abgebruchen wurde
+			//Prï¿½fe, ob das Menu abgebruchen wurde
 			if (!this.executed) {
 				//Menu wurde beendet
 				if (this.canceled) {
@@ -165,7 +165,7 @@ public class Window_Menu extends Window_Base {
 					//Es wurde Enter gedrueckt...
 					if (this.submenues.get(this.cursor) != null) {
 						//...und es ist ein Sumenu registriert, also wird dieses jetzt
-						//aktiviert und ausgeführt
+						//aktiviert und ausgefï¿½hrt
 						this.next_menu = this.submenues.get(this.cursor);
 						this.next_menu.previous_menu = this;
 						this.next_menu.executed = true;
@@ -220,7 +220,7 @@ public class Window_Menu extends Window_Base {
 	}
 	
 	/*
-	 * Fügt dem Menue einen Befehl hinzu, der bei Bestaetigung ein weiteres Menu aufruft
+	 * Fï¿½gt dem Menue einen Befehl hinzu, der bei Bestaetigung ein weiteres Menu aufruft
 	 */
 	
 	public void addMenuCommand(String cmd, Window_Menu menu, boolean disabled) {

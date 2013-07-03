@@ -12,35 +12,33 @@ import java.awt.Font;
 
 public class Object_Game {
 
-	public static final String GAME_TITLE = "ProPra - 3. Meilenstein";
-	public static final Font FONT = new Font("Arial", Font.PLAIN, 20);
-	public static final boolean FULLSCREEN = true;
+	public static final String			GAME_TITLE = "ProPra - 3. Meilenstein";
+	public static final Font			FONT = new Font("Arial", Font.PLAIN, 20);
+	public static final boolean			FULLSCREEN = false;
 	
-	private boolean switching;
-	private Abstract_Scene scene;
-	private Abstract_Scene next_scene;
-	private Object_Screen screen;
-	private Object_KeyHandler keyhandler;
-	private Object_SoundManager soundmanager;
-	private Object_AnimationManager animationmanager;
+	private boolean						switching;
+	private Abstract_Scene				scene;
+	private Abstract_Scene				next_scene;
+	private Object_Screen				screen;
+	private Object_KeyHandler			keyhandler;
+	private Object_SoundManager			soundmanager;
+	private Object_AnimationManager		animationmanager;
 	
 	Object_Game() {
 		//Screen und KeyHandler initialisieren
-		this.keyhandler = new Object_KeyHandler();
-		this.screen = new Object_Screen();
-		this.screen.getBuffer().getGraphics().setFont(new Font("Arial", Font.PLAIN, 130));
-		this.soundmanager = new Object_SoundManager();
-		this.animationmanager = new Object_AnimationManager(this);
+		this.keyhandler			= new Object_KeyHandler();
+		this.screen				= new Object_Screen();
+		this.soundmanager		= new Object_SoundManager();
+		this.animationmanager	= new Object_AnimationManager(this);
 		
-		//this.scene = new Scene_BattleSystem(c1, null, this);
-		this.scene = new Scene_StartMenu(this);
-		this.next_scene = null;
-		this.switching = false;
-		//this.scene = new Scene_AnimationManagerTest(this);
+		this.scene				= new Scene_StartMenu(this);
+		this.next_scene			= null;
+		this.switching			= false;
 		
 		this.screen.setTitle(GAME_TITLE);
 		this.screen.addKeyListener(keyhandler);
 		this.screen.setVisible(true);
+		this.screen.getBuffer().getGraphics().setFont(new Font("Arial", Font.PLAIN, 130));
 	}
 
 	//Die Ausf�hrung dieser Methode entspricht genau einem Frame
@@ -49,7 +47,6 @@ public class Object_Game {
 		if (this.switching) {
 			
 			if (!this.animationmanager.isFading()) {
-				System.out.println("\t\t\tTAUSCHEN");
 				//Fadeout abgeschlossen, tausche die scenes
 				this.scene.onExit();
 				this.scene = this.next_scene;
@@ -90,12 +87,13 @@ public class Object_Game {
 		}
 	}
 	
-	//Aktualisiert den tats�chlichen Bildschirm (muss nicht notwendigerweise mit update() synchron laufen!)
+	// Aktualisiert den tatsaechlichen Bildschirm (muss nicht notwendigerweise mit update() synchron laufen!)
+	
 	public void display() {
 		this.screen.update();
 	}
 
-	//Getter / Setter
+	//Getter und Setter
 	
 	public Abstract_Scene getScene() {
 		return this.scene;
@@ -119,9 +117,12 @@ public class Object_Game {
 	
 	//Szenen wechseln
 	
-	public void switchScene(Abstract_Scene next, boolean fading) {
+	// Die echte switchScene Methode ist privat, es werden mehrere gleichnamige public Methoden
+	// zur Verfuegung gestellt, die eine einfachere Parameterschnittstelle bereitstellen
+	
+	private void switchScene(Abstract_Scene next, boolean fading, int speed, int delta) {
 		if (fading) {
-			this.animationmanager.fadeOut(1,10);
+			this.animationmanager.fadeOut(speed, delta);
 			this.switching = true;
 			this.next_scene = next;
 		}
@@ -135,9 +136,19 @@ public class Object_Game {
 		}
 	}
 	
+	public void switchScene(Abstract_Scene next, int speed, int delta) {
+		switchScene(next, true, speed, delta);
+	}
+	
+	public void switchScene(Abstract_Scene next, boolean fading) {
+		switchScene(next, fading, 1, 10);
+	}
+	
 	public void switchScene(Abstract_Scene scene) {
 		switchScene(scene, false);
 	}
+	
+	// Spiel beenden
 	
 	public void exitOnError(String msg) {
 		System.out.println("Programmabbruch: "+msg);
@@ -145,7 +156,7 @@ public class Object_Game {
 	}
 	
 	public void quit() {
-		this.switchScene(null);
+		this.switchScene(null, true);
 	}
 
 }
