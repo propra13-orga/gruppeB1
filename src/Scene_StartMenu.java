@@ -118,7 +118,7 @@ public class Scene_StartMenu extends Abstract_Scene {
 				
 				s.setCtx(c1);
 				
-				this.game.switchScene(new Scene_BattleSystem(c1, null, this.game));
+				this.game.switchScene(new Scene_BattleSystem(c1, null, this.game), true);
 				break;
 			case 3: //Credits
 				String text = "3. Meilenstein\n\n"+

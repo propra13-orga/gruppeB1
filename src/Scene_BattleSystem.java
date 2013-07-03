@@ -188,14 +188,6 @@ public class Scene_BattleSystem extends Abstract_Scene {
 			y += 20;
 			x -= 15;
 		}
-		for (Object_BattleActor enemy : this.ctx.getAliveEnemies()) {
-			x = enemy.sprite.getX();
-			y = enemy.sprite.getY();
-			x += 75;
-			y += 15;
-			String info = enemy.hp + "/" + enemy.maxHp;
-			this.screen.drawString(info, x, y);
-		}
 	}
 	
 	private void drawArrow() {

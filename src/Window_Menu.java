@@ -16,15 +16,15 @@ import java.util.ArrayList;
 
 public class Window_Menu extends Window_Base {
 	
-	public static final Color		COLOR_FONT_STANDARD			= new Color(240, 240, 240);
-	public static final Color		COLOR_FONT_DISABLED			= new Color(100, 100, 100);
-	public static final Color		COLOR_CURSOR_BORDER			= new Color(255, 255, 255);
-	public static final Color		COLOR_CURSOR_FILL			= new Color(255, 255, 255);
-	public static final int			MIN_X						= Object_Map.TILESIZE;
-	public static final int			MAX_X						= Object_Screen.SCREEN_W;
-	public static final int			BORDER_BOX					= Object_Map.TILESIZE/2;
-	public static final int			BORDER_CURSOR				= 5;
-	public static final int			CURSOR_SPACE				= 5; //Der vertikale Platz zwischen zwei Befehlen
+	public Color					COLOR_FONT_STANDARD			= new Color(240, 240, 240);
+	public Color					COLOR_FONT_DISABLED			= new Color(100, 100, 100);
+	public Color					COLOR_CURSOR_BORDER			= new Color(255, 255, 255);
+	public Color					COLOR_CURSOR_FILL			= new Color(255, 255, 255);
+	public int						MIN_X						= Object_Map.TILESIZE;
+	public int						MAX_X						= Object_Screen.SCREEN_W;
+	public int						BORDER_BOX					= Object_Map.TILESIZE/2;
+	public int						BORDER_CURSOR				= 5;
+	public int						CURSOR_SPACE				= 5; //Der vertikale Platz zwischen zwei Befehlen
 	
 	public boolean					exit_possible				= true;
 	
@@ -137,13 +137,13 @@ public class Window_Menu extends Window_Base {
 					this.d_alpha *= -1;
 				}
 			}
-			//Pr�fe, ob das Menu abgebruchen wurde
+			//Pruefe, ob das Menu abgebruchen wurde
 			if (!this.executed) {
 				//Menu wurde beendet
 				if (this.canceled) {
 					//Escape wurde gedrueckt
 					if (!this.exit_possible) {
-						//Das war aber gar nicht erlaubt, also aktiviere das Menu wieder
+						//Das war aber gar nicht erlaubt, also aktiviere das Menue wieder
 						this.executed = true;
 						this.canceled = false;
 					}
@@ -165,7 +165,7 @@ public class Window_Menu extends Window_Base {
 					//Es wurde Enter gedrueckt...
 					if (this.submenues.get(this.cursor) != null) {
 						//...und es ist ein Sumenu registriert, also wird dieses jetzt
-						//aktiviert und ausgef�hrt
+						//aktiviert und ausgefuehrt
 						this.next_menu = this.submenues.get(this.cursor);
 						this.next_menu.previous_menu = this;
 						this.next_menu.executed = true;

@@ -33,6 +33,7 @@ import java.util.Random;
 
 public class Object_BattleEventManager extends Abstract_Update {
 	
+	public static final int MIN_MENUSIZE = 200;
 	public static final Random RANDOM = new Random(System.nanoTime());
 	
 	private ArrayList<Object_BattleEvent>	queue;
@@ -48,24 +49,12 @@ public class Object_BattleEventManager extends Abstract_Update {
 
 	@Override
 	public void updateData() {
-		
-		System.out.println("updateData() beginnt");
-		
 		//Aufsuehrungsliste aktualisieren
 		if (this.queue.size() > 0) {
-			
-			System.out.println("Events in Warteschlange");
-			
 			if (this.executed.size() == 0) {
-				
-				System.out.println("Fuege Events hinzu");
-				
 				addNextEvents();
 			}
 			else if ((boolean) this.executed.get(this.executed.size()-1).getAttribute("parallel")) {
-				
-				System.out.println("Fuege Events hinzu");
-				
 				//In der Warteschlange befinden sich Events und das letzte Event in
 				//der Ausfuehrungsliste kann parallel ausgefuehrt werden
 				addNextEvents();
@@ -79,6 +68,9 @@ public class Object_BattleEventManager extends Abstract_Update {
 				break;
 			case "getNextActor":
 				getNextActorHandler(e);
+				break;
+			case "setAnimated":
+				setAnimatedHandler(e);
 				break;
 			case "getPlayerInput":
 				getPlayerInputHandler(e);
@@ -152,14 +144,27 @@ public class Object_BattleEventManager extends Abstract_Update {
 		this.queue.add(e);
 	}
 	
+	public void setAnimated(Object_BattleActor actor, boolean value) {
+		Object_BattleEvent e = new Object_BattleEvent("setAnimated");
+		e.setAttribute("actor", actor);
+		e.setAttribute("value", value);
+		this.queue.add(e);
+	}
+	
 	public void getPlayerInput(Object_BattleActor actor) {
-		Object_BattleEvent e = new Object_BattleEvent("getPlayerInput");
+		Object_BattleEvent e			= new Object_BattleEvent("getPlayerInput");
 		
-		Window_Menu menu_main = new Window_Menu(this.game, "main");
-		Window_Menu menu_select_enemy = new Window_Menu(this.game, "select_enemy");
-		Window_Menu menu_select_player = new Window_Menu(this.game, "select_player");
-		Window_Menu menu_select_item = new Window_Menu(this.game, "select_item");
-		Window_Menu menu_select_skill = new Window_Menu(this.game, "select_skill");
+		Window_Menu menu_main			= new Window_Menu(this.game, "main");
+		Window_Menu menu_select_enemy	= new Window_Menu(this.game, "select_enemy");
+		Window_Menu menu_select_player	= new Window_Menu(this.game, "select_player");
+		Window_Menu menu_select_item	= new Window_Menu(this.game, "select_item");
+		Window_Menu menu_select_skill	= new Window_Menu(this.game, "select_skill");
+		
+		menu_main.MIN_X					= MIN_MENUSIZE;
+		menu_select_enemy.MIN_X			= MIN_MENUSIZE;
+		menu_select_player.MIN_X		= MIN_MENUSIZE;
+		menu_select_item.MIN_X			= MIN_MENUSIZE;
+		menu_select_skill.MIN_X			= MIN_MENUSIZE;
 		
 		menu_main.addMenuCommand("Angriff", menu_select_enemy);
 		menu_main.addMenuCommand("Skill", menu_select_skill);
@@ -176,6 +181,11 @@ public class Object_BattleEventManager extends Abstract_Update {
 		for (int i=0; i<skills.length; i++) {
 			menu_select_skill.addMenuCommand(skills[i], menu_select_enemy);
 		}
+		
+		for (Object_BattleActor b : this.battlesystem.getCtx().getAliveEnemies()) {
+			menu_select_enemy.addReturnCommand(b.name);
+		}
+		
 		menu_select_skill.disableCommand(2);
 		menu_main.topLeft();
 		Window_Menu.setMainMenu(menu_main);
@@ -222,20 +232,25 @@ public class Object_BattleEventManager extends Abstract_Update {
 		Object_BattleEvent e = new Object_BattleEvent("changeActorAnimation");
 		e.setAttribute("actor", actor);
 		e.setAttribute("animation", animation);
+		this.queue.add(e);
 	}
 	
-	public void moveActor(Object_BattleActor actor, int x, int y, int delay, boolean parallel) {
+	public void moveActor(Object_BattleActor actor, int x, int y, int delay, int speed, boolean parallel) {
 		Object_BattleEvent e = new Object_BattleEvent("moveActor");
 		e.setAttribute("actor", actor);
 		e.setAttribute("x", x);
 		e.setAttribute("y", y);
 		e.setAttribute("delay", delay);
+		e.setAttribute("speed", speed);
+		e.setAttribute("tick", 0);
 		e.setAttribute("parallel", parallel);
+		this.queue.add(e);
 	}
 	
 	public void playSound(String name) {
 		Object_BattleEvent e = new Object_BattleEvent("playSound");
 		e.setAttribute("name", name);
+		this.queue.add(e);
 	}
 	
 	
@@ -277,19 +292,36 @@ public class Object_BattleEventManager extends Abstract_Update {
 		e.finish();
 	}
 	
+	private void setAnimatedHandler(Object_BattleEvent e) {
+		((Object_BattleActor) e.getAttribute("actor")).sprite.animated = (boolean) e.getAttribute("value");
+	}
+	
 	private void getPlayerInputHandler(Object_BattleEvent e) {
-		System.out.println("playerInput Handler");
 		Window_Menu main = (Window_Menu) e.getAttribute("menu_main");
 		if (main.isExecuted()) {
 			main.updateData();
 		}
 		else {
 			main.setupMenuPath();
+			System.out.println("ENDE");
 			switch (main.getCurrentCursor()) {
 			case 0:								//Angriff
-				System.out.println("Angriff!");
+				main.nextMenu();
+				Object_BattleActor target = this.battlesystem.getCtx().getAliveEnemies().get(main.getCurrentCursor());
+				Object_BattleActor current = this.battlesystem.getCurrentActor();
+				moveActor(current, target.sprite.x+100, target.sprite.y, 1, 1, false);
+				setAnimated(current, false);
+				wait(40);
+				setAnimated(current, true);
+				moveActor(current,
+						Scene_BattleSystem.PLAYER_POSITIONS[current.sprite.position-1][0],
+						Scene_BattleSystem.PLAYER_POSITIONS[current.sprite.position-1][1],
+						1,
+						1,
+						false);
 				break;
 			}
+			getNextActor();
 			e.finish();
 		}
 	}
@@ -332,19 +364,28 @@ public class Object_BattleEventManager extends Abstract_Update {
 	}
 	
 	private void moveActorHandler(Object_BattleEvent e) {
-		//ACHTUNG: DELAY WIRD NOCH NICHT BEACHTET
-		int src_x = ((Object_BattleActor) e.getAttribute("actor")).sprite.x;
-		int src_y = ((Object_BattleActor) e.getAttribute("actor")).sprite.y;
-		int dest_x = (int) e.getAttribute("x");
-		int dest_y = (int) e.getAttribute("y");
-		if (src_x == dest_x && src_y == dest_y) {
-			e.finish();
-			return;
+		//ACHTUNG SPEED WIRD NOCH NICHT BEACHTET!
+		int tick = (int) e.getAttribute("tick");
+		//int speed = (int) e.getAttribute("speed");
+		tick++;
+		if (tick == ((int) e.getAttribute("delay"))) {
+			tick = 0;
+			int src_x = ((Object_BattleActor) e.getAttribute("actor")).sprite.x;
+			int src_y = ((Object_BattleActor) e.getAttribute("actor")).sprite.y;
+			int dest_x = (int) e.getAttribute("x");
+			int dest_y = (int) e.getAttribute("y");
+			if (src_x == dest_x && src_y == dest_y) {
+				e.finish();
+				return;
+			}
+			if (src_x < dest_x) src_x++;
+			if (src_x > dest_x) src_x--;
+			if (src_y < dest_y) src_y++;
+			if (src_y > dest_y) src_y--;
+			((Object_BattleActor) e.getAttribute("actor")).sprite.x = src_x;
+			((Object_BattleActor) e.getAttribute("actor")).sprite.y = src_y;
 		}
-		if (src_x < dest_x) src_x++;
-		if (src_x > dest_x) src_x--;
-		if (src_y < dest_y) src_y++;
-		if (src_y > dest_y) src_y--;
+		e.setAttribute("tick", tick);
 	}
 	
 	private void playSoundHandler(Object_BattleEvent e) {

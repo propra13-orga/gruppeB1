@@ -11,7 +11,7 @@ import javax.sound.sampled.DataLine;
 
 public class Object_SoundManager {
 	
-	public static final boolean				MUTED = false;
+	public static final boolean				MUTED = true;
 	
 	private Hashtable<String, Clip>	sounds;
 	
@@ -27,10 +27,10 @@ public class Object_SoundManager {
 	public void loadSound(String name) {
 		try{
             AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File("res/sound/"+name+".wav"));
-            AudioFormat af     = audioInputStream.getFormat();
-            int size      = (int) (af.getFrameSize() * audioInputStream.getFrameLength());
-            byte[] audio       = new byte[size];
-            DataLine.Info info      = new DataLine.Info(Clip.class, af, size);
+            AudioFormat af = audioInputStream.getFormat();
+            int size = (int) (af.getFrameSize() * audioInputStream.getFrameLength());
+            byte[] audio = new byte[size];
+            DataLine.Info info = new DataLine.Info(Clip.class, af, size);
             audioInputStream.read(audio, 0, size);
             
            // for(int i=0; i < 32; i++) {
@@ -51,6 +51,7 @@ public class Object_SoundManager {
 	}
 
 	public void playMidi(String filename) {
+		if (MUTED) return;
 		Sequencer sequencer;
 		try {
 			sequencer = MidiSystem.getSequencer();

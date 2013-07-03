@@ -16,6 +16,7 @@ class Object_BattleSprite extends Abstract_Update {
 	public int battletype;
 	public Object_BattleSpriteSet spriteset;
 	public Object_BattleActor actor;
+	public boolean animated = true;
 	public boolean moving = false;
 	
 	//Private Attribute, die nur fuer die Animation gebraucht werden
@@ -71,51 +72,14 @@ class Object_BattleSprite extends Abstract_Update {
 	}
 	
 	public void updateData() {
-		switch (this.animation_type) {
-		case Object_BattleSpriteSet.ANIMATION_FRONT_ATTACK:
-			//Normaler Angriff, Sprite bewegt sich zum Targetsprite
-			if (this.x < this.dest_x) {
-				this.x++;
-			}
-			else if (this.x > this.dest_x) {
-				this.x--;
-			}
-			else {
-				this.animation_type = Object_BattleSpriteSet.ANIMATION_HIT;
-			}
-			break;
-		case Object_BattleSpriteSet.ANIMATION_BACK_ATTACK:
-			if (this.x < this.dest_x) {
-				this.x++;
-			}
-			else if (this.x > this.dest_x) {
-				this.x--;
-			}
-			else {
-				this.animation_type = Object_BattleSpriteSet.ANIMATION_STAND;
-			}
-			break;
-		case Object_BattleSpriteSet.ANIMATION_BACK:
-			break;
-		case Object_BattleSpriteSet.ANIMATION_DAMAGE:
-			break;
-		case Object_BattleSpriteSet.ANIMATION_DEAD:
-			break;
-		case Object_BattleSpriteSet.ANIMATION_HIT:
-			this.moveToPosition(this.battletype, this.position);
-			this.animation_type = Object_BattleSpriteSet.ANIMATION_BACK_ATTACK;
-			break;
-		case Object_BattleSpriteSet.ANIMATION_STAND:
-			break;
-		case Object_BattleSpriteSet.ANIMATION_USE:
-			break;
-		}
-		this.animation_tick++;
-		if (this.animation_tick == this.animation_delay) {
-			this.animation_tick = 0;
-			this.animation += this.animation_delta;
-			if (this.animation != 1) {
-				this.animation_delta *= -1;
+		if (this.animated) {
+			this.animation_tick++;
+			if (this.animation_tick == this.animation_delay) {
+				this.animation_tick = 0;
+				this.animation += this.animation_delta;
+				if (this.animation != 1) {
+					this.animation_delta *= -1;
+				}
 			}
 		}
 	}
