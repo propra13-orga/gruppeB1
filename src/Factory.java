@@ -2,6 +2,7 @@ import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 /*
  * Factory.java
@@ -23,19 +24,25 @@ public class Factory {
 	
 	public Object_DBReader getDB() { return this.db; }
 	
-//	public Entity buildEntity(String entityType, String name, int x, int y) {
-//		return this.getEntity(new EntityData(db,entityType,name,x,y));
-//	}
 	
-	
-	public Entity build(String entityType, String name, int x, int y) {
+	public Entity build(Map<String,String> entityData) {
+		String entityType = entityData.get("entityType");
+		String name = entityData.remove("name");
+		
 		Entity entity = new Entity(name,this.scene.getEntityManager());
 		
-		Object_EntityData data = (Object_EntityData) db.getProperties(entityType);
+		//Object_EntityData data = (Object_EntityData) db.getProperties(entityType);
+		Map<String,String> data = db.getProperties(entityType);
 		
-		data.put("x",Integer.toString(x));
-		data.put("y",Integer.toString(y));
+		data.put("x",entityData.get("x"));
+		data.put("y",entityData.get("y"));
 		data.put("name", name);
+		
+		if (entityData != null) {
+			for (String attr : entityData.keySet()) {
+				data.put(attr, entityData.get(attr));
+			}
+		}
 		
 		/*
 		 * Component_Battle
@@ -156,6 +163,7 @@ public class Factory {
 		return entity;
 	}
 	
+	
 	private EventType StringToEventType(String typestr) {
 		EventType type = null;
 		switch(typestr) {
@@ -187,7 +195,7 @@ public class Factory {
 		return type;
 	}
 	
-	private Hashtable<String,String> filterHashtable(Hashtable<String,String> hashtable, String regex) {
+	private Hashtable<String,String> filterHashtable(Map<String,String> hashtable, String regex) {
 		Hashtable<String,String> filtered = new Hashtable<String,String>();
 		
 		for (String key : hashtable.keySet()) {

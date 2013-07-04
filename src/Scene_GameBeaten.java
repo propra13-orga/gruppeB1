@@ -7,7 +7,7 @@ public class Scene_GameBeaten extends Abstract_Scene {
 		super(game);
 		menu = new Window_Menu(game, "main");
 		menu.addReturnCommand("Spiel neu starten");
-		menu.addReturnCommand("Zurück zum Startmenü");
+		menu.addReturnCommand("Zurï¿½ck zum Startmenï¿½");
 		menu.addReturnCommand("Spiel beenden");
 		menu.center();
 	}
@@ -31,9 +31,9 @@ public class Scene_GameBeaten extends Abstract_Scene {
 			menu.setupMenuPath();
 			switch (menu.getCurrentCursor()) {
 			case 0: //Neu starten
-				game.switchScene(new Scene_Level(game));
+				game.switchScene(new Scene_Level(game,"level01"));
 				return;
-			case 1: // Hauptmenü
+			case 1: // Hauptmenï¿½
 				game.switchScene(new Scene_StartMenu(game));
 				return;
 			case 2: //Ende

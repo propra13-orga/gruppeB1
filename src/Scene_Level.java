@@ -1,14 +1,21 @@
+import java.io.File;
+import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 public class Scene_Level extends Abstract_Scene {
 	
+	
 	/*
 	 * LEVELVERWALTUNG.
 	 */
+	private String levelname = "level01";
+	
 	private Object_Level currentLevel;
 	private Object_Level nextLevel;
 	private int[] nextLevelSpawn = new int[2];
@@ -41,6 +48,11 @@ public class Scene_Level extends Abstract_Scene {
 		super(g);
 		this.load = false;
 		this.already_running = false;
+	}
+	
+	public Scene_Level(Object_Game g, String levelname) {
+		this(g);
+		this.levelname = levelname;
 	}
 	
 	public Scene_Level(Object_Game g, boolean load) {
@@ -91,7 +103,7 @@ public class Scene_Level extends Abstract_Scene {
 			this.getPlayer().init();
 		}
 		else {
-			this.BeispielInit();
+			this.initLevel();
 		}
 		
 		this.currentLevel.init();
@@ -286,75 +298,58 @@ public class Scene_Level extends Abstract_Scene {
 		return events;
 	}
 	
+	private Map<String,String> basicPlayerData() {
+		Map<String,String> data = new HashMap<String,String>();
+		data.put("entityType", "player_raw");
+		data.put("name", "Hannes");
+		return data;
+	}
+	
 	/*
-	 * Hier werden Level und Entitäten initialisiert. Wird später ausgelagert.
+	 * Hier werden Level und Entitäten initialisiert.
 	 */
-	private void BeispielInit() {
-		Object_Level level1 = new Object_Level(this.game, "level-1", 1);
-		Object_Level level2 = new Object_Level(this.game, "level_2", 2);
-		Object_Level level3 = new Object_Level(this.game, "map4", 3);
-		this.levels.put(level1.getID(), level1);
-		this.levels.put(level2.getID(), level2);
-		this.levels.put(level3.getID(), level3);
+	private void initLevel() {
+		Map<String,String> playerData = this.basicPlayerData();
+		/*
+		 * Lese alle TMX-Dateien im Ordner des entsprechenden Levels.
+		 */
+		File folder = new File("res/maps/"+this.levelname);
+		File[] files = folder.listFiles();
+		for (File file : files) {
+			String name = file.getName();
+			Pattern p = Pattern.compile("(\\w+-(\\d)).tmx");
+			Matcher m = p.matcher(name);
+			if (m.matches()) {
+				String levelname = m.group(1);
+				int number = Integer.parseInt(m.group(2));
+				Object_Level level = new Object_Level(this.game, levelname, number);
+				this.levels.put(level.getID(), level);
+				/*
+				 * Frage ggf. Startposition ab. Sobald mindestens eine TMX-Datei
+				 * die Properties "startX" und "startY" hat, wird das erste
+				 * gelesene davon als Anfangsmap gesetzt.
+				 */
+				if (this.currentLevel == null && level.getProperties().containsKey("startX")) {
+					this.currentLevel = level;
+					playerData.put("x", level.getProperties().get("startX"));
+					playerData.put("y", level.getProperties().get("startY"));
+				}
+			}
+		}
 		
 		Factory factory = new Factory(this);
 		
-		Entity player = factory.build("player_raw", "Held", 17, 16);
+		for (Object_Level level : this.levels.values()) {
+			for (Map<String,String> entityData : level.getEntityData()) {
+				level.addEntity(factory.build(entityData));
+			}
+		}
+		
+		
+		Entity player = factory.build(playerData);
 		new Component_Camera(player,renderSystem);
-		new Component_Inventory(player, interactionSystem, 50);
 		player.init();
 		eManager.setPlayer(player);
-		
-		String bla =	"Willkommen zu "+Object_Game.GAME_TITLE+"! Dies ist die erste Karte, die bis jetzt nur" +
-						"zu Testzwecken existiert...";
-		Entity enemy = factory.build("npc1", "Hannes", 13, 14);
-		Hashtable<String,String> prop_dialog = new Hashtable<String,String>();
-		prop_dialog.put("dialog", bla);
-		new Component_Trigger(enemy,this.getSystemInteraction(),EventType.ACTION,EventType.OPEN_DIALOG,prop_dialog);
-		
-		Entity salesperson = factory.build("salesperson","Ladenhueter",14,14);
-
-		Entity trigger = factory.build("teleport","Tuer 1",0,0);
-		Hashtable<String,String> prop_trigger = new Hashtable<String,String>();
-		prop_trigger.put("toLevel", "2");
-		prop_trigger.put("toX", "0");
-		prop_trigger.put("toY", "13");
-		new Component_Trigger(trigger,this.getSystemInteraction(),EventType.COLLISION,EventType.CHANGELEVEL,prop_trigger);
-
-		Entity trigger2 = factory.build("teleport","Tuer 2",0,0);
-		Hashtable<String,String> prop_trigger2 = new Hashtable<String,String>();
-		prop_trigger2.put("toLevel", "3");
-		prop_trigger2.put("toX", "0");
-		prop_trigger2.put("toY", "4");
-		new Component_Trigger(trigger2,this.getSystemInteraction(),EventType.COLLISION,EventType.CHANGELEVEL,prop_trigger2);
-		
-		Entity trigger3 = factory.build("success","Spiel-Ende", 22, 2);
-		
-//		Entity item = new Entity("testitem",this.eManager);
-//		new Component_Movement(item,movementSystem,10,14,0,0,2,31,true,false,true);
-//		new Component_Item(item, interactionSystem, "item", "Tolles Item", null, null, null);
-//		new Component_Sprite(item, renderSystem, "player");
-//		new Component_Trigger(item,this.getSystemInteraction(),EventType.ACTION,EventType.PICKUP);
-		Entity item = factory.build("firesword","Schwert des ewigen Feuers",10,14);
-		Entity item2 = factory.build("firesword","Schwert des ewigen Feuers 2",9,14);
-		
-		Entity instadeath = factory.build("instadeath","Ende",14,3);
-		
-		
-		level1.addEntity(enemy);
-		level1.addEntity(trigger);
-		level1.addEntity(instadeath);
-		level1.addEntity(salesperson);
-		level1.addEntity(item);
-		level1.addEntity(item2);
-
-//		level1.addEntity(enemy2);
-		
-		level2.addEntity(trigger2);
-		
-		level3.addEntity(trigger3);
-		
-		this.currentLevel = this.levels.get(1);
 		
 	}
 }

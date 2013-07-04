@@ -2,6 +2,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.Hashtable;
+import java.util.Map;
 
 import javax.imageio.ImageIO;
 import javax.xml.parsers.DocumentBuilder;
@@ -26,6 +27,7 @@ public class Object_Map extends Abstract_Update {
 	private BufferedImage					below;
 	private BufferedImage					samelevel;
 	private BufferedImage					above;
+	
 
 	Object_Map(Object_Game game, String filename) {
 		super(game);
@@ -51,6 +53,8 @@ public class Object_Map extends Abstract_Update {
 		
 		refreshMap();
 	}
+	
+	public Map<String,String> getProperties() { return this.properties; }
 	
 	public BufferedImage getLowTiles() {
 		return below;
@@ -104,7 +108,7 @@ public class Object_Map extends Abstract_Update {
 	 * 
 	 * 	1 -	Die Schicht, die unter den Sprites angezeigt wird (BELOW)
 	 * 
-	 * 	2 - Die Schicht die unter den Sprites, aber über BELOW angezeigt wird (SAME_LEVEL)
+	 * 	2 - Die Schicht die unter den Sprites, aber ï¿½ber BELOW angezeigt wird (SAME_LEVEL)
 	 * 		Hier werden Mapelemente angesiedelt, welche den Sprites 'im Weg stehen' koennen
 	 * 
 	 *  3 -	Die Schicht, die ueber den Sprites angezeigt wird (ABOVE)
@@ -192,7 +196,7 @@ public class Object_Map extends Abstract_Update {
 		return this.layer[l][y][x];
 	}
 	
-	private Document loadMap(String filename) throws Exception {
+	protected Document loadMap(String filename) throws Exception {
 		System.out.println("Lade: "+"res/maps/"+filename+".tmx");
 		File map = new File("res/maps/"+filename+".tmx");
 		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();

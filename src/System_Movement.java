@@ -74,7 +74,7 @@ class System_Movement extends System_Component {
 			String[] xxx = xy.split("x");
 			int x = Integer.parseInt(xxx[0]);
 			int y = Integer.parseInt(xxx[1]);
-			if (x > -1 && y > -1) positions[y][x] = 1;
+			if (x > -1 && y > -1 && x < w && y < h) positions[y][x] = 1;
 		}
 		return positions;
 	}
