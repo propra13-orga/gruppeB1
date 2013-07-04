@@ -45,8 +45,9 @@ class System_Interaction extends System_Component {
 			case ATTACK:
 				int ap = Integer.parseInt(((Component_Trigger) undergoer.getComponent("trigger_event")).getProperty("cause_dmg"));
 				((Component_Battle) actor.getComponent("battle")).addToProperty("prop_hp_current", -ap);
-				this.addEvent(new Event(EventType.PLAYERDMG,actor,undergoer));
-				System.out.println("ANGRIFF");
+				if (this.getScene().getPlayer().equals(actor)) {
+					this.addEvent(new Event(EventType.PLAYERDMG,actor,undergoer));					
+				}
 				break;
 			case CHANGELEVEL:
 				if (this.getScene().getPlayer().equals(actor)) {

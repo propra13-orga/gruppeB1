@@ -1,6 +1,7 @@
 import java.util.Hashtable;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 
 public class Scene_Level extends Abstract_Scene {
@@ -296,9 +297,9 @@ public class Scene_Level extends Abstract_Scene {
 		this.levels.put(level2.getID(), level2);
 		this.levels.put(level3.getID(), level3);
 		
-		Factory factory = new Factory(this,"res/db.csv");
+		Factory factory = new Factory(this);
 		
-		Entity player = factory.build("PlayerRaw", "Held", 17, 16);
+		Entity player = factory.build("player_raw", "Held", 17, 16);
 		new Component_Camera(player,renderSystem);
 		new Component_Inventory(player, interactionSystem, 50);
 		player.init();
@@ -306,36 +307,38 @@ public class Scene_Level extends Abstract_Scene {
 		
 		String bla =	"Willkommen zu "+Object_Game.GAME_TITLE+"! Dies ist die erste Karte, die bis jetzt nur" +
 						"zu Testzwecken existiert...";
-		Entity enemy = factory.build("NPC1", "Hannes", 13, 14);
+		Entity enemy = factory.build("npc1", "Hannes", 13, 14);
 		Hashtable<String,String> prop_dialog = new Hashtable<String,String>();
 		prop_dialog.put("dialog", bla);
 		new Component_Trigger(enemy,this.getSystemInteraction(),EventType.ACTION,EventType.OPEN_DIALOG,prop_dialog);
 		
-		Entity salesperson = factory.build("Salesperson","Ladenhueter",14,14);
+		Entity salesperson = factory.build("salesperson","Ladenhueter",14,14);
 
-		Entity trigger = factory.build("Teleport","Tuer 1",0,0);
+		Entity trigger = factory.build("teleport","Tuer 1",0,0);
 		Hashtable<String,String> prop_trigger = new Hashtable<String,String>();
 		prop_trigger.put("toLevel", "2");
 		prop_trigger.put("toX", "0");
 		prop_trigger.put("toY", "13");
 		new Component_Trigger(trigger,this.getSystemInteraction(),EventType.COLLISION,EventType.CHANGELEVEL,prop_trigger);
 
-		Entity trigger2 = factory.build("Teleport","Tuer 2",0,0);
+		Entity trigger2 = factory.build("teleport","Tuer 2",0,0);
 		Hashtable<String,String> prop_trigger2 = new Hashtable<String,String>();
 		prop_trigger2.put("toLevel", "3");
 		prop_trigger2.put("toX", "0");
 		prop_trigger2.put("toY", "4");
 		new Component_Trigger(trigger2,this.getSystemInteraction(),EventType.COLLISION,EventType.CHANGELEVEL,prop_trigger2);
 		
-		Entity trigger3 = factory.build("Success1","Spiel-Ende", 22, 2);
+		Entity trigger3 = factory.build("success","Spiel-Ende", 22, 2);
 		
-		Entity item = new Entity("testitem",this.eManager);
-		new Component_Movement(item,movementSystem,10,14,0,0,2,31,true,false,true);
-		new Component_Item(item, interactionSystem, "item", "Tolles Item", null, null, null);
-		new Component_Sprite(item, renderSystem, "player");
-		new Component_Trigger(item,this.getSystemInteraction(),EventType.ACTION,EventType.PICKUP);
+//		Entity item = new Entity("testitem",this.eManager);
+//		new Component_Movement(item,movementSystem,10,14,0,0,2,31,true,false,true);
+//		new Component_Item(item, interactionSystem, "item", "Tolles Item", null, null, null);
+//		new Component_Sprite(item, renderSystem, "player");
+//		new Component_Trigger(item,this.getSystemInteraction(),EventType.ACTION,EventType.PICKUP);
+		Entity item = factory.build("firesword","Schwert des ewigen Feuers",10,14);
+		Entity item2 = factory.build("firesword","Schwert des ewigen Feuers 2",9,14);
 		
-		Entity instadeath = factory.build("Instadeath","Ende",14,3);
+		Entity instadeath = factory.build("instadeath","Ende",14,3);
 		
 		
 		level1.addEntity(enemy);
@@ -343,6 +346,7 @@ public class Scene_Level extends Abstract_Scene {
 		level1.addEntity(instadeath);
 		level1.addEntity(salesperson);
 		level1.addEntity(item);
+		level1.addEntity(item2);
 
 //		level1.addEntity(enemy2);
 		
@@ -351,5 +355,6 @@ public class Scene_Level extends Abstract_Scene {
 		level3.addEntity(trigger3);
 		
 		this.currentLevel = this.levels.get(1);
+		
 	}
 }

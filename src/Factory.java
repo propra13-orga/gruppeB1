@@ -13,15 +13,15 @@ import java.util.List;
 
 public class Factory {
 	Scene_Level scene;
-	Object_DBBrowser db;
+	Object_DBReader db;
 	
-	public Factory(Scene_Level scene, String dbpath) {
+	public Factory(Scene_Level scene) {
 		this.scene = scene;
-		this.db = new Object_DBBrowser(dbpath);
+		this.db = new Object_DBReader();
 		}
 	
 	
-	public Object_DBBrowser getDB() { return this.db; }
+	public Object_DBReader getDB() { return this.db; }
 	
 //	public Entity buildEntity(String entityType, String name, int x, int y) {
 //		return this.getEntity(new EntityData(db,entityType,name,x,y));
@@ -31,13 +31,11 @@ public class Factory {
 	public Entity build(String entityType, String name, int x, int y) {
 		Entity entity = new Entity(name,this.scene.getEntityManager());
 		
-		List<String> attributes = this.db.getNonEmptyAttributes(entityType);
-		Object_EntityData data = new Object_EntityData();
-		for (String attribute : attributes) {
-			data.put(attribute, db.getEntry(entityType, attribute));
-		}
+		Object_EntityData data = (Object_EntityData) db.getProperties(entityType);
+		
 		data.put("x",Integer.toString(x));
 		data.put("y",Integer.toString(y));
+		data.put("name", name);
 		
 		/*
 		 * Component_Battle

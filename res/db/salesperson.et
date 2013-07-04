@@ -1,0 +1,7 @@
+name : Ladenhueter
+sprite : character_2
+prop_hp : 10
+orientation : 2
+collidable : true
+inventory : true
+onAction : trigger_buymenu

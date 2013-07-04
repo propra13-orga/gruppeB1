@@ -1,0 +1,10 @@
+name : Dagoberto
+sprite : character_2
+sprite_battle : battlechar-1
+prop_hp : 10
+prop_def : 2
+spd : 2
+controllable : true
+collidable : true
+inventory : true
+ai : true

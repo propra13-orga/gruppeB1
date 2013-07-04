@@ -1,0 +1,5 @@
+name : Toeter
+walkable : true
+collidable : true
+onCollision : trigger_attack
+cause_dmg : 1000
