@@ -25,7 +25,7 @@ public class Object_DBReader {
 	}
 	
 	private Map<String,String> getPropertiesFromFile(String fname) {
-		Map<String,String> properties = new Object_EntityData();
+		Map<String,String> properties = new HashMap<String,String>();
 		try {
 			BufferedReader br = new BufferedReader(new FileReader(DIR+fname));
 			String line;

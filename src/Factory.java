@@ -31,7 +31,6 @@ public class Factory {
 		
 		Entity entity = new Entity(name,this.scene.getEntityManager());
 		
-		//Object_EntityData data = (Object_EntityData) db.getProperties(entityType);
 		Map<String,String> data = db.getProperties(entityType);
 		
 		data.put("x",entityData.get("x"));

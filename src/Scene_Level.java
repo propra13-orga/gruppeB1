@@ -298,6 +298,9 @@ public class Scene_Level extends Abstract_Scene {
 		return events;
 	}
 	
+	/*
+	 * Basisdaten für Spieler.
+	 */
 	private Map<String,String> basicPlayerData() {
 		Map<String,String> data = new HashMap<String,String>();
 		data.put("entityType", "player_raw");
@@ -320,16 +323,16 @@ public class Scene_Level extends Abstract_Scene {
 			Pattern p = Pattern.compile("(\\w+-(\\d)).tmx");
 			Matcher m = p.matcher(name);
 			if (m.matches()) {
-				String levelname = m.group(1);
+				String roomname = m.group(1);
 				int number = Integer.parseInt(m.group(2));
-				Object_Level level = new Object_Level(this.game, levelname, number);
+				Object_Level level = new Object_Level(this.game, this.levelname+"/"+roomname, number);
 				this.levels.put(level.getID(), level);
 				/*
 				 * Frage ggf. Startposition ab. Sobald mindestens eine TMX-Datei
-				 * die Properties "startX" und "startY" hat, wird das erste
+				 * die Properties "startX" und "startY" hat, wird die erste
 				 * gelesene davon als Anfangsmap gesetzt.
 				 */
-				if (this.currentLevel == null && level.getProperties().containsKey("startX")) {
+				if (this.currentLevel == null && level.hasProperty("startX")) {
 					this.currentLevel = level;
 					playerData.put("x", level.getProperties().get("startX"));
 					playerData.put("y", level.getProperties().get("startY"));

@@ -40,7 +40,7 @@ public class Object_Map extends Abstract_Update {
 		}
 		
 		this.properties = new Hashtable<String, String>();
-		getProperties(doc);
+		retrieveProperties(doc);
 		this.width		= getMapWidth(doc);
 		this.height		= getMapHeight(doc);
 		this.tileset	= loadTileSet(doc);
@@ -55,6 +55,12 @@ public class Object_Map extends Abstract_Update {
 	}
 	
 	public Map<String,String> getProperties() { return this.properties; }
+	
+	public boolean hasProperty(String property) {
+		if (this.properties == null) return false;
+		if (this.properties.containsKey(property)) return true;
+		return false;
+	}
 	
 	public BufferedImage getLowTiles() {
 		return below;
@@ -240,9 +246,10 @@ public class Object_Map extends Abstract_Update {
 		return tmp_layer;
 	}
 	
-	private void getProperties(Document doc) {
+	private void retrieveProperties(Document doc) {
 		String name;
 		String value;
+		if (doc.getElementsByTagName("properties").getLength() < 1) return;
 		NodeList properties = ((Element) doc.getElementsByTagName("properties").item(0)).getElementsByTagName("property");
 		System.out.println("LAAAANGE: "+properties.getLength());
 		for (int i=0; i<properties.getLength(); i++) {
