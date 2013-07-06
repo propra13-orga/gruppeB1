@@ -1,4 +1,4 @@
-sprite : character_2
+sprite : firesword
 walkable : true
 onAction : trigger_pickup
 item_name : Schwert des ewigen Feuers
