@@ -1,9 +1,11 @@
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
+import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 /*
  * ComponentSystem.java
@@ -13,13 +15,15 @@ import java.util.List;
  */
 
 
-abstract class System_Component {
+abstract class System_Component implements IEventListener {
 	protected Abstract_Scene scene;
 	protected String[] types;
 	protected List<Abstract_Component> components;
 	protected Hashtable<String,List<Entity>> entitiesByType;
+	protected Map<EventType,List<Event>> events;
 	
 	public System_Component(Abstract_Scene scene, String ...types) {
+		this.events = new HashMap<EventType,List<Event>>();
 		this.scene = scene;
 		this.components = new LinkedList<Abstract_Component>();
 		this.types = types;
@@ -31,12 +35,20 @@ abstract class System_Component {
 	
 	abstract public void update();
 	
+	@Override
 	public void addEvent(Event event) {
 		((Scene_Level) this.scene).addEvent(event);
 	}
 	
-	public void addEvents(List<Event> events) {
+	protected void addEvents(List<Event> events) {
 		for (Event event : events) this.addEvent(event);
+	}
+	
+	@Override
+	public void broadcastEvent(Event event) {
+		EventType type = event.getType();
+		if (!this.events.containsKey(type)) return;
+		this.events.get(type).add(event);
 	}
 	
 	public void register(Abstract_Component component) {
@@ -53,8 +65,14 @@ abstract class System_Component {
 		return this.entitiesByType.get(type);
 	}
 	
-	public List<Event> getEvents(EventType... types) { 
-		return ((Scene_Level) this.scene).getEvents(types); 
+	@Override
+	public List<Event> getEvents(EventType... types) {
+		List<Event> events = new LinkedList<Event>();
+		for (EventType type : types) {
+			events.addAll(this.events.get(type));
+			this.events.get(type).clear();
+		}
+		return events;
 	}
 	
 	public Scene_Level getScene() { return (Scene_Level) this.scene; }
@@ -65,5 +83,13 @@ abstract class System_Component {
 			if (t.equals(type)) return true;
 		}
 		return false;
+	}
+	
+	@Override
+	public void listenTo(EventType...eventTypes) {
+		for (EventType eventType : eventTypes) {
+			this.events.put(eventType, new LinkedList<Event>());
+		}
+		((Scene_Level) this.scene).listenTo(this, eventTypes);
 	}
 }

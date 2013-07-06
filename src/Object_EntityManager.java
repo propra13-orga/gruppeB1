@@ -7,6 +7,7 @@ import java.io.ObjectOutputStream;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 /*
  * EntityManager.java
@@ -16,18 +17,21 @@ import java.util.List;
  */
 
 
-class Object_EntityManager {
+class Object_EntityManager implements IEventListener {
 	protected Scene_Level scene;
 	protected List<Entity> entities;
 	protected HashMap<Integer,Entity> entitiesByID;
 	protected Entity player;
 	protected int lastID;
+	protected Map<EventType,List<Event>> events;
 	
 	public Object_EntityManager(Scene_Level scene) {
+		this.events = new HashMap<EventType,List<Event>>();
 		this.scene = scene;
 		this.entities = new LinkedList<Entity>();
 		this.entitiesByID = new HashMap<Integer,Entity>();
 		this.lastID = 0;
+		this.listenTo(EventType.DEATH);
 	}
 	
 	/*
@@ -48,6 +52,7 @@ class Object_EntityManager {
 			}
 		}
 	}
+	
 	
 
 	
@@ -165,12 +170,39 @@ class Object_EntityManager {
 	 * Privates
 	 */
 	
-	private List<Event> getEvents(EventType type) {
-		return this.scene.getEvents(type); 
-	}
 	
 	private Scene_Level getScene() {
 		return this.scene;
+	}
+
+	@Override
+	public void addEvent(Event event) {
+		this.scene.addEvent(event);		
+	}
+
+	@Override
+	public void broadcastEvent(Event event) {
+		EventType type = event.getType();
+		if (!this.events.containsKey(type)) return;
+		this.events.get(type).add(event);		
+	}
+
+	@Override
+	public List<Event> getEvents(EventType... eventTypes) {
+		List<Event> events = new LinkedList<Event>();
+		for (EventType type : eventTypes) {
+			events.addAll(this.events.get(type));
+			this.events.get(type).clear();
+		}
+		return events;
+	}
+
+	@Override
+	public void listenTo(EventType... eventTypes) {
+		for (EventType eventType : eventTypes) {
+			this.events.put(eventType, new LinkedList<Event>());
+		}
+		this.scene.listenTo(this, eventTypes);
 	}
 
 }

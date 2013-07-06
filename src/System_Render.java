@@ -12,6 +12,7 @@ class System_Render extends System_Component {
 		this.screen_point = new int[2];
 		this.screen_point[0] = 0;
 		this.screen_point[1] = 0;
+		this.listenTo(EventType.PLAYERDMG);
 	}
 	
 	@Override

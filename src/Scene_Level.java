@@ -24,8 +24,8 @@ public class Scene_Level extends Abstract_Scene {
 	/*
 	 * EVENTVERWALTUNG.
 	 */
-	private Hashtable<EventType,List<Event>> events;
 	private Abstract_Scene nextScene;
+	private Object_EventManager eventManager;
 	
 	/*
 	 * ENTITYMANAGER UND KOMPONENTENSYSTEME.
@@ -85,12 +85,13 @@ public class Scene_Level extends Abstract_Scene {
 		}
 		this.nextScene = null;
 		this.levels = new Hashtable<Integer,Object_Level>();
-		this.events = this.initEventTable();
 		this.nextScene = null;
 		this.currentLevel = null;
 		this.nextLevel = null;
 		this.playerDead = false;
 		this.gameBeaten = false;
+		
+		this.eventManager = new Object_EventManager();
 		
 		this.eManager = new Object_EntityManager(this);
 		this.aiSystem = new System_AI(this);
@@ -112,8 +113,7 @@ public class Scene_Level extends Abstract_Scene {
 
 	@Override
 	public void onExit() {
-		// TODO Auto-generated method stub
-		
+		//
 	}
 
 	@Override
@@ -126,7 +126,6 @@ public class Scene_Level extends Abstract_Scene {
 		else if (this.nextScene != null) {
 			this.changeScene();
 		}
-		this.clearEvents();
 		this.check_menu();
 		this.aiSystem.update();
 		this.movementSystem.update();
@@ -140,7 +139,11 @@ public class Scene_Level extends Abstract_Scene {
 	}
 	
 	public void addEvent(Event event) {
-		this.events.get(event.getType()).add(event);
+		this.eventManager.addEvent(event);
+	}
+	
+	public void listenTo(IEventListener listener, EventType... eventTypes) {
+		this.eventManager.listenTo(listener, eventTypes);
 	}
 	
 	public void beatGame() {
@@ -181,18 +184,10 @@ public class Scene_Level extends Abstract_Scene {
 		return this.movementSystem.getEntityPositions();
 	}
 	
-	public List<Event> getEvents(EventType type) {
-		return this.events.get(type);
-	}
 	
-	public List<Event> getEvents(EventType... types) {
-		List<Event> events = new LinkedList<Event>();
-		for (EventType type : types) {
-			events.addAll(this.events.get(type));
-		}
-		return events;
-	}
-	
+	/*
+	 * Gibt die Spielerentität zurück.
+	 */
 	public Entity getPlayer() {
 		return this.eManager.getPlayer();
 	}
@@ -277,26 +272,6 @@ public class Scene_Level extends Abstract_Scene {
 		this.game.switchScene(this.nextScene);
 	}
 	
-	
-	/*
-	 * Löscht alle Events.
-	 */
-	private void clearEvents() {
-		for (EventType type : this.events.keySet()) {
-			this.events.get(type).clear();
-		}
-	}
-	
-	/*
-	 * Initialisiert die Hashtabelle, in der die Events gespeichert werden.
-	 */
-	private Hashtable<EventType,List<Event>> initEventTable() {
-		Hashtable<EventType,List<Event>> events = new Hashtable<EventType,List<Event>>();
-		for (EventType type : EventType.values()) {
-			events.put(type, new LinkedList<Event>());
-		}
-		return events;
-	}
 	
 	/*
 	 * Basisdaten für Spieler.

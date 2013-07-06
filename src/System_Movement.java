@@ -10,6 +10,7 @@ class System_Movement extends System_Component {
 		super(scene,"controls","movement");
 		this.keyHandler = keyHandler;
 		this.entityPositions = new HashMap<String,List<Entity>>();
+		this.listenTo(EventType.CMD_UP, EventType.CMD_DOWN, EventType.CMD_LEFT, EventType.CMD_RIGHT);
 	}
 	
 	@Override

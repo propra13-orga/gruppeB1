@@ -16,6 +16,8 @@ class System_Interaction extends System_Component {
 				"battle",
 				"item",
 				"inventory");
+		this.listenTo(EventType.ACTION, EventType.COLLISION, EventType.ATTACK, EventType.OPEN_BUYMENU,
+				EventType.OPEN_DIALOG, EventType.PICKUP, EventType.CHANGELEVEL, EventType.GAMEBEATEN, EventType.CMD_ACTION);
 	}
 
 	@Override
@@ -67,7 +69,9 @@ class System_Interaction extends System_Component {
 				this.getScene().demandSceneChange(
 						new Scene_BuyMenu(
 								this.getScene().game,
-								this.getScene()
+								this.getScene(),
+								undergoer,
+								actor
 								)
 						);
 				break;
