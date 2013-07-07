@@ -8,6 +8,10 @@ import java.awt.image.BufferedImage;
 
 class Component_Sprite extends Abstract_Component {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 617556010116827829L;
 	public static final int ANIMATION_LEFT = 0;
 	public static final int ANIMATION_MIDDLE = 1;
 	public static final int ANIMATION_RIGHT = 2;

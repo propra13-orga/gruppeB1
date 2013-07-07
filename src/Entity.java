@@ -1,6 +1,3 @@
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.util.Hashtable;
 
 /*
@@ -15,6 +12,11 @@ import java.util.Hashtable;
  */
 
 class Entity implements java.io.Serializable {
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 2840301197733965373L;
 	
 	protected String entityType;
 	protected String name;
@@ -84,21 +86,4 @@ class Entity implements java.io.Serializable {
 	public String getType() { return this.entityType; }
 	
 	public boolean isPlayer() {	return this.manager.isPlayer(this); }
-	
-	
-	/*
-	 * Privates
-	 */
-	
-//	private void writeObject(ObjectOutputStream oos) throws IOException {
-//		oos.defaultWriteObject();
-//	}
-//	
-//	private void readObject(ObjectInputStream ois) throws IOException {
-//		try {
-//			ois.defaultReadObject();
-//			this.components = new Hashtable<String,Abstract_Component>();
-//		}
-//		catch (ClassNotFoundException e) { e.printStackTrace(); }
-//	}
 }

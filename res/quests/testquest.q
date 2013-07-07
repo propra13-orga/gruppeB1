@@ -7,4 +7,5 @@ description : {
 }
 event : pickup : potion_hp
 event : pickup : firesword
+event : changelevel
 xp : 10

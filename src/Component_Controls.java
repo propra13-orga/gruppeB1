@@ -4,6 +4,11 @@
  */
 class Component_Controls extends Abstract_Component {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -4498451329055383926L;
+
 	public Component_Controls(Entity entity, System_Component system) {
 		super("controls",entity,system);
 	}

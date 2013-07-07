@@ -88,7 +88,7 @@ public class Object_Level extends Object_Map implements java.io.Serializable {
 					propname = property.getAttribute("name");
 					propvalue = property.getAttribute("value");
 					objectData.put(propname, propvalue);
-					System.out.printf("%s : %s\n",propname,propvalue);						
+					//System.out.printf("%s : %s\n",propname,propvalue);						
 				}
 				this.entityData.add(objectData);
 			}

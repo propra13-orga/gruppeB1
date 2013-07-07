@@ -30,7 +30,7 @@ public class Scene_GameOver extends Abstract_Scene {
 			this.menu.setupMenuPath();
 			switch (this.menu.getCurrentCursor()) {
 			case 0:
-				game.switchScene(new Scene_Level(game,"level01"));
+				game.switchScene(new Scene_Level(game,"level01", null));
 				return;
 			case 1:
 				game.quit();

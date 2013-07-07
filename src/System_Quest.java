@@ -25,7 +25,7 @@ public class System_Quest extends System_Component {
 						for (int i=0;i<events.size();i++) {
 							entityType = events.get(i);
 							System.out.println(entityType);
-							if (entityType.equals(undergoer.getType())) {
+							if (entityType == null || entityType.equals(undergoer.getType())) {
 								quest.moveToClosedEvents(eventType, i);
 								if (quest.noOpenEventsLeft()) {
 									this.handleAccomplishedQuest(bag,quest);

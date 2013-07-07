@@ -11,6 +11,7 @@ prop_dex : 1
 prop_spd : 3
 spd : 2
 controllable : true
+camera : true
 collidable : true
 inventory : true
 money : 20

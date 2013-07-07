@@ -4,6 +4,10 @@
  */
 
 class Component_Movement extends Abstract_Component {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -8494235272709325395L;
 	public int x, y, dx, dy;
 	public int orientation;
 	public int delay, tick;

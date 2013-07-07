@@ -59,21 +59,19 @@ public class Scene_BuyMenu extends Abstract_Scene {
 
 	@Override
 	public void onStart() {
-		// TODO Auto-generated method stub
-
+		//
 	}
 
 	@Override
 	public void onExit() {
-		// TODO Auto-generated method stub
-
+		//
 	}
 
 	@Override
 	public void updateData() {
-		for (String item : this.items_seller.keySet()) {
-			this.menu_buy.addReturnCommand(item,false);
-		}
+//		for (String item : this.items_seller.keySet()) {
+//			this.menu_buy.addReturnCommand(item,false);
+//		}
 		if (main_menu.isExecuted()) {
 			main_menu.updateData();
 		}

@@ -68,7 +68,7 @@ public class Scene_StartMenu extends Abstract_Scene {
 				return;
 			case 1: //Spiel starten
 				//this.menu.restart();
-				game.switchScene(new Scene_Level(game,"level01"), true);
+				game.switchScene(new Scene_Level(game,"level01", null), true);
 				return;
 			case 2:
 				Object_BattleContext c1 = new Object_BattleContext();

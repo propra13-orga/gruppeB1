@@ -31,7 +31,7 @@ public class Scene_GameBeaten extends Abstract_Scene {
 			menu.setupMenuPath();
 			switch (menu.getCurrentCursor()) {
 			case 0: //Neu starten
-				game.switchScene(new Scene_Level(game,"level01"));
+				game.switchScene(new Scene_Level(game,"level01", null));
 				return;
 			case 1: // Hauptmen�
 				game.switchScene(new Scene_StartMenu(game));

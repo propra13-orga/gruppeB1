@@ -101,6 +101,14 @@ public class Factory {
 		}
 		
 		/*
+		 * Component_Camera
+		 */
+		
+		if (data.containsKey("camera")) {
+			new Component_Camera(entity,this.scene.getSystemRender());
+		}
+		
+		/*
 		 * Component_Inventory
 		 */
 		int money = 0;

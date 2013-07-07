@@ -2116,5 +2116,12 @@
     <property name="questdealer" value="true"/>
    </properties>
   </object>
+  <object name="teleport1" type="teleport" x="288" y="608" width="32" height="32">
+   <properties>
+    <property name="toLevel" value="4"/>
+    <property name="toX" value="23"/>
+    <property name="toY" value="1"/>
+   </properties>
+  </object>
  </objectgroup>
 </map>

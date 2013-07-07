@@ -4,6 +4,14 @@ description : {
     fast
     
     nix.
+
+
+
+
+
+
 }
 event : pickup : potion_hp
+event : pickup : firesword
+event : changelevel
 xp : 10

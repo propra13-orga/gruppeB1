@@ -50,9 +50,13 @@ public class Scene_Level extends Abstract_Scene {
 		this.already_running = false;
 	}
 	
-	public Scene_Level(Object_Game g, String levelname) {
+	public Scene_Level(Object_Game g, String levelname, Entity player) {
 		this(g);
 		this.levelname = levelname;
+		if (player != null) {
+			player.init();
+			this.eManager.setPlayer(player);
+		}
 	}
 	
 	public Scene_Level(Object_Game g, boolean load) {
@@ -290,7 +294,7 @@ public class Scene_Level extends Abstract_Scene {
 	 * Hier werden Level und Entitäten initialisiert.
 	 */
 	private void initLevel() {
-		Map<String,String> playerData = this.basicPlayerData();
+
 		/*
 		 * Lese alle TMX-Dateien im Ordner des entsprechenden Levels.
 		 */
@@ -312,25 +316,54 @@ public class Scene_Level extends Abstract_Scene {
 				 */
 				if (this.currentLevel == null && level.hasProperty("startX")) {
 					this.currentLevel = level;
-					playerData.put("x", level.getProperties().get("startX"));
-					playerData.put("y", level.getProperties().get("startY"));
 				}
 			}
 		}
+				
+		this.initEntities();
 		
+	}
+	
+	private void initEntities() {
+		// Factory errichten.
 		Factory factory = new Factory(this);
 		
+		// Mapeigene Entitäten bauen.
 		for (Object_Level level : this.levels.values()) {
 			for (Map<String,String> entityData : level.getEntityData()) {
 				level.addEntity(factory.build(entityData));
 			}
 		}
 		
+		// Spieler bauen oder verschieben.
+		int x = Integer.parseInt(this.currentLevel.getProperties().get("startX"));
+		int y = Integer.parseInt(this.currentLevel.getProperties().get("startY"));
 		
-		Entity player = factory.build(playerData);
-		new Component_Camera(player,renderSystem);
-		player.init();
-		eManager.setPlayer(player);
-		
+		if (this.getPlayer() == null) {
+			System.out.println("player == null");
+			Map<String,String> playerData = this.basicPlayerData();
+			playerData.put("x", Integer.toString(x));
+			playerData.put("y", Integer.toString(y));
+			
+			Entity player = factory.build(playerData);
+			player.init();
+			eManager.setPlayer(player);
+		}
+		else {
+			Component_Movement compMovement = (Component_Movement) this.eManager.getPlayer().getComponent("movement");
+			Component_Sprite compSprite = (Component_Sprite) this.getPlayer().getComponent("sprite");
+			compMovement.warp(x, y);
+			compSprite.setX(compMovement.getX());
+			compSprite.setY(compMovement.getY());
+		}
 	}
 }
+
+
+
+
+
+
+
+
+

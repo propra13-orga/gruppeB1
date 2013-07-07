@@ -95,6 +95,13 @@ class System_Interaction extends System_Component {
 						if (!compQuestbag.hasQuest(quest)) System.out.printf("Verfuegbare Quest: %s\n", quest.getName());
 						else System.out.printf("Aktive oder abgeschlossene Quest: %s\n",quest.getName());
 					}
+					this.getScene().demandSceneChange(
+							new Scene_QuestMenu(
+									this.getScene().game,
+									this.getScene(),
+									undergoer,
+									actor)
+					);
 				}
 				break;
 			case PICKUP:

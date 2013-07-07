@@ -6,6 +6,11 @@
 
 class Component_Camera extends Abstract_Component {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -574999479262605376L;
+
 	public Component_Camera(Entity entity, System_Component system) {
 		super("camera",entity,system);
 	}

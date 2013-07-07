@@ -1,12 +1,37 @@
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-public class Object_Quest implements Comparable<Object_Quest> {
+
+/*
+ * Object_Quest.java
+ * 
+ * Dies ist ein Quest-Objekt. Es ist im Prinzip eine Liste von Events, die
+ * stattfinden muessen, bevor die Quest als erfüllt gilt. Die Events sind
+ * dargestellt als Paare von Event-Typen (siehe Event.java) und Entitäts-Typen
+ * gemaess der Datebank. Tritt nun ein "echtes" Event auf (siehe Event.java),
+ * so wird ueberprüft, ob eine Entitaet, die eine Quest (im Questbag) besitzt,
+ * das Event verursacht hat und ob der Typ der Entitaet, "auf" der das Event
+ * verursacht wurde, mit dem Typ in der Quest uebereinstimmt.
+ * 
+ * Momentan müssen die Events noch konjunktiv auftreten, spaeter ggf. auch
+ * disjunktiv (d.h. es muessen nur einige aus einer Auswahl erfuellt werden).
+ * 
+ * Weiter soll es spaeter ggf. noch Unterquests geben und Abhaengigkeiten unter
+ * Quests.
+ */
+
+public class Object_Quest implements Comparable<Object_Quest>, Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 5779174461819933527L;
+	
 	public static final String DIR = "res/quests/";
 	public static final String EXT = ".q";
 	
@@ -64,6 +89,9 @@ public class Object_Quest implements Comparable<Object_Quest> {
 	 * Privates
 	 */
 	
+	/*
+	 * Liest eine Quest aus einer Datei ein.
+	 */
 	private void readQuestFromFile() {
 		try {
 			BufferedReader br = new BufferedReader(new FileReader(DIR+this.fname+EXT));
@@ -115,6 +143,8 @@ public class Object_Quest implements Comparable<Object_Quest> {
 			br.close();
 		}
 		catch (IOException e) { e.printStackTrace(); }
+		
+		this.description = this.description.replaceAll("[\\s\\n]+$", "");
 	}
 
 	@Override
