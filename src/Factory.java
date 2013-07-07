@@ -157,6 +157,18 @@ public class Factory {
 		}
 		
 		/*
+		 * Component_Questdealer
+		 */
+		
+		if (data.containsKey("questdealer")) {
+			Hashtable<String,String> filteredQuests = this.filterHashtable(data, "deal_quest\\d*");
+			Component_Questdealer qdealer = new Component_Questdealer(entity,scene.getSystemQuest(),null);
+			for (String attr : filteredQuests.keySet()) {
+				qdealer.addQuest(filteredQuests.get(attr));
+			}
+		}
+		
+		/*
 		 * Component_Trigger
 		 */
 		

@@ -17,8 +17,9 @@ class System_Interaction extends System_Component {
 				"item",
 				"inventory");
 		this.listenTo(EventType.ACTION, EventType.COLLISION, EventType.ATTACK, EventType.OPEN_BUYMENU,
-				EventType.OPEN_DIALOG, EventType.CLOSE_DIALOG,
-				EventType.PICKUP, EventType.CHANGELEVEL, EventType.GAMEBEATEN, EventType.CMD_ACTION);
+				EventType.OPEN_DIALOG, EventType.CLOSE_DIALOG, EventType.OPEN_QUESTMENU,
+				EventType.PICKUP, EventType.CHANGELEVEL, EventType.GAMEBEATEN, EventType.CMD_ACTION,
+				EventType.QUEST_ACCOMPLISHED);
 	}
 
 	@Override
@@ -39,8 +40,8 @@ class System_Interaction extends System_Component {
 		}
 		
 		
-		for (Event event : this.getEvents(EventType.ATTACK, EventType.OPEN_BUYMENU, EventType.OPEN_DIALOG,
-				EventType.PICKUP, EventType.CHANGELEVEL, EventType.GAMEBEATEN)) {
+		for (Event event : this.getEvents(EventType.ATTACK, EventType.OPEN_BUYMENU, EventType.OPEN_DIALOG, EventType.OPEN_QUESTMENU,
+				EventType.PICKUP, EventType.CHANGELEVEL, EventType.GAMEBEATEN, EventType.QUEST_ACCOMPLISHED)) {
 			EventType type = event.getType();
 			Entity actor = event.getActor();
 			Entity undergoer = event.getUndergoer();
@@ -86,6 +87,16 @@ class System_Interaction extends System_Component {
 				);
 				this.addEvent(new Event(EventType.CLOSE_DIALOG,actor,undergoer, null));
 				break;
+			case OPEN_QUESTMENU:
+				if (undergoer.hasComponent("questdealer") && actor.hasComponent("questbag")) {
+					Component_Questdealer compQuestdealer = (Component_Questdealer) undergoer.getComponent("questdealer");
+					Component_Questbag compQuestbag = (Component_Questbag) actor.getComponent("questbag");
+					for (Object_Quest quest : compQuestdealer.getQuests()) {
+						if (!compQuestbag.hasQuest(quest)) System.out.printf("Verfuegbare Quest: %s\n", quest.getName());
+						else System.out.printf("Aktive oder abgeschlossene Quest: %s\n",quest.getName());
+					}
+				}
+				break;
 			case PICKUP:
 				if (actor.hasComponent("inventory")) {
 					Component_Inventory compInventory = (Component_Inventory) actor.getComponent("inventory");
@@ -93,6 +104,17 @@ class System_Interaction extends System_Component {
 						((Component_Movement) undergoer.getComponent("movement")).drawFromMap();
 						this.getScene().getCurrentLevel().removeEntity(undergoer);
 					}				
+				}
+				break;
+			case QUEST_ACCOMPLISHED:
+				System.out.println("AAA");
+				
+				if (actor.hasComponent("battle")) {
+					Component_Battle compBattle = (Component_Battle) actor.getComponent("battle");
+					if (compBattle.hasProperty("prop_xp")) {
+						int xp = Integer.parseInt(event.getProperty("quest_xp"));
+						this.handleXP(compBattle, xp);
+					}
 				}
 				break;
 			default:
@@ -130,7 +152,7 @@ class System_Interaction extends System_Component {
 		if (entity.hasComponent("inventory")) {
 			Component_Inventory compInventory = (Component_Inventory) entity.getComponent("inventory");
 			for (Entity item : compInventory.getInventory()) {
-				if (item != null) System.out.println(item.getName());
+				if (item != null) System.out.println(((Component_Item) item.getComponent("item")).getName());
 			}
 		}
 	}
@@ -154,6 +176,11 @@ class System_Interaction extends System_Component {
 				System.out.println("ACTION!");
 			}
 		}
+	}
+	
+	private void handleXP(Component_Battle compBattle, int xp) {
+		compBattle.addToProperty("prop_xp", xp);
+		System.out.printf("+%d XP macht %d XP!\n",xp,compBattle.getPropertyValue("prop_xp"));
 	}
 	
 	

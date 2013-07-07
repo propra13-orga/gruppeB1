@@ -10,7 +10,7 @@ prop_spd : 3
 spd : 2
 controllable : true
 collidable : true
-invetory : true
+inventory : true
 money : 20
 questbag : true
-has_quest : testquest
+has_quest1 : testquest

@@ -1,4 +1,3 @@
-import java.util.HashMap;
 import java.util.Map;
 
 /*
@@ -20,7 +19,9 @@ enum EventType {
 	COLLISION, ILLEGALCOLLISION, ATTACK, DEATH, PLAYERDMG,
 	GAMEBEATEN, ACTION, CONSUME, PICKUP, BATTLE,
 	CMD_ACTION, CMD_UP, CMD_DOWN, CMD_LEFT, CMD_RIGHT,
-	CHANGELEVEL, OPEN_DIALOG, OPEN_BUYMENU, CLOSE_DIALOG
+	CHANGELEVEL, OPEN_DIALOG, OPEN_BUYMENU, OPEN_QUESTMENU, 
+	CLOSE_DIALOG,
+	QUEST_ACCOMPLISHED
 	}
 
 class Event {
@@ -34,7 +35,7 @@ class Event {
 		this.type = type;
 		this.actor = actor;
 		this.undergoer = undergoer;
-		this.properties = null;
+		this.properties = properties;
 	}
 	
 	public EventType getType() { return this.type; }

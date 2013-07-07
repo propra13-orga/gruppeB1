@@ -6,4 +6,5 @@ description : {
     nix.
 }
 event : pickup : potion_hp
+event : pickup : firesword
 xp : 10
