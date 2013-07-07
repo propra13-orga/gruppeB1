@@ -12,3 +12,5 @@ controllable : true
 collidable : true
 invetory : true
 money : 20
+questbag : true
+has_quest1 : testquest

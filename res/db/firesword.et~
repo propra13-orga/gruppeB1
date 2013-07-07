@@ -2,6 +2,7 @@ sprite : firesword
 walkable : true
 onAction : trigger_pickup
 item_name : Schwert des ewigen Feuers
+item_value : 100
 dmg : 10
 dmg_fire : 3
 type_equippable : true

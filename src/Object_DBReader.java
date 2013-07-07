@@ -9,6 +9,7 @@ import java.util.List;
 
 public class Object_DBReader {
 	public static final String DIR = "res/db/";
+	public static final String EXT = ".et";
 	
 	private Map<String,Map<String,String>> content;
 
@@ -18,7 +19,7 @@ public class Object_DBReader {
 	
 	public Map<String,String> getProperties(String entityType) {
 		if (!content.containsKey(entityType)) {
-			content.put(entityType,this.getPropertiesFromFile(entityType+".et"));
+			content.put(entityType,this.getPropertiesFromFile(entityType+EXT));
 			
 		}
 		return content.get(entityType);
@@ -26,6 +27,7 @@ public class Object_DBReader {
 	
 	private Map<String,String> getPropertiesFromFile(String fname) {
 		Map<String,String> properties = new HashMap<String,String>();
+		properties.put("entityType", fname);
 		try {
 			BufferedReader br = new BufferedReader(new FileReader(DIR+fname));
 			String line;

@@ -1515,4 +1515,14 @@
    <tile gid="0"/>
   </data>
  </layer>
+ <objectgroup name="Objektebene 1" width="25" height="20">
+  <object name="Trank" type="potion_hp" x="544" y="96" width="32" height="32"/>
+  <object name="teleport" type="teleport" x="704" y="0" width="32" height="32">
+   <properties>
+    <property name="toLevel" value="1"/>
+    <property name="toX" value="8"/>
+    <property name="toY" value="18"/>
+   </properties>
+  </object>
+ </objectgroup>
 </map>

@@ -1,4 +1,5 @@
 import java.util.Hashtable;
+import java.util.Map;
 
 
 public class Component_Trigger extends Abstract_Component {
@@ -30,6 +31,7 @@ public class Component_Trigger extends Abstract_Component {
 	public EventType getTriggeredEvent() { return this.newEvent; }
 	public boolean isReady() { return this.ready; }
 	public String getProperty(String property) { return this.properties.get(property); }
+	public Map<String,String> getProperties() { return this.properties; }
 	
 	public void setReady() { this.ready = true; }
 	public void unsetReady() { this.ready = false; }

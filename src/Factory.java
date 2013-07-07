@@ -29,7 +29,7 @@ public class Factory {
 		String entityType = entityData.get("entityType");
 		String name = entityData.remove("name");
 		
-		Entity entity = new Entity(name,this.scene.getEntityManager());
+		Entity entity = new Entity(name,entityType,this.scene.getEntityManager());
 		
 		Map<String,String> data = db.getProperties(entityType);
 		
@@ -145,16 +145,28 @@ public class Factory {
 		}
 		
 		/*
-		 * Trigger
+		 * Component_Questbag
+		 */
+		
+		if (data.containsKey("questbag")) {
+			Component_Questbag bag = new Component_Questbag(entity,scene.getSystemQuest());
+			Hashtable<String,String> filteredQuests = this.filterHashtable(data, "has_quest\\d*");
+			for (String attr : filteredQuests.keySet()) {
+				bag.addQuest(new Object_Quest(filteredQuests.get(attr)));
+			}
+		}
+		
+		/*
+		 * Component_Trigger
 		 */
 		
 		Hashtable<String,String> filteredEvents = this.filterHashtable(data, "on\\w*");
 		if (!filteredEvents.isEmpty()) {
 			String firstkey = filteredEvents.keys().nextElement();
 			String typestr = filteredEvents.get(firstkey);
-			EventType reason = this.StringToEventType(firstkey);
-			EventType result = this.StringToEventType(typestr);
-			Hashtable<String,String> triggerprops = this.filterHashtable(data, "toX|toY|toLevel|toRoom|dialog|cause_dmg");
+			EventType reason = EventType.valueOf(firstkey.replaceFirst("on", "").toUpperCase());
+			EventType result = EventType.valueOf(typestr.toUpperCase());
+			Hashtable<String,String> triggerprops = this.filterHashtable(data, "toX|toY|toLevel|toRoom|dialog|cause_dmg|shop_item\\d+");
 			new Component_Trigger(entity,scene.getSystemInteraction(),reason,result,triggerprops);
 		}
 		
@@ -162,38 +174,7 @@ public class Factory {
 		return entity;
 	}
 	
-	
-	private EventType StringToEventType(String typestr) {
-		EventType type = null;
-		switch(typestr) {
-		case "onCollision":
-			type = EventType.COLLISION;
-			break;
-		case "onAction":
-			type = EventType.ACTION;
-			break;
-		case "trigger_endgame":
-			type = EventType.GAMEBEATEN;
-			break;
-		case "trigger_levelchange":
-			type = EventType.CHANGELEVEL;
-			break;
-		case "trigger_buymenu":
-			type = EventType.OPEN_BUYMENU;
-			break;
-		case "trigger_dialog":
-			type = EventType.OPEN_DIALOG;
-			break;
-		case "trigger_attack":
-			type = EventType.ATTACK;
-			break;
-		case "trigger_pickup":
-			type = EventType.PICKUP;
-			break;
-		}
-		return type;
-	}
-	
+		
 	private Hashtable<String,String> filterHashtable(Map<String,String> hashtable, String regex) {
 		Hashtable<String,String> filtered = new Hashtable<String,String>();
 		

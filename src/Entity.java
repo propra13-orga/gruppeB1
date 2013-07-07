@@ -15,7 +15,8 @@ import java.util.Hashtable;
  */
 
 class Entity implements java.io.Serializable {
-
+	
+	protected String entityType;
 	protected String name;
 	transient protected Object_EntityManager manager;
 	protected boolean active = false;
@@ -23,7 +24,8 @@ class Entity implements java.io.Serializable {
 	
 	protected Hashtable<String,Abstract_Component> components;
 	
-	public Entity(String name, Object_EntityManager manager) {
+	public Entity(String name, String entityType, Object_EntityManager manager) {
+		this.entityType = entityType;
 		this.name = name;
 		this.ID = -1;
 		this.manager = manager;
@@ -31,6 +33,7 @@ class Entity implements java.io.Serializable {
 	}
 	
 	public Entity(Entity entity) {
+		this.entityType = entity.entityType;
 		this.name = entity.name;
 		this.manager = entity.manager;
 		this.active = entity.active;
@@ -39,6 +42,7 @@ class Entity implements java.io.Serializable {
 	}
 	
 	public Entity(Entity entity, Object_EntityManager manager) {
+		this.entityType = entity.entityType;
 		this.name = entity.name;
 		this.manager = manager;
 		this.active = entity.active;
@@ -77,6 +81,7 @@ class Entity implements java.io.Serializable {
 	public Object_EntityManager getManager() {	return this.manager; }
 	public int getID() { return this.ID; }
 	public String getName() { return this.name; }
+	public String getType() { return this.entityType; }
 	
 	public boolean isPlayer() {	return this.manager.isPlayer(this); }
 	

@@ -35,6 +35,7 @@ public class Scene_Level extends Abstract_Scene {
 	private System_Movement movementSystem;
 	private System_Interaction interactionSystem;
 	private System_Render renderSystem;
+	private System_Quest questSystem;
 	
 	/*
 	 * FLAGS.
@@ -98,6 +99,7 @@ public class Scene_Level extends Abstract_Scene {
 		this.movementSystem = new System_Movement(this,game.getKeyHandler());
 		this.interactionSystem = new System_Interaction(this);
 		this.renderSystem = new System_Render(this,game.getScreen());
+		this.questSystem = new System_Quest(this);
 		
 		if (this.load) {
 			this.deserialize();
@@ -130,6 +132,7 @@ public class Scene_Level extends Abstract_Scene {
 		this.aiSystem.update();
 		this.movementSystem.update();
 		this.interactionSystem.update();
+		this.questSystem.update();
 		this.eManager.update();
 	}
 
@@ -196,6 +199,7 @@ public class Scene_Level extends Abstract_Scene {
 	public System_Component getSystemInteraction() { return this.interactionSystem; }
 	public System_Component getSystemAI() { return this.aiSystem; }
 	public System_Component getSystemRender() { return this.renderSystem; }
+	public System_Component getSystemQuest() { return this.questSystem; }
 	public Object_EntityManager getEntityManager() { return this.eManager; }
 	
 	

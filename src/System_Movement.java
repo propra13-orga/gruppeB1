@@ -10,11 +10,11 @@ class System_Movement extends System_Component {
 		super(scene,"controls","movement");
 		this.keyHandler = keyHandler;
 		this.entityPositions = new HashMap<String,List<Entity>>();
-		this.listenTo(EventType.CMD_UP, EventType.CMD_DOWN, EventType.CMD_LEFT, EventType.CMD_RIGHT);
+		this.listenTo(EventType.CMD_UP, EventType.CMD_DOWN, EventType.CMD_LEFT, EventType.CMD_RIGHT,EventType.CHANGELEVEL);
 	}
 	
 	@Override
-	public void update() {
+	public void update() {		
 		// Alle Bewegungsvektoren zurücksetzen.
 		for (Entity entity : this.getEntitiesByType("movement")) {
 			Component_Movement compMovement = (Component_Movement) entity.getComponent("movement");
@@ -107,8 +107,8 @@ class System_Movement extends System_Component {
 							&& ((compMovement1.getX() == compMovement2.getX()
 									&& compMovement1.getY() == compMovement2.getY())
 								|| this.changedPlaces(compMovement1, compMovement2))) {
-						collisions.add(new Event(EventType.COLLISION,compMovement1.getEntity(),compMovement2.getEntity()));
-						collisions.add(new Event(EventType.COLLISION,compMovement2.getEntity(),compMovement1.getEntity()));
+						collisions.add(new Event(EventType.COLLISION,compMovement1.getEntity(),compMovement2.getEntity(), null));
+						collisions.add(new Event(EventType.COLLISION,compMovement2.getEntity(),compMovement1.getEntity(), null));
 					}
 				}
 			}
@@ -145,7 +145,7 @@ class System_Movement extends System_Component {
 			Component_Movement compMovement1 = (Component_Movement) event.getActor().getComponent("movement");
 			Component_Movement compMovement2 = (Component_Movement) event.getUndergoer().getComponent("movement");
 			if (this.isIllegalCollision(compMovement1, compMovement2)) {
-				illegalCollisions.add(new Event(EventType.ILLEGALCOLLISION,event.getActor(),event.getUndergoer()));
+				illegalCollisions.add(new Event(EventType.ILLEGALCOLLISION,event.getActor(),event.getUndergoer(), null));
 			}
 		}
 		return illegalCollisions;
@@ -232,19 +232,19 @@ class System_Movement extends System_Component {
 			if (compMovement.isMoveable()) {
 				switch(this.keyHandler.getLast()) {
 				case Object_KeyHandler.KEY_UP:
-					this.addEvent(new Event(EventType.CMD_UP,player,null));
+					this.addEvent(new Event(EventType.CMD_UP,player,null, null));
 					break;
 				case Object_KeyHandler.KEY_DOWN:
-					this.addEvent(new Event(EventType.CMD_DOWN,player,null));
+					this.addEvent(new Event(EventType.CMD_DOWN,player,null, null));
 					break;
 				case Object_KeyHandler.KEY_LEFT:
-					this.addEvent(new Event(EventType.CMD_LEFT,player,null));
+					this.addEvent(new Event(EventType.CMD_LEFT,player,null, null));
 					break;
 				case Object_KeyHandler.KEY_RIGHT:
-					this.addEvent(new Event(EventType.CMD_RIGHT,player,null));
+					this.addEvent(new Event(EventType.CMD_RIGHT,player,null, null));
 					break;
 				case Object_KeyHandler.KEY_ENTER:
-					this.addEvent(new Event(EventType.CMD_ACTION,player,null));
+					this.addEvent(new Event(EventType.CMD_ACTION,player,null, null));
 					break;
 				default:
 					break;

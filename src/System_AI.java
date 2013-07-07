@@ -121,7 +121,7 @@ class System_AI extends System_Component {
 			break;
 		case ATTACK:
 			// Angreifen.
-			this.getScene().addEvent(new Event(EventType.ATTACK,entity,compAI.getFocus()));
+			this.getScene().addEvent(new Event(EventType.ATTACK,entity,compAI.getFocus(), null));
 			newState = stateMachine.getNext(StateType.ATTACK);
 			break;
 		case APPROACH:

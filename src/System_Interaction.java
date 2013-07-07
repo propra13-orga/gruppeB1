@@ -17,7 +17,8 @@ class System_Interaction extends System_Component {
 				"item",
 				"inventory");
 		this.listenTo(EventType.ACTION, EventType.COLLISION, EventType.ATTACK, EventType.OPEN_BUYMENU,
-				EventType.OPEN_DIALOG, EventType.PICKUP, EventType.CHANGELEVEL, EventType.GAMEBEATEN, EventType.CMD_ACTION);
+				EventType.OPEN_DIALOG, EventType.CLOSE_DIALOG,
+				EventType.PICKUP, EventType.CHANGELEVEL, EventType.GAMEBEATEN, EventType.CMD_ACTION);
 	}
 
 	@Override
@@ -32,7 +33,7 @@ class System_Interaction extends System_Component {
 				Component_Trigger trigger = (Component_Trigger) undergoer.getComponent("trigger_event");
 				if (trigger.getEventType().equals(event.getType())) {
 					EventType triggeredEvent = trigger.getTriggeredEvent();
-					this.addEvent(new Event(triggeredEvent,actor,undergoer));					
+					this.addEvent(new Event(triggeredEvent,actor,undergoer, null));					
 				}
 			}
 		}
@@ -48,7 +49,7 @@ class System_Interaction extends System_Component {
 				int ap = Integer.parseInt(((Component_Trigger) undergoer.getComponent("trigger_event")).getProperty("cause_dmg"));
 				((Component_Battle) actor.getComponent("battle")).addToProperty("prop_hp_current", -ap);
 				if (this.getScene().getPlayer().equals(actor)) {
-					this.addEvent(new Event(EventType.PLAYERDMG,actor,undergoer));					
+					this.addEvent(new Event(EventType.PLAYERDMG,actor,undergoer, null));					
 				}
 				break;
 			case CHANGELEVEL:
@@ -83,6 +84,7 @@ class System_Interaction extends System_Component {
 								((Component_Trigger) undergoer.getComponent("trigger_event")).getProperty("dialog")
 								)
 				);
+				this.addEvent(new Event(EventType.CLOSE_DIALOG,actor,undergoer, null));
 				break;
 			case PICKUP:
 				if (actor.hasComponent("inventory")) {
@@ -112,7 +114,7 @@ class System_Interaction extends System_Component {
 			Component_Battle compBattle = this.getBattle(entity);
 			if (compBattle.hasProperty("prop_hp_current")) {
 				int hp = compBattle.getPropertyValue("prop_hp_current");
-				if (hp <= 0) this.addEvent(new Event(EventType.DEATH,null,entity));				
+				if (hp <= 0) this.addEvent(new Event(EventType.DEATH,null,entity, null));				
 			}
 		}
 	}
@@ -148,7 +150,7 @@ class System_Interaction extends System_Component {
 			xy[1] += y;
 			if (!this.getScene().getEntitiesAt(xy[0],xy[1]).isEmpty()) {
 				Entity undergoer = this.getScene().getEntitiesAt(xy[0],xy[1]).get(0);
-				this.addEvent(new Event(EventType.ACTION,entity,undergoer));
+				this.addEvent(new Event(EventType.ACTION,entity,undergoer, null));
 				System.out.println("ACTION!");
 			}
 		}

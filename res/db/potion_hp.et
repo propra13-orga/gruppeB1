@@ -1,6 +1,6 @@
 sprite : potion_hp
 walkable : true
-onAction : trigger_pickup
+onAction : pickup
 item_name : Heiltrank
 type_stackable : true
 type_consumable : true
