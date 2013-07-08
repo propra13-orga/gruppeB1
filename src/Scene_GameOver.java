@@ -1,14 +1,40 @@
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
+
 
 public class Scene_GameOver extends Abstract_Scene {
-
-	Window_Menu menu;
 	
-	public Scene_GameOver(Object_Game game) {
+	Window_Menu menu;
+	BufferedImage background;
+
+	Scene_GameOver(Object_Game game) {
 		super(game);
-		menu = new Window_Menu(game, "main");
-		menu.addReturnCommand("Spiel neu starten", false);
-		menu.addReturnCommand("Spiel beenden", false);
-		menu.center();
+		
+		String path = "res/pictures/gameover.png";
+		try {
+			BufferedImage img = ImageIO.read( new File(path));
+			background = new BufferedImage(
+					img.getWidth(),
+					img.getHeight(),
+					BufferedImage.TYPE_INT_ARGB);
+			background.getGraphics().drawImage(img, 0, 0, null);
+		} catch (IOException e) {
+			this.game.exitOnError("Gameoverbild konnte nicht geladen werden");
+			return;
+		}
+
+	
+	menu=new Window_Menu(game, "Auswahl");
+	menu.addReturnCommand("Spiel neu starten");
+	menu.addReturnCommand("Zurueck ins Hauptmenue");
+	menu.addReturnCommand("Spiel beenden");
+	menu.center();
+	menu.y += 120;
+	Window_Menu.setMainMenu(menu);
+	
 	}
 
 	@Override
@@ -25,23 +51,36 @@ public class Scene_GameOver extends Abstract_Scene {
 
 	@Override
 	public void updateData() {
-		if (menu.isExecuted()) menu.updateData();
-		else {
-			this.menu.setupMenuPath();
-			switch (this.menu.getCurrentCursor()) {
-			case 0:
-				game.switchScene(new Scene_Level(game,"level01", null));
-				return;
-			case 1:
-				game.quit();
-			}
+		if(menu.isExecuted()){
+			menu.updateData();
 		}
+		
+		else {
+			menu.setupMenuPath();
+			switch(menu.getCurrentCursor()){
+			
+			case 0:
+				game.switchScene(new Scene_Level(game), true);
+				
+				break;
+			case 1:
+				this.game.switchScene(new Scene_StartMenu(this.game), true);
+				break;
+			case 2:
+				this.game.quit();
+				break;
+				
+	}
+			}
 	}
 
 	@Override
 	public void updateScreen() {
-		this.game.getScreen().clear();
-		this.screen.drawString("GAME OVER",Object_Screen.SCREEN_W/2,20);
-		menu.updateScreen();
+    this.screen.drawImage(this.background,0,0, null);
+    
+		menu.updateScreen();{
+			
+		}
 	}
+
 }
