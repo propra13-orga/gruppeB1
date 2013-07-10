@@ -1,4 +1,0 @@
-name : Portal
-walkable : true
-collidable : true
-onCollision : levelchange

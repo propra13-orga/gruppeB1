@@ -1,4 +1,0 @@
-name : Spielende
-walkable : true
-collidable : true
-onCollision : trigger_endgame
