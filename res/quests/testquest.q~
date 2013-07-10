@@ -1,15 +1,6 @@
 name : Die erste Quest
 description : {
-    Dies ist die erste Quest im Spiel. Sie beinhaltet
-    fast
-    
-    nix.
-
-
-
-
-
-
+    Sammle einen Heiltrank, ein Schwert des ewigen Feuers und betrete einen anderen         Kartenabschnitt.
 }
 event : pickup : potion_hp
 event : pickup : firesword

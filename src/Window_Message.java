@@ -15,21 +15,36 @@ public class Window_Message extends Abstract_Update {
 
 	private Window_Base window;
 	private FontMetrics metrics;
-	private int height;
+	public int height;
 	private List<String> lines;
 	
-	public static final int WIDTH = 300;
+	public int WIDTH = 300;
 	private static final int PADDING = 12;
 	
 	private int x;
 	private int y;
 	
 	Window_Message(String msg, int x, int y, Object_Game game) {
+		this(msg,x,y,300,game);
+//		super(game);
+//		this.lines = new ArrayList<String>();
+//		this.height = PADDING*2;
+//		this.x = x;
+//		this.y = y;
+//		this.screen.setFont(Object_Game.FONT);
+//		this.metrics = this.screen.getFontMetrics();
+//		this.prepareMessage(msg);
+//		//this.adjustXY();
+//		window = new Window_Base(game,this.x,this.y,WIDTH,this.height);
+	}
+	
+	Window_Message(String msg, int x, int y, int width, Object_Game game) {
 		super(game);
 		this.lines = new ArrayList<String>();
 		this.height = PADDING*2;
 		this.x = x;
 		this.y = y;
+		this.WIDTH = width;
 		this.screen.setFont(Object_Game.FONT);
 		this.metrics = this.screen.getFontMetrics();
 		this.prepareMessage(msg);
@@ -46,6 +61,13 @@ public class Window_Message extends Abstract_Update {
 	public void updateScreen() {
 		this.window.updateScreen();
 		this.drawMessage();
+	}
+	
+	public void changeMessage(String message) {
+		this.lines.clear();
+		this.height = PADDING*2;
+		this.prepareMessage(message);
+		this.window = new Window_Base(game,this.x,this.y,WIDTH,this.height);
 	}
 	
 	/*
@@ -66,7 +88,7 @@ public class Window_Message extends Abstract_Update {
 				}
 				else {
 					text_y += this.metrics.getHeight();
-					this.height += text_y;
+					//this.height += text_y;
 					this.lines.add(line+s);
 					line = "";
 				}
@@ -85,15 +107,15 @@ public class Window_Message extends Abstract_Update {
 		}
 	}
 	
-	private void adjustXY() {
-		int screenHeight = Object_Screen.SCREEN_H;
-		if (this.y+this.height > screenHeight) {
-			this.y = screenHeight-this.height;
-		}
-		
-		int screenWidth = Object_Screen.SCREEN_W;
-		if (this.x+WIDTH > screenWidth) {
-			this.x = screenWidth-WIDTH;
-		}
-	}
+//	private void adjustXY() {
+//		int screenHeight = Object_Screen.SCREEN_H;
+//		if (this.y+this.height > screenHeight) {
+//			this.y = screenHeight-this.height;
+//		}
+//		
+//		int screenWidth = Object_Screen.SCREEN_W;
+//		if (this.x+WIDTH > screenWidth) {
+//			this.x = screenWidth-WIDTH;
+//		}
+//	}
 }

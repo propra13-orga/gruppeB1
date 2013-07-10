@@ -40,7 +40,7 @@ public class Scene_QuestMenu extends Abstract_Scene {
 			
 			description = this.prepareDescription(quest);
 //			this.messages.add(new Window_Message(description,Object_Screen.SCREEN_W,Object_Screen.SCREEN_H,this.game));
-			this.messages.add(new Window_Message(description,Object_Screen.SCREEN_W-Window_Message.WIDTH,0,this.game));
+			this.messages.add(new Window_Message(description,Object_Screen.SCREEN_W-300,0,300,this.game));
 			
 		}
 		

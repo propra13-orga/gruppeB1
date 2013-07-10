@@ -31,6 +31,21 @@ public class Component_Inventory extends Abstract_Component {
 	
 	public Entity[] getInventory() { return this.inventory; }
 	public int getMoney() { return this.money; }
+	public Entity removeItem(int pos) {
+		Entity item = this.inventory[pos];
+		this.inventory[pos] = null;
+		return item;
+	}
+	public Entity removeItem(String entityType) {
+		for (int i=0;i<this.inventory.length;i++) {
+			Entity item = this.inventory[i];
+			if (item != null && item.getType().equals(entityType)) {
+				this.inventory[i] = null;
+				return item;
+			}
+		}
+		return null;
+	}
 	
 	/*
 	 * Setters
@@ -53,23 +68,5 @@ public class Component_Inventory extends Abstract_Component {
 			}
 		}
 		return false;
-	}
-		
-	
-	
-	/*
-	 * Privates
-	 */
-	
-	/*
-	 * Erzeugt ein Integer-Array der Länge 50, deren Einträge nur -1 sind. -1
-	 * steht für "kein Item".
-	 */
-	private int[] baseInventory(int n) {
-		int[] array = new int[n];
-		for (int i=0;i<n;i++) {
-			array[i] = -1;
-		}
-		return array;
 	}
 }

@@ -36,6 +36,8 @@ public class Scene_Level extends Abstract_Scene {
 	private System_Render renderSystem;
 	private System_Quest questSystem;
 	
+	private Factory factory;
+	
 	/*
 	 * FLAGS.
 	 */
@@ -104,6 +106,8 @@ public class Scene_Level extends Abstract_Scene {
 		this.renderSystem = new System_Render(this,game.getScreen());
 		this.questSystem = new System_Quest(this);
 		
+		this.factory = new Factory(this);
+		
 		if (this.load) {
 			this.deserialize();
 			this.getPlayer().init();
@@ -127,9 +131,11 @@ public class Scene_Level extends Abstract_Scene {
 		this.check_gameBeaten();
 		if (this.nextLevel != null) {
 			this.changeLevel();
+			this.nextLevel = null;
 		}
 		else if (this.nextScene != null) {
 			this.changeScene();
+			this.nextScene = null;
 		}
 		this.check_menu();
 		this.aiSystem.update();
@@ -189,6 +195,12 @@ public class Scene_Level extends Abstract_Scene {
 	public int[][] getEntityPositions() {
 		return this.movementSystem.getEntityPositions();
 	}
+	
+	/*
+	 * Gibt die Factory zurück.
+	 */
+	
+	public Factory getFactory() { return this.factory; }
 	
 	
 	/*
@@ -326,7 +338,7 @@ public class Scene_Level extends Abstract_Scene {
 	
 	private void initEntities() {
 		// Factory errichten.
-		Factory factory = new Factory(this);
+		//Factory factory = new Factory(this);
 		
 		// Mapeigene Entitäten bauen.
 		for (Object_Level level : this.levels.values()) {

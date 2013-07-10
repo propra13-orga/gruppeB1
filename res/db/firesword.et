@@ -1,3 +1,4 @@
+name : Feuerschwert
 sprite : firesword
 walkable : true
 onAction : pickup

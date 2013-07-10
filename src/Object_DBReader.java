@@ -19,7 +19,7 @@ public class Object_DBReader {
 	
 	public Map<String,String> getProperties(String entityType) {
 		if (!content.containsKey(entityType)) {
-			content.put(entityType,this.getPropertiesFromFile(entityType+EXT));
+			content.put(entityType,this.getPropertiesFromFile(entityType));
 			
 		}
 		return content.get(entityType);
@@ -29,7 +29,7 @@ public class Object_DBReader {
 		Map<String,String> properties = new HashMap<String,String>();
 		properties.put("entityType", fname);
 		try {
-			BufferedReader br = new BufferedReader(new FileReader(DIR+fname));
+			BufferedReader br = new BufferedReader(new FileReader(DIR+fname+EXT));
 			String line;
 			String[] entry;
 			while ((line = br.readLine()) != null) {

@@ -29,19 +29,28 @@ public class Factory {
 		String entityType = entityData.get("entityType");
 		String name = entityData.remove("name");
 		
-		Entity entity = new Entity(name,entityType,this.scene.getEntityManager());
-		
 		Map<String,String> data = db.getProperties(entityType);
 		
-		data.put("x",entityData.get("x"));
-		data.put("y",entityData.get("y"));
-		data.put("name", name);
+		if (entityData.containsKey("x") && entityData.containsKey("y")) {
+			data.put("x",entityData.get("x"));
+			data.put("y",entityData.get("y"));
+		}
+		else {
+			data.put("x", "-1");
+			data.put("-1", "-1");
+		}
+		if (!data.containsKey("name") && !data.get("name").equals("item")) {
+			data.put("name", name);			
+		}
+		else name = data.get("name");
 		
 		if (entityData != null) {
 			for (String attr : entityData.keySet()) {
 				data.put(attr, entityData.get(attr));
 			}
 		}
+		
+		Entity entity = new Entity(name,entityType,this.scene.getEntityManager());
 		
 		/*
 		 * Component_Battle
@@ -67,16 +76,18 @@ public class Factory {
 		/*
 		 * Component_Item
 		 */
-		Hashtable<String,String> filteredEffects = filterHashtable(data,"dmg|dmg_\\w+|armor|armor_\\w+");
+		Hashtable<String,String> filteredEffects = filterHashtable(data,"dmg|dmg_\\w+|armor|armor_\\w+|prop_\\w+");
 		Hashtable<String,String> filteredRestrictions = filterHashtable(data,"");
-		Hashtable<String,String> filteredProperties = filterHashtable(data,"slot_\\w+|type_\\w+|value");
+		Hashtable<String,String> filteredProperties = filterHashtable(data,"slot_\\w+|type_\\w+");
 		if (!filteredEffects.isEmpty() || 
 				!filteredRestrictions.isEmpty() ||
 				!filteredProperties.isEmpty()) {
 			String item_name = null;
 			String item_description = null;
+			int item_value = 0;
 			if (data.containsKey("item_name")) item_name = data.get("item_name");
-			if (data.containsKey("item_description")) item_name = data.get("item_description");
+			if (data.containsKey("item_description")) item_description = data.get("item_description");
+			if (data.containsKey("item_value")) item_value = Integer.parseInt(data.get("item_value"));
 			
 			List<String> restrictions = new LinkedList<String>();
 			restrictions.addAll(filteredRestrictions.keySet());
@@ -90,7 +101,7 @@ public class Factory {
 			
 			new Component_Item(entity,this.scene.getSystemInteraction(),
 					item_name, item_description,
-					effects, restrictions, properties);
+					item_value, effects, restrictions, properties);
 		}
 		
 		/*
@@ -195,7 +206,7 @@ public class Factory {
 	}
 	
 		
-	private Hashtable<String,String> filterHashtable(Map<String,String> hashtable, String regex) {
+	public Hashtable<String,String> filterHashtable(Map<String,String> hashtable, String regex) {
 		Hashtable<String,String> filtered = new Hashtable<String,String>();
 		
 		for (String key : hashtable.keySet()) {
