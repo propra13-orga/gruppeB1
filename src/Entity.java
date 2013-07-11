@@ -11,7 +11,7 @@ import java.util.Hashtable;
  * "position", so verfügt sie über Positionsdaten.
  */
 
-class Entity implements java.io.Serializable {
+class Entity implements java.io.Serializable, Comparable<Entity> {
 	
 	/**
 	 * 
@@ -86,4 +86,17 @@ class Entity implements java.io.Serializable {
 	public String getType() { return this.entityType; }
 	
 	public boolean isPlayer() {	return this.manager.isPlayer(this); }
+	
+
+	@Override
+	public int compareTo(Entity entity) {
+		if (this.getType().equals(entity.getType())) return 0;
+		return -1;
+	}
+	
+	@Override
+	public boolean equals(Object o) {
+		if (((Entity) o).compareTo(this) == 0) return true;
+		return false;
+	}
 }

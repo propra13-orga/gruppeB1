@@ -1,5 +1,4 @@
 import java.util.List;
-import java.util.Map;
 
 public interface IEventListener {
 	public void addEvent(Event event);

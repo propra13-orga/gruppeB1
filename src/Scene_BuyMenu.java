@@ -37,7 +37,7 @@ public class Scene_BuyMenu extends Abstract_Scene {
 	public Scene_BuyMenu(Object_Game game, Scene_Level parent, Entity seller, Entity buyer) {
 		super(game);
 		this.parent = parent;
-		this.db = new Object_DBReader();
+		this.db = parent.getFactory().getDBET();
 		this.buyer = buyer;
 		this.seller = seller;
 		this.money = this.retrieveMoney();
@@ -237,7 +237,7 @@ public class Scene_BuyMenu extends Abstract_Scene {
 		}
 		for (Entity entity : this.items_buyer) {
 			System.out.println(entity.getName());
-			this.messages_buyer.add(new Window_ItemProps(entity,Object_Screen.SCREEN_W-300,0,this.game));
+			this.messages_buyer.add(new Window_ItemProps(entity,Object_Screen.SCREEN_W-300,0,this.game,this.parent.getFactory()));
 		}
 	}
 	

@@ -8,28 +8,57 @@ import java.util.List;
 
 
 public class Object_DBReader {
-	public static final String DIR = "res/db/";
-	public static final String EXT = ".et";
+	public static final String DIR_ET = "res/db/";
+	public static final String EXT_ET = ".et";
+	public static final String DIR_Q = "res/quests/";
+	public static final String EXT_Q = ".q";
+	public static final String DIR_SK = "res/skills/";
+	public static final String EXT_SK = ".sk";
+	public static final String DIR_DAT = "res/data/";
+	public static final String EXT_DAT = ".dat";
+	
+	private final String ext;
+	private final String dir;
+	
 	
 	private Map<String,Map<String,String>> content;
 
-	public Object_DBReader() {
+	public Object_DBReader(String type) {
 		this.content = new HashMap<String,Map<String,String>>();
+		switch(type) {
+		case "entity":
+			this.ext = EXT_ET;
+			this.dir = DIR_ET;
+			break;
+		case "skill":
+			this.ext = EXT_SK;
+			this.dir = DIR_SK;
+			break;
+		case "quest":
+			this.ext = EXT_Q;
+			this.dir = DIR_Q;
+			break;
+		case "data":
+		default:
+			this.ext = EXT_DAT;
+			this.dir = DIR_DAT;
+			break;
+		}
+		
 	}
 	
-	public Map<String,String> getProperties(String entityType) {
-		if (!content.containsKey(entityType)) {
-			content.put(entityType,this.getPropertiesFromFile(entityType));
+	public Map<String,String> getProperties(String fname) {
+		if (!content.containsKey(fname)) {
+			content.put(fname,this.getPropertiesFromFile(fname));
 			
 		}
-		return content.get(entityType);
+		return content.get(fname);
 	}
 	
 	private Map<String,String> getPropertiesFromFile(String fname) {
 		Map<String,String> properties = new HashMap<String,String>();
-		properties.put("entityType", fname);
 		try {
-			BufferedReader br = new BufferedReader(new FileReader(DIR+fname+EXT));
+			BufferedReader br = new BufferedReader(new FileReader(this.dir+fname+this.ext));
 			String line;
 			String[] entry;
 			while ((line = br.readLine()) != null) {

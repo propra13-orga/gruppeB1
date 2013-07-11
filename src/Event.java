@@ -22,7 +22,7 @@ enum EventType {
 	CHANGELEVEL, OPEN_DIALOG, OPEN_BUYMENU, OPEN_QUESTMENU, 
 	CLOSE_DIALOG,
 	QUEST_ACCOMPLISHED,
-	ITEM_BOUGHT, ITEM_SOLD
+	ITEM_BOUGHT, ITEM_SOLD, ITEM_DROP, ITEM_POSSESS
 	}
 
 class Event {
@@ -31,6 +31,10 @@ class Event {
 	protected Entity actor;
 	protected Entity undergoer;
 	protected Map<String,String> properties;
+	
+	public Event(EventType type, Entity actor, Entity undergoer) {
+		this(type,actor,undergoer,null);
+	}
 	
 	public Event(EventType type, Entity actor, Entity undergoer, Map<String, String> properties) {
 		this.type = type;

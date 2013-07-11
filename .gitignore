@@ -6,3 +6,4 @@ tmp/**/*
 .loadpath
 *.launch
 *.*~
+*.log

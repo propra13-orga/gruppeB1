@@ -14,22 +14,33 @@ import java.util.Map;
 
 public class Factory {
 	Scene_Level scene;
-	Object_DBReader db;
+	Object_DBReader db_et;
+	Object_DBReader db_q;
+	Object_DBReader db_sk;
+	Object_DBReader db_dat;
 	
 	public Factory(Scene_Level scene) {
 		this.scene = scene;
-		this.db = new Object_DBReader();
+		this.db_et = new Object_DBReader("entity");
+		this.db_q = new Object_DBReader("quest");
+		this.db_sk = new Object_DBReader("skill");
+		this.db_dat = new Object_DBReader("data");
 		}
 	
 	
-	public Object_DBReader getDB() { return this.db; }
+	public Object_DBReader getDBET() { return this.db_et; }
+	public Object_DBReader getDBQ() { return this.db_q; }
+	public Object_DBReader getDBSK() { return this.db_sk; }
+	public Object_DBReader getDBDAT() { return this.db_dat; }
 	
 	
 	public Entity build(Map<String,String> entityData) {
 		String entityType = entityData.get("entityType");
 		String name = entityData.remove("name");
 		
-		Map<String,String> data = db.getProperties(entityType);
+		Map<String,String> data = db_et.getProperties(entityType);
+		
+		data.put("entityType", entityType);
 		
 		if (entityData.containsKey("x") && entityData.containsKey("y")) {
 			data.put("x",entityData.get("x"));
@@ -39,7 +50,7 @@ public class Factory {
 			data.put("x", "-1");
 			data.put("-1", "-1");
 		}
-		if (!data.containsKey("name") && !data.get("name").equals("item")) {
+		if (!data.containsKey("name") || data.get("name").equals("item")) {
 			data.put("name", name);			
 		}
 		else name = data.get("name");

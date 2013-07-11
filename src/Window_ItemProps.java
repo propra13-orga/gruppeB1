@@ -10,7 +10,8 @@ public class Window_ItemProps extends Abstract_Update {
 	private Window_Message foot;
 
 	private Factory factory;
-	private Object_DBReader db;
+	private Object_DBReader db_et;
+	private Object_DBReader db_dat;
 	
 	private String title;
 	private String[] properties;
@@ -21,9 +22,12 @@ public class Window_ItemProps extends Abstract_Update {
 	private static final String regex_props = "req_.*|slot_.*";
 	private static final String regex_effects = "dmg.*|armor.*|prop_.*";
 
-	public Window_ItemProps(Entity item, int x, int y, Object_Game game) {
+	public Window_ItemProps(Entity item, int x, int y, Object_Game game, Factory factory) {
 		super(game);
 		this.screen.setFont(Object_Game.FONT);
+		this.factory = factory;
+		this.db_et = factory.getDBET();
+		this.db_dat = factory.getDBDAT();
 		
 				
 		this.prepareData(item);
@@ -38,7 +42,8 @@ public class Window_ItemProps extends Abstract_Update {
 		super(game);
 		this.screen.setFont(Object_Game.FONT);
 		this.factory = factory;
-		this.db = factory.getDB();
+		this.db_et = factory.getDBET();
+		this.db_dat = factory.getDBDAT();
 		
 		this.prepareData(entityType);
 		String message = this.prepareMessage();
@@ -68,16 +73,16 @@ public class Window_ItemProps extends Abstract_Update {
 		for (int i=0;i<this.effects.length;i++) {
 			effect = this.effects[i];
 			if (effect != null) {
-				if (this.db.getProperties("names").containsKey(effect)) {
-					effect = this.db.getProperties("names").get(effect);
+				if (this.db_dat.getProperties("names").containsKey(effect)) {
+					effect = this.db_dat.getProperties("names").get(effect);
 				}
 				props += String.format("%s: %d\n",effect,this.values[i]);			
 			}
 		}
 		for (String property : this.properties) {
 			if (property != null) {
-				if (this.db.getProperties("names").containsKey(property)) {
-					property = this.db.getProperties("names").get(property);
+				if (this.db_dat.getProperties("names").containsKey(property)) {
+					property = this.db_dat.getProperties("names").get(property);
 				}
 				props += property + "\n";				
 			}
@@ -87,7 +92,7 @@ public class Window_ItemProps extends Abstract_Update {
 	}
 	
 	private void prepareData(String entityType) {
-		Map<String,String> entityData = this.db.getProperties(entityType);
+		Map<String,String> entityData = this.db_et.getProperties(entityType);
 		this.title = entityData.get("name");
 		this.value = "Wert: "+entityData.get("item_value");
 		

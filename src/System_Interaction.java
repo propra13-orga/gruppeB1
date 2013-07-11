@@ -9,6 +9,9 @@
 
 
 class System_Interaction extends System_Component {
+	
+	private int tick;
+	private static final int TICK_MAX = 9;
 
 	public System_Interaction(Abstract_Scene scene) {
 		super(scene,
@@ -20,12 +23,17 @@ class System_Interaction extends System_Component {
 				EventType.OPEN_DIALOG, EventType.CLOSE_DIALOG, EventType.OPEN_QUESTMENU,
 				EventType.PICKUP, EventType.CHANGELEVEL, EventType.GAMEBEATEN, EventType.CMD_ACTION,
 				EventType.QUEST_ACCOMPLISHED);
+		
+		this.tick = 0;
 	}
 
 	@Override
 	public void update() {
 		
+		this.updateTick();
+		
 		this.handleActionCommands();
+		this.handlePossession(5);
 		
 		for (Event event : this.getEvents(EventType.ACTION,EventType.COLLISION)) {
 			Entity actor = event.getActor();
@@ -165,7 +173,9 @@ class System_Interaction extends System_Component {
 	}
 	
 	/*
-	 * 
+	 * Wird ein Event CMD_ACTION verschickt (z.B. nach Tastendruck), so prüft
+	 * die Methode, ob sich vor der entsprechenden Entität eine weitere Entität
+	 * befindet. Falls ja, wird das Event ACTION verschickt.
 	 */
 	private void handleActionCommands() {
 		for (Event event : this.getEvents(EventType.CMD_ACTION)) {
@@ -185,9 +195,35 @@ class System_Interaction extends System_Component {
 		}
 	}
 	
+	/*
+	 * Verschickt jeden time-ten Updatezyklus ein Event ITEM_POSSESS für jedes
+	 * Item, was sich in irgendeinem Inventar befindet.
+	 */
+	private void handlePossession(int time) {
+		if (this.tick != time) return;
+		
+		for (Entity entity : this.getEntitiesByType("inventory")) {
+			Component_Inventory compInventory = (Component_Inventory) entity.getComponent("inventory");
+			for (Entity item : compInventory.getInventory()) {
+				if (item != null) {
+					this.addEvent(new Event(EventType.ITEM_POSSESS,entity,item));				
+				}
+			}
+		}
+	}
+	
 	private void handleXP(Component_Battle compBattle, int xp) {
 		compBattle.addToProperty("prop_xp", xp);
 		System.out.printf("+%d XP macht %d XP!\n",xp,compBattle.getPropertyValue("prop_xp"));
+	}
+	
+	/*
+	 * Erhöht den Tick um 1, wenn er kleiner als TICK_MAX ist, ansonsten wird er
+	 * auf 0 gesetzt.
+	 */
+	private void updateTick() {
+		if (this.tick < TICK_MAX) this.tick += 1;
+		else this.tick = 0;
 	}
 	
 	

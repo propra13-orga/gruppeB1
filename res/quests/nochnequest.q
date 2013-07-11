@@ -2,5 +2,5 @@ name : Noch so 'ne Quest
 description : {
     Sammle einen Heiltrank.
 }
-event : pickup : potion_hp
+event : item_possess : potion_hp
 xp : 5
