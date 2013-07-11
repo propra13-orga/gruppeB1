@@ -25,7 +25,7 @@ public class Scene_StartMenu extends Abstract_Scene {
 		menu.addReturnCommand("Neues Spiel");
 		menu.addReturnCommand("Kampfsystem starten");
 		menu.addReturnCommand("Credits");
-		menu.addReturnCommand("Teste GameOver Scene");
+//		menu.addReturnCommand("Teste GameOver Scene");
 		menu.addReturnCommand("Spiel beenden");
 		menu.center();
 		Window_Menu.setMainMenu(menu);
@@ -136,12 +136,12 @@ public class Scene_StartMenu extends Abstract_Scene {
 						JOptionPane.OK_CANCEL_OPTION);
 				menu.reset();
 				break;
-			case 4: //Teste GameOver Scene
-				this.keyhandler.clear();
-				this.keyhandler.freeze(Object_KeyHandler.KEY_ENTER, 40);
-				game.switchScene(new Scene_GameOver(game), true);
-				break;
-			case 5: //Spiel beenden
+//			case 4: //Teste GameOver Scene
+//				this.keyhandler.clear();
+//				this.keyhandler.freeze(Object_KeyHandler.KEY_ENTER, 40);
+//				game.switchScene(new Scene_GameOver(game), true);
+//				break;
+			case 4: //Spiel beenden
 				game.quit();
 			}
 		}
