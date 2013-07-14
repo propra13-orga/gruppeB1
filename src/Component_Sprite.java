@@ -83,8 +83,8 @@ class Component_Sprite extends Abstract_Component {
 		this.visible = compSprite.visible;		
 	}
 	
-	public void setX(int x) { this.pos_x = x*Object_Level.TILESIZE;}
-	public void setY(int y) { this.pos_y = y*Object_Level.TILESIZE;}
+	public void setX(int x) { this.pos_x = x*Object_Room.TILESIZE;}
+	public void setY(int y) { this.pos_y = y*Object_Room.TILESIZE;}
 	public void addToX(int offset) { this.pos_x += offset; }
 	public void addToY(int offset) { this.pos_y += offset; }
 	public void setDirection (int d) { this.direction = d; }
@@ -92,8 +92,8 @@ class Component_Sprite extends Abstract_Component {
 	
 	public int getX() { return pos_x; }
 	public int getY() {	return pos_y; }
-	public int getTileX() {	return pos_x / Object_Level.TILESIZE; }
-	public int getTileY() {	return pos_y / Object_Level.TILESIZE + 1; }
+	public int getTileX() {	return pos_x / Object_Room.TILESIZE; }
+	public int getTileY() {	return pos_y / Object_Room.TILESIZE + 1; }
 	public int getWidth() {	return width; }
 	public int getHeight() { return height; }
 

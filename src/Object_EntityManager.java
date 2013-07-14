@@ -107,7 +107,7 @@ class Object_EntityManager implements IEventListener {
 		}
 	}
 	
-	public List<Entity> deserializeEntities(Object_Level level) {
+	public List<Entity> deserializeEntities(Object_Room level) {
 		File folder = new File("res/save");
 		File[] listOfFiles = folder.listFiles();
 		

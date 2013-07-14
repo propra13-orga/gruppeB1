@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.Hashtable;
+import java.util.List;
 
 enum BattleSide {
 	PLAYER,
@@ -27,8 +28,8 @@ public class Object_BattleActor implements Comparable<Object_BattleActor> {
 	public boolean wait = false;
 	public boolean dead = false;
 	public Object_BattleSprite sprite;
-	public ArrayList<Entity> items;
-	public ArrayList<Entity> skills;
+	public List<Entity> items;
+	public List<Object_Skill> skills;
 	public Hashtable<String, Entity> weapons;
 	public Scene_BattleSystem battle_system;
 
@@ -81,6 +82,7 @@ public class Object_BattleActor implements Comparable<Object_BattleActor> {
 		return Integer.compare(s1, s2);
 	}
 	
+	public Entity getEntity() { return this.entity; }
 	public String getName() { return this.name; }
 	public int getHP() { return this.hp; }
 	public int getMaxHP() { return this.maxHp; }

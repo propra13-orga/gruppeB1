@@ -14,11 +14,12 @@ public class Scene_Level extends Abstract_Scene {
 	 * LEVELVERWALTUNG.
 	 */
 	private String levelname = "level01";
+	private String nextLevelName;
 	
-	private Object_Level currentLevel;
-	private Object_Level nextLevel;
-	private int[] nextLevelSpawn = new int[2];
-	private Hashtable<Integer,Object_Level> levels;
+	private Object_Room currentRoom;
+	private Object_Room nextRoom;
+	private int[] nextRoomSpawn = new int[2];
+	private Hashtable<Integer,Object_Room> rooms;
 	
 	/*
 	 * EVENTVERWALTUNG.
@@ -50,12 +51,24 @@ public class Scene_Level extends Abstract_Scene {
 		super(g);
 		this.load = false;
 		this.already_running = false;
+		
+		this.eventManager = new Object_EventManager();
+		
+		this.eManager = new Object_EntityManager(this);
+		this.aiSystem = new System_AI(this);
+		this.movementSystem = new System_Movement(this,game.getKeyHandler());
+		this.interactionSystem = new System_Interaction(this);
+		this.renderSystem = new System_Render(this,game.getScreen());
+		this.questSystem = new System_Quest(this);
+		
+		this.factory = new Factory(this);
 	}
 	
 	public Scene_Level(Object_Game g, String levelname, Entity player) {
 		this(g);
 		this.levelname = levelname;
 		if (player != null) {
+			this.factory.updateSystems(player);
 			player.init();
 			this.eManager.setPlayer(player);
 		}
@@ -69,8 +82,8 @@ public class Scene_Level extends Abstract_Scene {
 	public void serialize() {
 		Object_SaveLoadData.serialize(
 				new Object_SaveLoadData(
-						this.levels,
-						this.currentLevel.getID(),
+						this.rooms,
+						this.currentRoom.getID(),
 						this.getPlayer()
 				)
 		);
@@ -78,8 +91,8 @@ public class Scene_Level extends Abstract_Scene {
 	
 	public void deserialize() {
 		Object_SaveLoadData sld = Object_SaveLoadData.deserialize(this);
-		this.levels = sld.getRooms();
-		this.currentLevel = levels.get(sld.getCurrentRoom());
+		this.rooms = sld.getRooms();
+		this.currentRoom = rooms.get(sld.getCurrentRoom());
 		this.eManager.setPlayer(sld.getPlayer());
 	}
 
@@ -90,23 +103,13 @@ public class Scene_Level extends Abstract_Scene {
 			return;
 		}
 		this.nextScene = null;
-		this.levels = new Hashtable<Integer,Object_Level>();
+		this.rooms = new Hashtable<Integer,Object_Room>();
 		this.nextScene = null;
-		this.currentLevel = null;
-		this.nextLevel = null;
+		this.currentRoom = null;
+		this.nextRoom = null;
+		this.nextLevelName = null;
 		this.playerDead = false;
 		this.gameBeaten = false;
-		
-		this.eventManager = new Object_EventManager();
-		
-		this.eManager = new Object_EntityManager(this);
-		this.aiSystem = new System_AI(this);
-		this.movementSystem = new System_Movement(this,game.getKeyHandler());
-		this.interactionSystem = new System_Interaction(this);
-		this.renderSystem = new System_Render(this,game.getScreen());
-		this.questSystem = new System_Quest(this);
-		
-		this.factory = new Factory(this);
 		
 		if (this.load) {
 			this.deserialize();
@@ -116,7 +119,7 @@ public class Scene_Level extends Abstract_Scene {
 			this.initLevel();
 		}
 		
-		this.currentLevel.init();
+		this.currentRoom.init();
 		this.already_running = true;
 	}
 
@@ -129,9 +132,14 @@ public class Scene_Level extends Abstract_Scene {
 	public void updateData() {
 		this.check_playerDeath();
 		this.check_gameBeaten();
-		if (this.nextLevel != null) {
+		if (this.nextRoom != null) {
+			this.changeRoom();
+			this.nextRoom = null;
+		}
+		else if (this.nextLevelName != null) {
 			this.changeLevel();
-			this.nextLevel = null;
+			this.nextLevelName = null;
+			return;
 		}
 		else if (this.nextScene != null) {
 			this.changeScene();
@@ -162,10 +170,14 @@ public class Scene_Level extends Abstract_Scene {
 		this.gameBeaten = true;
 	}
 	
-	public void demandLevelChange(int ID, int x, int y) {
-		this.nextLevel = this.levels.get(ID);
-		this.nextLevelSpawn[0] = x;
-		this.nextLevelSpawn[1] = y;
+	public void demandLevelChange(String levelname) {
+		this.nextLevelName = levelname;
+	}
+	
+	public void demandRoomChange(int ID, int x, int y) {
+		this.nextRoom = this.rooms.get(ID);
+		this.nextRoomSpawn[0] = x;
+		this.nextRoomSpawn[1] = y;
 	}
 	
 	public void demandSceneChange(Abstract_Scene scene) {
@@ -177,8 +189,8 @@ public class Scene_Level extends Abstract_Scene {
 		this.playerDead = true;
 	}
 	
-	public Object_Level getCurrentLevel() {
-		return this.currentLevel;
+	public Object_Room getCurrentRoom() {
+		return this.currentRoom;
 	}
 	
 	/*
@@ -227,6 +239,7 @@ public class Scene_Level extends Abstract_Scene {
 		if (movementSystem.hasType(type)) return movementSystem;
 		if (interactionSystem.hasType(type)) return interactionSystem;
 		if (renderSystem.hasType(type)) return renderSystem;
+		if (questSystem.hasType(type)) return questSystem;
 		return null;
 	}
 	
@@ -265,22 +278,29 @@ public class Scene_Level extends Abstract_Scene {
 		}
 	}
 	
+	/*
+	 * 
+	 */
+	private void changeLevel() {
+		this.game.switchScene(new Scene_Level(this.game,this.nextLevelName,this.getPlayer()), true);
+	}
+	
 	
 	/*
 	 * Nimmt die nötigen Änderungen vor, um das Level zu wechseln.
 	 */
-	private void changeLevel() {
-		this.currentLevel.deinit();
-		this.currentLevel = this.nextLevel;
-		this.nextLevel = null;
-		int x = this.nextLevelSpawn[0];
-		int y = this.nextLevelSpawn[1];
+	private void changeRoom() {
+		this.currentRoom.deinit();
+		this.currentRoom = this.nextRoom;
+		this.nextRoom = null;
+		int x = this.nextRoomSpawn[0];
+		int y = this.nextRoomSpawn[1];
 		Component_Movement compMovement = (Component_Movement) this.eManager.getPlayer().getComponent("movement");
 		Component_Sprite compSprite = (Component_Sprite) this.getPlayer().getComponent("sprite");
 		compMovement.warp(x, y);
 		compSprite.setX(compMovement.getX());
 		compSprite.setY(compMovement.getY());
-		this.currentLevel.init();
+		this.currentRoom.init();
 	}
 	
 	/*
@@ -319,21 +339,20 @@ public class Scene_Level extends Abstract_Scene {
 			if (m.matches()) {
 				String roomname = m.group(1);
 				int number = Integer.parseInt(m.group(2));
-				Object_Level level = new Object_Level(this.game, this.levelname+"/"+roomname, number);
-				this.levels.put(level.getID(), level);
+				Object_Room level = new Object_Room(this.game, this.levelname+"/"+roomname, number);
+				this.rooms.put(level.getID(), level);
 				/*
 				 * Frage ggf. Startposition ab. Sobald mindestens eine TMX-Datei
 				 * die Properties "startX" und "startY" hat, wird die erste
 				 * gelesene davon als Anfangsmap gesetzt.
 				 */
-				if (this.currentLevel == null && level.hasProperty("startX")) {
-					this.currentLevel = level;
+				if (this.currentRoom == null && level.hasProperty("startX")) {
+					this.currentRoom = level;
 				}
 			}
 		}
 				
 		this.initEntities();
-		
 	}
 	
 	private void initEntities() {
@@ -341,15 +360,15 @@ public class Scene_Level extends Abstract_Scene {
 		//Factory factory = new Factory(this);
 		
 		// Mapeigene Entitäten bauen.
-		for (Object_Level level : this.levels.values()) {
+		for (Object_Room level : this.rooms.values()) {
 			for (Map<String,String> entityData : level.getEntityData()) {
 				level.addEntity(factory.build(entityData));
 			}
 		}
 		
 		// Spieler bauen oder verschieben.
-		int x = Integer.parseInt(this.currentLevel.getProperties().get("startX"));
-		int y = Integer.parseInt(this.currentLevel.getProperties().get("startY"));
+		int x = Integer.parseInt(this.currentRoom.getProperties().get("startX"));
+		int y = Integer.parseInt(this.currentRoom.getProperties().get("startY"));
 		
 		if (this.getPlayer() == null) {
 			System.out.println("player == null");

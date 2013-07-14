@@ -4,5 +4,5 @@ description : {
 }
 event : item_possess : potion_hp
 event : item_possess : firesword
-event : changelevel
+event : changeroom
 xp : 10

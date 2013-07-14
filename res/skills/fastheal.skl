@@ -1,0 +1,4 @@
+name : Schnelle Heilung
+description : Heilt ein befreundetes Ziel um 15 HP.
+heal : true
+heal_hp : 15

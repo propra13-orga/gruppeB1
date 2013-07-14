@@ -16,21 +16,21 @@ public class Factory {
 	Scene_Level scene;
 	Object_DBReader db_et;
 	Object_DBReader db_q;
-	Object_DBReader db_sk;
+	Object_DBReader db_skl;
 	Object_DBReader db_dat;
 	
 	public Factory(Scene_Level scene) {
 		this.scene = scene;
 		this.db_et = new Object_DBReader("entity");
 		this.db_q = new Object_DBReader("quest");
-		this.db_sk = new Object_DBReader("skill");
+		this.db_skl = new Object_DBReader("skill");
 		this.db_dat = new Object_DBReader("data");
 		}
 	
 	
 	public Object_DBReader getDBET() { return this.db_et; }
 	public Object_DBReader getDBQ() { return this.db_q; }
-	public Object_DBReader getDBSK() { return this.db_sk; }
+	public Object_DBReader getDBSKL() { return this.db_skl; }
 	public Object_DBReader getDBDAT() { return this.db_dat; }
 	
 	
@@ -143,6 +143,13 @@ public class Factory {
 		}
 		
 		/*
+		 * Component_Skillbag
+		 */
+		if (data.containsKey("skillbag")) {
+			new Component_Skillbag(entity,this.scene.getSystemInteraction());
+		}
+		
+		/*
 		 * Component_Sprite
 		 */
 		if (data.containsKey("sprite")) {
@@ -227,6 +234,14 @@ public class Factory {
 		}
 		
 		return filtered;
+	}
+	
+	public void updateSystems(Entity entity) {
+		String type;
+		for (Abstract_Component comp : entity.getComponents()) {
+			type = comp.getType();
+			comp.setSystem(this.scene.getSystemByType(type));
+		}
 	}
 	
 

@@ -15,5 +15,6 @@ camera : true
 collidable : true
 inventory : true
 money : 20
+skillbag : true
 questbag : true
 has_quest1 : testquest

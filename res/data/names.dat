@@ -1,12 +1,12 @@
 dmg : Schaden
 dmg_fire : Feuerschaden
 dmg_ice : Eisschaden
-dmg_wind : Windschaden
 dmg_earth : Erdschaden
+heal_hp : HP-Heilung
+heal_mp : MP-Heilung
 armor : Ruestung
 armor_fire : Feuerschutz
 armor_ice : Eisschutz
-armor_wind : Windschutz
 armor_earth : Erdschutz
 type_consumable : verzehrbar
 type_permanent : permanent

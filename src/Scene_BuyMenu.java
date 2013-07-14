@@ -82,7 +82,7 @@ public class Scene_BuyMenu extends Abstract_Scene {
 
 	@Override
 	public void onExit() {
-		//
+		this.checkOut();
 	}
 
 	@Override
@@ -140,7 +140,6 @@ public class Scene_BuyMenu extends Abstract_Scene {
 				
 			case "null":
 				this.keyhandler.freeze(Object_KeyHandler.KEY_ESCAPE, 40);
-				this.checkOut();
 				this.game.switchScene(parent);
 				return;
 			}

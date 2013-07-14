@@ -1,4 +1,4 @@
 name : Portal
 walkable : true
 collidable : true
-onCollision : changeroom
+onCollision : changelevel

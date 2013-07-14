@@ -9,6 +9,7 @@ public class Scene_GameMenu extends Abstract_Scene {
 		menu = new Window_Menu(game, "main");
 		menu.addReturnCommand("Spiel speichern");
 		menu.addReturnCommand("Spiel beenden");
+		menu.addReturnCommand("Faehigkeiten");
 		menu.addReturnCommand("Inventar");
 		menu.addReturnCommand("Ausruestung");
 		menu.addReturnCommand("Optionen");
@@ -51,6 +52,10 @@ public class Scene_GameMenu extends Abstract_Scene {
 				case 1: //Spiel beenden
 					this.keyhandler.freeze(Object_KeyHandler.KEY_ENTER, 40);
 					game.quit();
+					return;
+				case 2: //Faehigkeiten
+					this.keyhandler.freeze(Object_KeyHandler.KEY_ENTER, 40);
+					this.game.switchScene(new Scene_SkillMenu(this.game,this,this.current_map.getPlayer(),new Factory(this.current_map)));
 					return;
 				default:
 					System.out.println("Nur zu Testzwecken!");

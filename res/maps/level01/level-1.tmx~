@@ -3,9 +3,11 @@
  <properties>
   <property name="background" value="world"/>
   <property name="music" value="peace"/>
+  <property name="startX" value="16"/>
+  <property name="startY" value="15"/>
  </properties>
  <tileset firstgid="1" name="tileset_2" tilewidth="32" tileheight="32">
-  <image source="../tileset/tileset_2.png" trans="ff00ff" width="960" height="512"/>
+  <image source="../../tileset/tileset_2.png" trans="ff00ff" width="960" height="512"/>
  </tileset>
  <layer name="Kachelebene 1" width="25" height="20">
   <data>
@@ -2024,19 +2026,101 @@
   </data>
  </layer>
  <objectgroup name="Objektebene 1" width="25" height="20">
-  <object name="teleport1" type="teleport" x="192" y="608" width="32" height="32">
-   <properties>
-    <property name="toLevel" value="2"/>
-    <property name="toX" value="5"/>
-    <property name="toY" value="5"/>
-   </properties>
-  </object>
   <object name="item" type="firesword" x="256" y="544" width="32" height="32"/>
   <object name="Kerl" type="npc1" x="512" y="576" width="32" height="32">
    <properties>
     <property name="dialog" value="Lorem ipsum dolor sit amet."/>
-    <property name="onAction" value="trigger_dialog"/>
+    <property name="onAction" value="open_dialog"/>
     <property name="orientation" value="1"/>
+   </properties>
+  </object>
+  <object name="Gunther" type="salesperson" x="448" y="448" width="32" height="32">
+   <properties>
+    <property name="shop_item1" value="potion_hp"/>
+    <property name="shop_item2" value="potion_hp"/>
+    <property name="shop_item3" value="potion_hp"/>
+    <property name="shop_item4" value="firesword"/>
+    <property name="shop_item5" value="firesword"/>
+   </properties>
+  </object>
+  <object name="teleport1" type="teleport" x="256" y="608" width="32" height="32">
+   <properties>
+    <property name="toLevel" value="4"/>
+    <property name="toX" value="22"/>
+    <property name="toY" value="1"/>
+   </properties>
+  </object>
+  <object name="teleport1" type="teleport" x="224" y="608" width="32" height="32">
+   <properties>
+    <property name="toLevel" value="4"/>
+    <property name="toX" value="21"/>
+    <property name="toY" value="1"/>
+   </properties>
+  </object>
+  <object name="teleport1" type="teleport" x="192" y="608" width="32" height="32">
+   <properties>
+    <property name="toLevel" value="4"/>
+    <property name="toX" value="20"/>
+    <property name="toY" value="1"/>
+   </properties>
+  </object>
+  <object name="teleport1" type="teleport" x="160" y="608" width="32" height="32">
+   <properties>
+    <property name="toLevel" value="4"/>
+    <property name="toX" value="19"/>
+    <property name="toY" value="1"/>
+   </properties>
+  </object>
+  <object name="teleport1" type="teleport" x="128" y="608" width="32" height="32">
+   <properties>
+    <property name="toLevel" value="4"/>
+    <property name="toX" value="18"/>
+    <property name="toY" value="1"/>
+   </properties>
+  </object>
+  <object name="teleport1" type="teleport" x="96" y="608" width="32" height="32">
+   <properties>
+    <property name="toLevel" value="4"/>
+    <property name="toX" value="17"/>
+    <property name="toY" value="1"/>
+   </properties>
+  </object>
+  <object name="teleport1" type="teleport" x="64" y="608" width="32" height="32">
+   <properties>
+    <property name="toLevel" value="4"/>
+    <property name="toX" value="16"/>
+    <property name="toY" value="1"/>
+   </properties>
+  </object>
+  <object name="teleport1" type="teleport" x="32" y="608" width="32" height="32">
+   <properties>
+    <property name="toLevel" value="4"/>
+    <property name="toX" value="15"/>
+    <property name="toY" value="1"/>
+   </properties>
+  </object>
+  <object name="teleport1" type="teleport" x="0" y="608" width="32" height="32">
+   <properties>
+    <property name="toLevel" value="4"/>
+    <property name="toX" value="14"/>
+    <property name="toY" value="1"/>
+   </properties>
+  </object>
+  <object name="item" type="potion_hp" x="288" y="480" width="32" height="32"/>
+  <object name="Dagoberto" type="npc1" x="544" y="512" width="32" height="32">
+   <properties>
+    <property name="deal_quest1" value="testquest"/>
+    <property name="deal_quest2" value="nochnequest"/>
+    <property name="onAction" value="open_questmenu"/>
+    <property name="orientation" value="3"/>
+    <property name="questdealer" value="true"/>
+   </properties>
+  </object>
+  <object name="teleport1" type="teleport" x="288" y="608" width="32" height="32">
+   <properties>
+    <property name="toLevel" value="4"/>
+    <property name="toX" value="23"/>
+    <property name="toY" value="1"/>
    </properties>
   </object>
  </objectgroup>

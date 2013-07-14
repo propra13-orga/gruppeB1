@@ -25,8 +25,8 @@ class System_Render extends System_Component {
 		this.updateScreenPoint();
 		//Die gesamte Map wird als Bild berechnet
 		BufferedImage map = new BufferedImage(
-				this.getCurrentLevel().getWidth()*Object_Level.TILESIZE,
-				this.getCurrentLevel().getHeight()*Object_Level.TILESIZE,
+				this.getCurrentLevel().getWidth()*Object_Room.TILESIZE,
+				this.getCurrentLevel().getHeight()*Object_Room.TILESIZE,
 				BufferedImage.TYPE_INT_ARGB);
 		map.getGraphics().drawImage(this.getCurrentLevel().getBackground(),this.screen_point[0],this.screen_point[1],null);
 		map.getGraphics().drawImage(this.getCurrentLevel().getLowTiles(),0,0,null);
@@ -118,7 +118,7 @@ class System_Render extends System_Component {
 			// Der Offset bestimmt die Anzahl an Pixeln, die der Sprite bewegt
 			// werden soll. Die Pixelanzahl ist abhängig vom Delay und der
 			// Kachelgröße.
-			int offset = Object_Level.TILESIZE / compMovement.getDelay();
+			int offset = Object_Room.TILESIZE / compMovement.getDelay();
 			switch(compMovement.getOrientation()) {
 			case 1:
 				compSprite.addToY(-offset);
@@ -139,10 +139,10 @@ class System_Render extends System_Component {
 			}
 			
 			// newpos gibt jetzt den Abstand von der letzten Kachel an.
-			newpos = Math.abs(newpos) % Object_Level.TILESIZE;
+			newpos = Math.abs(newpos) % Object_Room.TILESIZE;
 			
 			// Hier wird entschieden, welche Animationsgrafik angezeigt wird.
-			if (newpos < Object_Level.TILESIZE-10) {
+			if (newpos < Object_Room.TILESIZE-10) {
 				if (compSprite.getOldAnimation() == Component_Sprite.ANIMATION_LEFT) {
 					compSprite.setAniRight();
 				}
@@ -204,8 +204,8 @@ class System_Render extends System_Component {
 		}
 	}
 	
-	private Object_Level getCurrentLevel() {
-		return ((Scene_Level) this.scene).getCurrentLevel();
+	private Object_Room getCurrentLevel() {
+		return ((Scene_Level) this.scene).getCurrentRoom();
 	}
 	
 	

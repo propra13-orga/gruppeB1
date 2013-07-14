@@ -18,10 +18,12 @@ class System_Interaction extends System_Component {
 				"trigger_event",
 				"battle",
 				"item",
-				"inventory");
+				"inventory",
+				"skillbag",
+				"equipment");
 		this.listenTo(EventType.ACTION, EventType.COLLISION, EventType.ATTACK, EventType.OPEN_BUYMENU,
 				EventType.OPEN_DIALOG, EventType.CLOSE_DIALOG, EventType.OPEN_QUESTMENU,
-				EventType.PICKUP, EventType.CHANGELEVEL, EventType.GAMEBEATEN, EventType.CMD_ACTION,
+				EventType.PICKUP, EventType.CHANGEROOM, EventType.CHANGELEVEL, EventType.GAMEBEATEN, EventType.CMD_ACTION,
 				EventType.QUEST_ACCOMPLISHED);
 		
 		this.tick = 0;
@@ -49,7 +51,7 @@ class System_Interaction extends System_Component {
 		
 		
 		for (Event event : this.getEvents(EventType.ATTACK, EventType.OPEN_BUYMENU, EventType.OPEN_DIALOG, EventType.OPEN_QUESTMENU,
-				EventType.PICKUP, EventType.CHANGELEVEL, EventType.GAMEBEATEN, EventType.QUEST_ACCOMPLISHED)) {
+				EventType.PICKUP, EventType.CHANGEROOM, EventType.CHANGELEVEL, EventType.GAMEBEATEN, EventType.QUEST_ACCOMPLISHED)) {
 			EventType type = event.getType();
 			Entity actor = event.getActor();
 			Entity undergoer = event.getUndergoer();
@@ -61,13 +63,20 @@ class System_Interaction extends System_Component {
 					this.addEvent(new Event(EventType.PLAYERDMG,actor,undergoer, null));					
 				}
 				break;
+			case CHANGEROOM:
+				if (this.getScene().getPlayer().equals(actor)) {
+					Component_Trigger trigger = (Component_Trigger) undergoer.getComponent("trigger_event");
+					int ID = Integer.parseInt(trigger.getProperty("toRoom"));
+					int x = Integer.parseInt(trigger.getProperty("toX"));
+					int y = Integer.parseInt(trigger.getProperty("toY"));
+					this.getScene().demandRoomChange(ID,x,y);				
+				}
+				break;
 			case CHANGELEVEL:
 				if (this.getScene().getPlayer().equals(actor)) {
 					Component_Trigger trigger = (Component_Trigger) undergoer.getComponent("trigger_event");
-					int ID = Integer.parseInt(trigger.getProperty("toLevel"));
-					int x = Integer.parseInt(trigger.getProperty("toX"));
-					int y = Integer.parseInt(trigger.getProperty("toY"));
-					this.getScene().demandLevelChange(ID,x,y);				
+					String levelname = trigger.getProperty("toLevel");
+					this.getScene().demandLevelChange(levelname);
 				}
 				break;
 			case GAMEBEATEN:
@@ -117,7 +126,7 @@ class System_Interaction extends System_Component {
 					Component_Inventory compInventory = (Component_Inventory) actor.getComponent("inventory");
 					if (compInventory.addItem(undergoer)) {
 						((Component_Movement) undergoer.getComponent("movement")).drawFromMap();
-						this.getScene().getCurrentLevel().removeEntity(undergoer);
+						this.getScene().getCurrentRoom().removeEntity(undergoer);
 					}				
 				}
 				break;

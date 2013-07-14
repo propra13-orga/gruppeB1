@@ -30,8 +30,8 @@ class System_AI extends System_Component {
 
 	@Override
 	public void update() {
-		this.w = this.getScene().getCurrentLevel().getWidth();
-		this.h = this.getScene().getCurrentLevel().getHeight();
+		this.w = this.getScene().getCurrentRoom().getWidth();
+		this.h = this.getScene().getCurrentRoom().getHeight();
 		this.retrieveEntityPositions();
 		this.retrieveWalkability();
 		
@@ -53,7 +53,7 @@ class System_AI extends System_Component {
 	 * Ist Kachel (x,y) begehbar?
 	 */
 	private boolean walkable(int x, int y) {
-		return this.getScene().getCurrentLevel().isPassable(x, y);
+		return this.getScene().getCurrentRoom().isPassable(x, y);
 	}
 	
 	

@@ -12,8 +12,8 @@ public class Object_DBReader {
 	public static final String EXT_ET = ".et";
 	public static final String DIR_Q = "res/quests/";
 	public static final String EXT_Q = ".q";
-	public static final String DIR_SK = "res/skills/";
-	public static final String EXT_SK = ".sk";
+	public static final String DIR_SKL = "res/skills/";
+	public static final String EXT_SKL = ".skl";
 	public static final String DIR_DAT = "res/data/";
 	public static final String EXT_DAT = ".dat";
 	
@@ -31,8 +31,8 @@ public class Object_DBReader {
 			this.dir = DIR_ET;
 			break;
 		case "skill":
-			this.ext = EXT_SK;
-			this.dir = DIR_SK;
+			this.ext = EXT_SKL;
+			this.dir = DIR_SKL;
 			break;
 		case "quest":
 			this.ext = EXT_Q;

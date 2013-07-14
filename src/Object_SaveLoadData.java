@@ -77,17 +77,17 @@ class Object_SaveLoadData implements java.io.Serializable {
 
 	public static final String PATH = "res/save/";
 	
-	private Hashtable<Integer,Object_Level> rooms;
+	private Hashtable<Integer,Object_Room> rooms;
 	private int currentRoom;
 	private Entity player;
 	
-	public Object_SaveLoadData(Hashtable<Integer,Object_Level> rooms, int currentRoom, Entity player) {
+	public Object_SaveLoadData(Hashtable<Integer,Object_Room> rooms, int currentRoom, Entity player) {
 		this.rooms = rooms;
 		this.currentRoom = currentRoom;
 		this.player = player;
 	}
 	
-	public Hashtable<Integer,Object_Level> getRooms() { return this.rooms; }
+	public Hashtable<Integer,Object_Room> getRooms() { return this.rooms; }
 	public int getCurrentRoom() { return this.currentRoom; }
 	public Entity getPlayer() { return this.player; }
 	
@@ -115,7 +115,7 @@ class Object_SaveLoadData implements java.io.Serializable {
 		}
 		catch (Exception e) { e.printStackTrace(); }
 		
-		for (Object_Level level : sld.getRooms().values()) {
+		for (Object_Room level : sld.getRooms().values()) {
 			for (Entity entity : level.getEntities()) {
 				entity.setManager(scene.getEntityManager());
 				for (Abstract_Component comp : entity.components.values()) {

@@ -2027,70 +2027,70 @@
   <object name="Trank" type="potion_hp" x="544" y="96" width="32" height="32"/>
   <object name="teleport" type="teleport" x="704" y="0" width="32" height="32">
    <properties>
-    <property name="toLevel" value="1"/>
+    <property name="toRoom" value="1"/>
     <property name="toX" value="8"/>
     <property name="toY" value="18"/>
    </properties>
   </object>
   <object name="teleport" type="teleport" x="672" y="0" width="32" height="32">
    <properties>
-    <property name="toLevel" value="1"/>
+    <property name="toRoom" value="1"/>
     <property name="toX" value="7"/>
     <property name="toY" value="18"/>
    </properties>
   </object>
   <object name="teleport" type="teleport" x="640" y="0" width="32" height="32">
    <properties>
-    <property name="toLevel" value="1"/>
+    <property name="toRoom" value="1"/>
     <property name="toX" value="6"/>
     <property name="toY" value="18"/>
    </properties>
   </object>
   <object name="teleport" type="teleport" x="608" y="0" width="32" height="32">
    <properties>
-    <property name="toLevel" value="1"/>
+    <property name="toRoom" value="1"/>
     <property name="toX" value="5"/>
     <property name="toY" value="18"/>
    </properties>
   </object>
   <object name="teleport" type="teleport" x="576" y="0" width="32" height="32">
    <properties>
-    <property name="toLevel" value="1"/>
+    <property name="toRoom" value="1"/>
     <property name="toX" value="4"/>
     <property name="toY" value="18"/>
    </properties>
   </object>
   <object name="teleport" type="teleport" x="544" y="0" width="32" height="32">
    <properties>
-    <property name="toLevel" value="1"/>
+    <property name="toRoom" value="1"/>
     <property name="toX" value="3"/>
     <property name="toY" value="18"/>
    </properties>
   </object>
   <object name="teleport" type="teleport" x="480" y="0" width="32" height="32">
    <properties>
-    <property name="toLevel" value="1"/>
+    <property name="toRoom" value="1"/>
     <property name="toX" value="1"/>
     <property name="toY" value="18"/>
    </properties>
   </object>
   <object name="teleport" type="teleport" x="448" y="0" width="32" height="32">
    <properties>
-    <property name="toLevel" value="1"/>
+    <property name="toRoom" value="1"/>
     <property name="toX" value="0"/>
     <property name="toY" value="18"/>
    </properties>
   </object>
   <object name="teleport" type="teleport" x="736" y="0" width="32" height="32">
    <properties>
-    <property name="toLevel" value="1"/>
+    <property name="toRoom" value="1"/>
     <property name="toX" value="9"/>
     <property name="toY" value="18"/>
    </properties>
   </object>
   <object name="teleport" type="teleport" x="512" y="0" width="32" height="32">
    <properties>
-    <property name="toLevel" value="1"/>
+    <property name="toRoom" value="1"/>
     <property name="toX" value="2"/>
     <property name="toY" value="18"/>
    </properties>

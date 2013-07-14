@@ -44,8 +44,8 @@ public class Component_Item extends Abstract_Component {
 	 * nicht vorhanden ist. Besser ist es aber, erst die vorhandenen Effekte mit
 	 * getEffectNames() abzufragen und dann deren Werte.
 	 */
-	public int getEffectValue(String effect) {
+	public Integer getEffectValue(String effect) {
 		if (this.effects.containsKey(effect)) return this.effects.get(effect);
-		return Integer.MAX_VALUE;
+		return null;
 	}
 }

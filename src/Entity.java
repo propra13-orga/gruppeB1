@@ -1,3 +1,4 @@
+import java.util.Collection;
 import java.util.Hashtable;
 
 /*
@@ -80,6 +81,7 @@ class Entity implements java.io.Serializable, Comparable<Entity> {
 	}
 	
 	public Abstract_Component getComponent(String type) { return this.components.get(type); }
+	public Collection<Abstract_Component> getComponents() { return this.components.values(); }
 	public Object_EntityManager getManager() {	return this.manager; }
 	public int getID() { return this.ID; }
 	public String getName() { return this.name; }

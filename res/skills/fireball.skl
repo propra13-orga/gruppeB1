@@ -1,0 +1,4 @@
+name : Feuerball
+description : Schleudert einen Feuerball auf den Gegner und verursacht 30 Punkte Feuerschaden.
+dmg_fire : 30
+cost_mp : 10

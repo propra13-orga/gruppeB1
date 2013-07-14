@@ -316,7 +316,7 @@
       <operations public="true" package="true" protected="true" private="true"/>    
     </display>  
   </class>  
-  <class id="36" language="java" name="Object_Level" project="gruppeB1" file="/gruppeB1/src/Object_Level.java" 
+  <class id="36" language="java" name="Object_Room" project="gruppeB1" file="/gruppeB1/src/Object_Room.java" 
     binary="false" corner="BOTTOM_RIGHT">    
     <position height="295" width="221" x="5009" y="3674"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 

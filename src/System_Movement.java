@@ -10,7 +10,7 @@ class System_Movement extends System_Component {
 		super(scene,"controls","movement");
 		this.keyHandler = keyHandler;
 		this.entityPositions = new HashMap<String,List<Entity>>();
-		this.listenTo(EventType.CMD_UP, EventType.CMD_DOWN, EventType.CMD_LEFT, EventType.CMD_RIGHT,EventType.CHANGELEVEL);
+		this.listenTo(EventType.CMD_UP, EventType.CMD_DOWN, EventType.CMD_LEFT, EventType.CMD_RIGHT,EventType.CHANGEROOM);
 	}
 	
 	@Override
@@ -68,8 +68,8 @@ class System_Movement extends System_Component {
 	 * enthält.
 	 */
 	public int[][] getEntityPositions() {
-		int w = this.getScene().getCurrentLevel().getWidth();
-		int h = this.getScene().getCurrentLevel().getHeight();
+		int w = this.getScene().getCurrentRoom().getWidth();
+		int h = this.getScene().getCurrentRoom().getHeight();
 		int[][] positions = new int[h][w];
 		for (String xy : this.entityPositions.keySet()) {
 			String[] xxx = xy.split("x");
@@ -334,6 +334,6 @@ class System_Movement extends System_Component {
 	 * Ist Kachel (x,y) begehbar?
 	 */
 	private boolean walkable(int x, int y) {
-		return ((Scene_Level) this.scene).getCurrentLevel().isPassable(x, y);
+		return ((Scene_Level) this.scene).getCurrentRoom().isPassable(x, y);
 	}
 }

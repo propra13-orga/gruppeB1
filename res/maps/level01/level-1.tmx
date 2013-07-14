@@ -2045,63 +2045,63 @@
   </object>
   <object name="teleport1" type="teleport" x="256" y="608" width="32" height="32">
    <properties>
-    <property name="toLevel" value="4"/>
+    <property name="toRoom" value="4"/>
     <property name="toX" value="22"/>
     <property name="toY" value="1"/>
    </properties>
   </object>
   <object name="teleport1" type="teleport" x="224" y="608" width="32" height="32">
    <properties>
-    <property name="toLevel" value="4"/>
+    <property name="toRoom" value="4"/>
     <property name="toX" value="21"/>
     <property name="toY" value="1"/>
    </properties>
   </object>
   <object name="teleport1" type="teleport" x="192" y="608" width="32" height="32">
    <properties>
-    <property name="toLevel" value="4"/>
+    <property name="toRoom" value="4"/>
     <property name="toX" value="20"/>
     <property name="toY" value="1"/>
    </properties>
   </object>
   <object name="teleport1" type="teleport" x="160" y="608" width="32" height="32">
    <properties>
-    <property name="toLevel" value="4"/>
+    <property name="toRoom" value="4"/>
     <property name="toX" value="19"/>
     <property name="toY" value="1"/>
    </properties>
   </object>
   <object name="teleport1" type="teleport" x="128" y="608" width="32" height="32">
    <properties>
-    <property name="toLevel" value="4"/>
+    <property name="toRoom" value="4"/>
     <property name="toX" value="18"/>
     <property name="toY" value="1"/>
    </properties>
   </object>
   <object name="teleport1" type="teleport" x="96" y="608" width="32" height="32">
    <properties>
-    <property name="toLevel" value="4"/>
+    <property name="toRoom" value="4"/>
     <property name="toX" value="17"/>
     <property name="toY" value="1"/>
    </properties>
   </object>
   <object name="teleport1" type="teleport" x="64" y="608" width="32" height="32">
    <properties>
-    <property name="toLevel" value="4"/>
+    <property name="toRoom" value="4"/>
     <property name="toX" value="16"/>
     <property name="toY" value="1"/>
    </properties>
   </object>
   <object name="teleport1" type="teleport" x="32" y="608" width="32" height="32">
    <properties>
-    <property name="toLevel" value="4"/>
+    <property name="toRoom" value="4"/>
     <property name="toX" value="15"/>
     <property name="toY" value="1"/>
    </properties>
   </object>
   <object name="teleport1" type="teleport" x="0" y="608" width="32" height="32">
    <properties>
-    <property name="toLevel" value="4"/>
+    <property name="toRoom" value="4"/>
     <property name="toX" value="14"/>
     <property name="toY" value="1"/>
    </properties>
@@ -2118,7 +2118,7 @@
   </object>
   <object name="teleport1" type="teleport" x="288" y="608" width="32" height="32">
    <properties>
-    <property name="toLevel" value="4"/>
+    <property name="toRoom" value="4"/>
     <property name="toX" value="23"/>
     <property name="toY" value="1"/>
    </properties>
