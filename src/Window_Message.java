@@ -76,34 +76,33 @@ public class Window_Message extends Abstract_Update {
 	 */
 	private void prepareMessage(String message) {
 		String[] lines = message.split("\\n");
-		int text_y = this.y+metrics.getAscent()+PADDING;
-		for (String realLine : lines) {
+		for (int j=0;j<lines.length;j++) {
+			String realLine = lines[j];
 			String[] msg = realLine.split("\\s");
 			String line = "";
-			text_y = this.metrics.getHeight();
-			this.height += text_y;
 			for (String s : msg) {
 				if (this.metrics.stringWidth(line+s+" ") < WIDTH-PADDING*6) {
 					line += s+" ";
 				}
 				else {
-					text_y += this.metrics.getHeight();
-					//this.height += text_y;
-					this.lines.add(line+s);
+					line += s;
+					this.lines.add(line);
 					line = "";
 				}
 			}
-			this.lines.add(line);
+			if (!(j == lines.length-1 && line.equals(""))) this.lines.add(line);
 		}
+		this.height = (this.lines.size())*(this.metrics.getHeight())+PADDING*2;
 	}
 	
 	private void drawMessage() {
 		int text_x = window.x+PADDING;
 		int text_y = window.y+metrics.getAscent()+PADDING;
 		
-		for (String s : this.lines) {
+		for (int i=0;i<this.lines.size();i++) {
+			String s = this.lines.get(i);
 			this.screen.drawString(s, text_x, text_y);
-			text_y += metrics.getHeight();
+			text_y += metrics.getHeight();			
 		}
 	}
 	
