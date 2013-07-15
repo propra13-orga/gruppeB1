@@ -240,6 +240,13 @@ public class Window_Menu extends Window_Base {
 		this.addMenuCommand(cmd, menu, false);
 	}
 	
+	public void removeCommand(int idx) {
+		this.commands.remove(idx);
+		if (this.disabled.contains(idx)) {
+			this.disabled.remove(this.disabled.indexOf(idx));
+		}
+	}
+	
 	/*
 	 * Setzt den current_menu Zeiger auf das naechste aufgerufene Menue
 	 */
@@ -460,16 +467,24 @@ public class Window_Menu extends Window_Base {
 	
 	//Private Methoden
 	
+	private void calculateMenuSize() {
+		this.width = MIN_X;
+		this.height = 0;
+		for (String command : this.commands) {
+			int new_width = 2*BORDER_BOX + 2*BORDER_CURSOR + this.metrics.stringWidth(command);
+			if (this.width < new_width) this.width = new_width;
+			if (this.width < MIN_X) this.width = MIN_X;
+			if (this.width > MAX_X) this.width = MAX_X;
+			this.height = 2*BORDER_BOX + commands.size()*(2*BORDER_CURSOR+this.cursorheight);
+			if (this.commands.size() > 1) {
+				this.height += (this.commands.size()-1)*CURSOR_SPACE;
+			}
+		}
+	}
+	
 	private void addCommand(String command) {
 		commands.add(command);
-		int new_width = 2*BORDER_BOX + 2*BORDER_CURSOR + this.metrics.stringWidth(command);
-		if (this.width < new_width) this.width = new_width;
-		if (this.width < MIN_X) this.width = MIN_X;
-		if (this.width > MAX_X) this.width = MAX_X;
-		this.height = 2*BORDER_BOX + commands.size()*(2*BORDER_CURSOR+this.cursorheight);
-		if (this.commands.size() > 1) {
-			this.height += (this.commands.size()-1)*CURSOR_SPACE;
-		}
+		calculateMenuSize();
 	}
 	
 	private void drawCommands() {
