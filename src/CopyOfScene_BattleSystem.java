@@ -73,6 +73,7 @@ public class CopyOfScene_BattleSystem extends Abstract_Scene {
 	private Window_Menu					menu_item;
 	private Window_Menu					menu_skill;
 	private Window_Menu					menu_player;
+	private Window_Menu                 menu_network;
 	
 	CopyOfScene_BattleSystem(Object_BattleContext ctx, Abstract_Scene previous_scene, Object_Game game) {
 		super(game);
@@ -423,6 +424,7 @@ public class CopyOfScene_BattleSystem extends Abstract_Scene {
 		this.menu_item = new Window_Menu(game, "item", 0, 0);
 		this.menu_skill = new Window_Menu(game, "skills", 0, 0);
 		this.menu_player = new Window_Menu(game, "player", 0, 0);
+		this.menu_network = new Window_Menu(game, "network", 0, 0);
 		Window_Menu.setMainMenu(this.main_menu);
 		
 		for (Object_BattleActor enemy : this.ctx.getEnemies()) {
@@ -436,6 +438,7 @@ public class CopyOfScene_BattleSystem extends Abstract_Scene {
 		this.main_menu.addMenuCommand("Angriff", this.menu_enemy);
 		this.main_menu.addMenuCommand("Skills", this.menu_skill);
 		this.main_menu.addMenuCommand("Item", this.menu_item);
+		this.main_menu.addMenuCommand("Network", this.menu_network);
 		this.main_menu.addReturnCommand("Verteidigung");
 		
 		//Hier zu Testzwecken das Item/SKill-men� mit Eintr�gen f�llen
@@ -444,6 +447,7 @@ public class CopyOfScene_BattleSystem extends Abstract_Scene {
 		this.menu_skill.addMenuCommand("Doppelschlag", this.menu_enemy);
 		this.menu_skill.addMenuCommand("Feuerball", this.menu_enemy);
 		this.menu_skill.addMenuCommand("Kleine Heilung", this.menu_enemy);
+		this.menu_network.addMenuCommand("Multiplayer", this.menu_network);
 		// !!! !!! !!! WICHTIG !!! !!! !!!
 		//sp�ter wenn pageable menu umgesetzt ist k�nnen skills nach physischen, magischen und
 		//heilenden skills sortiert werden
