@@ -49,6 +49,8 @@ public class Object_BattleActor implements Comparable<Object_BattleActor> {
 		this.id = ID_COUNTER;
 		ID_COUNTER++;
 		this.entity = entity;
+		this.extractProperties();
+		this.extractItems();
 		/*
 		 * Die ganzen Eigenschaften sind jetzt dynamisch. compBattle enthält eine
 		 * Liste mit zutreffenden Eigenschaften. Das heißt, es müssen nicht alle
@@ -94,4 +96,41 @@ public class Object_BattleActor implements Comparable<Object_BattleActor> {
 	public int getMaxSpeed() { return this.maxSpeed; }
 	public int getActionCost() { return this.maxSpeed / 3; }
 	public int getDEX() { return this.dex; }
+	
+	
+	private void extractProperties() {
+		Component_Battle compBattle = (Component_Battle) this.entity.getComponent("battle");
+		this.maxHp = compBattle.getPropertyValue("prop_hp");
+		this.hp = compBattle.getPropertyValue("prop_hp_current");
+		if (compBattle.hasProperty("prop_mp")) {
+			this.maxMp = compBattle.getPropertyValue("prop_mp");
+			this.mp = compBattle.getPropertyValue("prop_mp_current");
+		}
+		else
+		{
+			this.mp = 0;
+			this.maxMp = 0;
+		}
+		/*
+		 * Hier, wenn nötig, weitere Eigenschaften zuweisen. Insbesondere den Sprite!
+		 * Der Dateiname ist erreichbar über compBattle.getSprite();
+		 */
+	}
+	
+	
+	
+	private void extractItems() {
+		if (!this.entity.hasComponent("inventory")) return;
+		
+		Component_Inventory compInventory = (Component_Inventory) this.entity.getComponent("inventory");
+		for (Entity item : compInventory.getInventory()) {
+			if (item != null) {
+				Component_Item compItem = (Component_Item) item.getComponent("item");
+				if (compItem.getProperties().contains("type_consumable")) {
+					this.items.add(item);
+				}
+				
+			}
+		}
+	}
 }

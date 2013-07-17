@@ -1,5 +1,6 @@
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Map;
 
 class Component_Battle extends Abstract_Component {
 	
@@ -7,11 +8,11 @@ class Component_Battle extends Abstract_Component {
 	 * 
 	 */
 	private static final long serialVersionUID = 4080073737857884118L;
-	private HashMap<String,Integer> properties;
+	private Map<String,Integer> properties;
 	private String sprite;
 
 	public Component_Battle(Entity entity, System_Component system,
-			HashMap<String,Integer> properties,
+			Map<String,Integer> properties,
 			String sprite) {
 		super("battle",entity,system);
 		this.properties = properties;

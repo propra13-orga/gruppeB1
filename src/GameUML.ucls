@@ -136,8 +136,8 @@
       <operations public="true" package="true" protected="true" private="true"/>    
     </display>  
   </class>  
-  <class id="16" language="java" name="AIStateMachine" project="gruppeB1" file="/gruppeB1/src/System_AI.java" 
-    binary="false" corner="BOTTOM_RIGHT">    
+  <class id="16" language="java" name="Object_AIStateMachine" project="gruppeB1" 
+    file="/gruppeB1/src/Object_AIStateMachine.java" binary="false" corner="BOTTOM_RIGHT">    
     <position height="151" width="252" x="4527" y="4369"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      

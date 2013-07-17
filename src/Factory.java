@@ -220,6 +220,15 @@ public class Factory {
 		}
 		
 		
+		/*
+		 * Component_AI
+		 */
+		
+		if (data.containsKey("ai")) {
+			new Component_AI(entity,scene.getSystemAI(),2,7);
+		}
+				
+		
 		return entity;
 	}
 	

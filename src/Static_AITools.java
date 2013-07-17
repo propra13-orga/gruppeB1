@@ -187,6 +187,8 @@ public class Static_AITools {
 		return new_arr;
 	}
 	
+	
+	
 	/*
 	 * Druckt ein 2D-Array.
 	 */
@@ -269,6 +271,12 @@ class AStar {
 		@Override
 		public int compareTo(Node n) {
 			return this.f() - n.f();
+		}
+		
+		@Override
+		public boolean equals(Object o) {
+			if (((Node) o).compareTo(this) == 0) return true;
+			return false;
 		}
 	}
 	

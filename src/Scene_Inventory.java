@@ -4,7 +4,8 @@ import java.util.List;
 
 public class Scene_Inventory extends Abstract_Scene implements IEventListener {
 	
-	private Scene_Level parent;
+	private Abstract_Scene parent;
+	private Scene_Level current_level;
 	
 	private Window_Menu main_menu;
 	private Window_Menu menu_choice;
@@ -23,11 +24,12 @@ public class Scene_Inventory extends Abstract_Scene implements IEventListener {
 	
 	private int money;
 
-	public Scene_Inventory(Object_Game game, Scene_Level parent, Entity entity) {
+	public Scene_Inventory(Object_Game game, Abstract_Scene parent, Scene_Level current_level, Entity entity) {
 		super(game);
 		this.parent = parent;
+		this.current_level = current_level;
 		this.entity = entity;
-		this.factory = parent.getFactory();
+		this.factory = current_level.getFactory();
 		
 		this.money = this.retrieveMoney();
 		
@@ -76,7 +78,7 @@ public class Scene_Inventory extends Abstract_Scene implements IEventListener {
 
 	@Override
 	public void addEvent(Event event) {
-		this.parent.addEvent(event);		
+		this.current_level.addEvent(event);		
 	}
 
 	@Override

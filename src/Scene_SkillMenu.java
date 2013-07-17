@@ -71,7 +71,7 @@ public class Scene_SkillMenu extends Abstract_Scene {
 			if (this.main_menu.isCanceled()) {
 				this.keyhandler.clear();
 				this.keyhandler.freeze(Object_KeyHandler.KEY_ESCAPE, 40);
-				this.game.switchScene(this.parent);
+				this.game.switchScene(this.parent, true);
 				return;
 			}
 			else {
@@ -84,7 +84,7 @@ public class Scene_SkillMenu extends Abstract_Scene {
 				else {
 					this.keyhandler.clear();
 					this.keyhandler.freeze(Object_KeyHandler.KEY_ENTER, 40);
-					this.game.switchScene(this.parent);
+					this.game.switchScene(this.parent, true);
 					return;
 				}
 				

@@ -8,3 +8,4 @@ spd : 2
 controllable : true
 collidable : true
 inventory : true
+ai : true

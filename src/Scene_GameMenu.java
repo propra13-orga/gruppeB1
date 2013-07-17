@@ -54,8 +54,9 @@ public class Scene_GameMenu extends Abstract_Scene {
 					game.quit();
 					return;
 				case 2: //Faehigkeiten
+					this.keyhandler.clear();
 					this.keyhandler.freeze(Object_KeyHandler.KEY_ENTER, 40);
-					this.game.switchScene(new Scene_SkillMenu(this.game,this,this.current_map.getPlayer(),new Factory(this.current_map)));
+					this.game.switchScene(new Scene_SkillMenu(this.game,this,this.current_map.getPlayer(),this.current_map.getFactory()));
 					return;
 				default:
 					System.out.println("Nur zu Testzwecken!");

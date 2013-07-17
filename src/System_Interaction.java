@@ -22,7 +22,7 @@ class System_Interaction extends System_Component {
 				"skillbag",
 				"equipment");
 		this.listenTo(EventType.ACTION, EventType.COLLISION, EventType.ATTACK, EventType.OPEN_BUYMENU,
-				EventType.OPEN_DIALOG, EventType.CLOSE_DIALOG, EventType.OPEN_QUESTMENU,
+				EventType.OPEN_DIALOG, EventType.CLOSE_DIALOG, EventType.OPEN_QUESTMENU, EventType.OPEN_BATTLE,
 				EventType.PICKUP, EventType.CHANGEROOM, EventType.CHANGELEVEL, EventType.GAMEBEATEN, EventType.CMD_ACTION,
 				EventType.QUEST_ACCOMPLISHED);
 		
@@ -51,6 +51,7 @@ class System_Interaction extends System_Component {
 		
 		
 		for (Event event : this.getEvents(EventType.ATTACK, EventType.OPEN_BUYMENU, EventType.OPEN_DIALOG, EventType.OPEN_QUESTMENU,
+				EventType.OPEN_BATTLE,
 				EventType.PICKUP, EventType.CHANGEROOM, EventType.CHANGELEVEL, EventType.GAMEBEATEN, EventType.QUEST_ACCOMPLISHED)) {
 			EventType type = event.getType();
 			Entity actor = event.getActor();
@@ -83,6 +84,16 @@ class System_Interaction extends System_Component {
 				if (this.getScene().getPlayer().equals(actor)) {
 					this.getScene().beatGame();
 				}
+				break;
+			case OPEN_BATTLE:
+				Object_BattleContext bc = new Object_BattleContext();
+				Scene_BattleSystem bs = new Scene_BattleSystem(bc,this.getScene(),this.getScene().game);
+				Object_BattleActor us = new Object_BattleActor(undergoer,bs);
+				Object_BattleActor them = new Object_BattleActor(actor,bs);
+				bc.getActors().add(us);
+				bc.getActors().add(them);
+				bs.setCtx(bc);
+				this.getScene().demandSceneChange(bs);
 				break;
 			case OPEN_BUYMENU:
 				this.getScene().demandSceneChange(
