@@ -23,7 +23,6 @@ class System_AI extends System_Component {
 	public System_AI(Abstract_Scene scene) {
 		super(scene, "ai");
 		this.stateMachines = new HashMap<String,Object_AIStateMachine>();
-//		this.initSMBasicEnemy();
 		this.stateMachines.put("basic", this.simpleSMEnemy());
 		
 	}
@@ -43,9 +42,6 @@ class System_AI extends System_Component {
 			}
 			compAI.tick();
 		}
-		
-//		System.out.println("---");
-//		Static_AITools.printArray(Static_AITools.getFOV(this.walkability, 4, 6, 4, 10));
 		
 	}
 	
@@ -141,6 +137,7 @@ class System_AI extends System_Component {
 			break;
 		case APPROACH:
 			// Nähern.
+			this.approach(entity, compAI.getFocus());
 			newState = stateMachine.getNext(StateType.APPROACH);
 			System.out.println("NÄHERE MICH...");
 			break;
@@ -183,7 +180,10 @@ class System_AI extends System_Component {
 		}
 		return newState;
 	}
-
+	
+	/*
+	 * Berechnet die (euklidische) Distanz zwischen zwei Entitäten.
+	 */
 	private int getDistance(Entity entity1, Entity entity2) {
 		if (entity1.equals(entity2)) return 0;
 		Component_Movement compMovement1 = (Component_Movement) entity1.getComponent("movement");
@@ -195,6 +195,35 @@ class System_AI extends System_Component {
 		int d = (int) Math.sqrt((double) xx*xx+yy*yy);
 		
 		return d;
+	}
+	
+	/*
+	 * Bewegt eine Entität auf eine andere zu. Ganz billig, keine Pfadsuche nötig.
+	 */
+	private void approach(Entity entity1, Entity entity2) {
+		Component_Movement compMovement1 = (Component_Movement) entity1.getComponent("movement");
+		Component_Movement compMovement2 = (Component_Movement) entity2.getComponent("movement");
+		
+		if (!compMovement1.isMoveable()) return;
+		
+		int dx = compMovement2.getX()-compMovement1.getX();
+		int dy = compMovement2.getY()-compMovement1.getY();
+		
+		int orientation = Static_AITools.vectorToOrientation(dx, dy);
+		switch(orientation) {
+		case 0:
+			this.addEvent(new Event(EventType.CMD_UP,entity1,null));
+			break;
+		case 1:
+			this.addEvent(new Event(EventType.CMD_DOWN,entity1,null));
+			break;
+		case 2:
+			this.addEvent(new Event(EventType.CMD_LEFT,entity1,null));
+			break;
+		case 3:
+			this.addEvent(new Event(EventType.CMD_RIGHT,entity1,null));
+			break;
+		}
 	}
 	
 }

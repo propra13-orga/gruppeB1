@@ -52,6 +52,24 @@ public class Static_AITools {
 	}
 	
 	/*
+	 * Setzt eine Richtungsangabe in einen Vektor um.
+	 */
+	static int vectorToOrientation(int x, int y) {
+		if (Math.abs(x) >= Math.abs(y)) {
+			if (x > 0) {
+				return 3;
+			}
+			return 2;
+		}
+		else {
+			if (y > 0) {
+				return 1;
+			}
+			return 0;
+		}
+	}
+	
+	/*
 	 * Stutzt einen Vektor so, dass seine Einträge nicht kleiner als 0 und nicht
 	 * größer als max_x bzw. max_y werden.
 	 */

@@ -20,6 +20,7 @@ class System_Movement extends System_Component {
 			Component_Movement compMovement = (Component_Movement) entity.getComponent("movement");
 			compMovement.setdX(0);
 			compMovement.setdY(0);
+			this.handleMoveability(compMovement);
 		}
 		
 		// Tastatureingabe verarbeiten.
@@ -228,7 +229,6 @@ class System_Movement extends System_Component {
 		Entity player = this.getScene().getPlayer();
 		if (player.hasComponent("movement") && player.hasComponent("controls")) {
 			Component_Movement compMovement = (Component_Movement) player.getComponent("movement");
-			this.handleMoveability(compMovement);
 			if (compMovement.isMoveable()) {
 				switch(this.keyHandler.getLast()) {
 				case Object_KeyHandler.KEY_UP:
