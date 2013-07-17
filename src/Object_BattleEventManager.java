@@ -159,6 +159,7 @@ public class Object_BattleEventManager extends Abstract_Update {
 		Window_Menu menu_select_player	= new Window_Menu(this.game, "select_player");
 		Window_Menu menu_select_item	= new Window_Menu(this.game, "select_item");
 		Window_Menu menu_select_skill	= new Window_Menu(this.game, "select_skill");
+		Window_Menu menu_select_network = new Window_Menu(this.game, "select_network");
 		
 		menu_main.MIN_X					= MIN_MENUSIZE;
 		menu_select_enemy.MIN_X			= MIN_MENUSIZE;
@@ -169,6 +170,7 @@ public class Object_BattleEventManager extends Abstract_Update {
 		menu_main.addMenuCommand("Angriff", menu_select_enemy);
 		menu_main.addMenuCommand("Skill", menu_select_skill);
 		menu_main.addMenuCommand("Item", menu_select_item);
+		menu_main.addMenuCommand("Network",menu_select_network);
 		menu_main.addReturnCommand("Verteidigen");
 		
 		//Kommandos fuer Auswahlmenues von Spielern und Gegnern werden erst im Kampfverlauf
@@ -196,6 +198,7 @@ public class Object_BattleEventManager extends Abstract_Update {
 		e.setAttribute("menu_select_player", menu_select_player);
 		e.setAttribute("menu_select_item", menu_select_item);
 		e.setAttribute("menu_select_skill", menu_select_skill);
+		e.setAttribute("menu_select_network", menu_select_network);
 		e.setAttribute("parallel", false);
 		this.queue.add(e);
 	}
