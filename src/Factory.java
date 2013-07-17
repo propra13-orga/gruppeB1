@@ -131,6 +131,14 @@ public class Factory {
 		}
 		
 		/*
+		 * Component_Equipment
+		 */
+		
+		if (data.containsKey("equipment")) {
+			new Component_Equipment(entity,this.scene.getSystemInteraction());
+		}
+		
+		/*
 		 * Component_Inventory
 		 */
 		int money = 0;

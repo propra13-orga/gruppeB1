@@ -7,5 +7,6 @@ prop_def : 2
 spd : 2
 controllable : true
 collidable : true
+equipment : true
 inventory : true
 ai : true

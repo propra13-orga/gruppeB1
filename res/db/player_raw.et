@@ -13,6 +13,7 @@ spd : 2
 controllable : true
 camera : true
 collidable : true
+equipment : true
 inventory : true
 money : 20
 skillbag : true

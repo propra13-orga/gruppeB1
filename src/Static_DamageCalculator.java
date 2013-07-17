@@ -1,5 +1,5 @@
 
-public class Object_DamageCalculator {
+public class Static_DamageCalculator {
 //	private static final double BONUS = 2.0;
 //	private static final double MALUS = 0.5;
 
