@@ -38,6 +38,13 @@ public class Component_Item extends Abstract_Component {
 	public List<String> getEffectNames() { return new LinkedList<String>(this.effects.keySet()); }
 	public List<String> getRestrictions() { return this.restrictions; }
 	public List<String> getProperties() { return this.properties; }
+	public boolean hasProperty(String property) { return this.properties.contains(property); }
+	public boolean isEquippable() {
+		for (String property : this.properties) {
+			if (property.matches("slot_.*")) return true;
+		}
+		return false;
+	}
 	
 	/*
 	 * Gibt den Wert eines Effekts zurueck oder Integer.MAX_VALUE, falls dieser

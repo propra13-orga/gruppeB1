@@ -1,3 +1,7 @@
+import java.lang.reflect.Array;
+import java.util.Arrays;
+import java.util.List;
+
 
 public class Static_DamageCalculator {
 //	private static final double BONUS = 2.0;
@@ -43,9 +47,8 @@ public class Static_DamageCalculator {
 			prop += "_"+element;		
 		}
 		if (skill == null) {
-			Entity[] equipment = compEquipment.getEquipment();
 			
-			for (Entity item : equipment) {
+			for (Entity item : compEquipment.getEquipment().values()) {
 				if (item != null) {
 					Component_Item compItem = (Component_Item) item.getComponent("item");
 					dvalue = compItem.getEffectValue(prop);

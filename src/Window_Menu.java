@@ -302,6 +302,13 @@ public class Window_Menu extends Window_Base {
 		}
 	}
 	
+	public void enableCommand(String cmd) {
+		if (this.commands.contains(cmd)) {
+			int idx = this.commands.indexOf(cmd);
+			this.enableCommand(idx);
+		}
+	}
+	
 	/*
 	 * Mache einen bereits vorhandenen Befehl nicht mehr aufrufbar
 	 */

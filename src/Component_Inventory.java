@@ -36,6 +36,7 @@ public class Component_Inventory extends Abstract_Component {
 		this.inventory[pos] = null;
 		return item;
 	}
+	
 	public Entity removeItem(String entityType) {
 		for (int i=0;i<this.inventory.length;i++) {
 			Entity item = this.inventory[i];
@@ -45,6 +46,20 @@ public class Component_Inventory extends Abstract_Component {
 			}
 		}
 		return null;
+	}
+	
+	public boolean containsItem(Entity item) {
+		for (Entity item2 : this.inventory) {
+			if (item == item2) return true;
+		}
+		return false;
+	}
+	
+	public boolean containsItemOfType(String entityType) {
+		for (Entity item : this.inventory) {
+			if (item.getType().equals(entityType)) return true;
+		}
+		return false;
 	}
 	
 	/*

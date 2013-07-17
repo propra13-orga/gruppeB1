@@ -2123,5 +2123,6 @@
     <property name="toY" value="1"/>
    </properties>
   </object>
+  <object name="item" type="leftysword" x="288" y="544" width="32" height="32"/>
  </objectgroup>
 </map>

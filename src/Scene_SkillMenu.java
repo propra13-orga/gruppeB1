@@ -5,6 +5,7 @@ import java.util.List;
 public class Scene_SkillMenu extends Abstract_Scene {
 	
 	private Abstract_Scene parent;
+	private Scene_Level current_level;
 	private Entity adventurer;
 	private Factory factory;
 	
@@ -20,9 +21,10 @@ public class Scene_SkillMenu extends Abstract_Scene {
 	private final String[] skillnames = {"fireball","fastheal"};
 
 	public Scene_SkillMenu(Object_Game game, Abstract_Scene parent,
-			Entity player, Factory factory) {
+			Scene_Level current_level, Entity player, Factory factory) {
 		super(game);
 		this.parent = parent;
+		this.current_level = current_level;
 		this.adventurer = player;
 		this.factory = factory;
 		this.main_menu = new Window_Menu(game,"main");
@@ -71,7 +73,7 @@ public class Scene_SkillMenu extends Abstract_Scene {
 			if (this.main_menu.isCanceled()) {
 				this.keyhandler.clear();
 				this.keyhandler.freeze(Object_KeyHandler.KEY_ESCAPE, 40);
-				this.game.switchScene(this.parent, true);
+				this.game.switchScene(this.current_level, true);
 				return;
 			}
 			else {
@@ -84,7 +86,7 @@ public class Scene_SkillMenu extends Abstract_Scene {
 				else {
 					this.keyhandler.clear();
 					this.keyhandler.freeze(Object_KeyHandler.KEY_ENTER, 40);
-					this.game.switchScene(this.parent, true);
+					this.game.switchScene(this.current_level, true);
 					return;
 				}
 				

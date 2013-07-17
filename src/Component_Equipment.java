@@ -1,3 +1,6 @@
+import java.util.HashMap;
+import java.util.Map;
+
 
 public class Component_Equipment extends Abstract_Component {
 
@@ -6,17 +9,16 @@ public class Component_Equipment extends Abstract_Component {
 	 */
 	private static final long serialVersionUID = -6579517022715989440L;
 	
-	private Entity head;
-	private Entity breast;
-	private Entity arm_left;
-	private Entity arm_right;
-	private Entity legs;
-	private Entity ring;
-	private Entity necklace;
+	public final static String[] SLOTS = {"slot_arm_left", "slot_arm_right",
+			"slot_breast", "slot_legs", "slot_head", "slot_ring",
+			"slot_necklace"};
+	
+	private Map<String,Entity> equipment;
 
 	public Component_Equipment(Entity entity,
 			System_Component system) {
 		super("equipment", entity, system);
+		this.equipment = new HashMap<String,Entity>();
 	}
 
 	public Component_Equipment(Abstract_Component comp) {
@@ -28,36 +30,42 @@ public class Component_Equipment extends Abstract_Component {
 	 */
 	
 	public Entity getHead() {
-		return head;
+		return this.equipment.get("slot_head");
 	}
 
 	public Entity getBreast() {
-		return breast;
+		return this.equipment.get("slot_breast");
 	}
 
 	public Entity getArmLeft() {
-		return arm_left;
+		return this.equipment.get("slot_arm_left");
 	}
 
 	public Entity getArmRight() {
-		return arm_right;
+		return this.equipment.get("slot_arm_right");
 	}
 
 	public Entity getLegs() {
-		return legs;
+		return this.equipment.get("slot_legs");
 	}
 
 	public Entity getRing() {
-		return ring;
+		return this.equipment.get("slot_ring");
 	}
 
 	public Entity getNecklace() {
-		return necklace;
+		return this.equipment.get("slot_necklace");
 	}
 	
-	public Entity[] getEquipment() {
-		Entity[] equipment = {this.arm_left,this.arm_right,this.breast,this.head,this.legs,this.necklace,this.ring};
-		return equipment;
+	public Map<String,Entity> getEquipment() {
+		return this.equipment;
+	}
+	
+	public Entity getEquipment(String slot) {
+		if (this.equipment.containsKey(slot)) {
+			return this.equipment.get(slot);
+		}
+		return null;
 	}
 	
 	/*
@@ -65,31 +73,35 @@ public class Component_Equipment extends Abstract_Component {
 	 */
 
 	public void setHead(Entity head) {
-		this.head = head;
+		this.equipment.put("slot_head", head);
 	}
 
 	public void setBreast(Entity breast) {
-		this.breast = breast;
+		this.equipment.put("slot_breast", breast);
 	}
 
 	public void setArmLeft(Entity arm_left) {
-		this.arm_left = arm_left;
+		this.equipment.put("slot_arm_left", arm_left);
 	}
 
 	public void setArmRight(Entity arm_right) {
-		this.arm_right = arm_right;
+		this.equipment.put("slot_arm_right", arm_right);
 	}
 
 	public void setLegs(Entity legs) {
-		this.legs = legs;
+		this.equipment.put("slot_legs", legs);
 	}
 
 	public void setRing(Entity ring) {
-		this.ring = ring;
+		this.equipment.put("slot_ring", ring);
 	}
 
 	public void setNecklace(Entity necklace) {
-		this.necklace = necklace;
+		this.equipment.put("slot_necklace", necklace);
+	}
+	
+	public void setEquipment(String slot, Entity item) {
+		this.equipment.put(slot, item);
 	}
 
 }

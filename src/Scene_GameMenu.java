@@ -56,7 +56,12 @@ public class Scene_GameMenu extends Abstract_Scene {
 				case 2: //Faehigkeiten
 					this.keyhandler.clear();
 					this.keyhandler.freeze(Object_KeyHandler.KEY_ENTER, 40);
-					this.game.switchScene(new Scene_SkillMenu(this.game,this,this.current_map.getPlayer(),this.current_map.getFactory()));
+					this.game.switchScene(new Scene_SkillMenu(this.game,this,this.current_map,this.current_map.getPlayer(), this.current_map.getFactory()));
+					return;
+				case 4: // Ausruestung
+					this.keyhandler.clear();
+					this.keyhandler.freeze(Object_KeyHandler.KEY_ENTER, 40);
+					this.game.switchScene(new Scene_Equipment(this.game,this,this.current_map,this.current_map.getPlayer()));
 					return;
 				default:
 					System.out.println("Nur zu Testzwecken!");
