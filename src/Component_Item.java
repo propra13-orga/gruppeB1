@@ -39,6 +39,7 @@ public class Component_Item extends Abstract_Component {
 	public List<String> getRestrictions() { return this.restrictions; }
 	public List<String> getProperties() { return this.properties; }
 	public boolean hasProperty(String property) { return this.properties.contains(property); }
+	public boolean isConsumable() { return this.hasProperty("type_consumable"); }
 	public boolean isEquippable() {
 		for (String property : this.properties) {
 			if (property.matches("slot_.*")) return true;

@@ -24,7 +24,7 @@ class System_Interaction extends System_Component {
 		this.listenTo(EventType.ACTION, EventType.COLLISION, EventType.ATTACK, EventType.OPEN_BUYMENU,
 				EventType.OPEN_DIALOG, EventType.CLOSE_DIALOG, EventType.OPEN_QUESTMENU, EventType.OPEN_BATTLE,
 				EventType.PICKUP, EventType.CHANGEROOM, EventType.CHANGELEVEL, EventType.GAMEBEATEN, EventType.CMD_ACTION,
-				EventType.QUEST_ACCOMPLISHED);
+				EventType.QUEST_ACCOMPLISHED, EventType.ITEM_USE);
 		
 		this.tick = 0;
 	}
@@ -52,7 +52,8 @@ class System_Interaction extends System_Component {
 		
 		for (Event event : this.getEvents(EventType.ATTACK, EventType.OPEN_BUYMENU, EventType.OPEN_DIALOG, EventType.OPEN_QUESTMENU,
 				EventType.OPEN_BATTLE,
-				EventType.PICKUP, EventType.CHANGEROOM, EventType.CHANGELEVEL, EventType.GAMEBEATEN, EventType.QUEST_ACCOMPLISHED)) {
+				EventType.PICKUP, EventType.CHANGEROOM, EventType.CHANGELEVEL, EventType.GAMEBEATEN, EventType.QUEST_ACCOMPLISHED,
+				EventType.ITEM_USE)) {
 			EventType type = event.getType();
 			Entity actor = event.getActor();
 			Entity undergoer = event.getUndergoer();
@@ -84,6 +85,9 @@ class System_Interaction extends System_Component {
 				if (this.getScene().getPlayer().equals(actor)) {
 					this.getScene().beatGame();
 				}
+				break;
+			case ITEM_USE:
+				this.handleItemUse(actor, undergoer);
 				break;
 			case OPEN_BATTLE:
 				Object_BattleContext bc = new Object_BattleContext();
@@ -244,6 +248,20 @@ class System_Interaction extends System_Component {
 	private void updateTick() {
 		if (this.tick < TICK_MAX) this.tick += 1;
 		else this.tick = 0;
+	}
+	
+	private void handleItemUse(Entity entity, Entity item) {
+		Component_Item compItem = (Component_Item) item.getComponent("item");
+		Component_Battle compBattle = (Component_Battle) entity.getComponent("battle");
+		for (String property : compItem.getEffectNames()) {
+			if (property.matches("prop_.*")) {
+				int current = compBattle.getPropertyValue(property+"_current");
+				int oldmax = compBattle.getPropertyValue(property);
+				int add = compItem.getEffectValue(property);
+				int newv = Math.min(current+add, oldmax);
+				compBattle.addToProperty(property+"_current", newv);
+			}
+		}
 	}
 	
 	

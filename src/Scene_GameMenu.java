@@ -58,6 +58,11 @@ public class Scene_GameMenu extends Abstract_Scene {
 					this.keyhandler.freeze(Object_KeyHandler.KEY_ENTER, 40);
 					this.game.switchScene(new Scene_SkillMenu(this.game,this,this.current_map,this.current_map.getPlayer(), this.current_map.getFactory()));
 					return;
+				case 3: // Ausruestung
+					this.keyhandler.clear();
+					this.keyhandler.freeze(Object_KeyHandler.KEY_ENTER, 40);
+					this.game.switchScene(new Scene_Inventory(this.game,this,this.current_map,this.current_map.getPlayer()));
+					return;
 				case 4: // Ausruestung
 					this.keyhandler.clear();
 					this.keyhandler.freeze(Object_KeyHandler.KEY_ENTER, 40);
