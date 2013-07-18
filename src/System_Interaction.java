@@ -12,6 +12,7 @@ class System_Interaction extends System_Component {
 	
 	private int tick;
 	private static final int TICK_MAX = 9;
+	private int[] levelBorders = {0,10,25,63,158,395};
 
 	public System_Interaction(Abstract_Scene scene) {
 		super(scene,
@@ -24,7 +25,7 @@ class System_Interaction extends System_Component {
 		this.listenTo(EventType.ACTION, EventType.COLLISION, EventType.ATTACK, EventType.OPEN_BUYMENU,
 				EventType.OPEN_DIALOG, EventType.CLOSE_DIALOG, EventType.OPEN_QUESTMENU, EventType.OPEN_BATTLE,
 				EventType.PICKUP, EventType.CHANGEROOM, EventType.CHANGELEVEL, EventType.GAMEBEATEN, EventType.CMD_ACTION,
-				EventType.QUEST_ACCOMPLISHED);
+				EventType.QUEST_ACCOMPLISHED, EventType.ITEM_USE, EventType.LEVELUP);
 		
 		this.tick = 0;
 	}
@@ -52,7 +53,9 @@ class System_Interaction extends System_Component {
 		
 		for (Event event : this.getEvents(EventType.ATTACK, EventType.OPEN_BUYMENU, EventType.OPEN_DIALOG, EventType.OPEN_QUESTMENU,
 				EventType.OPEN_BATTLE,
-				EventType.PICKUP, EventType.CHANGEROOM, EventType.CHANGELEVEL, EventType.GAMEBEATEN, EventType.QUEST_ACCOMPLISHED)) {
+				EventType.PICKUP, EventType.CHANGEROOM, EventType.CHANGELEVEL, EventType.GAMEBEATEN, EventType.QUEST_ACCOMPLISHED,
+				EventType.ITEM_USE,
+				EventType.LEVELUP)) {
 			EventType type = event.getType();
 			Entity actor = event.getActor();
 			Entity undergoer = event.getUndergoer();
@@ -84,6 +87,12 @@ class System_Interaction extends System_Component {
 				if (this.getScene().getPlayer().equals(actor)) {
 					this.getScene().beatGame();
 				}
+				break;
+			case ITEM_USE:
+				this.handleItemUse(actor, undergoer);
+				break;
+			case LEVELUP:
+				this.handleLevelUp(actor);
 				break;
 			case OPEN_BATTLE:
 				Object_BattleContext bc = new Object_BattleContext();
@@ -216,6 +225,16 @@ class System_Interaction extends System_Component {
 	}
 	
 	/*
+	 * 
+	 */
+	private void handleLevelUp(Entity entity) {
+		if (entity.hasComponent("skillbag")) {
+			Component_Skillbag compSkillbag = (Component_Skillbag) entity.getComponent("skillbag");
+			compSkillbag.addToSkillPoints(2);
+		}
+	}
+	
+	/*
 	 * Verschickt jeden time-ten Updatezyklus ein Event ITEM_POSSESS für jedes
 	 * Item, was sich in irgendeinem Inventar befindet.
 	 */
@@ -234,6 +253,13 @@ class System_Interaction extends System_Component {
 	
 	private void handleXP(Component_Battle compBattle, int xp) {
 		compBattle.addToProperty("prop_xp", xp);
+		int newXP = compBattle.getPropertyValue("prop_xp");
+		int lvl = compBattle.getPropertyValue("prop_lvl");
+		if (newXP >= this.levelBorders[lvl]) {
+			compBattle.addToProperty("prop_lvl", 1);
+			System.out.println("Level up!");
+			this.addEvent(new Event(EventType.LEVELUP,compBattle.getEntity(),null));
+		}
 		System.out.printf("+%d XP macht %d XP!\n",xp,compBattle.getPropertyValue("prop_xp"));
 	}
 	
@@ -246,37 +272,18 @@ class System_Interaction extends System_Component {
 		else this.tick = 0;
 	}
 	
-	
-//	private void handleBattleEvents() {
-//		if (!this.getEvents(EventType.BATTLE).isEmpty()) {
-//			Entity player = this.getScene().getPlayer();
-//			List<Object_BattleActor> players = new ArrayList<Object_BattleActor>();
-//			players.add(new Object_BattleActor(player));
-//			for (Event event : this.getEvents(EventType.BATTLE)) {
-//				Entity actor = event.getActor();
-//				Entity undergoer = event.getUndergoer();
-//				Object_BattleActor ba_actor = new Object_BattleActor(actor);
-//				Object_BattleActor ba_undergoer = new Object_BattleActor(undergoer);
-//				players.add(ba_undergoer);
-//				players.add(ba_actor);
-//				if (actor.equals(player)) {
-//					ba_actor.side = BattleSide.PLAYER;
-//					ba_undergoer.side = BattleSide.ENEMY;
-//				}
-//				else if (undergoer.equals(player)) {
-//					ba_undergoer.side = BattleSide.PLAYER;
-//					ba_actor.side = BattleSide.ENEMY;
-//				}
-//			}
-//			
-//			this.getScene().demandSceneChange(
-//					new Scene_BattleSystem(
-//							new Object_BattleContext(players),
-//							this.getScene(),
-//							this.getScene().game
-//					)
-//			);
-//		}
-//	}
+	private void handleItemUse(Entity entity, Entity item) {
+		Component_Item compItem = (Component_Item) item.getComponent("item");
+		Component_Battle compBattle = (Component_Battle) entity.getComponent("battle");
+		for (String property : compItem.getEffectNames()) {
+			if (property.matches("prop_.*")) {
+				int current = compBattle.getPropertyValue(property+"_current");
+				int oldmax = compBattle.getPropertyValue(property);
+				int add = compItem.getEffectValue(property);
+				int newv = Math.min(current+add, oldmax);
+				compBattle.addToProperty(property+"_current", newv);
+			}
+		}
+	}
 	
 }

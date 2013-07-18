@@ -1,4 +1,3 @@
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -15,9 +14,9 @@ public class Scene_Equipment extends Abstract_Scene {
 	
 	private Window_Menu main_menu;
 	private Window_Menu menu_items;
-	private Map<String,Window_Menu> menus;
 	private List<Window_ItemProps> messages;
 	private Window_ItemProps current_message;
+	private Window_Message current_item;
 	
 	private List<Entity> items;
 	private Map<String,Entity> equipped;
@@ -29,9 +28,9 @@ public class Scene_Equipment extends Abstract_Scene {
 		this.current_level = current_level;
 		this.adventurer = entity;
 		
+		this.current_item = new Window_Message("Angelegt: ",Object_Screen.SCREEN_W-300,430,300,game);
+		
 		this.main_menu = new Window_Menu(game,"main",0,0);
-		this.menus = new HashMap<String,Window_Menu>();
-		this.setupMenus();
 		
 		this.items = new LinkedList<Entity>();
 		this.equipped = new HashMap<String,Entity>();
@@ -51,12 +50,14 @@ public class Scene_Equipment extends Abstract_Scene {
 
 	@Override
 	public void onStart() {
-		// TODO Auto-generated method stub
-
+		//
 	}
 
 	@Override
 	public void onExit() {
+		/*
+		 * Items zurueckuebertragen.
+		 */
 		Component_Equipment compEquipment = (Component_Equipment) this.adventurer.getComponent("equipment");
 		Component_Inventory compInventory = (Component_Inventory) this.adventurer.getComponent("inventory");
 		for (String slot : this.equipped.keySet()) {
@@ -68,6 +69,9 @@ public class Scene_Equipment extends Abstract_Scene {
 		for (Entity item : this.items) {
 			if (!this.isEquipped(item) && !compInventory.containsItem(item)) {
 				compInventory.addItem(item);
+			}
+			else if (this.isEquipped(item)) {
+				compInventory.removeItem(item);
 			}
 		}
 
@@ -85,6 +89,9 @@ public class Scene_Equipment extends Abstract_Scene {
 				int cursor_items = this.menu_items.getCurrentCursor();
 				if (cursor_items < this.items.size()) {
 					this.current_message = this.messages.get(cursor_items);
+				}
+				if (cursor_main < Component_Equipment.SLOTS.length) {
+					this.updateMessageCurrentItem(cursor_main);
 				}
 			}
 		}
@@ -120,6 +127,7 @@ public class Scene_Equipment extends Abstract_Scene {
 		if (this.current_message != null) {
 			this.current_message.updateScreen();
 		}
+		this.current_item.updateScreen();
 
 	}
 	
@@ -179,6 +187,15 @@ public class Scene_Equipment extends Abstract_Scene {
 		}
 	}
 	
+	private void updateMessageCurrentItem(int pos) {
+		String slot = Component_Equipment.SLOTS[pos];
+		String name = "";
+		if (this.equipped.containsKey(slot)) {
+			name = this.equipped.get(slot).getName();
+		}
+		this.current_item.changeMessage("Angelegt: "+name);
+	}
+	
 	private void initMessages() {
 		for (Entity item : this.items) {
 			this.messages.add(new Window_ItemProps(item,Object_Screen.SCREEN_W-300,0,this.game,this.current_level.getFactory()));
@@ -201,12 +218,6 @@ public class Scene_Equipment extends Abstract_Scene {
 			}
 		}
 		
-	}
-	
-	private void setupMenus() {
-		for (String slot : Component_Equipment.SLOTS) {
-			this.menus.put(slot, new Window_Menu(this.game,slot,0,0));
-		}
 	}
 	
 	private boolean isEquipped(Entity item) {

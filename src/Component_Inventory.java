@@ -48,6 +48,18 @@ public class Component_Inventory extends Abstract_Component {
 		return null;
 	}
 	
+	public Entity removeItem(Entity item) {
+		Entity item2;
+		for (int i=0;i<this.inventory.length;i++) {
+			item2 = this.inventory[i];
+			if (item == item2) {
+				this.inventory[i] = null;
+				return item2;
+			}
+		}
+		return null;
+	}
+	
 	public boolean containsItem(Entity item) {
 		for (Entity item2 : this.inventory) {
 			if (item == item2) return true;
