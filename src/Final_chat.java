@@ -69,6 +69,7 @@ public class Final_chat extends Applet {
 	  
 	  reponse = new List();
 	  reponse.setBounds(6, 22, 368, 266);
+	  l_panel.add(reponse);
 	  
 	  label = new Label("ChatBox");
 	  label.setBounds(8, 4, 120, 30);
