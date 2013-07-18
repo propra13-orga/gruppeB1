@@ -6,7 +6,16 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.List;
 
-
+/**
+ * 
+ * Dient dem Auslesen von Dateien der Typen .et (Entitäten), .q (Quests),
+ * .skl (Skills) oder .dat (sonstige Daten). Kann instantiiert werden und buffert
+ * dann einmal bereits gelesene Daten. Jeder Instanz von Object_DBReader ist 
+ * ein Dateityp zugeordnet und nur solche Dateien lassen sich damit auslesen.
+ * 
+ * @author Victor Persien
+ *
+ */
 public class Object_DBReader {
 	public static final String DIR_ET = "res/db/";
 	public static final String EXT_ET = ".et";
@@ -22,7 +31,17 @@ public class Object_DBReader {
 	
 	
 	private Map<String,Map<String,String>> content;
-
+	
+	/**
+	 * Konstruktor. "type" bestimmt den Typ, wobei 
+	 * <ul>
+	 * <li> "entity": Dateien vom Typ .et,
+	 * <li> "skill": Dateien vom Typ .skl,
+	 * <li> "quest": Dateien vom Typ .q,
+	 * <li> "data": Dateien vom Typ .dat.
+	 * </ul>
+	 * @param type		Der Typ, den der Reader behandelt.
+	 */
 	public Object_DBReader(String type) {
 		this.content = new HashMap<String,Map<String,String>>();
 		switch(type) {
@@ -47,6 +66,12 @@ public class Object_DBReader {
 		
 	}
 	
+	/**
+	 * Liest die Daten aus der Datei oder dem Puffer.
+	 * 
+	 * @param fname		Dateiname (ohne Endung).
+	 * @return			Tabelle der Eigenschaften.
+	 */
 	public Map<String,String> getProperties(String fname) {
 		if (!content.containsKey(fname)) {
 			content.put(fname,this.getPropertiesFromFile(fname));
@@ -55,6 +80,13 @@ public class Object_DBReader {
 		return content.get(fname);
 	}
 	
+	/**
+	 * Parst Dateien des Typs, für den die Klasse instantiiert wurde aus der
+	 * angegebenen Datei im angegebenen Pfad.
+	 * 
+	 * @param fname		Dateiname (ohne Endung).
+	 * @return			Tabelle der Eigenschaften.
+	 */
 	private Map<String,String> getPropertiesFromFile(String fname) {
 		Map<String,String> properties = new HashMap<String,String>();
 		try {

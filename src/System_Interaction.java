@@ -1,7 +1,5 @@
-/*
- * InteractionSystem.java
- * 
- * Das InteractionSystem behandelt "alles", was mit der Interaktion zwischen
+/**
+ * Das System_Interaction behandelt "alles", was mit der Interaktion zwischen
  * einzelnen Entitäten bzw. ihrer Komponenten zu tun hat. Dazu gehören insbeson-
  * dere Trigger und Kampfhandlungen.
  * 

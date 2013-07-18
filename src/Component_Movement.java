@@ -1,18 +1,37 @@
-/*
+/**
  * Die Bewegungskomponente enthält alle zur Bewegung (und Kollision) wichtigen
  * Daten. Jede Entität, die auf der Karte erscheinen soll, braucht diese.
+ * 
+ * @author Victor Persien
  */
 
 class Component_Movement extends Abstract_Component {
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = -8494235272709325395L;
 	public int x, y, dx, dy;
 	public int orientation;
+	/**
+	 * "tick" wird benutzt, um das Delay herunterzuzählen. Ist tick == 0,
+	 * dann kann die Entität bewegt werden.
+	 */
 	public int delay, tick;
 	public boolean moving, walkable, collidable, moveable, visible;
 	
+	/**
+	 * Konstruktur. Alle diese Komponenten sind vom Typ "movement".
+	 * 
+	 * @param entity		Entität, der diese Komponente gehört.
+	 * @param system		Zugehöriges Komponentensystem.
+	 * @param x				X-Koordinate.
+	 * @param y				Y-Koordinate.
+	 * @param dx			Richtungsvektor auf der X-Achse (veraltet).
+	 * @param dy			Richtungsvektor auf der Y-Achse (veraltet).
+	 * @param orientation	Blickrichtung. 0: oben, 1: unten, 2: links, 3: rechts.
+	 * @param delay			Bewegungsgeschwindigkeit. Höher -> langsamer.
+	 * @param walkable		Ist die Entität begehbar?
+	 * @param collidable	Löst eine Berührung ein Kollisionsevent aus?
+	 * @param visible		Ist die Entität sichtbar?
+	 */
 	public Component_Movement(Entity entity, System_Component system,
 			int x, int y, int dx, int dy, int orientation, int delay,
 			boolean walkable, boolean collidable, boolean visible) {
@@ -26,11 +45,7 @@ class Component_Movement extends Abstract_Component {
 		this.collidable = collidable;
 		this.moveable = true;
 		this.visible = visible;
-		// Das Delay bestimmt die Bewegungsgeschwindigkeit. Je höher, desto
-		// langsamer.
 		this.delay = delay;
-		// "tick" wird benutzt, um das Delay herunterzuzählen. Ist tick == 0, 
-		// dann kann die Entität bewegt werden.
 		this.tick = 0;
 	}
 	
@@ -38,6 +53,11 @@ class Component_Movement extends Abstract_Component {
 		this(entity,system,x,y,0,0,0,0,true,false,true);
 	}
 	
+	/**
+	 * Copy-Konstruktor.
+	 * 
+	 * @param compMovement
+	 */
 	public Component_Movement(Component_Movement compMovement) {
 		super(compMovement);
 		this.x = compMovement.x;
@@ -89,7 +109,7 @@ class Component_Movement extends Abstract_Component {
 	public boolean isMoveable() { return this.moveable; }
 	public boolean isVisible() { return this.visible; }
 	
-	public int[] orientationToVectior() { return this.orientationToVector(this.orientation); }
+	public int[] orientationToVector() { return this.orientationToVector(this.orientation); }
 	public int[] orientationToVector(int d) {
 		int[] dxdy = {0,0};
 		switch(d) {
@@ -143,12 +163,20 @@ class Component_Movement extends Abstract_Component {
 	public void resetTick() { this.tick = this.delay; }
 	public void nullifyTick() { this.tick = 0; }
 	
+	/**
+	 * Die Entität ist nicht mehr auf der Karte sichtbar.
+	 */
 	public void drawFromMap() {
 		this.unsetVisible();
 		this.x = -1;
 		this.y = -1;
 	}
 	
+	/**
+	 * Setzt die Entität wieder auf die Karte.
+	 * @param x
+	 * @param y
+	 */
 	public void putOnMap(int x, int y) {
 		this.setVisible();
 		this.x = x;

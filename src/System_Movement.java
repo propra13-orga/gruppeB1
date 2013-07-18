@@ -2,6 +2,15 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.HashMap;
 
+/**
+ * 
+ * Das System_Movement behandelt die Bewegung und Kollisionsabfrage von Entitäten
+ * bzw. ihren Komponenten.
+ * 
+ * @author Victor Persien
+ *
+ */
+
 class System_Movement extends System_Component {
 	protected Object_KeyHandler keyHandler;
 	private HashMap<String,List<Entity>> entityPositions;
@@ -52,7 +61,7 @@ class System_Movement extends System_Component {
 		this.retrieveEntityPositions();
 	}
 	
-	/*
+	/**
 	 * Gibt alle Entitäten zurück, die sich an Position xy befinden.
 	 */
 	public List<Entity> getEntitiesAt(int x, int y) {
@@ -64,7 +73,7 @@ class System_Movement extends System_Component {
 	
 	
 	
-	/*
+	/**
 	 * Gibt ein Array zurück, die die Positionsdaten aller Entitäten
 	 * enthält.
 	 */
@@ -100,10 +109,6 @@ class System_Movement extends System_Component {
 			if (compMovement1.isCollidable()) {
 				for (int j = 0; j < i; j++) {
 					Component_Movement compMovement2 = (Component_Movement) this.getEntitiesByType("movement").get(j).getComponent("movement");
-					// Haben beide Entitäten dieselbe Position?
-//					if (Component_Movement1.x == Component_Movement2.x 
-//							&& Component_Movement1.y == Component_Movement2.y
-//							&& Component_Movement2.isCollidable()) {
 					if (compMovement2.isCollidable()
 							&& ((compMovement1.getX() == compMovement2.getX()
 									&& compMovement1.getY() == compMovement2.getY())
@@ -117,14 +122,14 @@ class System_Movement extends System_Component {
 		return collisions;
 	}
 	
-	/*
+	/**
 	 * Gibt die Movement-Komponente einer Entität zurück.
 	 */
 	private Component_Movement getMovement(Entity entity) {
 		return (Component_Movement) entity.getComponent("movement");
 	}
 	
-	/*
+	/**
 	 * Haben zwei Entitäten einfach die Plätze getauscht? Diese Bedingung ist
 	 * auch eine Kollision.
 	 */
@@ -135,7 +140,7 @@ class System_Movement extends System_Component {
 				&& compMovement2.getY() == compMovement1.getOldY();
 	}
 	
-	/*
+	/**
 	 * Gibt eine Liste zurück, die Events enthält, welche die Teilnehmer einer
 	 * "illegalen" Kollision beinhalten.
 	 */
@@ -153,7 +158,7 @@ class System_Movement extends System_Component {
 	}
 	
 	
-	/*
+	/**
 	 * Setzt bestimmte Events in Bewegungen um.
 	 */
 	private void handleEvents() {
@@ -193,7 +198,7 @@ class System_Movement extends System_Component {
 		}
 	}
 	
-	/*
+	/**
 	 * Überprüft, ob eine Entität bewegt werden darf.
 	 */
 	private void handleMoveability(Component_Movement compMovement) {
@@ -208,7 +213,7 @@ class System_Movement extends System_Component {
 		}
 	}
 	
-	/*
+	/**
 	 * Setzt den Bewegungsvektor wieder zurück, falls die neue Position auf
 	 * einer nicht begehbaren Kachel oder außerhalb des Levels wäre.
 	 */
@@ -222,7 +227,7 @@ class System_Movement extends System_Component {
 		
 	}
 	
-	/*
+	/**
 	 * Setzt Tasteneingaben vom Keyhandler in Events um.
 	 */
 	private void handlePlayerInput() {
@@ -253,7 +258,7 @@ class System_Movement extends System_Component {
 		}		
 	}
 	
-	/*
+	/**
 	 * Definiert, welche Kollisionen als illegal gelten.
 	 */
 	private boolean isIllegalCollision(Component_Movement compMovement1, Component_Movement compMovement2) {
@@ -262,7 +267,7 @@ class System_Movement extends System_Component {
 		return false;
 	}
 	
-	/*
+	/**
 	 * Bewegt eine Entität gemäß ihrer Richtungsdaten (dx und dy).
 	 */
 	private void moveEntity(Entity entity) {
@@ -286,7 +291,7 @@ class System_Movement extends System_Component {
 		}
 	}
 	
-	/*
+	/**
 	 * Setzt die aktuelle Position auf den Stand vor der letzten Bewegung zurück.
 	 */
 	private void resetPosition(Component_Movement compMovement) {
@@ -299,7 +304,7 @@ class System_Movement extends System_Component {
 		compMovement.setMoveable();
 	}
 	
-	/*
+	/**
 	 * Aktualisiert die Hashtabelle entityPositions, die alle Positionsdaten
 	 * enthält.
 	 */
@@ -317,7 +322,7 @@ class System_Movement extends System_Component {
 		}
 	}
 	
-	/*
+	/**
 	 * Bestimmt, wie eine illegale Kollision aufgelöst werden soll.
 	 */
 	private void resolveIllegalCollisions(List<Event> illegalCollisions) {
@@ -330,7 +335,7 @@ class System_Movement extends System_Component {
 		}
 	}
 	
-	/*
+	/**
 	 * Ist Kachel (x,y) begehbar?
 	 */
 	private boolean walkable(int x, int y) {

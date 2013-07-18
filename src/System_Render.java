@@ -2,6 +2,14 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
+
+/**
+ * Hier erfolgt die grafische Ausgabe der Geschehnisse auf dem Spielfeld.
+ * 
+ * @author Victor Persien
+ *
+ */
+
 class System_Render extends System_Component {
 	protected Object_Screen screen;
 	protected int[] screen_point;
@@ -55,7 +63,7 @@ class System_Render extends System_Component {
 	 * Privates.
 	 */
 	
-	/*
+	/**
 	 * Hat der Spieler Schaden genommen, so soll der Bildschirm einmal kurz
 	 * rot aufblitzen.
 	 */
@@ -96,7 +104,7 @@ class System_Render extends System_Component {
 		return (Component_Sprite) entity.getComponent("sprite"); 
 	}
 	
-	/*
+	/**
 	 * Aktualisiert alle Sprites (also Sprite-Komponenten) in Abhängigkeit von
 	 * der Positions- und Bewegungsdaten der jeweiligen Entitäten.
 	 */

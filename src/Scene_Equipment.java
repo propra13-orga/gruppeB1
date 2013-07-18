@@ -3,6 +3,16 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * 
+ * Diese Scene bietet ein Menü, welches Ausrüstung an- und ablegen lässt. Dabei
+ * gibt es für jeden Slot (Linker Arm, rechter Arm, Beine, Kopf, etc.) ein 
+ * Untermenü, in dem diejenigen Items aus dem Inventar aus- und zugewählt werden
+ * können, die in den Slot passen.
+ * 
+ * @author Victor Persien
+ *
+ */
 
 public class Scene_Equipment extends Abstract_Scene {
 	private Abstract_Scene parent;
@@ -21,6 +31,15 @@ public class Scene_Equipment extends Abstract_Scene {
 	private List<Entity> items;
 	private Map<String,Entity> equipped;
 
+	/**
+	 * Konstruktor.
+	 * 
+	 * @param game				Aktuelles Spielobjekt.
+	 * @param parent			Scene, von der aus diese Scene aufgerufen wurde.
+	 * @param current_level		Aktuelle Level-Scene.
+	 * @param entity			Entität, deren Ausrüstung dargestellt und manipuliert
+	 * 							werden soll.
+	 */
 	public Scene_Equipment(Object_Game game, Abstract_Scene parent, 
 			Scene_Level current_level, Entity entity) {
 		super(game);
@@ -131,6 +150,13 @@ public class Scene_Equipment extends Abstract_Scene {
 
 	}
 	
+	/**
+	 * Bereitet das Hauptmenü vor, d.h. für jeden Slot gibt es einen Auswahlpunkt
+	 * zum Itemmenü. Dort sind die Items gelistet, die sich anlegen lassen.
+	 * 
+	 * Die Reihenfolge der Menüs richtet sich nach der, die in Component_Equipment.SLOTS
+	 * angegeben ist.
+	 */
 	private void prepareMainMenu() {
 		this.menuNames = new HashMap<String,String>();
 		this.menuNames.put("slot_head","Kopf");
@@ -160,6 +186,7 @@ public class Scene_Equipment extends Abstract_Scene {
 		}
 	}
 	
+	
 	private void prepareMenus() {
 		String name;
 		for (Entity item : this.items) {
@@ -169,7 +196,7 @@ public class Scene_Equipment extends Abstract_Scene {
 		this.menu_items.addCancelCommand("Ablegen");
 	}
 	
-	/*
+	/**
 	 * Aktiviert bzw. deaktiviert die Auswahl von Items in Abhaengigkeit davon,
 	 * welches Menue (Linker Arm, Kopf, etc.) gerade ausgewaehlt ist.
 	 */
@@ -187,6 +214,11 @@ public class Scene_Equipment extends Abstract_Scene {
 		}
 	}
 	
+	/**
+	 * Aktualisiert die Anzeige des gerade am entsprechenden Slot angelegten
+	 * Items, angegeben durch pos.
+	 * @param pos		Nummer des Items in der Liste.
+	 */
 	private void updateMessageCurrentItem(int pos) {
 		String slot = Component_Equipment.SLOTS[pos];
 		String name = "";
@@ -196,12 +228,18 @@ public class Scene_Equipment extends Abstract_Scene {
 		this.current_item.changeMessage("Angelegt: "+name);
 	}
 	
+	/**
+	 * Erstellt Fenster mit den Daten jedes Items.
+	 */
 	private void initMessages() {
 		for (Entity item : this.items) {
 			this.messages.add(new Window_ItemProps(item,Object_Screen.SCREEN_W-300,0,this.game,this.current_level.getFactory()));
 		}
 	}
 	
+	/**
+	 * Fügt die anlegbaren Items der Item-Liste hinzu.
+	 */
 	private void initItems() {
 		Component_Equipment compEquipment = (Component_Equipment) this.adventurer.getComponent("equipment");
 		Component_Inventory compInventory = (Component_Inventory) this.adventurer.getComponent("inventory");
@@ -220,6 +258,11 @@ public class Scene_Equipment extends Abstract_Scene {
 		
 	}
 	
+	/**
+	 * Überprüft, ob ein Item bereits angelegt ist.
+	 * @param item		Das zu überprüfende Item.
+	 * @return			true/false
+	 */
 	private boolean isEquipped(Entity item) {
 		if (item == null) return false;
 		for (Entity item2 : this.equipped.values()) {
@@ -228,10 +271,20 @@ public class Scene_Equipment extends Abstract_Scene {
 		return false;
 	}
 	
+	/**
+	 * Fügt ein Item zu den angelegten Items hinzu.
+	 * @param cursor_main	Index des ausgewählten Menüs.
+	 * @param pos			Position in der Liste
+	 */
 	private void handleEquip(int cursor_main, int pos) {
 		this.equipped.put(Component_Equipment.SLOTS[cursor_main],this.items.get(pos));
 	}
 	
+	/**
+	 * 
+	 * Legt ein vormals angelegtes Item ab.
+	 * @param cursor_main	Index des ausgewählten Menüs.
+	 */
 	private void handleUnequip(int cursor_main) {
 		this.equipped.remove(Component_Equipment.SLOTS[cursor_main]);
 	}

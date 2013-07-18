@@ -1,12 +1,17 @@
 import java.util.HashMap;
 import java.util.Map;
 
-
+/**
+ * 
+ * Diese Komponente stellt das Equipment (die Ausrüstung) eines Spielers dar,
+ * das (die) gerade angelegt ist. Jedes Item ist dabei einem Slot zugewiesen,
+ * wobei die Slots den Körperteilen der Entität entsprechen.
+ * 
+ * @author Victor Persien
+ *
+ */
 public class Component_Equipment extends Abstract_Component {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -6579517022715989440L;
 	
 	public final static String[] SLOTS = {"slot_arm_left", "slot_arm_right",
@@ -15,6 +20,12 @@ public class Component_Equipment extends Abstract_Component {
 	
 	private Map<String,Entity> equipment;
 
+	/**
+	 * Konstruktur. Alle diese Komponenten sind vom Typ "equipment".
+	 * 
+	 * @param entity		Entität, der die Komponente gehört.
+	 * @param system		Zugehöriges Komponentensystem.
+	 */
 	public Component_Equipment(Entity entity,
 			System_Component system) {
 		super("equipment", entity, system);

@@ -1,16 +1,11 @@
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-/*
- * ComponentSystem.java
- * 
- * Abstrakte Klasse ComponentSystem, von der alle Komponentensysteme erben.
+/**
+ * Abstrakte Klasse System_Component, von der alle Komponentensysteme erben.
  * Ist nur für die Spielmechanik innerhalb der Scene_Level brauchbar.
  */
 

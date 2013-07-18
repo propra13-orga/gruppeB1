@@ -2,16 +2,27 @@ import java.util.LinkedList;
 import java.util.List;
 
 
+/**
+ * 
+ * Entitäten, die diese Komponente besitzen, sind in der Lage, Skills
+ * (Fähigkeiten) zu erlernen.
+ * 
+ * @author Victor Persien
+ *
+ */
 public class Component_Skillbag extends Abstract_Component {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 6694489409150291391L;
 	
 	private List<Object_Skill> skills;
 	private int skillPoints;
 
+	/**
+	 * Konstruktur. Alle diese Komponenten sind vom Typ "skillbag".
+	 * 
+	 * @param entity		Entität, der die Komponente gehört.
+	 * @param system		Zugehöriges Komponentensystem.
+	 */
 	public Component_Skillbag(Entity entity,
 			System_Component system) {
 		super("skillbag", entity, system);

@@ -9,11 +9,11 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-/*
- * EntityManager.java
+/**
+ * Der EntityManager dient der verwaltung der Entitäten. Das schließt das
+ * Hinzufügen und Entfernen dieser von der Karte oder dem gesamten Spiel mit ein.
  * 
- * Der EntityManager dient der verwaltung der Entitäten. Für deren Definition,
- * siehe unten.
+ * @author Victor Persien
  */
 
 
@@ -34,13 +34,13 @@ class Object_EntityManager implements IEventListener {
 		this.listenTo(EventType.DEATH);
 	}
 	
-	/*
+	/**
 	 * Update.
 	 */
 	public void update() {
-		/*
-		 * Sind Entitäten gestorben? Wenn ja, entferne diese. Der Spielertod
-		 * wird gesondert behandelt.
+		/**
+		 * Behandelt den Tod von Entitäten. Ist der Spieler betroffen, wird dies
+		 * der zugehörigen Scene_Level mitgeteilt.
 		 */
 		for (Event event : this.getEvents(EventType.DEATH)) {
 			Entity entity = event.getUndergoer();
@@ -56,7 +56,7 @@ class Object_EntityManager implements IEventListener {
 	
 
 	
-	/*
+	/**
 	 * Füge eine Entität der Entitätenliste hinzu.
 	 */
 	public void register(Entity entity) {
@@ -68,7 +68,7 @@ class Object_EntityManager implements IEventListener {
 		}
 	}
 	
-	/*
+	/**
 	 * Deinitialisiere und dann entferne eine Entität aus der Entitätenliste.
 	 */
 	public void deregister(Entity entity) {
@@ -77,11 +77,11 @@ class Object_EntityManager implements IEventListener {
 			this.entitiesByID.remove(entity.getID());
 			this.entities.remove(entity);
 		} catch (Exception e) {
-			// TODO: handle exception
+			e.printStackTrace();
 		}
 	}
 	
-	/*
+	/**
 	 * Lege eine Entität als Spieler fest.
 	 */
 	public void setPlayer(Entity entity) {
@@ -107,7 +107,12 @@ class Object_EntityManager implements IEventListener {
 		}
 	}
 	
-	public List<Entity> deserializeEntities(Object_Room level) {
+	/**
+	 * Deserialisiert alle Entitäten im aktuellen Raum.
+	 * @param room
+	 * @return
+	 */
+	public List<Entity> deserializeEntities(Object_Room room) {
 		File folder = new File("res/save");
 		File[] listOfFiles = folder.listFiles();
 		
@@ -138,7 +143,7 @@ class Object_EntityManager implements IEventListener {
 		return entities;
 	}
 	
-	/*
+	/**
 	 * Ist die angegebene Entität der Spieler?
 	 */
 	public boolean isPlayer(Entity entity) {
@@ -146,17 +151,22 @@ class Object_EntityManager implements IEventListener {
 		return false;
 	}
 	
-	/*
+	/**
 	 * Gebe die Spielerentität zurück.
 	 */
 	public Entity getPlayer() { return this.player; }
 	
+	/**
+	 * Gibt die Entität anhand ihrer ID zurück (veraltet).
+	 * @param id
+	 * @return
+	 */
 	public Entity getEntityByID(int id) {
 		if (this.entitiesByID.containsKey(id)) return this.entitiesByID.get(id);
 		return null;
 	}
 	
-	/*
+	/**
 	 * Entitäten können sich hier bei ihrer Initialisierung eine noch nicht
 	 * vergebene ID zur eindeutigen Identifizierung abholen.
 	 */
@@ -170,7 +180,10 @@ class Object_EntityManager implements IEventListener {
 	 * Privates
 	 */
 	
-	
+	/**
+	 * Gibt die Levelscene zurück.
+	 * @return
+	 */
 	private Scene_Level getScene() {
 		return this.scene;
 	}

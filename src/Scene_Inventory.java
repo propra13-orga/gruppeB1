@@ -1,6 +1,14 @@
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * 
+ * Bietet ein grafisches Menü zur Anzeige des Inventars einer Entität. Hier
+ * können Items konsumiert oder zerstört werden.
+ * 
+ * @author Victor Persien
+ *
+ */
 
 public class Scene_Inventory extends Abstract_Scene implements IEventListener {
 	private Abstract_Scene parent;
@@ -17,7 +25,16 @@ public class Scene_Inventory extends Abstract_Scene implements IEventListener {
 	private List<Entity> items;
 	private List<Entity> trash;
 	private List<Entity> use;
-
+	
+	/**
+	 * Konstruktor.
+	 * 
+	 * @param game				Aktuelles Spielobjekt.
+	 * @param parent			Scene, von der aus diese Scene aufgerufen wurde.
+	 * @param current_level		Aktuelle Level-Scene.
+	 * @param entity			Entität, deren Ausrüstung dargestellt und manipuliert
+	 * 							werden soll.
+	 */
 	public Scene_Inventory(Object_Game game, Abstract_Scene parent, 
 			Scene_Level current_level, Entity entity) {
 		super(game);
@@ -114,6 +131,11 @@ public class Scene_Inventory extends Abstract_Scene implements IEventListener {
 		this.money_display.updateScreen();
 	}
 	
+	/**
+	 * Sendet Event event an den Eventmanager des Levels. Dient in erster Linie
+	 * zum Verschicken von Events des Typs ITEM_USE, um den entsprechenden
+	 * Komponentensystemen mitzuteilen, dass ein Item benutzt wird.
+	 */
 	@Override
 	public void addEvent(Event event) {
 		this.current_level.addEvent(event);
@@ -135,6 +157,12 @@ public class Scene_Inventory extends Abstract_Scene implements IEventListener {
 		//	
 	}
 	
+	/**
+	 * Markiere das Item mit Index pos als entweder zu benutzen oder wegzuwerfen,
+	 * je nach ausgewähltem menu.
+	 * @param menu
+	 * @param pos
+	 */
 	private void handleTrashOrUse(int menu, int pos) {
 		Entity item = this.items.get(pos);
 		if (menu == 0) {
@@ -145,6 +173,11 @@ public class Scene_Inventory extends Abstract_Scene implements IEventListener {
 		}
 	}
 	
+	/**
+	 * Ist das Item item schon als zu benutzen markiert?
+	 * @param item
+	 * @return			true/false
+	 */
 	private boolean itemInUse(Entity item) {
 		for (Entity item2 : this.use) {
 			if (item == item2) return true;
@@ -152,6 +185,11 @@ public class Scene_Inventory extends Abstract_Scene implements IEventListener {
 		return false;
 	}
 	
+	/**
+	 * Ist das Item item schon als wegzuwerfen markiert?
+	 * @param item
+	 * @return		true/false
+	 */
 	private boolean itemTrashed(Entity item) {
 		for (Entity item2 : this.trash) {
 			if (item == item2) return true;
@@ -159,12 +197,22 @@ public class Scene_Inventory extends Abstract_Scene implements IEventListener {
 		return false;
 	}
 	
+	/**
+	 * Aktiviert bzw. deaktiviert die Auswahl von Items in Abhaengigkeit davon,
+	 * welches Menue (Benutzen oder Wegwerfen) gerade ausgewaehlt ist.
+	 */
 	private void updateItemMenu(int pos) {
 		Entity item;
 		Component_Item compItem;
 		for (int i=0;i<this.items.size();i++) {
 			item = this.items.get(i);
 			compItem = (Component_Item) item.getComponent("item");
+			/*
+			 * Aktiviere den Eintrag eines Items, falls wenn pos == 0, das Item 
+			 * konsumierbar ist, und das Item weder in Benutzung noch angelegt
+			 * ist, wobei eine pos von 0 bedeutet, dass das Menü "Benutzen"
+			 * ausgewählt ist.
+			 */
 			if ((pos != 0 || compItem.isConsumable()) &&
 					!this.itemInUse(item) &&
 					!this.itemTrashed(item)) {
@@ -189,6 +237,9 @@ public class Scene_Inventory extends Abstract_Scene implements IEventListener {
 		}
 	}
 	
+	/**
+	 * Fügt die anlegbaren Items der Item-Liste hinzu.
+	 */
 	private void initItems() {
 		Component_Inventory compInventory = (Component_Inventory) this.adventurer.getComponent("inventory");
 		for (Entity item : compInventory.getInventory()) {
@@ -196,12 +247,19 @@ public class Scene_Inventory extends Abstract_Scene implements IEventListener {
 		}
 	}
 	
+	/**
+	 * Erstellt Fenster mit den Daten jedes Items.
+	 */
 	private void initMessages() {
 		for (Entity item : this.items) {
 			this.messages.add(new Window_ItemProps(item,Object_Screen.SCREEN_W-300,0,this.game,this.current_level.getFactory()));
 		}
 	}
 
+	/**
+	 * Liest das Geld der Käuferentität aus.
+	 * @return		Geld.
+	 */
 	private int retrieveMoney() {
 		Component_Inventory compInventory = (Component_Inventory) this.adventurer.getComponent("inventory");
 		return compInventory.getMoney();

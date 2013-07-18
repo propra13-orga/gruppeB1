@@ -1,16 +1,8 @@
 import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.PriorityQueue;
-import java.util.Random;
-import java.util.Stack;
 
-
-/*
- * AISystem.java
- * 
- * Kümmert sich um die KI. Bitte nicht großartig beachten, da kaum 
- * funktionstüchtig!
+/**
+ * Kümmert sich um die KI der NPCs, sofern sie eine KI-Komponente (Component_AI)
+ * besitzen.
  */
 
 class System_AI extends System_Component {
@@ -62,12 +54,6 @@ class System_AI extends System_Component {
 	 * Pfadsuche.
 	 */
 	
-	private void findPath(Entity entity, int toX, int toY) {
-		Component_Movement compMovement = (Component_Movement) entity.getComponent("movement");
-		AStar astar = new AStar(compMovement.getX(),compMovement.getY(),toX,toY,this.walkability);
-		astar.findPath();
-		astar.reconstructPath();
-	}
 	
 	private void retrieveEntityPositions() {
 		this.entityPositions = this.getScene().getEntityPositions();

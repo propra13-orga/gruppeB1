@@ -3,6 +3,16 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * 
+ * Der Eventmanager verwaltet Events, d.h. er empfängt Events von Klassen, die 
+ * IEventListener implementiert haben und verteilt sie an die entsprechenden
+ * Abonnenten.
+ * 
+ * @author Victor Persien
+ *
+ */
+
 public class Object_EventManager {
 	
 	private Map<EventType,List<IEventListener>> listenersByEventType;

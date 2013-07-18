@@ -69,10 +69,17 @@ import java.util.Hashtable;
 //	}
 //}
 
+/**
+ * 
+ * Serialisiert Spieldaten, um Spielstände speichern und laden zu können.
+ * (Zur Zeit nicht funktionstüchtig).
+ * 
+ * @author Victor Persien
+ *
+ */
+
 class Object_SaveLoadData implements java.io.Serializable {
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = 5376363191835331279L;
 
 	public static final String PATH = "res/save/";
