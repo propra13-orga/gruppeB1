@@ -1,7 +1,3 @@
-import java.lang.reflect.Array;
-import java.util.Arrays;
-import java.util.List;
-
 
 public class Static_DamageCalculator {
 //	private static final double BONUS = 2.0;

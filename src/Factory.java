@@ -266,7 +266,7 @@ public class Factory {
 		 */
 		
 		if (data.containsKey("ai")) {
-			new Component_AI(entity,scene.getSystemAI(),2,7);
+			new Component_AI(entity,scene.getSystemAI(),2,5);
 		}
 				
 		

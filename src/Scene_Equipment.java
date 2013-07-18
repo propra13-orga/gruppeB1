@@ -15,7 +15,7 @@ import java.util.Map;
  */
 
 public class Scene_Equipment extends Abstract_Scene {
-	private Abstract_Scene parent;
+//	private Abstract_Scene parent;
 	private Scene_Level current_level;
 	
 	private Entity adventurer;
@@ -43,7 +43,7 @@ public class Scene_Equipment extends Abstract_Scene {
 	public Scene_Equipment(Object_Game game, Abstract_Scene parent, 
 			Scene_Level current_level, Entity entity) {
 		super(game);
-		this.parent = parent;
+//		this.parent = parent;
 		this.current_level = current_level;
 		this.adventurer = entity;
 		

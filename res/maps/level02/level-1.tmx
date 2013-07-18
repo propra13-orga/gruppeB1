@@ -3858,5 +3858,8 @@
   </object>
   <object name="item" type="potion_hp" x="416" y="128" width="32" height="32"/>
   <object name="item" type="diamond" x="0" y="160" width="32" height="32"/>
+  <object name="Dubioser Geselle" type="thief" x="544" y="160" width="32" height="32"/>
+  <object name="Dubioser Geselle" type="thief" x="800" y="128" width="32" height="32"/>
+  <object name="Dubioser Geselle" type="thief" x="256" y="416" width="32" height="32"/>
  </objectgroup>
 </map>

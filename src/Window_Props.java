@@ -9,7 +9,7 @@ public class Window_Props extends Abstract_Update {
 	private Window_Message body;
 	private Window_Message foot;
 	
-	private Factory factory;
+//	private Factory factory;
 	
 	private String s_head;
 	private String s_body;
@@ -24,7 +24,7 @@ public class Window_Props extends Abstract_Update {
 			int x, int y, Factory factory, Object_Game game) {
 		super(game);
 		this.screen.setFont(Object_Game.FONT);
-		this.factory = factory;
+//		this.factory = factory;
 		
 		this.s_head = s_head;
 		this.s_foot = s_foot;

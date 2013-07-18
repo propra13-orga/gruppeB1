@@ -1,0 +1,4 @@
+name : Erdfaust
+description : Vermoebelt den Gegner mit einer Faust aus Ton und Erde.
+dmg_earth : 30
+cost_mp : 10

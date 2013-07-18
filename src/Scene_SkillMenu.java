@@ -4,7 +4,7 @@ import java.util.List;
 
 public class Scene_SkillMenu extends Abstract_Scene {
 	
-	private Abstract_Scene parent;
+//	private Abstract_Scene parent;
 	private Scene_Level current_level;
 	private Entity adventurer;
 	private Factory factory;
@@ -18,12 +18,13 @@ public class Scene_SkillMenu extends Abstract_Scene {
 	
 	private int skillPoints;
 	
-	private final String[] skillnames = {"fireball","fastheal"};
+	private final String[] skillnames = {"fireball","fastheal","earthfist",
+			"eisblitz","fastmanaheal"};
 
 	public Scene_SkillMenu(Object_Game game, Abstract_Scene parent,
 			Scene_Level current_level, Entity player, Factory factory) {
 		super(game);
-		this.parent = parent;
+//		this.parent = parent;
 		this.current_level = current_level;
 		this.adventurer = player;
 		this.factory = factory;
@@ -37,7 +38,7 @@ public class Scene_SkillMenu extends Abstract_Scene {
 		this.initMessages();
 		
 		this.skillPoints = this.retrieveSkillPoints();
-		String msg = String.format("Skillpunkte: %d", this.skillPoints);
+		String msg = String.format("Skillpkt.: %d", this.skillPoints);
 		this.message_skillPoints = new Window_Message(msg,Object_Screen.SCREEN_W-180,430,180,this.game);
 		
 		this.initMenu();
@@ -125,7 +126,7 @@ public class Scene_SkillMenu extends Abstract_Scene {
 	
 	private void initMessages() {
 		String s_head;
-		String s_foot = "x";
+		String s_foot = "";
 		for (Object_Skill skill : this.skills) {
 			s_head = skill.getName();
 			this.messages.add(new Window_Props(s_head,s_foot,Window_Props.intMapToString(skill.getProperties()),Object_Screen.SCREEN_W-300,0,this.factory,this.game));
@@ -147,7 +148,7 @@ public class Scene_SkillMenu extends Abstract_Scene {
 	}
 	
 	private void updateMessageSkillPoints() {
-		String msg = String.format("Skillpunkte: %d", this.skillPoints);
+		String msg = String.format("Skillpkt.: %d", this.skillPoints);
 		this.message_skillPoints.changeMessage(msg);
 	}
 }

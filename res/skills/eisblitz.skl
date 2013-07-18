@@ -1,0 +1,4 @@
+name : Eisblitz
+description : Schleudert dem Gegner einen Blitz aus Eis entgegen.
+dmg_ice : 30
+cost_mp : 10

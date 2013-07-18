@@ -1,0 +1,4 @@
+name : Schnelle Manaheilung
+description : Heilt ein befreundetes Ziel um 10 MP.
+heal : true
+heal_mp : 10

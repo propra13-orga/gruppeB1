@@ -11,7 +11,7 @@ import java.util.List;
  */
 
 public class Scene_Inventory extends Abstract_Scene implements IEventListener {
-	private Abstract_Scene parent;
+//	private Abstract_Scene parent;
 	private Scene_Level current_level;
 	
 	private Entity adventurer;
@@ -38,7 +38,7 @@ public class Scene_Inventory extends Abstract_Scene implements IEventListener {
 	public Scene_Inventory(Object_Game game, Abstract_Scene parent, 
 			Scene_Level current_level, Entity entity) {
 		super(game);
-		this.parent = parent;
+//		this.parent = parent;
 		this.current_level = current_level;
 		this.adventurer = entity;
 

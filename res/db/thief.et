@@ -1,0 +1,14 @@
+name : Dubioser Kerl
+sprite : thief
+sprite_battle : battlechar-1
+prop_hp : 50
+prop_mp : 30
+prop_def : 2
+spd : 2
+controllable : true
+collidable : true
+equipment : true
+inventory : true
+skillbag : true
+has_skill : fireball
+ai : true
