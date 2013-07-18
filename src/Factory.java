@@ -7,7 +7,7 @@ import java.util.Map;
 /*
  * Factory.java
  * 
- * Mit der Factory soll es möglich sein, Spielobjekte und Level zu erzeugen.
+ * Mit der Factory ist es möglich, Spielobjekte zu erzeugen.
  * 
  */
 
@@ -34,6 +34,9 @@ public class Factory {
 	public Object_DBReader getDBDAT() { return this.db_dat; }
 	
 	
+	/*
+	 * Baut eine Entität gemäß der in "entityData" spezifizierten Daten.
+	 */
 	public Entity build(Map<String,String> entityData) {
 		String entityType = entityData.get("entityType");
 		String name = entityData.remove("name");
@@ -79,6 +82,9 @@ public class Factory {
 				int value = Integer.parseInt(dataCompBattle.get(attr));
 				properties.put(prop, value);
 				properties.put(prop_current, value);
+			}
+			if (!dataCompBattle.containsKey("prop_lvl")) {
+				properties.put("prop_lvl", 1);
 			}
 			new Component_Battle(entity,scene.getSystemInteraction(),
 					properties,battleSprite);
@@ -147,14 +153,22 @@ public class Factory {
 			if (data.containsKey("money")) {
 				money = Integer.parseInt(data.get("money"));
 			}
-			new Component_Inventory(entity,this.scene.getSystemInteraction(),money);
+			Component_Inventory compInventory = new Component_Inventory(entity,this.scene.getSystemInteraction(),money);
+			Hashtable<String,String> filteredItems = this.filterHashtable(data, "has_item\\d*");
+			for (String et : filteredItems.values()) {
+				compInventory.addItem(this.build(this.db_et.getProperties(et)));
+			}
 		}
 		
 		/*
 		 * Component_Skillbag
 		 */
 		if (data.containsKey("skillbag")) {
-			new Component_Skillbag(entity,this.scene.getSystemInteraction());
+			Component_Skillbag compSkillbag = new Component_Skillbag(entity,this.scene.getSystemInteraction());
+			Hashtable<String,String> filteredSkills = this.filterHashtable(data, "has_skill\\d*");
+			for (String attr : filteredSkills.keySet()) {
+				compSkillbag.addSkill(new Object_Skill(this.db_skl.getProperties(filteredSkills.get(attr))));
+			}
 		}
 		
 		/*
@@ -240,7 +254,10 @@ public class Factory {
 		return entity;
 	}
 	
-		
+	/*
+	 * Filtert eine Hashtable so, dass sie nur noch Schlüssel enthält, die
+	 * den regulären Ausdruck "regex" matchen.
+	 */
 	public Hashtable<String,String> filterHashtable(Map<String,String> hashtable, String regex) {
 		Hashtable<String,String> filtered = new Hashtable<String,String>();
 		
@@ -253,6 +270,9 @@ public class Factory {
 		return filtered;
 	}
 	
+	/*
+	 * Aktualisiert die Verweise auf die Komponentensysteme nach Levelwechsel.
+	 */
 	public void updateSystems(Entity entity) {
 		String type;
 		for (Abstract_Component comp : entity.getComponents()) {
