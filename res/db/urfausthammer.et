@@ -1,0 +1,11 @@
+name : Urfausthammer
+sprite : hammer
+walkable : true
+onAction : pickup
+item_name : Urfausthammer
+item_value : 500
+dmg : 50
+dmg_earth : 10
+type_equippable : true
+slot_arm_left : true
+slot_arm_right : true

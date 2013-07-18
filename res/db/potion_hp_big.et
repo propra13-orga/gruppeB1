@@ -1,0 +1,9 @@
+name : Heiltrank
+sprite : potion_hp
+walkable : true
+onAction : pickup
+item_name : Heiltrank
+item_value : 50
+type_stackable : true
+type_consumable : true
+prop_hp : 50

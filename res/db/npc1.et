@@ -1,5 +1,5 @@
 name : Dagoberto
-sprite : character_2
+sprite : people
 sprite_battle : battlechar-1
 prop_hp : 100
 prop_mp : 30

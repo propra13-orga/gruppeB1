@@ -1,0 +1,9 @@
+name : Manatrank
+sprite : potion_mp
+walkable : true
+onAction : pickup
+item_name : Manatrank
+item_value : 10
+type_stackable : true
+type_consumable : true
+prop_mp : 10

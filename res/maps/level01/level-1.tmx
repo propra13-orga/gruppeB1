@@ -893,7 +893,7 @@
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
-   <tile gid="0"/>
+   <tile gid="422"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
@@ -920,7 +920,7 @@
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
-   <tile gid="57"/>
+   <tile gid="368"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
@@ -2027,11 +2027,11 @@
  </layer>
  <objectgroup name="Objektebene 1" width="25" height="20">
   <object name="item" type="firesword" x="256" y="544" width="32" height="32"/>
-  <object name="Kerl" type="npc1" x="512" y="576" width="32" height="32">
+  <object name="Kerl" type="npc1" x="160" y="480" width="32" height="32">
    <properties>
-    <property name="dialog" value="Lorem ipsum dolor sit amet."/>
+    <property name="dialog" value="Bist du bereit fuer ein großes Abenteuer? \n Dann betrete die verfaerbte Rasenflaeche zu meiner Linken. Oder schau dich hier noch etwas um."/>
     <property name="onAction" value="open_dialog"/>
-    <property name="orientation" value="1"/>
+    <property name="orientation" value="2"/>
    </properties>
   </object>
   <object name="Gunther" type="salesperson" x="448" y="448" width="32" height="32">
@@ -2041,6 +2041,9 @@
     <property name="shop_item3" value="potion_hp"/>
     <property name="shop_item4" value="firesword"/>
     <property name="shop_item5" value="firesword"/>
+    <property name="shop_item6" value="potion_mp"/>
+    <property name="shop_item7" value="potion_mp"/>
+    <property name="shop_item8" value="potion_mp"/>
    </properties>
   </object>
   <object name="teleport1" type="teleport" x="256" y="608" width="32" height="32">
@@ -2114,7 +2117,6 @@
     <property name="onAction" value="open_questmenu"/>
     <property name="orientation" value="3"/>
     <property name="questdealer" value="true"/>
-    <property name="sprite" value="people"/>
    </properties>
   </object>
   <object name="teleport1" type="teleport" x="288" y="608" width="32" height="32">
@@ -2125,5 +2127,10 @@
    </properties>
   </object>
   <object name="item" type="leftysword" x="288" y="544" width="32" height="32"/>
+  <object name="Teleport" type="levelswitch" x="96" y="480" width="32" height="32">
+   <properties>
+    <property name="toLevel" value="level02"/>
+   </properties>
+  </object>
  </objectgroup>
 </map>

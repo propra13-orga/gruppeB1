@@ -1,0 +1,8 @@
+name : Mara
+sprite : girl_blue
+spd : 2
+controllable : true
+collidable : true
+inventory : true
+onAction : open_dialog
+dialog : Es weht ein kühler Wind...

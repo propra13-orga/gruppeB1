@@ -1,0 +1,8 @@
+name : Teurer Diamant
+sprite : diamond
+walkable : true
+onAction : pickup
+item_name : Teurer Diamant
+item_value : 100
+item_description : Hat keinen Nutzen; ist einfach nur wertvoll.
+type_stackable : true

@@ -4,7 +4,13 @@ import java.awt.image.BufferedImage;
 
 
 /**
- * Hier erfolgt die grafische Ausgabe der Geschehnisse auf dem Spielfeld.
+ * Hier erfolgt die grafische Ausgabe der Geschehnisse auf dem Spielfeld. Im
+ * Wesentlichen werden dabei Daten aus der Movement-Komponente derjenigen
+ * Entitäten, die auch eine Sprite-Komponente besitzen, in Letztere übertragen
+ * und dann anhand dieser Sprites gemalt. Außerdem wird die Map neu gezeichnet.
+ * <p>
+ * Die Vorgänge hier dienen alleine der grafischen Ausgabe innerhalb von
+ * Instanzen der Klasse Scene_Level.
  * 
  * @author Victor Persien
  *
@@ -84,6 +90,9 @@ class System_Render extends System_Component {
 		return false;
 	}
 	
+	/**
+	 * Zeigt die Statuswerte des Spielers auf dem Bildschirm an.
+	 */
 	private void displayStats() {
 		Entity player = this.getScene().getPlayer();
 		Component_Battle compBattle = (Component_Battle) player.getComponent("battle");
@@ -100,6 +109,11 @@ class System_Render extends System_Component {
 		g.drawString(s,10,Object_Screen.SCREEN_H-10);
 	}
 	
+	/**
+	 * Gibt die Spritekomponente einer Entität zurück.
+	 * @param entity	Eine Entität.
+	 * @return			Ihre Sprite-Komponente.
+	 */
 	private Component_Sprite getSprite(Entity entity) { 
 		return (Component_Sprite) entity.getComponent("sprite"); 
 	}
@@ -175,7 +189,11 @@ class System_Render extends System_Component {
 		}	
 	}
 	
-	
+	/**
+	 * Legt einen Offset screen_point in Abhängigkeit von einer Entität mit 
+	 * Kamera-Komponente (i.d.R. der Spieler) fest, um den aktuellen 
+	 * Kartenausschnitt anzuzeigen.
+	 */
 	private void updateScreenPoint() {
 		Entity camera = this.getEntitiesByType("camera").get(0);
 
@@ -191,7 +209,12 @@ class System_Render extends System_Component {
 			screen_point[1] = this.getCurrentLevel().getHeight()*Object_Map.TILESIZE-Object_Screen.SCREEN_H;
 		}
 	}
-
+	
+	/**
+	 * Zeichnet nacheinander die untere und die obere Hälfte (in der Reihenfolge)
+	 * aller Sprites von Entitäten mit Sprite-Komponente.
+	 * @param screen
+	 */
 	private void drawSprites(BufferedImage screen) {
 		for (Entity entity : this.getEntitiesByType("sprite")) {
 			Component_Sprite compSprite = this.getSprite(entity);
@@ -212,6 +235,10 @@ class System_Render extends System_Component {
 		}
 	}
 	
+	/**
+	 * Gibt das aktuelle Level zurück.
+	 * @return		Aktuelles Level.
+	 */
 	private Object_Room getCurrentLevel() {
 		return ((Scene_Level) this.scene).getCurrentRoom();
 	}
