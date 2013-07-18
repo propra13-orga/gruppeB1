@@ -7,6 +7,34 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 
+/**
+ * 
+ * Diese Klasse definiert das Hauptspiel, das heißt alles, was sich auf der Karte
+ * abspielt.
+ * <p>
+ * Ein Level besteht zunächst einmal aus mehreren Räumen (Object_Room), in denen
+ * sich Entitäten befinden. Dem Spieler ist es möglich, zwischen diesen Räumen
+ * zu wechseln.
+ * <p>
+ * Die Verarbeitung der Spieldaten findet in den Komponentensystemen statt,
+ * wobei jedes unterschiedliche Typen von Komponenten manipuliert. Komponenten
+ * sind spezielle Datencontainer, die das Verhalten von Spielobjekten (Entitäten)
+ * definieren. Die Masse der Manipulationen bilden zusammen die Spielmechanik.
+ * <p>
+ * Die Kommunikation zwischen den Komponentensystem erfolgt über das verschicken
+ * und empfangen von Events, die Paaren von Entitäten einen Event-Typ zuweisen.
+ * Je nach Event-Typ sind die Komponentensysteme veranlasst, unterschiedliche 
+ * Manipulationen an den Komponenten der jeweiligen Entitäten vorzunehmen.
+ * <p>
+ * Eine solche Architektur wird auch als "Entity-Component System" bezeichnet
+ * und stellt eine Form des Data-Oriented Development dar, welches Spielobjekte
+ * nicht als hierarchisch geordnet ansieht, sondern als reine passive
+ * Datencontainer, um so eine größere Dynamik gewährleisten zu können.
+ * 
+ * @author Victor Persien
+ *
+ */
+
 public class Scene_Level extends Abstract_Scene {
 	
 	
@@ -158,28 +186,56 @@ public class Scene_Level extends Abstract_Scene {
 		this.renderSystem.update();
 	}
 	
+	/**
+	 * Fügt dem Eventmanager ein Event hinzu.
+	 * @param event
+	 */
 	public void addEvent(Event event) {
 		this.eventManager.addEvent(event);
 	}
 	
+	/**
+	 * Registiert einen EventListener beim Eventmanager.
+	 * @param listener
+	 * @param eventTypes
+	 */
 	public void listenTo(IEventListener listener, EventType... eventTypes) {
 		this.eventManager.listenTo(listener, eventTypes);
 	}
 	
+	/**
+	 * Setzt das Spiel auf erfolgreich bestanden.
+	 */
 	public void beatGame() {
 		this.gameBeaten = true;
 	}
 	
+	/**
+	 * Setzt das nächste Level auf levelname. Der Wechsel erfolgt dann im nächsten
+	 * Zyklus.
+	 * @param levelname
+	 */
 	public void demandLevelChange(String levelname) {
 		this.nextLevelName = levelname;
 	}
 	
+	/**
+	 * Setzt den nächsten Raum auf denjenigen mit der angegebenen ID und die 
+	 * dortigen Startkoordinaten auf (x,y).
+	 * @param ID	ID des nächsten Raums.
+	 * @param x		X-Koordinate nach Betreten.
+	 * @param y		Y-Koordinate nach Betreten.
+	 */
 	public void demandRoomChange(int ID, int x, int y) {
 		this.nextRoom = this.rooms.get(ID);
 		this.nextRoomSpawn[0] = x;
 		this.nextRoomSpawn[1] = y;
 	}
 	
+	/**
+	 * Setzt die nächste Scene auf scene.
+	 * @param scene
+	 */
 	public void demandSceneChange(Abstract_Scene scene) {
 		this.nextScene = scene;
 	}
@@ -193,14 +249,14 @@ public class Scene_Level extends Abstract_Scene {
 		return this.currentRoom;
 	}
 	
-	/*
+	/**
 	 * Gibt alle Entitäten zurück, die sich an Position xy befinden.
 	 */
 	public List<Entity> getEntitiesAt(int x, int y) {
 		return this.movementSystem.getEntitiesAt(x,y);
 	}
 	
-	/*
+	/**
 	 * Gibt ein Array in den Maßen der aktuellen Map zurück mit einer 1 an den
 	 * Stellen, wo sich mindestens eine Entität befindet, und einer 0 sonst.
 	 */
@@ -208,14 +264,14 @@ public class Scene_Level extends Abstract_Scene {
 		return this.movementSystem.getEntityPositions();
 	}
 	
-	/*
-	 * Gibt die Factory zurück.
+	/**
+	 * Gibt die Factory (Fabrikfunktion für Entitäten) zurück.
 	 */
 	
 	public Factory getFactory() { return this.factory; }
 	
 	
-	/*
+	/**
 	 * Gibt die Spielerentität zurück.
 	 */
 	public Entity getPlayer() {
@@ -234,6 +290,12 @@ public class Scene_Level extends Abstract_Scene {
 	 * Privates
 	 */
 	
+	/**
+	 * Gibt ein Komponentensystem zurück, welches Komponenten des Typs type
+	 * verwaltet.
+	 * @param type		Komponententyp.
+	 * @return			Entsprechendes Komponentensystem.
+	 */
 	public System_Component getSystemByType(String type) {
 		if (aiSystem.hasType(type)) return aiSystem;
 		if (movementSystem.hasType(type)) return movementSystem;
@@ -243,7 +305,7 @@ public class Scene_Level extends Abstract_Scene {
 		return null;
 	}
 	
-	/*
+	/**
 	 * Überprüft, ob das Spiel als beendet erklärt wurde.
 	 */
 	private void check_gameBeaten() {
@@ -253,21 +315,20 @@ public class Scene_Level extends Abstract_Scene {
 		}
 	}
 	
-	/*
+	/**
 	 * Prüft, ob ESC gedrückt wurde und ruft in diesem Fall das Spielmenü auf.
 	 */
 	private void check_menu() {
 		if (game.getKeyHandler().getKey(Object_KeyHandler.KEY_ESCAPE)) {
 			game.getKeyHandler().clear();
 			game.getKeyHandler().freeze(Object_KeyHandler.KEY_ESCAPE, 20);
-			//Men� aufrufen
+
 			game.switchScene(new Scene_GameMenu(game, this), true);
-			//return true;
+
 		}
-		//return false;
 	}
 	
-	/*
+	/**
 	 * Prüft, ob der Spieler gestorben ist und in diesem Fall das Game-Over-Menü
 	 * auf.
 	 */
@@ -278,15 +339,15 @@ public class Scene_Level extends Abstract_Scene {
 		}
 	}
 	
-	/*
-	 * 
+	/**
+	 * Wechselt das Level.
 	 */
 	private void changeLevel() {
 		this.game.switchScene(new Scene_Level(this.game,this.nextLevelName,this.getPlayer()), true);
 	}
 	
 	
-	/*
+	/**
 	 * Nimmt die nötigen Änderungen vor, um das Level zu wechseln.
 	 */
 	private void changeRoom() {
@@ -303,8 +364,8 @@ public class Scene_Level extends Abstract_Scene {
 		this.currentRoom.init();
 	}
 	
-	/*
-	 * 
+	/**
+	 * Wechselt die Scene zu der in this.nextScene angegebenen.
 	 */
 	private void changeScene() {
 		this.game.getKeyHandler().clear();
@@ -312,7 +373,7 @@ public class Scene_Level extends Abstract_Scene {
 	}
 	
 	
-	/*
+	/**
 	 * Basisdaten für Spieler.
 	 */
 	private Map<String,String> basicPlayerData() {
@@ -322,12 +383,12 @@ public class Scene_Level extends Abstract_Scene {
 		return data;
 	}
 	
-	/*
+	/**
 	 * Hier werden Level und Entitäten initialisiert.
 	 */
 	private void initLevel() {
 
-		/*
+		/**
 		 * Lese alle TMX-Dateien im Ordner des entsprechenden Levels.
 		 */
 		File folder = new File("res/maps/"+this.levelname);
@@ -355,10 +416,10 @@ public class Scene_Level extends Abstract_Scene {
 		this.initEntities();
 	}
 	
+	/**
+	 * Initialisiert alle Entitäten, die sich im aktuellen Raum befinden.
+	 */
 	private void initEntities() {
-		// Factory errichten.
-		//Factory factory = new Factory(this);
-		
 		// Mapeigene Entitäten bauen.
 		for (Object_Room level : this.rooms.values()) {
 			for (Map<String,String> entityData : level.getEntityData()) {

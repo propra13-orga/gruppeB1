@@ -3,6 +3,16 @@ import java.util.List;
 import java.util.Map;
 
 
+/**
+ * 
+ * Hier werden Quest-bezogene Komponenten manipuliert. Im Wesentlichen beschränkt
+ * sich das darauf, dass in jedem Zyklus jegliche Events abgerufen werden und 
+ * daraufhin ermittelt wird, ob diese Teil einer Quest sind.
+ * 
+ * @author Victor Persien
+ *
+ */
+
 public class System_Quest extends System_Component {
 
 	public System_Quest(Abstract_Scene scene, String... types) {

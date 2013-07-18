@@ -1,22 +1,48 @@
 
+/**
+ * 
+ * Komponente, die Daten beinhaltet, die für die NPC-KI nötig sind.
+ * 
+ * @author Victor Persien
+ *
+ */
 public class Component_AI extends Abstract_Component {
 	
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 2542429345441972195L;
-
+	
+	/**
+	 * Entität, die gerade im Fokus der Entität ist, der diese Komponente gehört.
+	 * In der Regel handelt es sich bei Ersterer um die Spielerentität.
+	 */
 	private Entity focus;
 	
 	private int atkRange;
 	private int viewDistance;
 	
+	/**
+	 * Typ der KI. Zur Zeit gibt es nur "basic".
+	 */
 	private String aiType;
+	
+	/**
+	 * Zustand, in dem sich der KI-Automat befindet.
+	 */
 	private StateType state;
 	
+	/**
+	 * Der Zustand soll sich nur alle TICK_MAX ticks (Game-Loop-Zyklen) ändern.
+	 */
 	private int tick;
 	private static final int TICK_MAX = 5;
-
+	
+	/**
+	 * Konstruktur. Alle diese Komponenten sind vom Typ "ai".
+	 * 
+	 * @param entity		Entität, der die Komponente gehört.
+	 * @param system		Zugehöriges Komponentensystem.
+	 * @param atkRange		Angriffsradius (auf der Map).
+	 * @param viewDistance	Sichtradius (auf der Map).
+	 */
 	public Component_AI(Entity entity, System_Component system, int atkRange, int viewDistance) {
 		super("ai", entity, system);
 		this.atkRange = atkRange;

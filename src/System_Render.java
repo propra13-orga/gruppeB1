@@ -2,6 +2,14 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
+
+/**
+ * Hier erfolgt die grafische Ausgabe der Geschehnisse auf dem Spielfeld.
+ * 
+ * @author Victor Persien
+ *
+ */
+
 class System_Render extends System_Component {
 	protected Object_Screen screen;
 	protected int[] screen_point;
@@ -47,7 +55,7 @@ class System_Render extends System_Component {
 		if (!this.checkPlayerDMG()) {
 			this.screen.getBuffer().getGraphics().drawImage(map,0,0,null);
 		}
-		//this.displayStats();
+		this.displayStats();
 	}
 	
 	
@@ -55,7 +63,7 @@ class System_Render extends System_Component {
 	 * Privates.
 	 */
 	
-	/*
+	/**
 	 * Hat der Spieler Schaden genommen, so soll der Bildschirm einmal kurz
 	 * rot aufblitzen.
 	 */
@@ -79,9 +87,9 @@ class System_Render extends System_Component {
 	private void displayStats() {
 		Entity player = this.getScene().getPlayer();
 		Component_Battle compBattle = (Component_Battle) player.getComponent("battle");
-		//int hp = compBattle.getHP();
+
 		int hp = compBattle.getPropertyValue("prop_hp_current");
-		//float fraction = (float) hp / (float) compBattle.getMaxHP();
+
 		float fraction = (float) hp / (float) compBattle.getPropertyValue("prop_hp");
 				
 		String s = String.format("HP: %d", hp);
@@ -96,7 +104,7 @@ class System_Render extends System_Component {
 		return (Component_Sprite) entity.getComponent("sprite"); 
 	}
 	
-	/*
+	/**
 	 * Aktualisiert alle Sprites (also Sprite-Komponenten) in Abhängigkeit von
 	 * der Positions- und Bewegungsdaten der jeweiligen Entitäten.
 	 */

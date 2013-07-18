@@ -2,6 +2,14 @@ import java.util.LinkedList;
 import java.util.Map;
 import java.util.List;
 
+/**
+ * 
+ * Grafisches Auswahlmenü, um Items bei einem NPC zu kaufen bzw. zu verkaufen.
+ * 
+ * @author viper100
+ *
+ */
+
 public class Scene_BuyMenu extends Abstract_Scene {
 	
 	Scene_Level parent;
@@ -33,7 +41,14 @@ public class Scene_BuyMenu extends Abstract_Scene {
 	
 	private int money;
 	
-
+	/**
+	 * Konstruktor.
+	 * 
+	 * @param game		Das aktuelle Spiel.
+	 * @param parent	Die Scene, von der aus das hiesige Menü aufgerufen wurde.
+	 * @param seller	Verkäuferentität (i.d.R. ein NPC).
+	 * @param buyer		Die Käuferentität (i.d.R. der Spieler).
+	 */
 	public Scene_BuyMenu(Object_Game game, Scene_Level parent, Entity seller, Entity buyer) {
 		super(game);
 		this.parent = parent;
@@ -162,6 +177,14 @@ public class Scene_BuyMenu extends Abstract_Scene {
 	 * Privates
 	 */
 	
+	/**
+	 * Fügt namen von Entitätstypen, wie sie aus der Datenbank gelesen werden,
+	 * in die Liste items_seller ein. Für jede Einfügung wird zudem die Anzahl
+	 * in items_sellen_quant auf 1 gesetzt und der Preis in items_seller_price
+	 * eingetragen. Tritt ein Entitätstyp noch einmal auf und hat es die
+	 * Eigenschaft "type_stackable" in der Item-Komponente, so wird statt einer
+	 * Einfügung in die Liste der Zähler in items_seller_quant erhöht.
+	 */
 	private void initItemsSeller() {
 		this.items_seller = new LinkedList<String>();
 		this.items_seller_quant = new LinkedList<Integer>();
@@ -189,6 +212,9 @@ public class Scene_BuyMenu extends Abstract_Scene {
 		}
 	}
 	
+	/**
+	 * Initialisiert ein Auswahlmenü zum Kaufen von Items.
+	 */
 	private void initMenuBuy() {
 		String name;
 		for (String entityType : this.items_seller) {
@@ -198,6 +224,10 @@ public class Scene_BuyMenu extends Abstract_Scene {
 		}
 	}
 	
+	/**
+	 * Arbeitet analog zu initItemsSeller(), jedoch werden hier nicht Entitätstypen 
+	 * (d.h. Strings) abgelegt, sondern Entitäten.
+	 */
 	private void initItemsBuyer() {
 		this.items_buyer = new LinkedList<Entity>();
 		this.items_buyer_quant = new LinkedList<Integer>();
@@ -221,6 +251,9 @@ public class Scene_BuyMenu extends Abstract_Scene {
 		}
 	}
 	
+	/**
+	 * Initialisiert ein Auswahlmenü zum Verkaufen von Items.
+	 */
 	private void initMenuSell() {
 		String name;
 		for (Entity entity : this.items_buyer) {
@@ -229,6 +262,10 @@ public class Scene_BuyMenu extends Abstract_Scene {
 		}
 	}
 	
+	/**
+	 * Initialisiert die Nachrichten, die angezeigt werden, wenn ein Item in
+	 * der Liste des Verkaufsmenüs ausgewählt ist.
+	 */
 	private void initMessagesSell() {
 		if (this.items_buyer.size() == 0) {
 			this.main_menu.disableCommand(1);
@@ -240,6 +277,10 @@ public class Scene_BuyMenu extends Abstract_Scene {
 		}
 	}
 	
+	/**
+	 * Initialisiert die Nachrichten, die angezeigt werden, wenn ein Item in
+	 * der Liste des Kaufmenüs ausgewählt ist.
+	 */
 	private void initMessagesBuy() {
 		if (this.items_seller.size() == 0) {
 			this.main_menu.disableCommand(0);
@@ -250,6 +291,11 @@ public class Scene_BuyMenu extends Abstract_Scene {
 		}
 	}
 	
+	/**
+	 * Legt ein zu kaufendes Item in den Einkaufswagen, zieht
+	 * Geld ab und aktualisiert die Geldanzeige.
+	 * @param pos		Die Position des Items in der Liste.
+	 */
 	private void handleBuy(int pos) {
 		int price = this.items_seller_price.get(pos);
 		if (price <= this.money) {
@@ -264,7 +310,11 @@ public class Scene_BuyMenu extends Abstract_Scene {
 		this.updateMoneyDisplay();
 	}
 	
-	
+	/**
+	 * Legt ein zu verkaufendes Item in den Verkaufswagen, fügt Geld hinzu und
+	 * aktualisiert die Geldanzeige.
+	 * @param pos		Die Position des Items in der Liste.
+	 */
 	private void handleSell(int pos) {
 		int quant = this.items_buyer_quant.get(pos);
 		this.items_buyer_quant.set(pos, quant-1);
@@ -276,6 +326,11 @@ public class Scene_BuyMenu extends Abstract_Scene {
 		this.updateMoneyDisplay();
 	}
 	
+	/**
+	 * Wandelt die Einträge in cart_buy in Entitäten um und fügt sie in der in cart_buy angegebenen Anzahl 
+	 * dem Inventar des Käufers hinzu. Entfernt außerdem die Items aus dem 
+	 * Inventar in der in cart_sell angegebenen Anzahl.
+	 */
 	private void checkOut() {
 		Component_Inventory compInventory = (Component_Inventory) this.buyer.getComponent("inventory");
 		Map<String,String> entityData;
@@ -311,6 +366,12 @@ public class Scene_BuyMenu extends Abstract_Scene {
 		compInventory.setMoney(this.money);
 	}
 	
+	/**
+	 * Entfernt ein Item gleichen Typs aus der Liste items_buyer oder gibt null
+	 * zurück, falls keines vorhanden ist.
+	 * @param item		Gesuchtes Item.
+	 * @return			Mit item typgleiche Entität oder null.
+	 */
 	private Entity fetchItemBuyer(Entity item) {
 		for (int i=0;i<this.items_buyer.size();i++) {
 			Entity item2 = this.items_buyer.get(i);
@@ -323,15 +384,28 @@ public class Scene_BuyMenu extends Abstract_Scene {
 		return null;
 	}
 	
+	/**
+	 * Liest das Geld der Käuferentität aus.
+	 * @return		Geld.
+	 */
 	private int retrieveMoney() {
 		return ((Component_Inventory) this.buyer.getComponent("inventory")).getMoney();
 	}
 	
+	/**
+	 * Aktualisiert die Geldanzeige.
+	 */
 	private void updateMoneyDisplay() {
 		String money_string = String.format("Geld: %d",this.money);
 		this.money_display.changeMessage(money_string);
 	}
 	
+	/**
+	 * Aktualisiert die Anzeige, welche die Anzahl der von einem Itemtyp
+	 * vorhandenen Exemplare anzeigt, sofern diese Stapelbar sind.
+	 * @param menu
+	 * @param pos
+	 */
 	private void updateQuantityDisplay(int menu, int pos) {
 		int quant = 0;
 		switch (menu) {

@@ -1,16 +1,28 @@
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * 
+ * Der Questbag enthält Objekte vom Typ Object_Quest, also Quests, die im Laufe
+ * des Spiels gesammelt und erfüllt werden können. Offene Quests müssen noch
+ * abgeschlossen werden, geschlossene sind es bereits.
+ * 
+ * @author Victor Persien
+ *
+ */
 public class Component_Questbag extends Abstract_Component {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -7205233874573512699L;
 	
 	private List<Object_Quest> openQuests;
 	private List<Object_Quest> closedQuests;
-
+	
+	/**
+	 * Konstruktur. Alle diese Komponenten sind vom Typ "questbag".
+	 * 
+	 * @param entity		Entität, der die Komponente gehört.
+	 * @param system		Zugehöriges Komponentensystem.
+	 */
 	public Component_Questbag(Entity entity,
 			System_Component system) {
 		super("questbag", entity, system);

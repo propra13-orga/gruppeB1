@@ -2,12 +2,16 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * 
+ * 
+ * 
+ * @author Victor Persien
+ *
+ */
 
 public class Object_Skill implements Serializable, Comparable<Object_Skill> {
 	
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -1596660653106070453L;
 	
 	private String name;

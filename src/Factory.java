@@ -4,19 +4,34 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-/*
- * Factory.java
+/**
  * 
- * Mit der Factory soll es möglich sein, Spielobjekte und Level zu erzeugen.
+ * Mit der Factory ist es möglich, Entitäten und andere Spielobjekte zu erzeugen.
+ * Weiter dient sie dem Zugriff auf die Datenbanken für Entitäten, Quests, Skills
+ * und allgemeineren Daten.
+ * 
+ * @author Victor Persien
  * 
  */
 
 
 public class Factory {
 	Scene_Level scene;
+	/**
+	 * Liest Daten aus .et-Dateien (für Entitäten).
+	 */
 	Object_DBReader db_et;
+	/**
+	 * Liest Daten aus .q-Dateien (für Quests).
+	 */
 	Object_DBReader db_q;
+	/**
+	 * Liest Daten aus .skl-Dateien (für Skills).
+	 */
 	Object_DBReader db_skl;
+	/**
+	 * Liest Daten aus .dat-Dateien (für sonstige Daten).
+	 */
 	Object_DBReader db_dat;
 	
 	public Factory(Scene_Level scene) {
@@ -25,7 +40,7 @@ public class Factory {
 		this.db_q = new Object_DBReader("quest");
 		this.db_skl = new Object_DBReader("skill");
 		this.db_dat = new Object_DBReader("data");
-		}
+	}
 	
 	
 	public Object_DBReader getDBET() { return this.db_et; }
@@ -34,6 +49,13 @@ public class Factory {
 	public Object_DBReader getDBDAT() { return this.db_dat; }
 	
 	
+	/**
+	 * Baut eine Entität gemäß der in "entityData" spezifizierten Daten.
+	 * 
+	 * @param entityData		Tabelle mit Daten, die eine Entität ausmachen.
+	 * 							Diese befinden sich in der Regel in einer .et-Datei
+	 * 							und können mittels db_et ausgelesen werden.
+	 */
 	public Entity build(Map<String,String> entityData) {
 		String entityType = entityData.get("entityType");
 		String name = entityData.remove("name");
@@ -79,6 +101,9 @@ public class Factory {
 				int value = Integer.parseInt(dataCompBattle.get(attr));
 				properties.put(prop, value);
 				properties.put(prop_current, value);
+			}
+			if (!dataCompBattle.containsKey("prop_lvl")) {
+				properties.put("prop_lvl", 1);
 			}
 			new Component_Battle(entity,scene.getSystemInteraction(),
 					properties,battleSprite);
@@ -147,14 +172,22 @@ public class Factory {
 			if (data.containsKey("money")) {
 				money = Integer.parseInt(data.get("money"));
 			}
-			new Component_Inventory(entity,this.scene.getSystemInteraction(),money);
+			Component_Inventory compInventory = new Component_Inventory(entity,this.scene.getSystemInteraction(),money);
+			Hashtable<String,String> filteredItems = this.filterHashtable(data, "has_item\\d*");
+			for (String et : filteredItems.values()) {
+				compInventory.addItem(this.build(this.db_et.getProperties(et)));
+			}
 		}
 		
 		/*
 		 * Component_Skillbag
 		 */
 		if (data.containsKey("skillbag")) {
-			new Component_Skillbag(entity,this.scene.getSystemInteraction());
+			Component_Skillbag compSkillbag = new Component_Skillbag(entity,this.scene.getSystemInteraction());
+			Hashtable<String,String> filteredSkills = this.filterHashtable(data, "has_skill\\d*");
+			for (String attr : filteredSkills.keySet()) {
+				compSkillbag.addSkill(new Object_Skill(this.db_skl.getProperties(filteredSkills.get(attr))));
+			}
 		}
 		
 		/*
@@ -240,7 +273,13 @@ public class Factory {
 		return entity;
 	}
 	
-		
+	/**
+	 * Filtert eine Hashtable so, dass sie nur noch Schlüssel enthält, die
+	 * den regulären Ausdruck "regex" matchen.
+	 * 
+	 * @param hashtable		Die zu filternde Tabelle.
+	 * @param regex			Der Regex, nach dem gefiltert werden soll.
+	 */
 	public Hashtable<String,String> filterHashtable(Map<String,String> hashtable, String regex) {
 		Hashtable<String,String> filtered = new Hashtable<String,String>();
 		
@@ -253,6 +292,9 @@ public class Factory {
 		return filtered;
 	}
 	
+	/**
+	 * Aktualisiert die Verweise auf die Komponentensysteme nach Levelwechsel.
+	 */
 	public void updateSystems(Entity entity) {
 		String type;
 		for (Abstract_Component comp : entity.getComponents()) {
@@ -266,5 +308,12 @@ public class Factory {
 	 * Privates
 	 */
 	
+	/**
+	 * Berechnet die Verzögerung beim Bewegen auf der Karte anhand des Wertes
+	 * speed.
+	 * 
+	 * @param speed		Die Bewegungsgeschwindigkeit auf der Karte.
+	 * @return			Die Entsprechende Verzögerung.
+	 */
 	private int calculateDelay(int speed) { return (int) Math.pow(2,6-speed); }
 }

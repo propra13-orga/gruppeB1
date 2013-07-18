@@ -1,7 +1,7 @@
 import java.util.Collection;
 import java.util.Hashtable;
 
-/*
+/**
  * Instanzen der Klasse Entity (Entitäten) sind sog. Flyweight-Objekte, die
  * außer einem Namen und einem Verweis auf ihren EntityManager keine wirklichen
  * Daten enthalten, sondern nur Container für Komponenten.
@@ -9,14 +9,14 @@ import java.util.Hashtable;
  * Die Komponenten wiederum enthalten je nach Typ unterschiedliche Daten. Die
  * Eigenschaften, die eine Entität hat, werden durch die vorhandenen Komponenten
  * festgelegt. Besitzt eine Entität zum Beispiel eine Komponente vom Typ -
- * "position", so verfügt sie über Positionsdaten.
+ * "movement", so verfügt sie über Daten, die für die Bewegung auf dem Spielfeld
+ * wichtig sind.
+ * 
+ * @author Victor Persien
  */
 
 class Entity implements java.io.Serializable, Comparable<Entity> {
 	
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 2840301197733965373L;
 	
 	protected String entityType;

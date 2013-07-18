@@ -1,3 +1,13 @@
+
+/**
+ * 
+ * Diese Komponente stellt das Inventar einer Entität dar. Darin befinden sich
+ * alle gesammelten Items, außer denjenigen, die angelegt sind (diese befinden
+ * sich in der Equipment-Komponente).
+ * 
+ * @author Victor Persien
+ *
+ */
 public class Component_Inventory extends Abstract_Component {
 
 	private static final long serialVersionUID = 1L;
@@ -5,6 +15,13 @@ public class Component_Inventory extends Abstract_Component {
 	private Entity[] inventory;
 	private int money;
 	
+	/**
+	 * Konstruktur. Alle diese Komponenten sind vom Typ "inventory".
+	 * 
+	 * @param entity		Entität, der die Komponente gehört.
+	 * @param system		Zugehöriges Komponentensystem.
+	 * @param money			Geld, welches die Entität besitzt.
+	 */
 	public Component_Inventory(Entity entity,
 			System_Component system, int money) {
 		super("inventory", entity, system);
@@ -43,6 +60,18 @@ public class Component_Inventory extends Abstract_Component {
 			if (item != null && item.getType().equals(entityType)) {
 				this.inventory[i] = null;
 				return item;
+			}
+		}
+		return null;
+	}
+	
+	public Entity removeItem(Entity item) {
+		Entity item2;
+		for (int i=0;i<this.inventory.length;i++) {
+			item2 = this.inventory[i];
+			if (item == item2) {
+				this.inventory[i] = null;
+				return item2;
 			}
 		}
 		return null;

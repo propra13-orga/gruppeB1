@@ -9,4 +9,6 @@ controllable : true
 collidable : true
 equipment : true
 inventory : true
+skillbag : true
+has_skill : fireball
 ai : true

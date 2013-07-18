@@ -1,10 +1,10 @@
-/*
- * Scene_Dialog.java
- * 
+/**
  * Diese Szene soll der Darstellung von Dialogen im Spiel dienen. Der Szene wird
- * ein String (später ein komplexeres Objekt) übergeben, welcher auf dem
- * Bildschirm ausgegegeben wird.
+ * ein String übergeben, welcher auf dem Bildschirm ausgegegeben wird. Passt
+ * der String nicht auf den Bildschirm, so wird durch Drücken von ENTER "eine
+ * Seite umgeschlagen".
  * 
+ * @author Victor Persien
  */
 
 
@@ -12,7 +12,14 @@ public class Scene_Dialog extends Abstract_Scene {
 	private String dialog;
 	private Window_DialogBox message;
 	private Scene_Level parent;
-
+	
+	/**
+	 * Konstruktor
+	 * 
+	 * @param game		Das aktuelle Spielobjekt.
+	 * @param parent	Die Scene, von der aus diese Scene aufgerufen wurde.
+	 * @param dialog	Der String, der angezeigt werden soll.
+	 */
 	public Scene_Dialog(Object_Game game, Scene_Level parent, String dialog) {
 		super(game);
 		this.parent = parent;

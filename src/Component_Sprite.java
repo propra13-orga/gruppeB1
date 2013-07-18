@@ -1,16 +1,16 @@
 import java.awt.image.BufferedImage;
 
-/*
- * Sprite.java
- * Diese Klasse speicher alle wichtigen Daten, um einen (animierten) Sprite
- * darzustellen.
+/**
+ * 
+ * Diese Komponente speichert alle wichtigen Daten, um einen (animierten) Sprite
+ * auf der Karte darzustellen.
+ * 
+ * @author Alexander Schäfer, Victor Persien
+ * 
  */
 
 class Component_Sprite extends Abstract_Component {
 	
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 617556010116827829L;
 	public static final int ANIMATION_LEFT = 0;
 	public static final int ANIMATION_MIDDLE = 1;
@@ -33,7 +33,15 @@ class Component_Sprite extends Abstract_Component {
 	private int pos_x;
 	private int pos_y;
 	
-	
+	/**
+	 * Konstruktur. Alle diese Komponenten sind vom Typ "sprite".
+	 * 
+	 * @param entity		Entität, der die Komponente gehört.
+	 * @param system		Zugehöriges Komponentensystem.
+	 * @param filename		Dateiname (ohne Endung) des Sprites.
+	 * @param x				X-Koordinate.
+	 * @param y				Y-Koordinate.
+	 */
 	public Component_Sprite(Entity entity, System_Component system,
 			String filename, int x, int y) {
 		super("sprite",entity,system);

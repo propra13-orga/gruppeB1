@@ -1,14 +1,19 @@
-/*
+/**
  * Entitäten mit dieser Komponente können gesteuert werden. Der Spieler über die
- * Tastatur, NPCs über die KI (kommt noch).
+ * Tastatur, NPCs über die KI.
+ * 
+ * @author Victor Persien
  */
 class Component_Controls extends Abstract_Component {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -4498451329055383926L;
 
+	/**
+	 * Konstruktur. Alle diese Komponenten sind vom Typ "controls".
+	 * 
+	 * @param entity		Entität, der die Komponente gehört.
+	 * @param system		Zugehöriges Komponentensystem.
+	 */
 	public Component_Controls(Entity entity, System_Component system) {
 		super("controls",entity,system);
 	}
