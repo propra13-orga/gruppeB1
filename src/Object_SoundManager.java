@@ -1,4 +1,7 @@
+import java.applet.Applet;
+import java.applet.AudioClip;
 import java.io.File;
+import java.net.MalformedURLException;
 import java.util.Hashtable;
 
 import javax.sound.midi.MidiSystem;
@@ -11,7 +14,7 @@ import javax.sound.sampled.DataLine;
 
 public class Object_SoundManager {
 	
-	public static final boolean				MUTED = true;
+	public static final boolean				MUTED = false;
 	
 	private Hashtable<String, Clip>	sounds;
 	
@@ -43,10 +46,15 @@ public class Object_SoundManager {
 	
 	public void playSound(String name) {
 		if (!MUTED) {
-			if (this.sounds.containsKey(name)) {
-				this.sounds.get(name).start();
-				this.sounds.get(name).setFramePosition(0);
+			File f = new File("res/sound/"+name+".wav");
+			AudioClip sound = null;
+			try {
+				sound = Applet.newAudioClip( f.toURL() );
+			} catch (MalformedURLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
+			sound.play();
 		}
 	}
 

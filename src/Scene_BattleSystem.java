@@ -188,6 +188,13 @@ public class Scene_BattleSystem extends Abstract_Scene {
 			y += 20;
 			x -= 15;
 		}
+		for (Object_BattleActor enemy : this.ctx.getAliveEnemies()) {
+			String stats = "HP: "+enemy.hp+" / "+enemy.maxHp;
+			this.screen.drawString(
+					stats,
+					enemy.sprite.x+70,
+					enemy.sprite.y);
+		}
 	}
 	
 	private void drawArrow() {
@@ -225,7 +232,7 @@ public class Scene_BattleSystem extends Abstract_Scene {
 		
 		int rnd_speed;
 		for (Object_BattleActor b : this.ctx.getActors()) {
-			rnd_speed = (int) CopyOfScene_BattleSystem.random(-(int) (b.maxSpeed*0.15), (int) (b.maxSpeed*0.15));
+			rnd_speed = (int) Scene_BattleSystem.random(-(int) (b.maxSpeed*0.15), (int) (b.maxSpeed*0.15));
 			b.speed += rnd_speed;
 			if (b.speed <= 0) b.speed = (int) (b.maxSpeed*0.1);
 			if (b.speed > b.maxSpeed) b.speed = (int) (b.maxSpeed*0.95);

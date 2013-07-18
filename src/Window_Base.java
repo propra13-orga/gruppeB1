@@ -4,6 +4,22 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+/**
+ * Das Windowsystem bietet eine einfache Schnittstelle zum Anzeigen von Nachrichten, Menues und Dialogen im Spiel.
+ * Window_Base stellt dabei die wichtigsten Grundfunktionen zur Verfuegung und sollte nicht selbst instanziiert werden.
+ * 
+ * @author Alexander
+ * 
+ * @param WINDOWSYSTEM		Gibt den Dateinamen der Grafik an, welche zum generieren des Fesnters genutzt wird
+ * @param x					x und y bilden die Koordinaten des linken oberen Randes des Fensters
+ * @param x					x und y bilden die Koordinaten des linken oberen Randes des Fensters
+ * @param width				Gibt die gesamte Breite des Fenster an (ggf. auch mit Rand)
+ * @param height			Gibt die gesamte Hoehe des Fensters an (ggf. auch mit Rand)
+ * @param box				Da die Fenstergrafik nur einmal generiert werden muss, wird sie anschliessend hier gespeichert
+ * @param set				Speichert die genutzte Windowset Grafik
+ *
+ */
+
 public class Window_Base extends Abstract_Update {
 
 	public static final String		WINDOWSYSTEM = "window-1";
@@ -15,6 +31,15 @@ public class Window_Base extends Abstract_Update {
 	
 	private BufferedImage			box;
 	private BufferedImage			set;
+	
+	/**
+	 *
+	 * @param game		
+	 * @param x
+	 * @param y
+	 * @param width
+	 * @param height
+	 */
 	
 	Window_Base(Object_Game game, int x, int y, int width, int height) {
 		super(game);
@@ -46,6 +71,10 @@ public class Window_Base extends Abstract_Update {
 	public void updateScreen() {
 		this.screen.drawImage(this.box, this.x, this.y, null);
 	}
+	
+	/**
+	 * Sollten sich Position, Form oder Windowset aendern, kann ueber refresh_box() die Fenstergrafik neu generiert werden
+	 */
 	
 	public void refresh_box() {
 		//Box zeichnen

@@ -1,3 +1,5 @@
+import java.awt.image.BufferedImage;
+
 
 /*
  * Stellt Methoden zu verschiedenen Animationen des BattleSprites bereit
@@ -86,6 +88,10 @@ class Object_BattleSprite extends Abstract_Update {
 	
 	public void updateScreen() {
 		this.screen.drawImage(this.spriteset.getSprite(this.animation_type, this.animation), this.x, this.y, null);
+	}
+	
+	public BufferedImage getGraphic() {
+		return this.spriteset.getSprite(this.animation_type, this.animation);
 	}
 	
 	public void setAnimationDelay(int delay) {

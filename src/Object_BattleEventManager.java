@@ -93,6 +93,9 @@ public class Object_BattleEventManager extends Abstract_Update {
 			case "moveActor":
 				moveActorHandler(e);
 				break;
+			case "killActor":
+				killActorHandler(e);
+				break;
 			case "playSound":
 				playSoundHandler(e);
 				break;
@@ -159,7 +162,7 @@ public class Object_BattleEventManager extends Abstract_Update {
 		Window_Menu menu_select_player	= new Window_Menu(this.game, "select_player");
 		Window_Menu menu_select_item	= new Window_Menu(this.game, "select_item");
 		Window_Menu menu_select_skill	= new Window_Menu(this.game, "select_skill");
-		Window_Menu menu_select_network = new Window_Menu(this.game, "select_network");
+		//Window_Menu menu_select_network = new Window_Menu(this.game, "select_network");
 		
 		menu_main.MIN_X					= MIN_MENUSIZE;
 		menu_select_enemy.MIN_X			= MIN_MENUSIZE;
@@ -170,7 +173,7 @@ public class Object_BattleEventManager extends Abstract_Update {
 		menu_main.addMenuCommand("Angriff", menu_select_enemy);
 		menu_main.addMenuCommand("Skill", menu_select_skill);
 		menu_main.addMenuCommand("Item", menu_select_item);
-		menu_main.addMenuCommand("Network",menu_select_network);
+		//menu_main.addMenuCommand("Network",menu_select_network);
 		menu_main.addReturnCommand("Verteidigen");
 		
 		//Kommandos fuer Auswahlmenues von Spielern und Gegnern werden erst im Kampfverlauf
@@ -198,7 +201,7 @@ public class Object_BattleEventManager extends Abstract_Update {
 		e.setAttribute("menu_select_player", menu_select_player);
 		e.setAttribute("menu_select_item", menu_select_item);
 		e.setAttribute("menu_select_skill", menu_select_skill);
-		e.setAttribute("menu_select_network", menu_select_network);
+		//e.setAttribute("menu_select_network", menu_select_network);
 		e.setAttribute("parallel", false);
 		this.queue.add(e);
 	}
@@ -218,6 +221,13 @@ public class Object_BattleEventManager extends Abstract_Update {
 	public void waitUntilDone() {
 		Object_BattleEvent e = new Object_BattleEvent("waitUntilDone");
 		e.setAttribute("parallel", false);
+		this.queue.add(e);
+	}
+	
+	public void killActor(Object_BattleActor actor) {
+		Object_BattleEvent e = new Object_BattleEvent("killActor");
+		e.setAttribute("actor", actor);
+		e.setAttribute("tick", 0);
 		this.queue.add(e);
 	}
 	
@@ -299,6 +309,24 @@ public class Object_BattleEventManager extends Abstract_Update {
 		((Object_BattleActor) e.getAttribute("actor")).sprite.animated = (boolean) e.getAttribute("value");
 	}
 	
+	private void killActorHandler(Object_BattleEvent e) {
+		Object_BattleActor actor = (Object_BattleActor) e.getAttribute("actor");
+		int tick = (int) e.getAttribute("tick");
+		
+		if (tick == 0) {
+			//aus action order entfernen
+		}
+		else {
+			System.out.println("PLUS TRANSPARENZ");
+			Object_Screen.setTransparency(actor.sprite.getGraphic(), tick);
+		}
+		tick++;
+		if (tick == 255) {
+			actor.dead = true;
+			e.finish();
+		}
+	}
+	
 	private void getPlayerInputHandler(Object_BattleEvent e) {
 		Window_Menu main = (Window_Menu) e.getAttribute("menu_main");
 		if (main.isExecuted()) {
@@ -315,6 +343,16 @@ public class Object_BattleEventManager extends Abstract_Update {
 				moveActor(current, target.sprite.x+100, target.sprite.y, 1, 1, false);
 				setAnimated(current, false);
 				wait(40);
+				
+				//Schaden berechnen (leider momentan noch billig version)
+				int damage = 235; //lol xD
+				target.hp -= damage;
+				if (target.hp <= 0) {
+					target.hp = 0;
+					target.sprite.x = 0;
+					killActor(target);
+				}
+				
 				setAnimated(current, true);
 				moveActor(current,
 						Scene_BattleSystem.PLAYER_POSITIONS[current.sprite.position-1][0],

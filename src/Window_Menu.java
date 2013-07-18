@@ -3,15 +3,25 @@ import java.awt.FontMetrics;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
-/*
- * Window_Menu.java
+/**
+ * Diese Klasse baut auf Window_Base auf und bietet die Moeglichkeit, Menues ins Spiel zu integrieren.
+ * Dabei koennen mehrere Menues verschachtelt und dynamisch verwaltet werden.
+ * Dabei kann jedes Menue als Hauptmenue fungieren und gleichzeitig auch wieder als Untermenue in ein bereits
+ * bestehendes eingebaut werden.
  * 
- * Mit dieser Klasse ist es m�glich, verschachtelte Menues zu erstellen.
- * Zuerst m�ssen alle Menues einzeln erstellt werden. Anschliessend kann jedem Menue
- * mit den Befehlen entweder absolute Befehle (addReturnCommand) oder Befehle, die ein
- * weiteres Menue oeffnen (addMenuCommand) hinzufuegen.
- * Fuer ein Verwendungsbeispiel siehe Scene_BattleSystem.java
- * 
+ * @author Alexander
+ *
+ *@param COLOR_FONT_STANDARD		Die Standardfarbe fuer Schrift
+ *@param COLOR_FONT_DISABLED		Die Standardfarbe fuer Schrift von nicht auswaehlbaren Menueelementen
+ *@param COLOR_CURSOR_BORDER		Die Standardfarbe fuer den Rand des Menuecursors
+ *@param COLOR_CURSOR_FILL			Die Standardfarbe fuer das Innere des Menuecursors
+ *@param MIN_X						Minimale Groesse eines Menues
+ *@param MAX_X						Maximale Groesse eines Menues
+ *@param BORDER_BOX					Abstand zwischen Fensterrand und Cursor
+ *@param BORDER_CURSOR				Abstand zwischen Cursor und Text, den er umschliesst
+ *@param CURSOR_SPACE				Vertikaler Abstand zwischen zwei untereinanderliegenden Cursorpositionen
+ *
+ *@param exit_posiible				true, wenn das Menue per Escape beendet werden kann
  */
 
 public class Window_Menu extends Window_Base {
@@ -46,8 +56,15 @@ public class Window_Menu extends Window_Base {
 	private FontMetrics				metrics;					//Zur Berechnung von Hoehe und Breite von Strings
 	private BufferedImage			background;
 	
-	/*
-	 * contructors
+	/**
+	 * Erstellt ein neues Menueobjekt
+	 * 
+	 * @param game		Das Gameobjekt
+	 * @param name		Ein Name fuer das Menue, mit dem es sich eindeutig identifizieren laesst. Darf nill "null" sein
+	 * @param x
+	 * @param y
+	 * @param width
+	 * @param height
 	 */
 	
 	Window_Menu(Object_Game game, String name, int x, int y, int width, int height) {
@@ -194,33 +211,53 @@ public class Window_Menu extends Window_Base {
 		}
 	}
 	
-	/*
-	 * Fuegt dem Menue einen Befehl hinzu, der kein weiteres Untermenue aufruft
+	/**
+	 * Fuegt dem Menue einen return command hinzu
+	 * 
+	 * @param cmd			Name des commands
+	 * @param disabled		Kann der command ausgewaehlt werden
 	 */
 	
 	public void addReturnCommand(String cmd, boolean disabled) {
 		this.addMenuCommand(cmd, null, disabled);
 	}
 	
+	/**
+	 * Fuegt dem Menue einen return command hinzu
+	 * 
+	 * @param cmd			Name des commands
+	 */
 	public void addReturnCommand(String cmd) {
 		this.addMenuCommand(cmd, null, false);
 	}
 	
-	/*
-	 * Fuegt dem Menue einen Befehl hinzu, der entweder in das vorige Menue zurueck
-	 * springt oder das Menue komplett beendet
+	/**
+	 * Guegt dem Menue einen cancel command hinzu
+	 * 
+	 * @param cmd			Name des commands
+	 * @param disabled		Kann der command ausgewaehlt werden
 	 */
 	
 	public void addCancelCommand(String cmd, boolean disabled) {
 		this.addMenuCommand(cmd, this.previous_menu, disabled);
 	}
 	
+	/**
+	 * Guegt dem Menue einen cancel command hinzu
+	 * 
+	 * @param cmd			Name des commands
+	 */
+	
 	public void addCancelCommand(String cmd) {
 		this.addMenuCommand(cmd, this.previous_menu, false);
 	}
 	
-	/*
-	 * F�gt dem Menue einen Befehl hinzu, der bei Bestaetigung ein weiteres Menu aufruft
+	/**
+	 * Fuegt dem Menue einen menu command hinzu
+	 * 
+	 * @param cmd			Name des commands
+	 * @param menu			das bei Bestaetigung auszufuehrende Submenu
+	 * @param disabled		Kann der command ausgewaehlt werden
 	 */
 	
 	public void addMenuCommand(String cmd, Window_Menu menu, boolean disabled) {
@@ -236,9 +273,22 @@ public class Window_Menu extends Window_Base {
 		this.refresh_box();
 	}
 	
+	/**
+	 * Fuegt dem Menue einen menu command hinzu
+	 * 
+	 * @param cmd			Name des commands
+	 * @param menu			das bei Bestaetigung auszufuehrende Submenu
+	 */
+	
 	public void addMenuCommand(String cmd, Window_Menu menu) {
 		this.addMenuCommand(cmd, menu, false);
 	}
+	
+	/**
+	 * Entfernt einen command vom Menue
+	 * 
+	 * @param idx			Index des zu loeschenden commands
+	 */
 	
 	public void removeCommand(int idx) {
 		this.commands.remove(idx);
@@ -247,17 +297,27 @@ public class Window_Menu extends Window_Base {
 		}
 	}
 	
-	/*
-	 * Setzt den current_menu Zeiger auf das naechste aufgerufene Menue
+	/**
+	 * Setzt seinen Menuezeiger auf sich selbst, um so von sich aus durch seine Untermenues navigieren
+	 * zu koennen. Sollte nur von als MainMenu deklarierten Menues aufgerufen werden.
 	 */
 	
 	public void setupMenuPath() {
 		this.current_menu = this;
 	}
 	
+	/**
+	 * Setzt den Menuezeiger auf das im aktuellen Menue aufgerufene Untermenue (kann auch null sein)
+	 */
+	
 	public void nextMenu() {
 		this.current_menu = this.current_menu.submenues.get(this.current_menu.cursor);
 	}
+	
+	/**
+	 * 
+	 * @return			Der Name des Menues auf das der Menuezeiger zeigt
+	 */
 	
 	public String getCurrentName() {
 		if (this.current_menu == null) {
@@ -266,13 +326,28 @@ public class Window_Menu extends Window_Base {
 		return this.current_menu.name;
 	}
 	
+	/**
+	 * 
+	 * @return			Der Name des im aktuellen Menue aufgerufenen commands
+	 */
+	
 	public String getCurrentChoice() {
 		return this.current_menu.commands.get(this.current_menu.cursor);
 	}
 	
+	/**
+	 * 
+	 * @return			Die im aktuellen Menue stehende Cursorposition
+	 */
+	
 	public int getCurrentCursor() {
 		return this.current_menu.cursor;
 	}
+	
+	/**
+	 * 
+	 * @return			Das absolut zuletzt aufgerufene Menue
+	 */
 	
 	public Window_Menu getLastMenu() {
 		if (this.next_menu == null) {
@@ -283,6 +358,11 @@ public class Window_Menu extends Window_Base {
 		}
 	}
 	
+	/**
+	 * 
+	 * @return			Die absolut zuletzt gesetzte Cursorposition
+	 */
+	
 	public int getLastCursor() {
 		if (this.next_menu == null) {
 			return this.cursor;
@@ -292,8 +372,9 @@ public class Window_Menu extends Window_Base {
 		}
 	}
 	
-	/*
-	 * Mache einen bereits vorhandenen Befehl aufrufbar
+	/**
+	 * Macht einen command auswaehlbar
+	 * @param idx			Der Index des commands in der Commandliste
 	 */
 	
 	public void enableCommand(int idx) {
@@ -302,6 +383,12 @@ public class Window_Menu extends Window_Base {
 		}
 	}
 	
+	/**
+	 * Macht einen command auswaehlbar
+	 * @param cmd			Der Name des Commands (falls mehrere commands den selben Namen
+	 * 						besitzen, wird der zuerst hinzugefuegte bearbeitet)
+	 */
+	
 	public void enableCommand(String cmd) {
 		if (this.commands.contains(cmd)) {
 			int idx = this.commands.indexOf(cmd);
@@ -309,8 +396,9 @@ public class Window_Menu extends Window_Base {
 		}
 	}
 	
-	/*
-	 * Mache einen bereits vorhandenen Befehl nicht mehr aufrufbar
+	/**
+	 * Macht einen command nicht auswaehlbar
+	 * @param idx			Der Index des commands in der Commandliste
 	 */
 	
 	public void disableCommand(int idx) {
@@ -319,8 +407,8 @@ public class Window_Menu extends Window_Base {
 		}
 	}
 	
-	/*
-	 * Loescht alle Untermenues
+	/**
+	 * Loescht alle Untermenues und die Commandliste
 	 */
 	
 	public void clear() {
@@ -328,36 +416,41 @@ public class Window_Menu extends Window_Base {
 		this.commands.clear();
 	}
 	
-	/*
-	 * Das Menue kann mit Escape beendet werden
+	/**
+	 * 
+	 * @param value true, wenn man das Menue mit Escape beenden koennen soll, sonst false
 	 */
 	
 	public void setExitPossible(boolean value) {
 		this.exit_possible = value;
 	}
 	
-	/*
-	 * Setzt this.executed (wieder) auf true
+	/**
+	 * isExecuted() gibt (wieder) true zurueck
 	 */
 	
 	public void restart() {
 		this.executed = true;
 	}
 	
+	/**
+	 * isExecuted() gibt nicht (mehr) true zurueck
+	 */
+	
 	public void stop() {
 		this.executed = false;
 	}
 	
-	/*
-	 * Das Menue wird immer angezeigt
+	/**
+	 * Menue wird auch angezeigt, wenn isExecuted() nicht true zurueckgibt
 	 */
 	
 	public void show() {
 		this.visible = true;
 	}
 	
-	/*
-	 * Das Menue wird nur angezeigt, wenn es ausgefuehrt wird
+	/**
+	 * Menue wird nur angezeigt, wenn isExecuted() true zurueck gibt
 	 */
 	
 	public void hide() {
