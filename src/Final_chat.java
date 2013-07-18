@@ -1,5 +1,3 @@
-package network;
-
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -231,13 +229,4 @@ public class Final_chat extends Applet {
 		   l_panel.setEnabled(true);
 	   } catch(IOException e) { disconnect();}
    }
-
-	   
-  	
-
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-
-	}
-
 }
