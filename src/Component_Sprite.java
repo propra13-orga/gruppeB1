@@ -52,7 +52,7 @@ class Component_Sprite extends Abstract_Component {
 		direction = Object_KeyHandler.KEY_DOWN;
 		animation = ANIMATION_MIDDLE;
 		old_animation = ANIMATION_LEFT;
-		width = 32;
+		width = 48;
 		height = 64;
 		this.visible = true;
 	}
@@ -114,11 +114,11 @@ class Component_Sprite extends Abstract_Component {
 	}
 	
 	public BufferedImage getLowerHalf() {
-		return getImage().getSubimage(0, 32, 32, 32);
+		return getImage().getSubimage(0, 32, 48, 32);
 	}
 	
 	public BufferedImage getUpperHalf() {
-		return getImage().getSubimage(0, 0, 32, 32);
+		return getImage().getSubimage(0, 0, 48, 32);
 	}
 	
 	public void setAniMiddle() { this.animation = ANIMATION_MIDDLE; }

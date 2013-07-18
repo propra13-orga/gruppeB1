@@ -2114,6 +2114,7 @@
     <property name="onAction" value="open_questmenu"/>
     <property name="orientation" value="3"/>
     <property name="questdealer" value="true"/>
+    <property name="sprite" value="people"/>
    </properties>
   </object>
   <object name="teleport1" type="teleport" x="288" y="608" width="32" height="32">
